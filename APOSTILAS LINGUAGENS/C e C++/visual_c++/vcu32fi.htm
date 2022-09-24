@@ -1,0 +1,1868 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu32fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="p05vcufi.htm">
+
+<LINK REL="Previous" HREF="vcu31fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu31fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p05vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">32 &#151; OLE Automation</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Building an Automation Server</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Constructing the ASRV Application Skeleton</A></LI>
+
+<LI>
+
+<A HREF="#I5">Implementing the Calculation</A></LI>
+
+<LI>
+
+<A HREF="#I6">Adding Automation Support</A></LI>
+
+<LI>
+
+<A HREF="#I7">The Type Library</A></LI>
+
+<LI>
+
+<A HREF="#I8">Testing the Application</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">Standard Methods and Properties</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I10">The Application Object</A></LI>
+
+<LI>
+
+<A HREF="#I11">The Documents Collection</A></LI>
+
+<LI>
+
+<A HREF="#I12">The Document Object</A></LI>
+
+<LI>
+
+<A HREF="#I13">The Objects Collection</A></LI></UL>
+
+<LI>
+
+<A HREF="#I14">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>32 &#151; OLE Automation</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>OLE automation represents a communication mechanism between cooperating applications. Applications that are <I>OLE automation servers</I> have the capability to expose their objects through a series of <I>properties</I> and <I>methods</I>. Applications that are OLE clients or <I>OLE controllers</I> can access these exposed properties and methods through the OLE IDispatch interface.
+
+<BR></P>
+
+<P>One of the most popular uses of OLE automation is to expose the capabilities of your application to the extent that your application becomes fully controllable from a general purpose OLE controller, such as Microsoft's Visual Basic. In this fashion, Visual Basic can act as a powerful macro language for your application.
+
+<BR></P>
+
+<P>The MFC Library and the Visual C++ Developer Studio provide extensive support for developing OLE automation servers. In this chapter, we first explore these capabilities by constructing a simple server application; later, we review other issues that concern OLE automation development.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Building an Automation Server</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The OLE automation server that we build in this chapter is simple indeed; this tiny program performs one task only, and that is the multiplication of two numbers. The program is capable of running stand-alone using a simple dialog-based user interface. It also supports invocation from within an OLE controller.
+
+<BR></P>
+
+<P>Figure 32.1 shows the user interface of this application, ASRV. To use this application, first enter the two multiplicands in the two edit fields on the left side, then click on the = button to calculate the result.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu01.gif">Figure 32.1. The user interface of the ASRV </B><B>server.</A></B>
+
+<BR></P>
+
+<P>The OLE automation methods and properties closely correspond to these user-interface elements. Two properties, Multi1 and Multi2, correspond to the two multiplicands; these properties are read and write. The Result property, representing the result of the multiplication, is a read-only property. Finally, the Set method corresponds to the function of the = button; this method carries out the actual multiplication.
+
+<BR></P>
+
+<P>We construct this application in three steps. First, the application's skeleton is created. Next, the user interface is edited and the functions performing the calculations are added. Finally, OLE automation capabilities are implemented.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Constructing the ASRV Application Skeleton</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The ASRV application skeleton should be constructed using the AppWizard. The application should be a single-document-based application with default settings.
+
+<BR></P>
+
+<P>Support for OLE automation is specified in Step 3 of AppWizard (Figure 32.2). Make sure the OLE automation check box is marked before proceeding from this step.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu02.gif">Figure 32.2. Adding OLE automation support.</A></B>
+
+<BR></P>
+
+<P>We should also change the base class of the new application's view class before dismissing AppWizard. In AppWizard Step 6 (Figure 32.3), select the class CASRVView and select CFormView as its base class. As a CFormView-based class, our new view class uses a dialog template to provide its visual appearance.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu03.gif">Figure 32.3. Changing the base class for the view.</A></B>
+
+<BR></P>
+
+<P>At this point, you can click on the Finish button to complete construction of the skeleton application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Implementing the Calculation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>I almost used the term &quot;Calculator Engine&quot; in the title, but I figured that such a term might cause some of you to burst out in hysterical laughter. After all, calling a simple multiplication operation an &quot;engine&quot; may be too much, even in this day and age of hype, pomp, and circumstance!
+
+<BR></P>
+
+<P>The first step in implementing the calculator is to create its user interface. AppWizard created us a dialog corresponding to the CFormView-derived view class; however, the dialog is spartan, to say the least (Figure 32.4). Edit this dialog by removing the default TODO field and adding three edit fields, a button, and a static field as shown earlier in Figure 32.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu04.gif">Figure 32.4. &quot;Spartan&quot; default dialog supplied by </B><B>AppWizard.</A></B>
+
+<BR></P>
+
+<P>The two edit fields on the left side should be called IDC_MULTI1 and IDC_MULTI2, respectively. The edit field on the right-hand side should be called IDC_RESULT. You may consider making this field a read-only field. The button, with a caption set to a single equal sign, should be called IDC_CALCULATE. You may consider setting the Default property for this button to enable using the Enter key to perform the calculation.
+
+<BR></P>
+
+<P>While the dialog is open for editing, invoke the ClassWizard. Using the ClassWizard, add a member function to the view class corresponding to a mouse click on the IDC_CALCULATE button (Figure 32.5).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu05.gif">Figure 32.5. Adding a member function to handle clicks </B><B>on the Calculate button.</A></B>
+
+<BR></P>
+
+<P>At this point, you are probably expecting us to add member variables corresponding to the edit fields. However, this is not how we are going to proceed at this time. The member variables that represent the multiplicands and the result are added to the document class instead; correspondingly, we have to modify the DoDataExchange member function of the view class manually.
+
+<BR></P>
+
+<P>After dismissing the ClassWizard, open the header file for the document class for editing. In the Attributes section of the CASRVDoc class declaration, add declarations for three new member variables as follows:
+
+<BR></P>
+
+<PRE>class CASRVDoc : public CDocument
+
+{
+
+protected: // create from serialization only
+
+    CASRVDoc();
+
+    DECLARE_DYNCREATE(CASRVDoc)
+
+// Attributes
+
+public:
+
+long m_lMulti1;
+
+    long m_lMulti2;
+
+    long m_lResult;
+
+...</PRE>
+
+<P>These variables must also be initialized. Initialization can take place in the constructor (Listing 32.1).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.1. Variable initialization in the </B><B>CASRVDoc</B><B> constructor.</B></LH></UL>
+
+<PRE>CASRVDoc::CASRVDoc()
+
+{
+
+    // TODO: add one-time construction code here
+
+    m_lMulti1 = 0;
+
+    m_lMulti2 = 0;
+
+    m_lResult = 0;
+
+    EnableAutomation();
+
+    AfxOleLockApp();
+
+}</PRE>
+
+<P>To actually perform the calculation, we need a new member function in CASRVDoc. This member function, DoCalculate, will be declared as follows:
+
+<BR></P>
+
+<PRE>class CASRVDoc : public CDocument
+
+{
+
+    ...
+
+// Operations
+
+public:
+
+void DoCalculate();
+
+...</PRE>
+
+<P>The implementation of DoCalculate is shown in Listing 32.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.2. Implementation of </B><B>CASRVDoc::DoCalculate</B><B>.</B></LH></UL>
+
+<PRE>void CASRVDoc::DoCalculate()
+
+{
+
+    m_lResult = m_lMulti1 * m_lMulti2;
+
+}</PRE>
+
+<P>Two things remain to be done. First, we need to connect the member variables in CASRVDoc with the CFormView-based dialog. Second, we must add a call to CASRVDoc::DoCalculate from within the handler function for mouse clicks on the IDC_CALCULATE button.
+
+<BR></P>
+
+<P>The modified version of CASRVView::DoDataExchange is shown in Listing 32.3. Basically, we do what ClassWizard would have done, if only the variables were local to this class.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.3. Modified version of </B><B>CASRVDoc::DoDataExchange</B><B>.</B></LH></UL>
+
+<PRE>void CASRVView::DoDataExchange(CDataExchange* pDX)
+
+{
+
+    CFormView::DoDataExchange(pDX);
+
+    //{{AFX_DATA_MAP(CASRVView)
+
+    //}}AFX_DATA_MAP
+
+    CASRVDoc *pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    DDX_Text(pDX, IDC_MULTI1, pDoc-&gt;m_lMulti1);
+
+    DDX_Text(pDX, IDC_MULTI2, pDoc-&gt;m_lMulti2);
+
+    DDX_Text(pDX, IDC_RESULT, pDoc-&gt;m_lResult);
+
+}</PRE>
+
+<P>In the implementation of CASRVView::OnCalculate (Listing 32.4), we call the document class's member function DoCalculate to perform the actual calculation. We also utilize the UpdateData function to ensure that the member variables and the dialog fields are properly updated before and after the calculation.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.4. Implementation of </B><B>CASRVView::OnCalculate</B><B>.</B></LH></UL>
+
+<PRE>void CASRVView::OnCalculate()
+
+{
+
+    // TODO: Add your control notification handler code here
+
+    CASRVDoc *pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    UpdateData(TRUE);
+
+    pDoc-&gt;DoCalculate();
+
+    UpdateData(FALSE);
+
+}</PRE>
+
+<P>At this point, the application can be recompiled and should operate normally as a stand-alone application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Adding Automation Support</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The first step in adding automation support is through the ClassWizard. To add properties and methods to the CASRVDoc class, invoke the ClassWizard, select the OLE Automation tab, and select the CASRVDoc class (Figure 32.6).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu06.gif">Figure 32.6. Using the ClassWizard to add automation </B><B>support.</A></B>
+
+<BR></P>
+
+<P>First, add two properties corresponding to the two multiplicands. Click on the Add Property button to invoke the Add Property dialog. In this dialog, specify Multi1 as the external name of the new property and long as the property's type. Modify the default variable name supplied by ClassWizard to read m_lMulti1 (Figure 32.7). Click on the OK button to dismiss this dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu07.gif">Figure 32.7. Adding a new property.</A></B>
+
+<BR></P>
+
+<P>Next, use the ClassWizard to add another property, Multi2, in a similar fashion.
+
+<BR></P>
+
+<P>The third property, Result, differs from the previous two. Because this is a read-only property, we choose Get/Set methods as the property's implementation. Or, to be more precise, we use a Get method, for implementing a read-only property is accomplished simply by erasing the ClassWizard-generated name for the Set function (Figure 32.8).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu08.gif">Figure 32.8. Adding a read-only property.</A></B>
+
+<BR></P>
+
+<P>The one thing that remains is adding the Calculate method that performs the actual calculation. To add this method, click on the Add Method button. In the Add Method dialog, type Calculate as both the External and Internal name of the new method, and select void as the method's return type (Figure 32.9).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu09.gif">Figure 32.9. Adding a new method.</A></B>
+
+<BR></P>
+
+<P>At this point, we are finished with ClassWizard; it can be dismissed by clicking on the OK button.
+
+<BR></P>
+
+<P>Take a brief look at the header file of CASRVDoc. Towards the end of the class declaration, the ClassWizard added a series of items to the class's dispatch map:
+
+<BR></P>
+
+<PRE>class CASRVDoc : public CDocument
+
+{
+
+    ...
+
+protected:
+
+    ...
+
+    // Generated OLE dispatch map functions
+
+    //{{AFX_DISPATCH(CASRVDoc)
+
+    long m_lMulti1;
+
+    afx_msg void OnMulti1Changed();
+
+    long m_lMulti2;
+
+    afx_msg void OnMulti2Changed();
+
+    afx_msg long GetResult();
+
+    afx_msg void Calculate();
+
+    //}}AFX_DISPATCH
+
+    DECLARE_DISPATCH_MAP()
+
+    DECLARE_INTERFACE_MAP()
+
+};</PRE>
+
+<P>There are several things that should be noticed here. First, as you can see, the ClassWizard generated declarations for the member variables m_lMulti1 and m_lMulti2; therefore, the declarations we added by hand earlier are no longer needed and should be removed from the Attributes section.
+
+<BR></P>
+
+<P>Second, the ClassWizard created the method function Calculate; as there is no need for this and a separate DoCalculate, these two functions can be consolidated into one and we can get rid of DoCalculate.
+
+<BR></P>
+
+<P>Third, notice that the variables m_lMulti1 and m_lMulti2 are in a section of the class declaration that is marked protected. However, we access these variables from CASRVView::DoDataExchange. The simplest way to ensure that the program can be compiled is to add CASRVView as a friend class to CASRVDoc.
+
+<BR></P>
+
+<P>Because of these numerous changes, I have listed the final form of the CASRVDoc class declaration in its entirety (see Listing 32.5).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.5. </B><B>CASRVDoc</B><B> class declaration with automation support.</B></LH></UL>
+
+<PRE>class CASRVDoc : public CDocument
+
+{
+
+friend class CASRVView;
+
+protected: // create from serialization only
+
+    CASRVDoc();
+
+    DECLARE_DYNCREATE(CASRVDoc)
+
+// Attributes
+
+public:
+
+    long m_lResult;
+
+// Operations
+
+public:
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CASRVDoc)
+
+    public:
+
+    virtual BOOL OnNewDocument();
+
+    virtual void Serialize(CArchive&amp; ar);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+public:
+
+    virtual ~CASRVDoc();
+
+#ifdef _DEBUG
+
+    virtual void AssertValid() const;
+
+    virtual void Dump(CDumpContext&amp; dc) const;
+
+#endif
+
+protected:
+
+// Generated message map functions
+
+protected:
+
+    //{{AFX_MSG(CASRVDoc)
+
+        // NOTE - the ClassWizard will add and remove member
+
+        //  functions here.  DO NOT EDIT what you see in these
+
+        //  blocks of generated code !
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+    // Generated OLE dispatch map functions
+
+    //{{AFX_DISPATCH(CASRVDoc)
+
+    long m_lMulti1;
+
+    afx_msg void OnMulti1Changed();
+
+    long m_lMulti2;
+
+    afx_msg void OnMulti2Changed();
+
+    afx_msg long GetResult();
+
+    afx_msg void Calculate();
+
+    //}}AFX_DISPATCH
+
+    DECLARE_DISPATCH_MAP()
+
+    DECLARE_INTERFACE_MAP()
+
+};</PRE>
+
+<P>The ClassWizard added two notification handlers and two method functions to the implementation of CASRVDoc. After removing the DoCalculate member function from the implementation file, modify CASRVDoc::GetResult and CASRVDoc::Calculate as shown in Listing 32.6. The notification handler functions do not need to be altered.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.6. </B><B>CASRVDoc::GetResult</B><B> and </B><B>CASRVDoc::Calculate</B><B>.</B></LH></UL>
+
+<PRE>long CASRVDoc::GetResult()
+
+{
+
+    // TODO: Add your property handler here
+
+    return m_lResult;
+
+}
+
+void CASRVDoc::Calculate()
+
+{
+
+    // TODO: Add your dispatch handler code here
+
+    m_lResult = m_lMulti1 * m_lMulti2;
+
+}</PRE>
+
+<P>One thing remains to be done before we can recompile the application. In the function CASRVView::OnCalculate there is a now obsolete reference to the DoCalculate member function of the document class. Change this reference to Calculate instead, and now you can recompile the program.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>The Type Library</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before we test our application, let's take a quick peek at one of the files generated and maintained by ClassWizard. The ASRV.odl file (Listing 32.7) is a script file created in Microsoft's <I>Object Definition </I><I>Language</I>. It is compiled using the MkTypLib.exe tool; the resulting type library (TLB) file is an OLE compound document that can be accessed by automation clients using the ITypeComp, ITypeInfo, and ITypeLib OLE interfaces.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.7. The </B><B>ASRV.odl</B><B> type library source file.</B></LH></UL>
+
+<PRE>// ASRV.odl : type library source for ASRV.exe
+
+// This file will be processed by the Make Type Library (mktyplib)
+
+// tool to produce the type library (ASRV.tlb).
+
+[ uuid(603E9429-01C6-11CF-87C3-00403321BFAC), version(1.0) ]
+
+library ASRV
+
+{
+
+    importlib(&quot;stdole32.tlb&quot;);
+
+    //  Primary dispatch interface for CASRVDoc
+
+    [ uuid(603E942A-01C6-11CF-87C3-00403321BFAC) ]
+
+    dispinterface IASRV
+
+    {
+
+        properties:
+
+     // NOTE - ClassWizard will maintain property information here.
+
+     //    Use extreme caution when editing this section.
+
+            //{{AFX_ODL_PROP(CASRVDoc)
+
+            [id(1)] long Multi1;
+
+            [id(2)] long Multi2;
+
+            [id(3)] long Result;
+
+            //}}AFX_ODL_PROP
+
+        methods:
+
+     // NOTE - ClassWizard will maintain method information here.
+
+     //    Use extreme caution when editing this section.
+
+            //{{AFX_ODL_METHOD(CASRVDoc)
+
+            [id(4)] void Calculate();
+
+            //}}AFX_ODL_METHOD
+
+    };
+
+    //  Class information for CASRVDoc
+
+    [ uuid(82F6E8E9-01BD-11CF-87C3-00403321BFAC) ]
+
+    coclass CASRVDoc
+
+    {
+
+        [default] dispinterface IASRV;
+
+    };
+
+    //{{AFX_APPEND_ODL}}
+
+};</PRE>
+
+<P>The interfaces ICreateTypeInfo and ICreateTypeLib are used by the tools themselves (such as MkTypLib.exe).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Testing the Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE automation servers can best be tested from within a general-purpose automation controller. If you have Visual Basic installed on your system, you can use it as an ideal OLE automation testing tool. (Both 16- and 32-bit versions should work fine together with 32-bit automation servers created using Visual C++.)
+
+<BR></P>
+
+<P>To test the ASRV server from within Visual Basic 3.0, I created the simple form shown in Figure 32.10.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu10.gif">Figure 32.10. Visual Basic form used for testing </B><B>ASRV.</A></B>
+
+<BR></P>
+
+<P>The three edit fields in this form are called Multi1, Multi2, and Result, respectively. The button with the equal sign in it is called Calculate.
+
+<BR></P>
+
+<P>To perform the test, I attached the code shown in Listing 32.8 to the Form. The declaration (Dim statement) of ASRV is performed in the (general) section; the Form_Load subroutine is attached to the Load event of the Form object; the Calculate_Click subroutine is attached to the Click event of the Calculate button. By implementing the test application this way, we can avoid reloading the ASRV server every time a calculation is performed.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 32.8. Visual Basic code used for testing ASRV.</B></LH></UL>
+
+<PRE>Dim ASRV As object
+
+Sub Form_Load ()
+
+    Set ASRV = CreateObject(&quot;ASRV.Document&quot;)
+
+End Sub
+
+Sub Calculate_Click ()
+
+    ASRV.Multi1 = Val(Multi1.Text)
+
+    ASRV.Multi2 = Val(Multi2.Text)
+
+    ASRV.Calculate
+
+    Result.Text = Str(ASRV.Result)
+
+End Sub</PRE>
+
+<P>Note that during the test, the ASRV application never becomes visible. This is because when launched with the /Automation command-line parameter (and this is how Visual Basic launches it), the AppWizard-generated application never displays its main application window. If it were a multiple-document interface application that was already running, the behavior would be slightly different: The application window would remain visible, but no new frame window would be displayed to represent the new document. Either way, it should be kept in mind that a document launched using OLE automation may not have an associated view window.
+
+<BR></P>
+
+<P>This Visual Basic application is identical in functionality and nearly identical in appearance to the original user interface of ASRV. The difference, of course, is that the ASRV application now performs as a black-box module. Not only does even this simple server application show the power of OLE automation, it also demonstrates the potential of OLE automation controllers such as Visual Basic to act as highly powerful system integration applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>Standard Methods and Properties</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>When building the ASRV server, I intentionally used a very simple set of methods and properties in order to keep the example program simple and focused. However, Microsoft actually provides a recommended set of properties and methods that production applications should implement:
+
+<BR></P>
+
+<UL>
+
+<LI>Every application should implement at least one object, an Application object, with its standard set of methods and properties.
+
+<BR>
+
+<BR></LI>
+
+<LI>Applications should also implement, if applicable, collections of documents, document objects, and object collections within documents.
+
+<BR>
+
+<BR></LI></UL>
+
+<P>This brings up an interesting issue that we have not had an opportunity to address during the construction of ASRV. ASRV's simple properties were merely long integers. The use of string properties is relatively straightforward, but what if the value of a property or the result of a method is another object? This is the case, for example, when an OLE controller requests a particular item from an application's document collection. How is the document item passed to the controller?
+
+<BR></P>
+
+<P>The answer is simple, but far from obvious. A method that returns another object should in fact return a pointer to an IDispatch OLE interface. Such a pointer can be obtained for any CCmdTarget-derived object by calling the CCmdTarget member function GetIDispatch. For example, if your application object has a method that returns the active document, this method may be implemented similarly to the following:
+
+<BR></P>
+
+<PRE>LPDISPATCH GetActiveDocument()
+
+{
+
+    CFrameWnd *pWnd = (CFrameWnd *)AfxGetMainWnd();
+
+    ASSERT_VALID(pWnd);
+
+    CMyDocument *pDoc = pWnd-&gt;GetActiveDocument();
+
+    ASSERT_VALID(pDoc);
+
+    return pDoc-&gt;GetIDispatch(TRUE);
+
+}</PRE>
+
+<P>The hierarchy of standard objects that OLE automation servers should support is shown in Figure 32.11.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="32vcu11.gif">Figure 32.11. Standard OLE automation objects.</A></B>
+
+<BR></P>
+
+<P>All objects must support two standard properties, shown in Table 32.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 32.1. Properties common to all standard objects.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Property/Method</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Mandatory</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Read/Write</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>P: Application</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>The application object</P>
+
+<TR>
+
+<TD>
+
+<P>P: Parent</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>The parent of the current object</P></TABLE>
+
+<P>All collection objects (for example, the documents collection) must support an additional set of properties and methods, shown in Table 32.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 32.2. Properties and methods for collection objects.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Property/Method</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Mandatory</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Read/Write</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>P: Count</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Number of items in collection</P>
+
+<TR>
+
+<TD>
+
+<P>P: _NewEnum</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Enumerator for iteration</P>
+
+<TR>
+
+<TD>
+
+<P>M: Add</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Adds an item to the collection</P>
+
+<TR>
+
+<TD>
+
+<P>M: Item</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Retrieves a collection item</P>
+
+<TR>
+
+<TD>
+
+<P>M: Remove</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Removes a collection item</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The Application Object</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The application object represents the application itself. This object should support the set of properties and methods listed in Table 32.3.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 32.3. Properties and methods for application objects.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Property/Method</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Mandatory</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Read/Write</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>P: ActiveDocument</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Active document object</P>
+
+<TR>
+
+<TD>
+
+<P>P: Caption</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Application window title</P>
+
+<TR>
+
+<TD>
+
+<P>P: DefaultFilePath</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Default directory path</P>
+
+<TR>
+
+<TD>
+
+<P>P: Documents</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>The documents collection</P>
+
+<TR>
+
+<TD>
+
+<P>P: FullName</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Executable full filename</P>
+
+<TR>
+
+<TD>
+
+<P>P: Height</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Height of application window</P>
+
+<TR>
+
+<TD>
+
+<P>P: Interactive</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>User interaction allowed</P>
+
+<TR>
+
+<TD>
+
+<P>P: Left</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Application window left side</P>
+
+<TR>
+
+<TD>
+
+<P>P: Name</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Application name</P>
+
+<TR>
+
+<TD>
+
+<P>P: Path</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Executable file path</P>
+
+<TR>
+
+<TD>
+
+<P>P: StatusBar</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Status bar text</P>
+
+<TR>
+
+<TD>
+
+<P>P: Top</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Application window top</P>
+
+<TR>
+
+<TD>
+
+<P>P: Visible</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Application window visible</P>
+
+<TR>
+
+<TD>
+
+<P>P: Width</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Width of application window</P>
+
+<TR>
+
+<TD>
+
+<P>M: Help</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Display online help</P>
+
+<TR>
+
+<TD>
+
+<P>M: Quit</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Exit the application</P>
+
+<TR>
+
+<TD>
+
+<P>M: Repeat</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Repeat last action</P>
+
+<TR>
+
+<TD>
+
+<P>M: Undo</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Undo last action</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>The Documents Collection</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The documents collection represents all the application's currently active documents in a collection. This collection object should implement, in addition to properties and methods common to all objects and to all collections, an additional two methods, shown in Table 32.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 32.4. Methods of the documents collection</B><B>.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Property/Method</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Mandatory</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Read/Write</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>M: Close</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>M: Open</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Opens a new document</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The Document Object</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The document object represents an individual document. In addition to standard properties and methods, document objects should support the properties and methods shown in Table 32.5.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 32.5. Properties and methods of document objects.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Property/Method</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Mandatory</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Read/Write</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>P: Author</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Author of the document</P>
+
+<TR>
+
+<TD>
+
+<P>P: Comments</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Document comments</P>
+
+<TR>
+
+<TD>
+
+<P>P: FullName</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Document full filename</P>
+
+<TR>
+
+<TD>
+
+<P>P: Keywords</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Document keywords</P>
+
+<TR>
+
+<TD>
+
+<P>P: Name</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Document filename</P>
+
+<TR>
+
+<TD>
+
+<P>P: Path</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Document filepath</P>
+
+<TR>
+
+<TD>
+
+<P>P: ReadOnly</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-only</P>
+
+<TD>
+
+<P>Read-only document</P>
+
+<TR>
+
+<TD>
+
+<P>P: Saved</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Changes were saved</P>
+
+<TR>
+
+<TD>
+
+<P>P: Subject</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Subject of document</P>
+
+<TR>
+
+<TD>
+
+<P>P: Title</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<P>Read-write</P>
+
+<TD>
+
+<P>Document title</P>
+
+<TR>
+
+<TD>
+
+<P>M: Activate</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Activates first document window</P>
+
+<TR>
+
+<TD>
+
+<P>M: Close</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Closes the document</P>
+
+<TR>
+
+<TD>
+
+<P>M: NewWindow</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Creates new window for document</P>
+
+<TR>
+
+<TD>
+
+<P>M: Print</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Prints the document</P>
+
+<TR>
+
+<TD>
+
+<P>M: PrintOut</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Same as Print</P>
+
+<TR>
+
+<TD>
+
+<P>M: PrintPreview</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Activates Print Preview</P>
+
+<TR>
+
+<TD>
+
+<P>M: RevertToSaved</P>
+
+<TD>
+
+<P>No</P>
+
+<TD>
+
+<TD>
+
+<P>Reloads last saved version</P>
+
+<TR>
+
+<TD>
+
+<P>M: Save</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Saves the document</P>
+
+<TR>
+
+<TD>
+
+<P>M: SaveAs</P>
+
+<TD>
+
+<P>Yes</P>
+
+<TD>
+
+<TD>
+
+<P>Saves using filename</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>The Objects Collection</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The objects collection is offered by document objects as applicable. This collection contains application-specific items. For example, in the case of a graphics application, the objects collection may represent a series of shapes that together comprise a drawing (a document). In the case of a word processor, the objects collection may represent paragraphs of text. Or, in the case of a spreadsheet application, this collection may represent the collection of spreadsheet cells.
+
+<BR></P>
+
+<P>The implementation of the objects collection and that of individual objects (and indeed, whether these are implemented at all) is implementation-dependent. If you choose to implement these items, remember to add the methods and properties common to all objects, and those common to all collections.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>OLE automation is a means of communication between OLE automation servers and OLE automation controllers using the OLE IDispatch interface. The MFC Library and the Developer Studio provide extensive support for the development of OLE automation servers.
+
+<BR></P>
+
+<P>Constructing an automation server through AppWizard requires that you select the OLE automation check box in AppWizard Step 3. This adds automation support to your application and enables your application's document class for automation.
+
+<BR></P>
+
+<P>Automation methods and properties are added through the ClassWizard. Methods are represented by member functions. Properties are either represented by member variables or by Get/Set methods. If you wish to implement a read-only (or write-only) property, use Get/Set methods as the property's implementation, and erase the unwanted method while still in ClassWizard.
+
+<BR></P>
+
+<P>ClassWizard also creates a type library source file, which is a script written using the Object Description Language. When a type library is generated from this script using the MkTypLib.exe tool, it can be utilized by other applications for finding out about the server's automation interface.
+
+<BR></P>
+
+<P>OLE automation servers can be tested and used from automation controllers. General purpose automation controllers include programming environments such as Visual Basic. The ability to use automation servers as black box components shows the power of OLE automation as well as the power of Visual Basic and similar development systems as system integration tools.
+
+<BR></P>
+
+<P>Microsoft recommends that OLE automation applications expose a series of standard objects through properties and methods. These objects include the Application object, the application's documents collection, individual document objects, the collection of objects within a document, and, if applicable, objects (items) that comprise a document. A set of standard properties and methods is defined for these that other applications may attempt to utilize.</P>
+
+<P><A HREF="vcu31fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p05vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

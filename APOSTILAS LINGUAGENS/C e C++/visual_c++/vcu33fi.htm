@@ -1,0 +1,1412 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu33fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu34fi.htm">
+
+<LINK REL="Previous" HREF="p05vcufi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="p05vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu34fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">33 &#151; Database Programming Through ODBC</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">ODBC in Action</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">The ODBC Setup Applet</A></LI>
+
+<LI>
+
+<A HREF="#I5">ODBC API Concepts</A></LI>
+
+<LI>
+
+<A HREF="#I6">A Simple ODBC Example</A></LI>
+
+<LI>
+
+<A HREF="#I7">Other ODBC calls</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">The SQL Standard and ODBC</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Data Manipulation Statements</A></LI>
+
+<LI>
+
+<A HREF="#I10">Views</A></LI>
+
+<LI>
+
+<A HREF="#I11">Data Definition Statements</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">ODBC in MFC Applications</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">Setting Up a Data Source</A></LI>
+
+<LI>
+
+<A HREF="#I14">Creating an ODBC Application Skeleton Through AppWizard</A></LI>
+
+<LI>
+
+<A HREF="#I15">Customizing the ODBC Application</A></LI>
+
+<LI>
+
+<A HREF="#I16">ODBC Classes in MFC</A></LI>
+
+<LI>
+
+<A HREF="#I17">Summary</A></LI></UL></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>33 &#151; Database Programming Through ODBC</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>ODBC, or Open Database Connectivity, represents a vendor-independent mechanism for accessing data in a variety of data sources.
+
+<BR></P>
+
+<P>ODBC drivers are available for many different types of data sources. You can use ODBC to retrieve data from text files, dBase tables, Excel spreadsheets, SQL Server databases, and many other sources.
+
+<BR></P>
+
+<P>Many ODBC drivers are redistributable. You can package your application for installation with the appropriate ODBC drivers and software for driver installation and management.
+
+<BR></P>
+
+<P>At the heart of ODBC is its capability to execute SQL (Structured Query Language) statements against data sources. In addition to reviewing ODBC in this chapter, we also take a (very) brief look at SQL itself. If you plan to perform extensive development work using ODBC, I recommend a reference manual on SQL, such as Date's <I>The SQL Standard</I>.
+
+<BR></P>
+
+<P>The MFC Library provides extensive support for ODBC applications. A series of classes exists encapsulating ODBC databases, tables, and records. The AppWizard supports the creation of ODBC applications, and further support for ODBC is provided by ClassWizard.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>ODBC in Action</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>This section presents a review of some of the fundamental concepts of ODBC that we need to cover before we can begin an attempt to create an ODBC application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>The ODBC Setup Applet</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Invoked through the Control Panel or as a stand-alone application, the ODBC setup applet is used to register data sources.
+
+<BR></P>
+
+<P>What exactly is a data source? That depends on the driver. In the case of a driver such as the SQL Server driver, the data source can be a database on a server. In the case of a driver such as the Microsoft Access or Microsoft Excel drivers, the database is a file (an MDB or XLS file). In the case of the Microsoft Text driver, the database is a disk directory that contains text files, which serve as tables in the database from the driver's perspective.
+
+<BR></P>
+
+<P>To add a data source, invoke the ODBC setup applet and select the Add button. In the resulting dialog (Figure 33.1), pick a driver and click OK.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu01.gif">Figure 33.1. ODBC Add Data Source dialog.</A></B>
+
+<BR></P>
+
+<P>Next, a driver-specific dialog is displayed (Figure 33.2), where you can select the database and adjust the desired characteristics of the driver.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu02.gif">Figure 33.2. ODBC driver setup (Microsoft Text </B><B>driver).</A></B>
+
+<BR></P>
+
+<P>The ODBC setup applet's main dialog (Figure 33.3) lists all installed data sources. You can add or delete data sources, or you can modify the setup of existing data sources using this dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu03.gif">Figure 33.3. ODBC Setup Applet.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>ODBC API Concepts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Applications that use ODBC rely on ODBC drivers for data access. Drivers can be single-tier or multiple-tier. Single-tier drivers process ODBC calls and SQL statements. Multiple-tier drivers process ODBC calls and pass SQL statements to the data source (potentially a server residing elsewhere on the network).
+
+<BR></P>
+
+<P>The ODBC standard defines three conformance levels. The Core API includes those fundamental ODBC calls that are required to access a data source and execute SQL commands. The Level 1 API contains a set of additional calls used to retrieve information about data sources and the driver itself. The Level 2 API contains additional calls, such as calls that operate using parameter and result arrays. As some drivers may not support Level 2 calls (although most support Level 1), it is important to know whether a particular command is available or not; ODBC references clearly mark each command with the API level that it conforms to.
+
+<BR></P>
+
+<P>With respect to the SQL grammar, ODBC defines a core grammar and two variants: a minimum SQL grammar and an extended grammar.
+
+<BR></P>
+
+<P>Note that ODBC is not equivalent to Embedded SQL. Embedded SQL uses SQL statements in source programs written in another language. Such a hybrid program is processed by a precompiler before it is passed to the compiler of the host programming language.
+
+<BR></P>
+
+<P>In contrast, ODBC interprets SQL statements at run-time. The host program does not need to be recompiled to execute different SQL statements, nor is it necessary to compile separate versions of a host program for different data sources.
+
+<BR></P>
+
+<P>An ODBC application has to perform a series of steps to connect to a data source before it can execute SQL statements. These steps are illustrated in Figure 33.4.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu04.gif">Figure 33.4. Typical set of ODBC calls.</A></B>
+
+<BR></P>
+
+<P>The first of the calls in Figure 33.1, SQLAllocEnv, allocates an ODBC environment. In effect, this call initializes the ODBC library and returns an environment handle of type SQLENVH.
+
+<BR></P>
+
+<P>The second call, SQLAllocConnect, allocates memory for a connection. The handle that is returned by this function, of type SQLHDBC, is used in subsequent ODBC function calls to refer to a specific connection. One application can maintain several open connections.
+
+<BR></P>
+
+<P>The third call, SQLConnect, establishes a connection by loading the driver and connecting to the data source. This call has alternatives; for example, the SQLDriverConnect call can be utilized to connect to data sources that are not set up via the ODBC setup applet.
+
+<BR></P>
+
+<P>Memory for an SQL statement is allocated through a call to SQLAllocStmt. By allocating memory for statements in a separate step, ODBC offers a mechanism whereas statements can be constructed, used, and reused before the memory allocated for them is released.
+
+<BR></P>
+
+<P>After these four calls, a typical ODBC application performs a series of calls to execute SQL statements against a database. It can use SQLPrepare to prepare (compile) an SQL statement for execution and SQLExecute to actually execute it. It can use a variety of calls to bind variables to statements and to retrieve the results of a statement.
+
+<BR></P>
+
+<P>When its work is finished, the application should free the ODBC resources it has allocated. The statement handle is freed by calling SQLFreeStmt. The connection is terminated by calling SQLDisconnect; the memory allocated for the collection is released by a call to SQLFreeConnect. Finally, the ODBC environment is released by calling SQLFreeEnv.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>A Simple ODBC Example</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To put this into practice, I developed a very simple ODBC application that reads rows stored in an Excel spreadsheet. When an Excel spreadsheet is accessed using the Microsoft Excel ODBC driver, worksheets play the role of database tables; and rows in a worksheet play the role of records in a table.
+
+<BR></P>
+
+<P>The spreadsheet is shown in Figure 33.5. It is a simple table of people's last names, first names, and ages.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu05.gif">Figure 33.5. A simple Excel spreadsheet to be accessed </B><B>through ODBC.</A></B>
+
+<BR></P>
+
+<P>Instead of installing this Excel spreadsheet as a data source through the ODBC setup applet, I opted to utilize the capabilities of the SQLDriverConnect function. This function enables you to connect to a data source even if it has not been previously installed through the ODBC setup applet.
+
+<BR></P>
+
+<P>At first, I was thinking of developing a command line-based example (a console application). However, this is unfortunately not possible when using the ODBC libraries. Because many ODBC calls may use the Windows interface (displaying dialogs, for instance), it is not possible to utilize them from a command-line application. An attempt to compile a console application that contains ODBC calls results in a link failure even if you specify the correct libraries on the command line.
+
+<BR></P>
+
+<P>Therefore, I decided to write a simple Windows application in which I utilize calls to MessageBox to display data retrieved from the ODBC source.
+
+<BR></P>
+
+<P>The application is shown in Listing 33.1. This program can be compiled from the command line by typing cl ages.c odbc32.lib user32.lib. Using this program requires the file ages.xls to be available in the current directory.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 33.1.Simple ODBC application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;sql.h&gt;
+
+#include &lt;sqlext.h&gt;
+
+#include &lt;string.h&gt;
+
+#define CONNSTR \
+
+        &quot;DBQ=AGES.XLS;DRIVER={Microsoft Excel Driver (*.xls)}&quot;
+
+#define CONNLEN (sizeof(CONNSTR)-1)
+
+#define SQLTRY(x,y) \
+
+        { \
+
+          rc = y; \
+
+          if (rc != SQL_SUCCESS) \
+
+          { \
+
+            char buf[255]; \
+
+            char szState[6]; \
+
+            char szMsg[255]; \
+
+            SDWORD sdwNative; \
+
+            SWORD swMsgLen; \
+
+            SQLError(hEnv, hDBC, hStmt, szState, &amp;sdwNative, \
+
+                     szMsg, sizeof(szMsg), &amp;swMsgLen); \
+
+            wsprintf(buf, &quot;Error %d performing %s\nSQLState = %s&quot; \
+
+                    &quot;\nSQL message = %s&quot;, rc, x, szState, szMsg); \
+
+            MessageBox(NULL, buf, &quot;Error&quot;, MB_OK | MB_ICONSTOP); \
+
+            goto Terminate; \
+
+          } \
+
+        }
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+    SQLHENV hEnv = 0;
+
+    SQLHDBC hDBC = 0;
+
+    SQLHSTMT hStmt = 0;
+
+    SQLCHAR szConnStr[255];
+
+    SQLCHAR szStmt[255];
+
+    SQLCHAR szFirstName[255];
+
+    SQLCHAR szLastName[255];
+
+    long nAge;
+
+    SWORD cbConnStr;
+
+    RETCODE rc;
+
+    SDWORD sdwLNLen;
+
+    SDWORD sdwFNLen;
+
+    SDWORD sdwALen;
+
+    int i;
+
+    char szResult[1000];
+
+    SQLTRY(&quot;SQLAllocEnv&quot;, SQLAllocEnv(&amp;hEnv))
+
+    SQLTRY(&quot;SQLAllocConnect&quot;, SQLAllocConnect(hEnv, &amp;hDBC))
+
+    SQLTRY(&quot;SQLDriverConnect&quot;, SQLDriverConnect(hDBC, NULL,
+
+                                   CONNSTR, CONNLEN, szConnStr,
+
+                                   sizeof(szConnStr), &amp;cbConnStr,
+
+                                   SQL_DRIVER_NOPROMPT))
+
+    SQLTRY(&quot;SQLAllocStmt&quot;, SQLAllocStmt(hDBC, &amp;hStmt))
+
+    wsprintf(szStmt, &quot;SELECT * FROM [Sheet1$]&quot;);
+
+    SQLTRY(&quot;SQLPrepare&quot;, SQLPrepare(hStmt, szStmt, strlen(szStmt)))
+
+    SQLTRY(&quot;SQLBindCol&quot;, SQLBindCol(hStmt, 1, SQL_C_CHAR,
+
+                 (PTR)szLastName, sizeof(szLastName), &amp;sdwLNLen))
+
+    SQLTRY(&quot;SQLBindCol&quot;, SQLBindCol(hStmt, 2, SQL_C_CHAR,
+
+                 (PTR)szFirstName, sizeof(szFirstName), &amp;sdwFNLen))
+
+    SQLTRY(&quot;SQLBindCol&quot;, SQLBindCol(hStmt, 3, SQL_C_SLONG,
+
+                 (PTR)&amp;nAge, sizeof(nAge), &amp;sdwALen))
+
+    SQLTRY(&quot;SQLExecute&quot;, SQLExecute(hStmt))
+
+    for (i = 1; (rc = SQLFetch(hStmt)) == SQL_SUCCESS; i++)
+
+    {
+
+        wsprintf(szResult, &quot;Record #%d\nLast Name: %s\nFirst Name:&quot;
+
+                 &quot; %s\nAge: %d&quot;, i, szLastName, szFirstName, nAge);
+
+        MessageBox(NULL, szResult, &quot;Data&quot;, MB_OK);
+
+    }
+
+    if (rc != SQL_NO_DATA_FOUND)
+
+    {
+
+        SQLTRY(&quot;SQLFetch&quot;, rc)
+
+    }
+
+    MessageBox(NULL, &quot;Successfully completed.&quot;, &quot;Success&quot;, MB_OK);
+
+Terminate:
+
+    if (hStmt) SQLFreeStmt(hStmt, SQL_CLOSE);
+
+    if (hDBC) SQLDisconnect(hDBC);
+
+    if (hDBC) SQLFreeConnect(hDBC);
+
+    if (hEnv) SQLFreeEnv(hEnv);
+
+}</PRE>
+
+<P>Because there are so many things that can go wrong during an ODBC call, I did not think that I could get away with an example that has no error checking. Fortunately, ODBC calls use a uniform error reporting mechanism; thus, it was easy to create a simple macro, SQLTRY, and use that for simple error reporting. In a more sophisticated application you may utilize, for example, exception processing for this purpose (instead of that nasty goto).
+
+<BR></P>
+
+<P>The rest is fairly simple. After the obligatory calls to SQLAllocEnv and SQLAllocConnect, the program calls SQLDriverConnect. This call enables it to open a table that has not been set up using the ODBC setup applet, and do it (optionally) without presenting a user interface. This is exactly what we are doing here; note the constants CONNSTR and CONNLEN that are used for this purpose. In CONNSTR, the driver's name must be specified <I>exactly</I>; otherwise, the call will fail.
+
+<BR></P>
+
+<P>Once the database (spreadsheet) has been successfully connected to, a single SQL statement is executed:
+
+<BR></P>
+
+<PRE>SELECT * FROM [Sheet1$]</PRE>
+
+<P>The name Sheet1$ (enclosed in square brackets because it contains a character, '$', not recognized by SQL) is the driver-supplied name for the first spreadsheet in an Excel workbook. The SELECT SQL statement is used to retrieve a record or set of records; in its present form, it is used to simply retrieve all fields in all records.
+
+<BR></P>
+
+<P>The next three calls <I>bind</I> C variables to table columns. This is the purpose of the SQLBindCol function. When records are subsequently retrieved, field values are deposited into these variables.
+
+<BR></P>
+
+<P>The records themselves are retrieved by SQLFetch and displayed, in a rather pedestrian fashion, using MessageBox. SQLFetch is called repeatedly until its return value is something other than SQL_SUCCESS. A return value of SQL_NO_DATA_FOUND indicates that the last record has been retrieved; anything else is an error and treated accordingly.
+
+<BR></P>
+
+<P>The program ends with the obligatory calls to SQLFreeStmt, SQLDisconnect, SQLFreeConnect, and SQLFreeEnv to free up resources and terminate the connection to the data source.
+
+<BR></P>
+
+<P>If you run this program, it displays a series of dialogs like the one shown in Figure 33.6.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu06.gif">Figure 33.6. Dialog displayed by </B><B>ages.exe.</B><B></A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Other ODBC calls</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The example program in Listing 33.1 demonstrated some of the basic features of ODBC. Needless to say, there are many other ODBC function calls that application can utilize.
+
+<BR></P>
+
+<P>In addition to SQLConnect and SQLDriverConnect, the SQLBrowseConnect provides a third alternative for connecting to a data source. This function enables applications to iteratively browse data sources.
+
+<BR></P>
+
+<P>Several connection options related to transaction processing, character set translation, time-outs, tracing, and other features can be set using SQLSetConnectOption. Current settings can be retrieved through SQLGetConnectOption.
+
+<BR></P>
+
+<P>Information about drivers, data sources, and other options can be retrieved through a variety of functions, including SQLDataSources, SQLDrivers, SQLGetFunctions, SQLGetInfo, and SQLGetTypeInfo.
+
+<BR></P>
+
+<P>Statement-level options can be specified by calling SQLSetStmtOption.
+
+<BR></P>
+
+<P>As an alternative to calling SQLPrepare and SQLExecute, applications can utilize the SQLExecDirect function to execute SQL statements in a single step. The advantages of using SQLPrepare include the capability to execute a prepared statement more than once and to retrieve information about the result set prior to executing the statement.
+
+<BR></P>
+
+<P>The driver's translated version of an SQL statement can be retrieved by calling SQLNativeSql.
+
+<BR></P>
+
+<P>Some SQL statements require parameters. You can use SQLBindParameter to match variables in your program with question marks in an SQL statement. For example, you can use an SQL statement like this one:
+
+<BR></P>
+
+<PRE>INSERT INTO [Sheet1$] (LastName, FirstName, Age) VALUES (?, ?, ?)</PRE>
+
+<P>Prior to executing this statement, you can use three SQLBindParameter calls to match program variables to question marks in the SQL statement. This function is used in conjunction with SQLParamData and SQLPutData, which are used in response to an SQL_NEED_DATA return value from SQLExecute.
+
+<BR></P>
+
+<P>SQLParamOptions, which is a Level 2 ODBC extension, enables an application to set multiple values. Another Level 2 extension, SQLExtendedFetch, can be used to return data on several rows in an array form.
+
+<BR></P>
+
+<P>Information about a statement's parameters can be retrieved by calling SQLDescribeParam and SQLNumParams.
+
+<BR></P>
+
+<P>Information about a statement's results can be obtained by calls to SQLNumResultCols, SQLColAttributes, and SQLDescribeCol. The SQLRowCount function returns the number of rows affected by an SQL UPDATE, INSERT, or DELETE operation; it, however, is not guaranteed to return the number of rows in a result set, and few SQL drivers support that functionality.
+
+<BR></P>
+
+<P>As an alternative to using SQLBindCol to bind columns, an application can rely on SQLGetData to retrieve data from unbound columns.
+
+<BR></P>
+
+<P>ODBC supports positioning of SQL cursors. A Level 2 extension function, SQLSetPos, can be used to position the cursor to a specific row and to update, delete, or add data to the row set.
+
+<BR></P>
+
+<P>Transaction processing is supported by the SQLTransact function.
+
+<BR></P>
+
+<P>Information about a data source can be retrieved by calling the functions SQLTables, SQLTablePrivileges, SQLColumns, SQLColumnPrivileges, SQLPrimaryKeys, SQLForeignKeys, SQLSpecialColumns, SQLStatistics, SQLProcedures, and SQLProcedureColumns. The information is returned by these functions as a result set, accessible by calling SQLBindCol and SQLFetch.
+
+<BR></P>
+
+<P>ODBC enables the asynchronous execution of functions. Asynchronous execution is enabled by calling SQLSetStmtOption or SQLSetConnectOption with SQL_ASYNC_ENABLE. When, afterwards, a function that supports asynchronous execution is called, it returns immediately with the return value SQL_STILL_EXECUTING. Repeated calls to the same function (with parameters that must be valid but are ignored, except for the first, <I>hStmt</I> parameter) can be used to determine whether the function's execution has completed.
+
+<BR></P>
+
+<P>Information about ODBC errors can be retrieved in a standardized form using SQLError.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>The SQL Standard and ODBC</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>SQL, or Structured Query Language, is an official (ANSI) standard for relational database processing. In this section, I present a very brief overview of SQL, with special emphasis on the use of its statements in the context of ODBC. Hopefully, this brief summary will prove to be helpful in carrying out simple ODBC SQL operations in your applications without having to surround yourself with SQL reference works.
+
+<BR></P>
+
+<P>At the heart of SQL are <I>data manipulation statements</I> and <I>schema </I><I>definition statements</I>. Data manipulation statements retrieve, add, delete, or change data in a recordset (row set). Schema definition statements define the layout of a database.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Data Manipulation Statements</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are four basic data manipulation statements: SELECT, INSERT, UPDATE, and DELETE.
+
+<BR></P>
+
+<P>SELECT operations have a general form of &quot;SELECT-FROM-WHERE&quot;. For example, a SELECT statement may look like the following:
+
+<BR></P>
+
+<PRE>SELECT FirstName, LastName FROM EMPLOYEES WHERE EMPLOYEES.Age&lt;30</PRE>
+
+<P>Many other clauses and qualifiers can be used to refine a SELECT statement.
+
+<BR></P>
+
+<P>One of the most distinguishing features of relational databases is the ability to perform <I>join</I> operations. Loosely speaking, join operations means combining two or more tables into a single result set. For example, consider the following statement:
+
+<BR></P>
+
+<PRE>SELECT EMPLOYEES.FirstName, EMPLOYEES.LastName, PLANS.Name
+
+FROM EMPLOYEES, PLANS
+
+WHERE EMPLOYEES.Age &lt; PLANS.MaxAge</PRE>
+
+<P>This statement operates on two tables, EMPLOYEES and PLANS; the former represents the employees of a corporation, the latter the set of benefit packages the corporation offers. This SELECT statement retrieves, for each employee, the name of the employee and the name of all the plans the employee qualifies for by age. Note that if the employee qualifies for more than one plan, his or her name will appear more than once in the result set.
+
+<BR></P>
+
+<P>If you wish to use a SELECT statement to retrieve all the fields in a row, you can use a single asterisk as a shorthand. For example, for an EMPLOYEES table that has three fields, FirstName, LastName, and Age, the following two statements are equivalent:
+
+<BR></P>
+
+<PRE>SELECT FirstName, LastName, Age FROM EMPLOYEE
+
+SELECT * FROM EMPLOYEE</PRE>
+
+<P>SQL also offers a series of <I>aggregate functions</I>. These functions include COUNT, MIN, MAX, AVG, and SUM. For example, to count, in the EMPLOYEES table, the number of employees whose last names are distinct, you would use the following statement:
+
+<BR></P>
+
+<PRE>SELECT COUNT (DISTINCT EMPLOYEES.LastName) FROM EMPLOYEES</PRE>
+
+<P>Or, to calculate the combined life experience of the corporation's work force, you would issue the following statement:
+
+<BR></P>
+
+<PRE>SELECT SUM (EMPLOYEES.AGE) FROM EMPLOYEES</PRE>
+
+<P>Obviously, many forms of the SELECT statement operate on multiple rows and return row sets as results. The SQL standard defines the concept of a <I>cursor</I> that is used to iteratively fetch the rows from a result set. The ODBC SQLBindCol and SQLFetch functions are based on the same principle.
+
+<BR></P>
+
+<P>The INSERT statement is used to add rows to a table. The UPDATE statement is used to modify existing rows. The DELETE statement is used to remove rows. The syntax of these commands is similar to the syntax of the SELECT command. In particular, these commands have cursor-based and noncursor variants. For example, consider the following command that you would execute on December 31 every year to update the corporate employee database (naturally, nobody ages after 30):
+
+<BR></P>
+
+<PRE>UPDATE EMPLOYEES
+
+SET EMPLOYEES.AGE = EMPLOYEES.AGE + 1
+
+WHERE EMPLOYEES.AGE &lt; 30</PRE>
+
+<P>This <I>searched update</I> operates on all rows specified by the WHERE clause and does not require a cursor to execute. Other forms of these statements are cursor based; ODBC supports such operations via SQLBindParameter and related functions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Views</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A view, loosely speaking, is a kind of a &quot;virtual&quot; table. Not backed by physical storage, a view represents a row set created dynamically using the CREATE VIEW statement.
+
+<BR></P>
+
+<P>A view can be created with the help of a SELECT statement. For example, to create a view containing all employees younger than 30, you would use the following statement:
+
+<BR></P>
+
+<PRE>CREATE VIEW YOUNGEMPLOYEES (LastName, FirstName, Age)
+
+AS SELECT EMPLOYEES.LastName, EMPLOYEES.FirstName, EMPLOYEES.Age
+
+   FROM EMPLOYEES
+
+   WHERE EMPLOYEES.Age &lt; 30</PRE>
+
+<P>In subsequent operations, you can use this view just like you would use any other table. For example, you can use the following SELECT statement:
+
+<BR></P>
+
+<PRE>SELECT * FROM YOUNGEMPLOYEES</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Data Definition Statements</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Data definition statements are used to create and update tables and indexes in a database.
+
+<BR></P>
+
+<P>The CREATE TABLE statement can be used for, what else? To create a table, of course. To create the EMPLOYEES table that we used in the preceding sections, you could use the following statement:
+
+<BR></P>
+
+<PRE>CREATE TABLE EMPLOYEES
+
+  ( LastName  CHAR(30)  NOT NULL,
+
+    FirstName CHAR(30),
+
+    Age       INTEGER
+
+  )</PRE>
+
+<P>The CREATE TABLE statement supports constraint clauses. These include UNIQUE clauses (specifying that a field's value must be unique) and CHECK clauses (specifying a condition). For example, our EMPLOYEES table definition may look like this:
+
+<BR></P>
+
+<PRE>CREATE TABLE EMPLOYEES
+
+  ( LastName  CHAR(30) NOT NULL,
+
+    FirstName CHAR(30) NOT NULL,
+
+    Age INTEGER,
+
+    UNIQUE (LastName, FirstName),
+
+    CHECK (Age &lt; 30)
+
+  )</PRE>
+
+<P>Tables can also be created with indexes. For example, to create an EMPLOYEES table indexed by last name, use the following syntax:
+
+<BR></P>
+
+<PRE>CREATE TABLE EMPLOYEES
+
+  ( LastName  CHAR(30)  NOT NULL,
+
+    FirstName CHAR(30),
+
+    Age       INTEGER,
+
+    PRIMARY KEY (LastName)
+
+  )</PRE>
+
+<P>The CREATE INDEX statement can be used to create an index on an existing table.
+
+<BR></P>
+
+<P>The ALTER TABLE statement can be used to modify the structure of an existing table.
+
+<BR></P>
+
+<P>The DROP statement can be used to delete an existing table or index from the database.
+
+<BR></P>
+
+<P>Finally, the GRANT and REVOKE commands can be used to grant and revoke security privileges on specific tables.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>ODBC in MFC Applications</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The use of ODBC is greatly simplified by the Microsoft Foundation Classes Library. Simple applications that access tables through ODBC can be created with only a few mouse clicks using the AppWizard and ClassWizard. Several MFC classes exist that support accessing databases and recordsets.
+
+<BR></P>
+
+<P>Our discussion of ODBC-related features in the MFC Library starts with the construction of a simple example.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Setting Up a Data Source</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before an MFC ODBC application can be constructed using AppWizard, it is necessary to identify a data source on which the application will operate. The data source must be identified and set up through the ODBC setup applet.
+
+<BR></P>
+
+<P>The data source used in our example application is a text file. To access this file, we need the Microsoft Text ODBC driver. (If you did not install this driver when you set up Visual C++, rerun the Visual C++ setup program.)
+
+<BR></P>
+
+<P>The data file, ages.txt, will contain a set of records with first names, last names, and ages. The first row in the file will be used as a header row. The file will be a comma-separated file, with the following contents:
+
+<BR></P>
+
+<PRE>LastName,FirstName,Age
+
+Doe,John,29
+
+Doe,Jane,26
+
+Smith,Joe,44
+
+Brown,Joseph,27</PRE>
+
+<P>After creating this file, we must identify the data source through the 32-bit ODBC setup applet. Invoke this applet and click on the Add button; select the Microsoft Text Driver in the dialog shown in Figure 33.7.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu07.gif">Figure 33.7. Adding a text data source.</A></B>
+
+<BR></P>
+
+<P>Clicking on this dialog's OK button invokes the ODBC Text Setup dialog (Figure 33.8), which is a dialog specific to the selected driver. The Microsoft Text driver views disk directories as databases and individual text files as tables in the database. The driver can be set up to use either the current directory or a specific directory as the data source.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu08.gif">Figure 33.8. ODBC Text Setup.</A></B>
+
+<BR></P>
+
+<P>If you select a specific directory, the driver enables, through the Options extension of its dialog, setting up individual tables (text files). For example, I specified g:\amfc as the directory where the new application will be placed and created ages.txt in that directory. After specifying this directory name by clicking on the Select Directory button, the Define Format button became active in the ODBC Text Setup dialog (Figure 33.9).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu09.gif">Figure 33.9. ODBC Text Setup options.</A></B>
+
+<BR></P>
+
+<P>Clicking on the Define Format button brings up yet another dialog (Figure 33.10) where the format of individual tables (text files) can be specified. In the case of the ages.txt table, setting the Column Name Header check box enables the Guess button to work correctly and retrieve the names of fields and correctly guess their type.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu10.gif">Figure 33.10. Defining the format of a text table.</A></B>
+
+<BR></P>
+
+<P>Dismiss this dialog by clicking on the OK button. When the ODBC Text Setup dialog reappears, add a name to this data source. I decided to name this data source &quot;CSV Files in AMFC.&quot; Dismiss this dialog, too, by clicking on its OK button, and dismiss the Data Sources dialog by clicking on its Close button.
+
+<BR></P>
+
+<P>At this point, a look at the amfc directory where the ages.txt file resides reveals that the ODBC setup applet created another file, one named schema.ini. This file, shown in Listing 33.2, contains information on the characteristics of the ODBC data source that we just specified.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 33.2.The </B><B>schema.ini</B><B> file created by the ODBC setup applet.</B></LH></UL>
+
+<PRE>[ages.txt]
+
+ColNameHeader=True
+
+Format=CSVDelimited
+
+MaxScanRows=25
+
+CharacterSet=OEM
+
+Col1=LASTNAME Char Width 255
+
+Col2=FIRSTNAME Char Width 255
+
+Col3=AGE Integer</PRE>
+
+<P>Now that our data source has been set up and identified, we can turn to the AppWizard to construct a skeleton for our application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Creating an ODBC Application Skeleton Through AppWizard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To begin creating the ODBC skeleton application, fire up AppWizard and create a project named AMFC. The project should be single-document-based (AppWizard Step 1). Database options are specified in AppWizard Step 2 (Figure 33.11), where you should specify the Database view without file support option.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu11.gif">Figure 33.11. Specifying database support in </B><B>AppWizard.</A></B>
+
+<BR></P>
+
+<P>Once you have specified this option, you must click the Data Source button and define a data source for this application before proceeding. Specify the recently created data source, CSV Files in AMFC, as the ODBC data source in this Database Options dialog (Figure 33.12).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu12.gif">Figure 33.12. Specifying a data source.</A></B>
+
+<BR></P>
+
+<P>When you click the OK button in the Database Options dialog, AppWizard responds by showing yet another dialog (Figure 33.13) where you can select database tables. Select the ages.txt file as the database table and click the OK button.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu13.gif">Figure 33.13. Specifying a table.</A></B>
+
+<BR></P>
+
+<P>Clicking the OK button returns you to the AppWizard main dialog and enables you to proceed from Step 2.
+
+<BR></P>
+
+<P>For our test application, we do not need to change any other options, so you might as well proceed by clicking the Finish button. The AMFC test application will be created by AppWizard at this time.
+
+<BR></P>
+
+<P>Take a look at the classes created by AppWizard (Figure 33.14). When compared with applications that have no database support, you may notice a new class and a few new member variables in the application's document and view classes.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu14.gif">Figure 33.14. ODBC application classes.</A></B>
+
+<BR></P>
+
+<P>The new class, CAMFCSet, is a class derived from CRecordset. Looking at this class's declaration (shown in Listing 33.3), we can see that AppWizard not only created the class, it also added member variables that reflect the fields of the database table that we specified.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 33.3.Declaration of </B><B>CAMFCSet.</B></LH></UL>
+
+<PRE>class CAMFCSet : public CRecordset
+
+{
+
+public:
+
+    CAMFCSet(CDatabase* pDatabase = NULL);
+
+    DECLARE_DYNAMIC(CAMFCSet)
+
+// Field/Param Data
+
+    //{{AFX_FIELD(CAMFCSet, CRecordset)
+
+    CString m_LastName;
+
+    CString m_FirstName;
+
+    long    m_Age;
+
+    //}}AFX_FIELD
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CAMFCSet)
+
+    public:
+
+  virtual CString GetDefaultConnect(); // Default connection string
+
+  virtual CString GetDefaultSQL();     // default SQL for Recordset
+
+  virtual void DoFieldExchange(CFieldExchange* pFX); // RFX support
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+#ifdef _DEBUG
+
+    virtual void AssertValid() const;
+
+    virtual void Dump(CDumpContext&amp; dc) const;
+
+#endif
+
+};</PRE>
+
+<P>These member variables are also reflected in the class's implementation file (Listing 33.4), in the constructor function and also in the function DoFieldExchange. The latter is called by the MFC framework to exchange data between the recordset's member variables and corresponding columns in the database table.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 33.4.Implementation of </B><B>CAMFCSet.</B></LH></UL>
+
+<PRE>IMPLEMENT_DYNAMIC(CAMFCSet, CRecordset)
+
+CAMFCSet::CAMFCSet(CDatabase* pdb)
+
+    : CRecordset(pdb)
+
+{
+
+    //{{AFX_FIELD_INIT(CAMFCSet)
+
+    m_LastName = _T(&quot;&quot;);
+
+    m_FirstName = _T(&quot;&quot;);
+
+    m_Age = 0;
+
+    m_nFields = 3;
+
+    //}}AFX_FIELD_INIT
+
+    m_nDefaultType = snapshot;
+
+}
+
+CString CAMFCSet::GetDefaultConnect()
+
+{
+
+    return _T(&quot;ODBC;DSN=CSV files in AMFC&quot;);
+
+}
+
+CString CAMFCSet::GetDefaultSQL()
+
+{
+
+    return _T(&quot;[AGES].[TXT]&quot;);
+
+}
+
+void CAMFCSet::DoFieldExchange(CFieldExchange* pFX)
+
+{
+
+    //{{AFX_FIELD_MAP(CAMFCSet)
+
+    pFX-&gt;SetFieldType(CFieldExchange::outputColumn);
+
+    RFX_Text(pFX, _T(&quot;[LastName]&quot;), m_LastName);
+
+    RFX_Text(pFX, _T(&quot;[FirstName]&quot;), m_FirstName);
+
+    RFX_Long(pFX, _T(&quot;[Age]&quot;), m_Age);
+
+    //}}AFX_FIELD_MAP
+
+}</PRE>
+
+<P>Before we proceed, let me call your attention to a subtle yet deadly bug present in Visual C++ Version 4. Notice that the GetDefault member function returns the string value &quot;[AGES].[TXT]&quot;. This, unfortunately, is wrong, and will result in an SQL syntax error if you attempt to run the application. The correct string should be &quot;[AGES.TXT]&quot;; you must change the implementation of this function to reflect the correct value.
+
+<BR></P>
+
+<P>The changes in the application's document and view classes are minor. The document class acquired a new member variable, m_aMFCSet, which is of type CAMFCSet and, rather unsurprisingly, represents the table that the application's document is associated with. The view class also acquired a member variable, m_pSet, which is set by default to point to the document class's m_aMFCSet member. The view class also has a new function, OnGetRecordset; the default implementation simply returns the value of m_pSet.
+
+<BR></P>
+
+<P>Although the skeleton application can be built at this time, it is not very useful in its present state. As shown in Figure 33.15, it merely displays a blank dialog; and although the record selection commands work, their only visible effect is the enabling and disabling of command items and buttons as one end or the other of the table is reached. Clearly, we must modify the application's dialog before the application is of any practical use.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu15.gif">Figure 33.15. The skeleton application in action.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Customizing the ODBC Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As it turns out, customizing our ODBC application is laughably simple. In fact, the customization that enables us to browse records in our table <I>does not require adding a single line of code by hand</I>. All that is required is the addition of controls to the application's main dialog and the use of ClassWizard to add the appropriate member variables.
+
+<BR></P>
+
+<P>To begin, open the IDD_AMFC_FORM dialog for editing. Remove the static &quot;TODO&quot; control, then add three static controls and three edit controls as shown in Figure 33.16. Name the edit controls IDC_LASTNAME, IDC_FIRSTNAME, and IDC_AGE, respectively.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu16.gif">Figure 33.16. Adding controls to AMFC's main </B><B>dialog.</A></B>
+
+<BR></P>
+
+<P>Now comes the tricky part. In order to have ClassWizard assign member variables, hold down the Control key, and double-click on one of the edit fields. The result is a ClassWizard Add Member Variable dialog that is already filled with values that represent ClassWizard's guess as to the proper recordset member variable (Figure 33.17). The ClassWizard guesses the proper variable name by looking at the static fields in the dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu17.gif">Figure 33.17. Assigning recordset member variables to </B><B>dialog fields.</A></B>
+
+<BR></P>
+
+<P>Repeat this action for the other two dialog fields. When done, recompile the application.
+
+<BR></P>
+
+<P>Surprise! This was all that needed to be done to turn AMFC into a functional application. In its present form (Figure 33.18), it is a functional browser of records in the ages.txt file.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu18.gif">Figure 33.18. The AMFC application in action.</A></B>
+
+<BR></P>
+
+<P>Needless to say, as a simple browser, AMFC barely scratches the surface of the ODBC capabilities of MFC. Before we conclude this chapter, we'll take a look at what else is supported by the ODBC classes in the MFC Library.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>ODBC Classes in MFC</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The set of classes that the MFC Library offers in support of ODBC applications is shown in Figure 33.19. Among these classes, the two important ones are CDatabase and CRecordset.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="33vcu19.gif">Figure 33.19. ODBC support classes in MFC.</A></B>
+
+<BR></P>
+
+<P>The CDatabase class represents a connection to a data source. Its member variable m_hdbc represents an ODBC connection handle. The member functions Open and Close can be used to establish a connection to the data source or to terminate the connection.
+
+<BR></P>
+
+<P>Other member functions are used to set or retrieve connection settings. These functions include GetConnect (returns the ODBC connection string), IsOpen, GetDatabaseName, CanUpdate, CanTransact, InWaitForDataSource, SetLoginTimeout, SetQueryTimeout, and SetSynchronousMode. By default, the CDatabase class uses asynchronous mode for accessing the data source. An asynchronous operation that is in progress can be canceled by calling the Cancel member function.
+
+<BR></P>
+
+<P>Transaction processing is supported through the member functions BeginTrans, CommitTrans, and Rollback.
+
+<BR></P>
+
+<P>The CDatabase class also offers two overridable functions. OnSetOptions is used to set standard connection options. OnWaitForDataSource is called by the framework to yield processing time while performing a lengthy operation.
+
+<BR></P>
+
+<P>The ExecuteSQL member function can be used to directly execute an SQL statement. This statement cannot be used in conjunction with SQL statements that return data records.
+
+<BR></P>
+
+<P>The CRecordset class encapsulates the functionality of an ODBC SQL statement and the row set returned by the statement. Member variables of this class identify the ODBC statement handle, the number of fields and parameters in the recordset, the CDatabase object through which this recordset is connected to the data source, and two strings that correspond to SQL WHERE and ORDER BY clauses.
+
+<BR></P>
+
+<P>The two principal types of recordsets are <I>dynasets</I> and <I>snapshots</I>. The type of a recordset is specified when calling the CRecordset::Open member function. Snapshots represent a static view of the data as it existed at the time the snapshot was created. This is most useful for tasks such as report generation. Dynasets present a dynamic view of the data, reflecting changes to it made by other users or through other recordsets in your application.
+
+<BR></P>
+
+<P>When the recordset is opened through its Open member function, the table is accessed and the query that the recordset represents is performed. The recordset and the associated statement handle can be closed by calling the Close member function.
+
+<BR></P>
+
+<P>Attributes of the recordset can be retrieved by calling the member functions CanAppend, CanRestart, CanScroll, CanTransact, CanUpdate, GetRecordCount, GetStatus, GetTableName, GetSQL, IsOpen, IsBOF, IsEOF, and IsDeleted.
+
+<BR></P>
+
+<P>The recordset can be navigated through the functions Move, MoveFirst, MoveLast, MoveNext, and MovePrev.
+
+<BR></P>
+
+<P>Operations on the recordset can be carried out by calling AddNew, Delete, Edit, or Update.
+
+<BR></P>
+
+<P>Other recordset functions carry out miscellaneous housekeeping functions.
+
+<BR></P>
+
+<P>You never use an object of type CRecordset directly. Rather, you should derive a class from CRecordset and add member variables that correspond to the fields (columns) of the table that the recordset represents. Next, override the recordset's DoFieldExchange member function; this function should facilitate the exchange of data between member variables and fields in the database through RFX_ functions. These functions, similar in syntax and concept to the dialog data exchange (DDX_) functions, are summarized in Table 33.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 33.1.</B><B>RFX_</B><B> functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Function Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Field Type</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>ODBC SQL Type</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>RFX_Binary</P>
+
+<TD>
+
+<P>CByteArray</P>
+
+<TD>
+
+<P>SQL_BINARY, SQL_LONGVARBINARY, SQL_VARBINARY</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Bool</P>
+
+<TD>
+
+<P>BOOL</P>
+
+<TD>
+
+<P>SQL_BIT</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Byte</P>
+
+<TD>
+
+<P>BYTE</P>
+
+<TD>
+
+<P>SQL_TINYINT</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Date</P>
+
+<TD>
+
+<P>CTime</P>
+
+<TD>
+
+<P>SQL_DATE, SQL_TIME, SQL_TIMESTAMP</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Double</P>
+
+<TD>
+
+<P>double</P>
+
+<TD>
+
+<P>SQL_DOUBLE</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Int</P>
+
+<TD>
+
+<P>int</P>
+
+<TD>
+
+<P>SQL_SMALLINT</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Long</P>
+
+<TD>
+
+<P>LONG</P>
+
+<TD>
+
+<P>SQL_INTEGER</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_LongBinary</P>
+
+<TD>
+
+<P>CLongBinary</P>
+
+<TD>
+
+<P>SQL_LONGVARCHAR</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Single</P>
+
+<TD>
+
+<P>float</P>
+
+<TD>
+
+<P>SQL_REAL</P>
+
+<TR>
+
+<TD>
+
+<P>RFX_Text</P>
+
+<TD>
+
+<P>CString</P>
+
+<TD>
+
+<P>SQL_CHAR, SQL_DECIMAL, SQL_LONGVARCHAR, SQL_NUMERIC, SQL_VARCHAR</P></TABLE>
+
+<P>Field exchange is facilitated through the CFieldExchange class. An object of this class contains information about the field that is being exchanged when the recordset's DoFieldExchange member function is called.
+
+<BR></P>
+
+<P>The CRecordView class is a view class derived from CFormView that is designed specifically to display database records in forms. Objects of type CRecordView utilize dialog data exchange (DDX) and record field exchange (RFX) functions to facilitate the movement of data between the form and the data source. CRecordView-derived objects are used in conjunction with CRecordset-derived objects.
+
+<BR></P>
+
+<P>ODBC operations utilize the CDBException class for reporting errors via the MFC exception mechanism.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Summary</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>ODBC is a powerful, SQL-based, vendor-independent mechanism for accessing data in various data sources.
+
+<BR></P>
+
+<P>At the heart of ODBC are ODBC drivers, which are often redistributable DLLs that implement access to data sources of various types. Single-tier drivers implement both the connection to the data source and the processing SQL statements. Multiple-tier drivers connect to data sources and pass on the SQL statements. ODBC data sources can be local files (for example, text files, dBase files, Excel files) and remote data servers (for example, SQL Server, Oracle).
+
+<BR></P>
+
+<P>Data sources are usually specified through the ODBC setup applet (invoked through the Control Panel), although the SQLDriverConnect call makes it possible to connect to a data source that has not been set up this way.
+
+<BR></P>
+
+<P>An ODBC session involves calls that build up a connection to the data source, construct and submit SQL statements, and process the results. The ODBC API defines a series of function calls that facilitate these sessions. The API defines a set of conformance levels (Core, Level 1, and Level 2); most drivers support at least Level 1 ODBC functions.
+
+<BR></P>
+
+<P>ODBC supports a variation of the standard SQL syntax. Data manipulation statements such as SELECT, INSERT, UPDATE, and DELETE&#151;as well as data definition statements such as CREATE TABLE, DROP TABLE, CREATE INDEX, DROP INDEX, and ALTER TABLE&#151;are supported. ODBC also supports the CREATE VIEW SQL statement.
+
+<BR></P>
+
+<P>The Microsoft Foundation Classes Library provides two classes for ODBC support. The CDatabase class represents an ODBC connection; the CRecordset class represents an ODBC SQL statement and the row set the statement returns. Applications typically derive a class from CRecordset and add member variables corresponding to table columns. The CRecordset class offers member functions that facilitate browsing and editing the row set.</P>
+
+<P><A HREF="p05vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu34fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

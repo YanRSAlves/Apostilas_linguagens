@@ -1,0 +1,946 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu34fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu35fi.htm">
+
+<LINK REL="Previous" HREF="vcu33fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu33fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu35fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">34 &#151; Data Access Objects</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">DAO Overview</A></LI>
+
+<LI>
+
+<A HREF="#I4">Building a DAO Application</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I5">The Database</A></LI>
+
+<LI>
+
+<A HREF="#I6">Creating the Skeleton Application</A></LI>
+
+<LI>
+
+<A HREF="#I7">Exploring the DAO Application Skeleton</A></LI>
+
+<LI>
+
+<A HREF="#I8">Customizing the Application</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">DAO Classes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I10">The CDaoRecordset Class</A></LI>
+
+<LI>
+
+<A HREF="#I11">The CDaoDatabase Class</A></LI>
+
+<LI>
+
+<A HREF="#I12">The CDaoWorkspace Class</A></LI>
+
+<LI>
+
+<A HREF="#I13">The CDaoQueryDef Class</A></LI>
+
+<LI>
+
+<A HREF="#I14">The CDaoTableDef Class</A></LI>
+
+<LI>
+
+<A HREF="#I15">Miscellaneous DAO Classes</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>34 &#151; Data Access Objects</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Data Access Objects, or DAOs, are Microsoft's latest invention in database access technology. This technology is used for database access in Microsoft's Visual Basic 4, Microsoft Access, and Visual Basic for Applications; and now, with the help of a set of specialized MFC classes, it is also available to the Visual C++ programmer.
+
+<BR></P>
+
+<P>DAO is supplied in the form of redistributable components. Redistributable DAO files can be found in the msdev\redist\dao directory on your Visual C++ 4 CD-ROM. You may either utilize the setup program provided in this directory or incorporate the DAO components found here into your application's setup utility.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>DAO Overview</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Data Access Objects enable you to access and manipulate databases through the Microsoft Jet database engine. Through this engine, you can access data in Microsoft Access database files (MDB files). The technology also enables you to access local and remote databases through ODBC drivers.
+
+<BR></P>
+
+<P>Data Access Object technology is based on OLE. Figure 34.1 depicts the hierarchy of Data Access Objects. This hierarchy is greatly simplified by the DAO classes in MFC.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu01.gif">Figure 34.1. DAO object hierarchy.</A></B>
+
+<BR></P>
+
+<P>Many DAO functions utilize Structured Query Language (SQL) statements. You can use the SQL SELECT statement to retrieve data from a database, or the SQL UPDATE, INSERT, and DELETE statements to modify the contents of the database. An easy way to create SQL statements for use with DAO objects is to create the query from within Microsoft Access, save the query in the database, and access the query through a QueryDef object.
+
+<BR></P>
+
+<P>Visual C++ provides extensive support for building DAO applications through the AppWizard. In addition to ODBC, AppWizard enables you to create applications that are based on DAO Classes. Our tour of DAO begins with the creation of a simple DAO application and exploration of its behavior.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B>Building a DAO Application</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Building a DAO application is quite simple. First, if it does not exist yet, we must create a data source. For the application demonstrated here, the data source is a simple Access database of two tables. Next, the skeleton application must be created using AppWizard; and finally, we must customize this application as appropriate.
+
+<BR></P>
+
+<P>The application is a simple browser; it browses a row set that is created as a relational join of two tables.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>The Database</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The database used in this example contains two tables. One table contains the first names, last names, and and ages of employees; the other table contains the names of benefit packages offered to employees and the maximum qualifying age for each package. The purpose of our application, which I decided to call ADAO, is simple: display, for each employee, all benefit packages he or she qualifies for.
+
+<BR></P>
+
+<P>The database, adao.mdb, is constructed using Microsoft Access. To construct the database, start Access and create a blank database named adao.mdb in the directory of your choice. Upon successful creation, select the Table tab in the Database window, and click the New button. Select New Table. (Note that the database file used to create the sample code in this chapter was itself created using Access 2.0; if you are using a later version of Access, your database file, and hence the code generated by AppWizard, may differ slightly from what is shown here.)
+
+<BR></P>
+
+<P>Figure 34.2 shows the newly constructed Employees table just before it is saved. As you can see, three fields were added (LastName, FirstName, and Age) of which the first two are 50-character-wide text fields, the third is a number field. The table's primary key was set to the combination of the LastName and FirstName fields.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu02.gif">Figure 34.2. Creating the </B><B>Employees</B><B> table.</A></B>
+
+<BR></P>
+
+<P>Save the new table under the name Employees and repeat this procedure to create a second table (Figure 34.3). This table contains information about benefit packages. It contains two fields, the first of which, Name, serves as the table's primary key. This table should be saved under the name Plans.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu03.gif">Figure 34.3. Creating the </B><B>Plans</B><B> table.</A></B>
+
+<BR></P>
+
+<P>When your work creating these tables is done, the Database window should show two tables, as seen in Figure 34.4.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu04.gif">Figure 34.4. Tables in </B><B>adao.mdb</B><B>.</A></B>
+
+<BR></P>
+
+<P>The next step is to add data to these tables. You can do so by simply double-clicking the table's name in the Database window.
+
+<BR></P>
+
+<P>Figure 34.5 shows the four records I added to Employees. Figure 34.6 shows the three records I added to the Plans table.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu05.gif">Figure 34.5. Records in the </B><B>Employees</B><B> table.</A></B>
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu06.gif">Figure 34.6. Records in the </B><B>Plans</B><B> table.</A></B>
+
+<BR></P>
+
+<P>This is all we need to do with Microsoft Access. Our MDB file is now ready for use from within a C++ DAO application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Creating the Skeleton Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To create the ADAO application, launch the AppWizard and start creating a single-document-based project. Database support is specified in AppWizard Step 2; select the Database view without file support option (Figure 34.7).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu07.gif">Figure 34.7. Adding database support to a skeleton </B><B>application.</A></B>
+
+<BR></P>
+
+<P>Before you can proceed from this step, you must specify a data source. To do so, click on the Data Source button. In the Database Options dialog that appears, select DAO as the data source (Figure 34.8).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu08.gif">Figure 34.8. Adding a DAO data source.</A></B>
+
+<BR></P>
+
+<P>Clicking on the ellipsis button next to the DAO field enables you to specify the actual database file. It brings up a standard File Open dialog, where you can select the file adao.mdb. Select this file and when the Database Options dialog reappears, click the OK button. This should display another dialog where the tables of the database can be selected. Select both the Employees and the Plans table and click OK (Figure 34.9).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu09.gif">Figure 34.9. Selecting tables.</A></B>
+
+<BR></P>
+
+<P>At this time, all dialogs should disappear except for the AppWizard Step 2 dialog; this dialog should now display our data source selection.
+
+<BR></P>
+
+<P>All other AppWizard settings can remain at their default values; therefore, you can quickly complete creating the skeleton application by clicking on the Finish button.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Exploring the DAO Application Skeleton</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The classes of the skeleton application created by AppWizard are shown in Figure 34.10. When compared to an application with no database support, this application offers one extra class and a few additional member variables and functions in its document and view classes. Not evidently visible, but also a notable difference, is the fact that the view class is derived from CDaoRecordView.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu10.gif">Figure 34.10. Skeleton application classes.</A></B>
+
+<BR></P>
+
+<P>If you are experienced with MFC ODBC programming, you may note that the structure of this application is very similar to that of ODBC applications created by AppWizard.
+
+<BR></P>
+
+<P>The new class, CADAOSet, is derived from CDaoRecordset and represents the row set that we will select from the join of the Employees and Plans table. Looking at this class's declaration (Listing 34.1), you can see that the AppWizard already inserted member variables that correspond to the columns (fields) in the two tables.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 34.1. </B><B>CDAOSet</B><B> class declaration.</B></LH></UL>
+
+<PRE>class CADAOSet : public CDaoRecordset
+
+{
+
+public:
+
+    CADAOSet(CDaoDatabase* pDatabase = NULL);
+
+    DECLARE_DYNAMIC(CADAOSet)
+
+// Field/Param Data
+
+    //{{AFX_FIELD(CADAOSet, CDaoRecordset)
+
+    CString m_LastName;
+
+    CString m_FirstName;
+
+    double  m_Age;
+
+    CString m_Name;
+
+    double  m_MaxAge;
+
+    //}}AFX_FIELD
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CADAOSet)
+
+    public:
+
+    virtual CString GetDefaultDBName();
+
+    virtual CString GetDefaultSQL();
+
+    virtual void DoFieldExchange(CDaoFieldExchange* pFX);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+#ifdef _DEBUG
+
+    virtual void AssertValid() const;
+
+    virtual void Dump(CDumpContext&amp; dc) const;
+
+#endif
+
+};</PRE>
+
+<P>A look at the implementation of CADAOSet (Listing 34.2) shows how these member variables are initialized in the class's constructor. The variables are also referred to in the AppWizard-generated implementation of the DoFieldExchange member function. This function exchanges data between member variables in the class and fields in the database.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 34.2. </B><B>CADAOSet</B><B> class implementation.</B></LH></UL>
+
+<PRE>IMPLEMENT_DYNAMIC(CADAOSet, CDaoRecordset)
+
+CADAOSet::CADAOSet(CDaoDatabase* pdb)
+
+    : CDaoRecordset(pdb)
+
+{
+
+    //{{AFX_FIELD_INIT(CADAOSet)
+
+    m_LastName = _T(&quot;&quot;);
+
+    m_FirstName = _T(&quot;&quot;);
+
+    m_Age = 0.0;
+
+    m_Name = _T(&quot;&quot;);
+
+    m_MaxAge = 0.0;
+
+    m_nFields = 5;
+
+    //}}AFX_FIELD_INIT
+
+    m_nDefaultType = dbOpenDynaset;
+
+}
+
+CString CADAOSet::GetDefaultDBName()
+
+{
+
+    return _T(&quot;G:\\ADAO\\adao.mdb&quot;);
+
+}
+
+CString CADAOSet::GetDefaultSQL()
+
+{
+
+    return _T(&quot;[Employees],[Plans]&quot;);
+
+}
+
+void CADAOSet::DoFieldExchange(CDaoFieldExchange* pFX)
+
+{
+
+    //{{AFX_FIELD_MAP(CADAOSet)
+
+    pFX-&gt;SetFieldType(CDaoFieldExchange::outputColumn);
+
+    DFX_Text(pFX, _T(&quot;[LastName]&quot;), m_LastName);
+
+    DFX_Text(pFX, _T(&quot;[FirstName]&quot;), m_FirstName);
+
+    DFX_Double(pFX, _T(&quot;[Age]&quot;), m_Age);
+
+    DFX_Text(pFX, _T(&quot;[Name]&quot;), m_Name);
+
+    DFX_Double(pFX, _T(&quot;[MaxAge]&quot;), m_MaxAge);
+
+    //}}AFX_FIELD_MAP
+
+}</PRE>
+
+<P>To do its work, DoFieldExchange makes use of DFX_ functions. These functions are the DAO cousins of the RFX_ functions used for ODBC field exchange. The set of DFX_ functions available for use in DoFieldExchange is summarized in Table 34.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 34.1. </B><B>DFX_</B><B> functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Function Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Field Type</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>ODBC SQL Type</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>DFX_Binary</P>
+
+<TD>
+
+<P>CByteArray</P>
+
+<TD>
+
+<P>DAO_BYTES</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Bool</P>
+
+<TD>
+
+<P>BOOL</P>
+
+<TD>
+
+<P>DAO_BOOL</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Byte</P>
+
+<TD>
+
+<P>BYTE</P>
+
+<TD>
+
+<P>DAO_BYTES</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Currency</P>
+
+<TD>
+
+<P>COleCurrency</P>
+
+<TD>
+
+<P>DAO_CURRENCY</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_DateTime</P>
+
+<TD>
+
+<P>COleDateTime</P>
+
+<TD>
+
+<P>DAO_DATE</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Double</P>
+
+<TD>
+
+<P>double</P>
+
+<TD>
+
+<P>DAO_R8</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Long</P>
+
+<TD>
+
+<P>long</P>
+
+<TD>
+
+<P>DAO_I4</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_LongBinary</P>
+
+<TD>
+
+<P>CLongBinary</P>
+
+<TD>
+
+<P>DAO_BYTES</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Short</P>
+
+<TD>
+
+<P>short</P>
+
+<TD>
+
+<P>DAO_I2</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Single</P>
+
+<TD>
+
+<P>float</P>
+
+<TD>
+
+<P>DAO_R4</P>
+
+<TR>
+
+<TD>
+
+<P>DFX_Text</P>
+
+<TD>
+
+<P>CString</P>
+
+<TD>
+
+<P>DAO_CHAR, DAO_WCHAR</P></TABLE>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> It is recommended that applications not use the DFX_LongBinary function but use DFX_Binary instead. DFX_LongBinary is provided for compatibility with ODBC.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>The new member variables and functions in our application's view and document classes are a simple business. The document class, CADAODoc, contains a new member variable of type CADAOSet, m_aDAOSet. Very obviously, this variable represents the recordset that the document is associated with.
+
+<BR></P>
+
+<P>The view class contains a pointer of type CADAOSet (m_pSet); in the default implementation, this pointer is set to point to the document object's m_aDAOSet member. The view class also has a new member function, OnGetRecordset, which in the default implementation simply returns m_pSet.
+
+<BR></P>
+
+<P>Although you can recompile the ADAO application at this time, as Figure 34.11 illustrates, it is not yet a very useful application. We need to customize its dialog, and we also need to add the necessary operations that will restrict the rows selected to rows that we wish to see.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu11.gif">Figure 34.11. Running the ADAO application </B><B>skeleton.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Customizing the Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The first step in customizing the ADAO application is changing its main dialog. Open the IDD_ADAO_FORM dialog for editing, remove the default &quot;TODO&quot; static control, and add static controls and edit controls as shown in Figure 34.12.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu12.gif">Figure 34.12. Customizing the ADAO dialog.</A></B>
+
+<BR></P>
+
+<P>Name the five edit fields IDC_LASTNAME, IDC_FIRSTNAME, IDC_AGE, IDC_NAME, and IDC_MAXAGE as appropriate. Before dismissing this dialog, you can also use the ClassWizard to identify dialog fields with corresponding recordset member variables.
+
+<BR></P>
+
+<P>To do so, hold down the Control key, and double-click on the IDC_LASTNAME edit field. The ClassWizard Add Member Variable dialog appears, with ClassWizard's guess as to the name of the member variable (Figure 34.13). ClassWizard derives its guess by looking at the static fields in the dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu13.gif">Figure 34.13. Adding a recordset member variable.</A></B>
+
+<BR></P>
+
+<P>ClassWizard's guess is appropriate for the first three fields in our dialog; however, for the plan name and plan maximum age fields, it is necessary to manually change ClassWizard's selection. This can be done by selecting the proper m_pSet member variable from the drop-down list in the Add Member Variable dialog.
+
+<BR></P>
+
+<P>After you specified the member variables for all five edit fields, you can dismiss the dialog. However, we are not done yet; we have not yet specified anywhere the selection criteria that would make our application display only the rows representing valid plans for each employee.
+
+<BR></P>
+
+<P>To change the selection criteria, open the CADAOSet::GetDefaultSQL function for editing. The default implementation of this function simply returns the table names that form the recordset. What we wish to do is add additional criteria that would restrict the selections from the tables to only those rows that we wish to see.
+
+<BR></P>
+
+<P>In SQL, our desired selection can be expressed in the form of a SELECT statement:
+
+<BR></P>
+
+<PRE>SELECT Employees.LastName, Employees.FirstName, Employees.Age,
+
+       Plans.Name, Plans.MaxAge
+
+FROM Employees, Plans
+
+WHERE Employees.Age &lt; Plans.MaxAge
+
+ORDER BY Employees.LastName, Employees.FirstName, Plans.Name</PRE>
+
+<P>Indeed, one way to specify our selection would be to change GetDefaultSQL to return a string representing the above SQL SELECT statement. However, there is another way; and that is to utilize the member variables of the CDaoRecordset class.
+
+<BR></P>
+
+<P>In particular, CDaoRecordset offers two member variables, one of which corresponds to the SQL WHERE clause, the other, to the SQL ORDER_BY clause. Our new version of CADAOSet::GetDefaultSQL (Listing 34.3) utilizes these member variables to create the desired selection of rows.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 34.3. Updated version of </B><B>CADAOSet::GetDefaultSQL</B><B>.</B></LH></UL>
+
+<PRE>CString CADAOSet::GetDefaultSQL()
+
+{
+
+    m_strFilter = &quot;[Employees].[Age] &lt; [Plans].[MaxAge]&quot;;
+
+    m_strSort =
+
+   &quot;[Employees].[LastName],[Employees].[FirstName],[Plans].[Name]&quot;;
+
+    return _T(&quot;[Employees],[Plans]&quot;);
+
+}</PRE>
+
+<P>This completes our work on the ADAO project. Recompiling and running the application (Figure 34.14) shows that it indeed behaves as expected, displaying benefit plans that employees qualify for, ordered by the name of the employee and the name of the benefit package.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu14.gif">Figure 34.14. Running the ADAO application.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>DAO Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Although the ADAO application demonstrates how a simple DAO program can be created, it fails to demonstrate many DAO features. To remedy this deficiency, in the remainder of this chapter we take a brief tour of MFC DAO classes and their capabilities.
+
+<BR></P>
+
+<P>The set of DAO classes offered by MFC is shown in Figure 34.15. In addition to the CDaoRecordset class that we have encountered while constructing ADAO, there are four other major classes and two helper classes related to DAO. Still, this is a significant improvement over the multitude of raw DAO objects (Figure 34.1).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="34vcu15.gif">Figure 34.15. DAO Classes.</A></B>
+
+<BR></P>
+
+<P>Before we review the role and features of each of these classes one by one, this section presents a brief overview of how DAO works. For this, it might be helpful to take another look at Figure 34.1, at the beginning of this chapter.
+
+<BR></P>
+
+<P>All DAO objects are derived from the DBEngine object; furthermore, all database objects are derived from DAO workspace objects. However, unless you need to manipulate secure databases, you typically do not need to reference either of these; instead, a default workspace object is assumed for all transactions.
+
+<BR></P>
+
+<P>The database and recordset objects very obviously represent databases and selection sets (tables, recordsets, or dynasets) in those databases.
+
+<BR></P>
+
+<P>Query definition (QueryDef) objects are used to execute specific SQL queries against a database. Query definitions are normally used in conjunction with recordsets to access data in a database using a specific query.
+
+<BR></P>
+
+<P>Table definition (TableDef) objects represent the structure of tables in the database. Through table definition objects, it is possible to create new tables, and to modify the structure and characteristics of existing tables.
+
+<BR></P>
+
+<P>There are several other DAO object types. These object types (Field objects, Parameter objects, Index objects, User objects, Group objects, and Error objects) are not represented by specific MFC classes. Instead, DAO objects of this type are accessed through the other DAO MFC classes as appropriate.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The </B><B><I>CDaoRecordset</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>CDaoRecordset objects represent recordsets. A recordset can represent records in a table, a dynaset, and a snapshot. A table-type recordset is updatable and represents the records in a single table. A dynaset-type recordset represents records from one or more tables as a result of a query; dynaset records are also updatable. A snapshot, on the other hand, can also contain fields from one or more tables but these fields are not updatable; the snapshot is a static copy of records used to find data or generate reports.
+
+<BR></P>
+
+<P>A recordset is created by calling the CDaoRecordset::Open member function. The three forms of this function enable you to create a recordset using an SQL query string, a CDaoTableDef object, or a CDaoQueryDef object.
+
+<BR></P>
+
+<P>The CDaoRecordset class offers a large number of member functions. Perhaps the most important among these are recordset navigation functions and data update functions. The navigation functions include Find, FindFirst, FindLast, FindNext, and FindPrev; and Move, MoveFirst, MoveLast, MoveNext, and MovePrev. Data update functions include AddNew, CancelUpdate, Delete, Edit, and Update.
+
+<BR></P>
+
+<P>Other navigation-related functions include GetAbsolutePosition, GetBookmark, GetPercentPosition, and SetAbsolutePosition, SetBookmark, and SetPercentPosition.
+
+<BR></P>
+
+<P>The CDaoRecordset class offers a variety of attribute functions to set and retrieve recordset attributes. For example, the CanUpdate function can be used to determine whether a recordset is updatable; the SetCurrentIndex function can be used to set the current index on a table-type recordset.
+
+<BR></P>
+
+<P>Normally, you use the CDaoRecordset class by deriving your own recordset class from it, adding member variables that represent fields, and overriding the DoFieldExchange member function to facilitate the exchange of data between the database and the member variables. However, several member functions exist that provide an alternative. These include GetFieldValue and SetFieldValue, which enable you to directly access the value of a field by name. This method is referred to as <I>dynamic binding</I>, as opposed to the static binding accomplished through DoFieldExchange.
+
+<BR></P>
+
+<P>Other recordset operations can be used to control the locally maintained cache of records and to manipulate recordset indexes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>The </B><B><I>CDaoDatabase</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDaoDatabase class represents a connection to a database. A connection is created by calling CDaoDatabase::Open and terminated by calling CDaoDatabase::Close. A new database can be created by calling CDaoDatabase::Create.
+
+<BR></P>
+
+<P>The CDaoDatabase class offers a series of attribute member functions; for example, the GetName member function can be used to retrieve the name of the database, or the IsOpen member function can be used to determine if the connection represented by the CDaoDatabase object is open.
+
+<BR></P>
+
+<P>Other member functions can be used to manipulate the collections of table definition and query definition objects that are defined for this database. In particular, you can use the DeleteTableDef member function to delete not only a DAO TableDef object but also the underlying table and all its data from the database.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The </B><B><I>CDaoWorkspace</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDaoWorkspace class represents database sessions. Typically, you do not need to create objects of type CDaoWorkspace, unless you wish to utilize specific functionality available through this class or to access password-protected databases.
+
+<BR></P>
+
+<P>A DAO workspace can be created by calling CDaoWorkspace::Create. Arguments to this function specify the name of the workspace, the user name, and password. An existing workspace object can be opened by calling CDaoWorkspace::Open; by passing a NULL parameter to this function, you can explicitly open the default workspace.
+
+<BR></P>
+
+<P>Several member functions exist that manipulate databases and the database engine itself. For example, you can compact or repair a database by calling the CompactDatabase or RepairDatabase member functions. Other functions can be used to manipulate user names, passwords, and other database attributes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>The </B><B><I>CDaoQueryDef</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDaoQueryDef class represents query definitions. To create a new query definition, use the CQueryDef::Create member function; to access a query definition that was saved into a database, use CQueryDef::Open. A newly created query can be added to the database by calling the CQueryDef::Append member function.
+
+<BR></P>
+
+<P>CQueryDef objects can be used in conjunction with CRecordSet objects to retrieve data from the database. CQueryDef objects can also be used directly; to execute an action query that modifies the data in the database, use the CQueryDef::Execute member function.
+
+<BR></P>
+
+<P>Other CQueryDef member functions can be used to set and retrieve query definition attributes and to manipulate query fields and parameters.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>The </B><B><I>CDaoTableDef</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDaoTableDef class represents table definitions. A table definition describes the structure and attributes of a table in a database.
+
+<BR></P>
+
+<P>You can open an existing table definition in a database by calling CDaoTableDef::Open. A new table definition can be created by calling CDaoTableDef::Create. To add a table corresponding to a new definition to the database, call the Append member function.
+
+<BR></P>
+
+<P>Fields can be created and deleted by calling the CreateField and DeleteField member functions. Indexes for the table can be created or deleted by calling CreateIndex and DeleteIndex. Other member functions can be used to set or retrieve various table attributes; for example, GetFieldCount returns the number of fields in the table, and SetValidationRule can be used to assign a validation rule to a field.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Miscellaneous DAO Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In addition to the five fundamental DAO classes, DAO operations make use of two additional classes: CDaoFieldExchange and CDaoException.
+
+<BR></P>
+
+<P>CDaoFieldExchange is used in calls to CDaoRecordset::DoFieldExchange. An object of type CDaoFieldExchange defines the field that is affected by the field exchange operation and provides other parameters that characterize the field exchange.
+
+<BR></P>
+
+<P>All DAO classes utilize exception objects of type CDaoException to report errors.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Data Access Objects represent an OLE-based technology used in Visual Basic 4, Visual Basic for Applications, and Microsoft Access to access databases through the Microsoft Jet database engine. The Microsoft Foundation Classes Library and the Visual C++ AppWizard and ClassWizard provide extensive support for developing DAO-based applications in Visual C++. DAO libraries are supplied in the form of redistributable components that you can freely distribute with your Visual C++ applications.
+
+<BR></P>
+
+<P>Constructing a DAO application through AppWizard is simple. The steps to construct a simple application include specifying the data source, modifying the application's main dialog, and adding recordset member variables to the dialog.
+
+<BR></P>
+
+<P>The DAO object hierarchy is a complex hierarchy of several objects. The MFC provides a greatly simplified view of DAO, through a set of five core DAO classes and two supplementary classes. Of the core classes, CDaoQueryDef and CDaoRecordset represent queries against a database and the query results; databases themselves are represented by CDaoDatabase. A class used more rarely is CDaoWorkspace; unless you need to access secure databases, you can normally rely on the implied default workspace rather than create an object of type CDaoWorkspace explicitly. Finally, CDaoTableDef is used to represent table structures; through this class, you can add tables to your database and manipulate existing tables.</P>
+
+<P><A HREF="vcu33fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu35fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

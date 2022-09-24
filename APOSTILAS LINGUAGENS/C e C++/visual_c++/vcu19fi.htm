@@ -1,0 +1,1624 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu19fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu20fi.htm">
+
+<LINK REL="Previous" HREF="vcu18fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu18fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu20fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I1">19 &#151; Exploring an MFC Skeleton Application</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">A Simple MFC Application Skeleton</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Creating the YAH Project</A></LI>
+
+<LI>
+
+<A HREF="#I5">Exploring the Application Object</A></LI>
+
+<LI>
+
+<A HREF="#I6">The Message Map</A></LI>
+
+<LI>
+
+<A HREF="#I7"> The Frame, the Document, and the View</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">The Frame Window Class</A></LI>
+
+<LI>
+
+<A HREF="#I9">The Document Class</A></LI>
+
+<LI>
+
+<A HREF="#I10">The View Class</A></LI>
+
+<LI>
+
+<A HREF="#I11"> Skeleton Application Resources</A></LI></UL></UL>
+
+<LI>
+
+<A HREF="#I12">Adding Code to the Application</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">Adding a String Resource</A></LI>
+
+<LI>
+
+<A HREF="#I14">Modifying the Document</A></LI>
+
+<LI>
+
+<A HREF="#I15">Modifying the View</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Summary</A></LI></UL></UL></UL>
+
+
+
+<H2 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>19 &#151; Exploring an MFC Skeleton Application</B>
+
+<BR></FONT></A></CENTER></H2>
+
+<P>What is a typical MFC framework application like? How does it utilize the application, document template, and document classes? How do you create and build such an application? These are the questions that I attempt to answer in this chapter.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>A Simple MFC Application Skeleton</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Have you not guessed it yet? We are going to build a YAHWA! No, I am not swearing in Yiddish; it is short for Yet Another Hello World Application.
+
+<BR></P>
+
+<P>But this time, it is going to be a framework application built using the MFC AppWizard. We will use this application to experiment with MFC features and to explore the relationships between the application's various classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Creating the YAH Project</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>I would have liked to name my project YAHWA but with a 5-character project name, AppWizard would have generated filenames that are longer than 8 characters. Alas, such filenames would have been mangled when put on an ISO9660 CD-ROM. Instead of getting into that mess, I figured it is easier to just use a shorter name.
+
+<BR></P>
+
+<P>The YAH project is created through AppWizard. From the Developer Studio, select the New command under the File menu; select Project Workspace in the New dialog; and select MFC AppWizard (exe). Type in the name of the project (&quot;YAH&quot;) and select a directory where the new project would be placed. Click on the Create button.
+
+<BR></P>
+
+<P>YAH should be a single document interface (SDI) project; set this option in the first AppWizard dialog step that appears. Most other default settings should be accepted, except for a few settings that can be accessed by clicking the Advanced button in AppWizard Step 4. In this advanced dialog, enter YAH as the file extension and change the main frame caption to &quot;Hello, World!&quot; (or whatever you find suitable). See Figure 19.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="19vcu01.gif">Figure 19.1. AppWizard advanced options for the YAH </B><B>project.</A></B>
+
+<BR></P>
+
+<P>After these changes, you can let AppWizard create the project. Once the project has been created, the Developer Studio opens the project and displays the project workspace in ClassView (see Figure 19.2).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="19vcu02.gif">Figure 19.2. YAH classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Exploring the Application Object</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As you can see, AppWizard created five classes for the YAH project. Take a look at CYAHApp. This class is derived from CWinApp and represents the application itself.
+
+<BR></P>
+
+<P>The CYAHApp class is declared in YAH.h; this file can be opened either by double-clicking on the CYAHApp class in ClassView or double-clicking the filename in FileView. Looking at the declaration (Listing 19.1) reveals three member functions: a constructor, an override of the virtual function InitInstance, and a member function CAppAbout. How do these functions relate to a typical WinMain function in a non-MFC application?
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.1. </B><B>CYAHApp</B><B> class declaration.</B></LH></UL>
+
+<PRE>class CYAHApp : public CWinApp
+
+{
+
+public:
+
+    CYAHApp();
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CYAHApp)
+
+    public:
+
+    virtual BOOL InitInstance();
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+    //{{AFX_MSG(CYAHApp)
+
+    afx_msg void OnAppAbout();
+
+        // NOTE - the ClassWizard will add and remove member
+
+        // functions here. DO NOT EDIT what you see in these blocks
+
+        // of generated code !
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>A look at the implementation of AfxWinMain in the MFC source file winmain.cpp reveals the answer. The major initialization steps performed here are shown in Figure 19.3.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="19vcu03.gif">Figure 19.3. Major initialization steps.</A></B>
+
+<BR></P>
+
+<P>How can the application object be constructed before AfxWinMain is executed? Simple; in YAH.cpp, a global object of type CYAHApp named theApp is declared. By the time execution begins, this object will have been constructed (which implies that its constructor will have been called).
+
+<BR></P>
+
+<P>The member functions InitApplication and InitInstance can be overridden. They correspond to one-time and instance-specific initializations. These functions are called explicitly by AfxWinMain before the message loop is entered.
+
+<BR></P>
+
+<P>Look at the file YAH.cpp, the implementation file for the CYAHApp class (if you wish to open this file from ClassView, you may have to expand the CYAHApp class and double-click on one of the member functions). Actually, to be precise, look at the first half of this file; the second half contains a declaration and the implementation of the CAboutDlg class, which is the skeleton application's About dialog; this does not concern us at the moment. The relevant parts of YAH.cpp are shown in Listing 19.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.2. </B><B>CYAHApp</B><B> class implementation.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// CYAHApp
+
+BEGIN_MESSAGE_MAP(CYAHApp, CWinApp)
+
+    //{{AFX_MSG_MAP(CYAHApp)
+
+    ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+
+ // NOTE - the ClassWizard will add and remove mapping macros here.
+
+ // DO NOT EDIT what you see in these blocks of generated code!
+
+    //}}AFX_MSG_MAP
+
+    // Standard file based document commands
+
+    ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
+
+    ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
+
+    // Standard print setup command
+
+    ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
+
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// CYAHApp construction
+
+CYAHApp::CYAHApp()
+
+{
+
+    // TODO: add construction code here,
+
+    // Place all significant initialization in InitInstance
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// The one and only CYAHApp object
+
+CYAHApp theApp;
+
+///////////////////////////////////////////////////////////////////
+
+// CYAHApp initialization
+
+BOOL CYAHApp::InitInstance()
+
+{
+
+ // Standard initialization
+
+ // If you are not using these features and wish to reduce the size
+
+ //  of your final executable, you should remove from the following
+
+ //  the specific initialization routines you do not need.
+
+#ifdef _AFXDLL
+
+    Enable3dControls(); // Call this when using MFC in a shared DLL
+
+#else
+
+    Enable3dControlsStatic();  // Call this when linking statically
+
+#endif
+
+    LoadStdProfileSettings();     // Load standard INI file options
+
+    // Register the application's document templates.  Document
+
+    // templates serve as the connection between documents, frame
+
+    // windows and views.
+
+    CSingleDocTemplate* pDocTemplate;
+
+    pDocTemplate = new CSingleDocTemplate(
+
+        IDR_MAINFRAME,
+
+        RUNTIME_CLASS(CYAHDoc),
+
+        RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+
+        RUNTIME_CLASS(CYAHView));
+
+    AddDocTemplate(pDocTemplate);
+
+    // Enable DDE Execute open
+
+    EnableShellOpen();
+
+    RegisterShellFileTypes(TRUE);
+
+  // Parse command line for standard shell commands, DDE, file open
+
+    CCommandLineInfo cmdInfo;
+
+    ParseCommandLine(cmdInfo);
+
+    // Dispatch commands specified on the command line
+
+    if (!ProcessShellCommand(cmdInfo))
+
+        return FALSE;
+
+    // Enable drag/drop open
+
+    m_pMainWnd-&gt;DragAcceptFiles();
+
+    return TRUE;
+
+}</PRE>
+
+<P>The framework only created an override version of InitInstance, not InitApplication. Because Win32 applications run in separate memory spaces, application-specific (as opposed to instance-specific) initializations are now rare (as they would normally only affect the current instance of the application anyway).
+
+<BR></P>
+
+<P>In InitInstance, a number of initializations take place. These initialization steps reflect many of the choices you select when you create the project through AppWizard. For example, we selected the default 3-D look for the YAH application; correspondingly, the 3-D look is enabled here in InitInstance.
+
+<BR></P>
+
+<P>Perhaps the most important initialization step is the creation of a document template. An object of type CSingleDocTemplate (because we selected an SDI application) is created and added to the application's document templates using the AddDocTemplate member function.
+
+<BR></P>
+
+<P>The information stored in document templates is used when the user selects the New command from the File menu. The default implementation of this command is in the function CWinApp::OnFileNew. This function uses the template information to decide what kind of objects it must create to represent the new document object and its corresponding view.
+
+<BR></P>
+
+<P>There are applications that can handle many kinds of documents. For example, a graphics application may be able to handle both bitmap and vector graphic files. A programmer's editor may handle source (text) files and provide graphical editing for resource files. How can an MFC application accommodate multiple document types?
+
+<BR></P>
+
+<P>Well, first of all, you need to create a Multiple Document Interface (MDI) application. SDI applications created with AppWizard do not support multiple document types. Afterwards, it takes little effort to add additional document types. After declaring and implementing a new document class and a corresponding view class, make sure that these classes are added in the form of a new document template to the application object by calling AddDocTemplate in your application object's InitInstance member function. Subsequently, when the user selects the File New command, the framework automatically presents a dialog where the user can select the desired document type.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>The Message Map</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the files YAH.h and YAH.cpp, we encountered the macros DECLARE_MESSAGE_MAP, BEGIN_MESSAGE_MAP, and END_MESSAGE_MAP. What do these macros represent and how do they connect to the application's main message loop in the application object's Run member function?
+
+<BR></P>
+
+<P>The Run member function dispatches messages to their target windows much like any non-MFC application would in its message loop. In fact, it calls the very same function, ::DispatchMessage, for this purpose. Thus, the first recipient of a message is always a window.
+
+<BR></P>
+
+<P>The message handler function in an object capable of receiving messages (that is, a command target object, including window objects) generally dispatches, or routes, messages in the following order:
+
+<BR></P>
+
+<OL>
+
+<LI>To any currently active child command target objects
+
+<BR>
+
+<BR></LI>
+
+<LI>To itself
+
+<BR>
+
+<BR></LI>
+
+<LI>To other command target objects
+
+<BR>
+
+<BR></LI></OL>
+
+<P>For example, a command message that is ultimately processed by the application's document class may be routed through its frame window and view window first before eventually reaching the message handler in the document class.
+
+<BR></P>
+
+<P>Table 19.1 summarizes how messages are handled by the major MFC command target classes.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 19.1. Message routing.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Class</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Routing order</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>MDI frame windows (CMDIFrameWnd)</P>
+
+<TD>
+
+<P>1.</P>
+
+<TD>
+
+<P>Active MDI child window</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>2.</P>
+
+<TD>
+
+<P>This window</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>3.</P>
+
+<TD>
+
+<P>Application object</P>
+
+<TR>
+
+<TD>
+
+<P>Document frame windows</P>
+
+<TD>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>(CMDIChildWnd, CFrameWnd)</P>
+
+<TD>
+
+<P>1.</P>
+
+<TD>
+
+<P>Active view</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>2.</P>
+
+<TD>
+
+<P>This window</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>3.</P>
+
+<TD>
+
+<P>Application object</P>
+
+<TR>
+
+<TD>
+
+<P>View</P>
+
+<TD>
+
+<P>1.</P>
+
+<TD>
+
+<P>This window</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>2.</P>
+
+<TD>
+
+<P>Attached document object</P>
+
+<TR>
+
+<TD>
+
+<P>Document</P>
+
+<TD>
+
+<P>1.</P>
+
+<TD>
+
+<P>This document</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>2.</P>
+
+<TD>
+
+<P>Document template</P>
+
+<TR>
+
+<TD>
+
+<P>Dialog box</P>
+
+<TD>
+
+<P>1.</P>
+
+<TD>
+
+<P>This window</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>2.</P>
+
+<TD>
+
+<P>Owner window</P>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>3.</P>
+
+<TD>
+
+<P>Application object</P></TABLE>
+
+<P>So how do those message map macros relate to message processing? Simple. The DECLARE_MESSAGE_MAP macro declares an array of message map entries as part of your class declaration. The BEGIN_MESSAGE_MAP and END_MESSAGE_MAP macros enclose a series of initializers for this array that represent the individual messages that your class can respond to.
+
+<BR></P>
+
+<P>Look at the message map entries in YAH.cpp. These default entries connect a few standard commands in the File menu to default implementations supplied as part of the CWinApp class. ON_COMMAND is one of several macros that make creating message map entries easier. Normally, message map entries are created automatically by the ClassWizard; however, there are times when it is necessary to manually add entries (for example, when processing an application-specific message).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B> The Frame, the Document, and the View</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In a simple non-MFC Windows application, you would typically create one window and use its client area to present your application's output. MFC applications, on the other hand, use at least two windows: a <I>frame </I><I>window</I> and a <I>view window</I>.
+
+<BR></P>
+
+<P>The frame window manages the application's menus, toolbars, and other user-interface components. The view window, in turn, is dedicated to presenting data from the application's document.
+
+<BR></P>
+
+<P>The document object is not a visual object. It is an object that represents the application's data; it typically corresponds to the contents of a file. The document object closely interacts with the view window for presenting the data and for user interaction.
+
+<BR></P>
+
+<P>The relationship between the frame and view windows and the document object is depicted in Figure 19.4.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="19vcu04.gif">Figure 19.4. Frames, views, and documents.</A></B>
+
+<BR></P>
+
+<P>The next sections present a look at the declaration and implementation of these three classes.
+
+<BR></P>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>The Frame Window Class</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>The application's frame window is supported by the CMainFrame class, which is declared in MainFrm.h (Listing 19.3).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.3. </B><B>CMainFrame</B><B> class declaration.</B></LH></UL>
+
+<PRE>class CMainFrame : public CFrameWnd
+
+{
+
+protected: // create from serialization only
+
+    CMainFrame();
+
+    DECLARE_DYNCREATE(CMainFrame)
+
+// Attributes
+
+public:
+
+// Operations
+
+public:
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CMainFrame)
+
+    virtual BOOL PreCreateWindow(CREATESTRUCT&amp; cs);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+public:
+
+    virtual ~CMainFrame();
+
+#ifdef _DEBUG
+
+    virtual void AssertValid() const;
+
+    virtual void Dump(CDumpContext&amp; dc) const;
+
+#endif
+
+protected:  // control bar embedded members
+
+    CStatusBar  m_wndStatusBar;
+
+    CToolBar    m_wndToolBar;
+
+// Generated message map functions
+
+protected:
+
+    //{{AFX_MSG(CMainFrame)
+
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+
+        // NOTE - the ClassWizard will add and remove member
+
+        // functions here. DO NOT EDIT what you see in these blocks
+
+        // of generated code!
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>Nothing surprising here. A constructor, a destructor, an overridden PreCreateWindow, an overridden OnCreate, and some debug member functions. However, I would like to call your attention to the two member variables m_wndStatusBar and m_wndToolBar. These correspond to the application's single toolbar and status bar. For any control bars that you may wish to add to your program, this is the preferred way to do it; declare them as member variables of the frame window class and add supporting code in the frame window class's implementation file.
+
+<BR></P>
+
+<P>The implementation of CMainFrame (Listing 19.4) can be found in MainFrm.cpp. In this file it is the OnCreate member function that deserves a closer look. It is here in this function that the toolbar and status bar are initialized.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.4. </B><B>CMainFrame</B><B> class implementation.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// CMainFrame
+
+IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
+
+BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+
+    //{{AFX_MSG_MAP(CMainFrame)
+
+ // NOTE - the ClassWizard will add and remove mapping macros here.
+
+ //    DO NOT EDIT what you see in these blocks of generated code !
+
+    ON_WM_CREATE()
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()
+
+static UINT indicators[] =
+
+{
+
+    ID_SEPARATOR,           // status line indicator
+
+    ID_INDICATOR_CAPS,
+
+    ID_INDICATOR_NUM,
+
+    ID_INDICATOR_SCRL,
+
+};
+
+///////////////////////////////////////////////////////////////////
+
+// CMainFrame construction/destruction
+
+CMainFrame::CMainFrame()
+
+{
+
+    // TODO: add member initialization code here
+
+}
+
+CMainFrame::~CMainFrame()
+
+{
+
+}
+
+int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+
+{
+
+    if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+
+        return -1;
+
+    if (!m_wndToolBar.Create(this) ||
+
+        !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
+
+    {
+
+        TRACE0(&quot;Failed to create toolbar\n&quot;);
+
+        return -1;      // fail to create
+
+    }
+
+    if (!m_wndStatusBar.Create(this) ||
+
+        !m_wndStatusBar.SetIndicators(indicators,
+
+          sizeof(indicators)/sizeof(UINT)))
+
+    {
+
+        TRACE0(&quot;Failed to create status bar\n&quot;);
+
+        return -1;      // fail to create
+
+    }
+
+    // TODO: Remove this if you don't want tool tips or a
+
+    //  resizeable toolbar
+
+    m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
+
+        CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
+
+    // TODO: Delete these three lines if you don't want the toolbar
+
+    //  to be dockable
+
+    m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+
+    EnableDocking(CBRS_ALIGN_ANY);
+
+    DockControlBar(&amp;m_wndToolBar);
+
+    return 0;
+
+}
+
+BOOL CMainFrame::PreCreateWindow(CREATESTRUCT&amp; cs)
+
+{
+
+    // TODO: Modify the Window class or styles here by modifying
+
+    //  the CREATESTRUCT cs
+
+    return CFrameWnd::PreCreateWindow(cs);
+
+}</PRE>
+
+<P>For those familiar with earlier versions of Visual C++, there is a notable difference here. Although there is still a global array called indicators that specifies the indicators that go into the status bar, there is no corresponding global array which would specify toolbar buttons. Where did it go? As it turns out, Visual C++ Version 4 now supports a toolbar resource type in its resource files. This resource is editable with the Developer Studio resource editor; thus it is no longer necessary to manually set up and maintain an array of button command identifiers that correspond to buttons in the toolbar bitmap.
+
+<BR></P>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>The Document Class</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>The declaration of the document class in YAHDoc.h (Listing 19.5) provides overrides for two functions: OnNewDocument and Serialize. OnNewDocument is called when the user selects the File New command; this member function is especially important for SDI applications in which the same document object is used over and over again. OnNewDocument is the place where the document object should be reinitialized; for this reason, many initialization operations that would normally go into the constructor really belong here instead.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.5. </B><B>CYAHDoc</B><B> class declaration.</B></LH></UL>
+
+<PRE>class CYAHDoc : public CDocument
+
+{
+
+protected: // create from serialization only
+
+    CYAHDoc();
+
+    DECLARE_DYNCREATE(CYAHDoc)
+
+// Attributes
+
+public:
+
+// Operations
+
+public:
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CYAHDoc)
+
+    public:
+
+    virtual BOOL OnNewDocument();
+
+    virtual void Serialize(CArchive&amp; ar);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+public:
+
+    virtual ~CYAHDoc();
+
+#ifdef _DEBUG
+
+    virtual void AssertValid() const;
+
+    virtual void Dump(CDumpContext&amp; dc) const;
+
+#endif
+
+protected:
+
+// Generated message map functions
+
+protected:
+
+    //{{AFX_MSG(CYAHDoc)
+
+        // NOTE - the ClassWizard will add and remove member
+
+        // functions here. DO NOT EDIT what you see in these blocks
+
+        // of generated code !
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>The Serialize member function is called when the document is loaded or saved. This member function must be overridden; you must write your own saving and loading code in the override version in order to save and load your document data.
+
+<BR></P>
+
+<P>Apropos serialization&#151;isn't there a glaring inconsistency here? Why is the DECLARE_DYNCREATE macro used in the class declaration when this class obviously supports serialization? Shouldn't it be DECLARE_SERIAL instead?
+
+<BR></P>
+
+<P>The reason using DECLARE_SERIAL is unnecessary is that although the class has a Serialize member function, the operator &gt;&gt; is never used to retrieve a document from a CArchive. The Serialize member function is called explicitly, from CDocument::OnOpenDocument. The use of DECLARE_SERIAL (and IMPLEMENT_SERIAL) is only necessary for classes that are loaded from a CArchive object using the &gt;&gt; operator.
+
+<BR></P>
+
+<P>Both CYAHDoc override functions are implemented in the file YAHDoc.cpp (Listing 19.6). Their default implementations do nothing; you must supply the code to initialize your document type, and save and load document data.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.6. </B><B>CYAHDoc</B><B> class implementation.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// CYAHDoc
+
+IMPLEMENT_DYNCREATE(CYAHDoc, CDocument)
+
+BEGIN_MESSAGE_MAP(CYAHDoc, CDocument)
+
+    //{{AFX_MSG_MAP(CYAHDoc)
+
+ // NOTE - the ClassWizard will add and remove mapping macros here.
+
+ //    DO NOT EDIT what you see in these blocks of generated code!
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// CYAHDoc construction/destruction
+
+CYAHDoc::CYAHDoc()
+
+{
+
+    // TODO: add one-time construction code here
+
+}
+
+CYAHDoc::~CYAHDoc()
+
+{
+
+}
+
+BOOL CYAHDoc::OnNewDocument()
+
+{
+
+    if (!CDocument::OnNewDocument())
+
+        return FALSE;
+
+    // TODO: add reinitialization code here
+
+    // (SDI documents will reuse this document)
+
+    return TRUE;
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+// CYAHDoc serialization
+
+void CYAHDoc::Serialize(CArchive&amp; ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        // TODO: add storing code here
+
+    }
+
+    else
+
+    {
+
+        // TODO: add loading code here
+
+    }
+
+}</PRE>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The View Class</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>The default declaration of the view class in YAHView.h (Listing 19.7) includes several function overrides. Perhaps the most significant of these is OnDraw; it is this function that is responsible for presenting a visual representation of the data of the document that corresponds to this view.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.7. </B><B>CYAHView</B><B> class declaration.</B></LH></UL>
+
+<PRE>class CYAHView : public CView
+
+{
+
+protected: // create from serialization only
+
+    CYAHView();
+
+    DECLARE_DYNCREATE(CYAHView)
+
+// Attributes
+
+public:
+
+    CYAHDoc* GetDocument();
+
+// Operations
+
+public:
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CYAHView)
+
+    public:
+
+    virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+
+    virtual BOOL PreCreateWindow(CREATESTRUCT&amp; cs);
+
+    protected:
+
+    virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+
+    virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+
+    virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+public:
+
+    virtual ~CYAHView();
+
+#ifdef _DEBUG
+
+    virtual void AssertValid() const;
+
+    virtual void Dump(CDumpContext&amp; dc) const;
+
+#endif
+
+protected:
+
+// Generated message map functions
+
+protected:
+
+    //{{AFX_MSG(CYAHView)
+
+        // NOTE - the ClassWizard will add and remove member
+
+        // functions here. DO NOT EDIT what you see in these blocks
+
+        // of generated code !
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>Notice that this class, like the document class, is also declared with the DECLARE_DYNCREATE macro. Use of this macro is necessary because when a new document is created, the view object is created dynamically.
+
+<BR></P>
+
+<P>The implementation of the view class in YAHView.cpp (Listing 19.8) contains few surprises. The override functions are only skeletons; you must supply your own implementation. However, only the OnDraw member function must be edited in order to obtain a functional application. In order to have printing capability, it is not necessary to adjust any of the printing-related member functions here, although you would probably want to do so because the default printing behavior may not be satisfactory.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 19.8. </B><B>CYAHView</B><B> class implementation.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// CYAHView
+
+IMPLEMENT_DYNCREATE(CYAHView, CView)
+
+BEGIN_MESSAGE_MAP(CYAHView, CView)
+
+    //{{AFX_MSG_MAP(CYAHView)
+
+ // NOTE - the ClassWizard will add and remove mapping macros here.
+
+ //    DO NOT EDIT what you see in these blocks of generated code!
+
+    //}}AFX_MSG_MAP
+
+    // Standard printing commands
+
+    ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
+
+    ON_COMMAND(ID_FILE_PRINT_DIRECT, CView::OnFilePrint)
+
+    ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
+
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// CYAHView construction/destruction
+
+CYAHView::CYAHView()
+
+{
+
+    // TODO: add construction code here
+
+}
+
+CYAHView::~CYAHView()
+
+{
+
+}
+
+BOOL CYAHView::PreCreateWindow(CREATESTRUCT&amp; cs)
+
+{
+
+    // TODO: Modify the Window class or styles here by modifying
+
+    //  the CREATESTRUCT cs
+
+    return CView::PreCreateWindow(cs);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// CYAHView drawing
+
+void CYAHView::OnDraw(CDC* pDC)
+
+{
+
+    CYAHDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: add draw code for native data here
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// CYAHView printing
+
+BOOL CYAHView::OnPreparePrinting(CPrintInfo* pInfo)
+
+{
+
+    // default preparation
+
+    return DoPreparePrinting(pInfo);
+
+}
+
+void CYAHView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+
+{
+
+    // TODO: add extra initialization before printing
+
+}
+
+void CYAHView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+
+{
+
+    // TODO: add cleanup after printing
+
+}</PRE>
+
+<P>Notice that there are several message map entries here that are related to printing. They call the base class functions that implement default printing and print preview behavior.
+
+<BR></P>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B> Skeleton Application Resources</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>To complete our tour of the skeleton MFC application, here is a brief look at the resources that were generated by AppWizard. To see the list of resources, open the project in ResourceView and expand the single item seen in this view.
+
+<BR></P>
+
+<P>The accelerator resource requires little explanation; it contains the keyboard shortcuts to many standard menu functions. The menu bar itself is defined in the application's single menu resource.
+
+<BR></P>
+
+<P>AppWizard created one dialog resource, an About dialog. This dialog is displayed when the user selects the About command from the Help menu.
+
+<BR></P>
+
+<P>Two icons have been generated; IDR_MAINFRAME is the application icon, and IDR_YAHTYPE is the icon representing the application's document type.
+
+<BR></P>
+
+<P>The string table contains numerous strings. Many of these correspond to MFC framework messages; others represent status bar messages, tooltips, and other text items specific to this application. Of particular interest is the string resource IDR_MAINFRAME, also referred to as the <I>document template string</I>. This string contains up to nine substrings, separated by the newline (\n) character. Here is what it has been set to by AppWizard:
+
+<BR></P>
+
+<PRE>Hello, World!\n\nYAH\nYAH Files (*.yah)\n.YAH\nYAH.Document\nYAH Document</PRE>
+
+<P>The substrings of the document template string are described in Table 19.2. The general syntax for this string is the following:
+
+<BR></P>
+
+<PRE>&lt;windowTitle&gt;\n&lt;docName&gt;\n&lt;fileNewName&gt;\n&lt;filterName&gt;\n
+
+&lt;filterExt&gt;\n&lt;regFileTypeID&gt;\n&lt;regFileTypeName&gt;\n
+
+&lt;filterMacExt(filterWinExt)&gt;\n&lt;filterMacName(filterWinName)&gt;</PRE>
+
+<UL>
+
+<LH><B>Table 19.2. Substrings of the document template string.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Substring</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>&lt;windowTitle&gt;</P>
+
+<TD>
+
+<P>The title of the application's main frame window</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;docName&gt;</P>
+
+<TD>
+
+<P>Root document name for document windows (this name plus a number will be used as window titles)</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;fileNewName&gt;</P>
+
+<TD>
+
+<P>Document type displayed in the File New dialog when the application supports multiple types</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;filterName&gt;</P>
+
+<TD>
+
+<P>Filter used in the file dialogs</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;filterExt&gt;</P>
+
+<TD>
+
+<P>Extension used in the file dialogs</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;regFileTypeID&gt;</P>
+
+<TD>
+
+<P>File type registered in the Registry</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;regFileTypeName&gt;</P>
+
+<TD>
+
+<P>Visible name of the file type registered in the Registry</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;filterMacExt&gt;</P>
+
+<TD>
+
+<P>Filename filter for Macintosh version</P>
+
+<TR>
+
+<TD>
+
+<P>&lt;filterMacName&gt;</P>
+
+<TD>
+
+<P>Filename filter for Macintosh version</P></TABLE>
+
+<P>The resource file also contains a toolbar resource and a version resource.
+
+<BR></P>
+
+<P>Note how several resources share the same identifier, IDR_MAINFRAME. Such common identifiers are used when the application calls the CSingleDocTemplate (or CMultiDocTemplate) constructor. It identifies the menu, icon, accelerator table, and document template string corresponding to a specific document type.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>Adding Code to the Application</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Now that we have seen the basic elements of an MFC skeleton, it is time to look at actually modifying the skeleton by adding some of our own code. We'll try something simple this time. In the document class, we will add a string member variable and initialize it from a resource; in the view class, we will add code to display this string in the middle of the application's view window.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Adding a String Resource</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To add a string resource, open the project workspace in ResourceView and open the string table. Add a string named IDS_HELLO and set its value to &quot;Hello, World!&quot; (or whatever else may suit your taste).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Modifying the Document</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The first step in modifying our application is to add a member variable to the document class. To do this, edit the YAHDoc.h file. In the Attributes section, add a declaration for a member variable of type CString as follows:
+
+<BR></P>
+
+<PRE>// Attributes
+
+public:
+
+CString m_sData;</PRE>
+
+<P>Obviously, m_sData must be initialized somewhere. We must also add this member to the Serialize member function to enable it to be saved to, and loaded from, a file. These changes are carried out in the YAHDoc.cpp file.
+
+<BR></P>
+
+<P>We will initialize the string in the OnNewDocument member function to ensure that it is reinitialized every time the user selects the New command from the File menu. Here is the modified OnNewDocument:
+
+<BR></P>
+
+<PRE>BOOL CYAHDoc::OnNewDocument()
+
+{
+
+    if (!CDocument::OnNewDocument())
+
+        return FALSE;
+
+    // TODO: add reinitialization code here
+
+    // (SDI documents will reuse this document)
+
+m_sData.LoadString(IDS_HELLO);
+
+return TRUE;
+
+}</PRE>
+
+<P>And here is the modified Serialize member function:
+
+<BR></P>
+
+<PRE>void CYAHDoc::Serialize(CArchive&amp; ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        // TODO: add storing code here
+
+ar &lt;&lt; m_sData;
+
+}
+
+    else
+
+    {
+
+        // TODO: add loading code here
+
+ar &gt;&gt; m_sData;
+
+}
+
+}</PRE>
+
+<P>We are almost done! All that is left is to actually display the string; this must be implemented as part of our view class.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Modifying the View</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To display our string, we must modify the view class's OnDraw member function. As AppWizard already provided us with an empty implementation for this function, it is not necessary to modify the class declaration; we only add code to the existing function skeleton in YAHView.cpp:
+
+<BR></P>
+
+<PRE>void CYAHView::OnDraw(CDC* pDC)
+
+{
+
+    CYAHDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: add draw code for native data here
+
+CRect rect;
+
+    GetClientRect(&amp;rect);
+
+    pDC-&gt;DPtoLP(&amp;rect);
+
+    pDC-&gt;DrawText(pDoc-&gt;m_sData, &amp;rect,
+
+                  DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+}</PRE>
+
+<P>All that is left is to recompile and run the application. If all goes well, the application window should look similar to that shown in Figure 19.5.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="19vcu05.gif">Figure 19.5. The Yet Another Hello World </B><B>Application.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>MFC applications are created through AppWizard. At the heart of every MFC application is a CWinApp-derived object, which implements application initialization and the application's main message loop.
+
+<BR></P>
+
+<P>Messages are dispatched and routed through message maps, which are a feature of command handler objects (such as windows). The CWinApp::Run member function dispatches messages through ::DispatchMessage; further routing takes place according to MFC's message routing rules. Generally, a command handler object routes a message first to any child command handler objects; next, to itself; and finally, to additional command handler objects.
+
+<BR></P>
+
+<P>Visual presentation of an application and management of the application's data are a result of cooperation between a frame window, a view window, and a document object. The document object holds the application's data and generally corresponds to a disk file. The view window is used to present the contents of a document to the user and accept user interaction. The view window works hand-in-hand with the frame window, which manages other elements of the application's user interface, such as its menu bar, toolbars, or status bar.
+
+<BR></P>
+
+<P>When implementing an MFC application, one typically edits the document and view classes simultaneously. Representations of new document objects are declared as members of the document class; the visual interfaces corresponding to the new elements are implemented as part of the view class.</P>
+
+<P><A HREF="vcu18fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu20fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

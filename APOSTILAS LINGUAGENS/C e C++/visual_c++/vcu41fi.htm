@@ -1,0 +1,1112 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu41fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu42fi.htm">
+
+<LINK REL="Previous" HREF="vcu40fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu40fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu42fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">41 &#151; The OpenGL Graphics Library</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">OpenGL Overview</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Basic OpenGL Concepts</A></LI>
+
+<LI>
+
+<A HREF="#I5">Initialization</A></LI>
+
+<LI>
+
+<A HREF="#I6">Drawing with OpenGL</A></LI>
+
+<LI>
+
+<A HREF="#I7">Additional Libraries</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">Writing OpenGL Windows Applications in C</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">OpenGL Initialization</A></LI>
+
+<LI>
+
+<A HREF="#I10">The Window Procedure</A></LI>
+
+<LI>
+
+<A HREF="#I11">Compiling and Running the Application</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">OpenGL in MFC Applications</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">OpenGL initialization</A></LI>
+
+<LI>
+
+<A HREF="#I14">Drawing the Cube</A></LI>
+
+<LI>
+
+<A HREF="#I15">Running the Application</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>41 &#151; The OpenGL Graphics Library</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>OpenGL is a device- and operating system-independent library for three-dimensional graphics and graphics rendering. OpenGL was originally developed by Silicon Graphics Inc. (SGI) for use on their high-end graphics workstations. Since then, OpenGL has become a widely accepted standard with implementations on many operating system and hardware platforms, including the Windows NT and Windows 95 operating systems.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> OpenGL support under Windows 95 has just become available recently. The Windows 95 version of the OpenGL development system and redistributable run-time files are available as part of the October, 1995 or later release of the Microsoft Developer Library, level 2. There is no support for OpenGL under Win32s.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>In addition to the standard OpenGL Library implementation, Windows also provides a series of functions that integrate OpenGL with the operating system. In particular, functions are provided that associate OpenGL rendering contexts with GDI device contexts. These Windows extensions to the OpenGL Library are identified by names that begin with wgl. In addition to these OpenGL extensions, a series of new Win32 API functions has also been defined to facilitate certain aspects of OpenGL programming.
+
+<BR></P>
+
+<P>The OpenGL Library is large and complex. If you wish to have access to a comprehensive set of manuals, you should consider purchasing <I>The OpenGL </I><I>Reference Manual</I> from the OpenGL Architecture Review Board, or <I>The </I><I>OpenGL Programming Guide</I> by Jackie Neider, Tom Davis, and Mason Woo. Both books are published by Addison-Wesley.
+
+<BR></P>
+
+<P>In this chapter, in addition to presenting a brief (and far from comprehensive!) overview of the OpenGL Library, I place the focus on using OpenGL from Windows and MFC applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>OpenGL Overview</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The purpose of the OpenGL Library is to render two- and three-dimensional objects into a <I>frame buffer</I>, such as the pixel memory of your computer's graphics hardware.
+
+<BR></P>
+
+<P>The OpenGL Library is fundamentally procedural. What this means is that in your application, you don't describe what an object looks like; instead, you specify how an object is to be drawn. Complex geometric objects are described in terms of simple elements that your application defines.
+
+<BR></P>
+
+<P>The OpenGL Library implementation follows the client-server model. OpenGL clients and servers need not even reside on the same machine.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Basic OpenGL Concepts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>At the basic level, the OpenGL Library deals with <I>vertices</I>. A vertex is a point, for example the end point of a line, or a corner of a polygon. Vertices can be two- or three-dimensional.
+
+<BR></P>
+
+<P>At the next level are <I>primitives</I>. Primitives consist of a group of one or more vertices. For example, a rectangle described as a set of four vertices is a primitive.
+
+<BR></P>
+
+<P>How vertices are assembled into primitives and how primitives are drawn into a frame buffer are controlled by a variety of settings. For example, applications can specify a three-dimensional transformation matrix that defines how the coordinates of an object are translated into coordinates on the drawing surface.
+
+<BR></P>
+
+<P>In addition to its ability to draw points and lines, OpenGL can also draw surfaces, apply lighting specifications, and use texture bitmaps.
+
+<BR></P>
+
+<P>Another set of features enables applications to selectively use or discard pixels. For example, drawing a pixel can be made conditional upon properties such as the pixel's depth or its opacity.
+
+<BR></P>
+
+<P>A greatly simplified view of how OpenGL works is presented in Figure 41.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="41vcu01.gif">Figure 41.1. Simplified overview of OpenGL </B><B>operations.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Initialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before the OpenGL Library can be used, a number of initialization steps must be executed.
+
+<BR></P>
+
+<P>Every Windows OpenGL application must associate a rendering context with a device context. The device context must be a display device context or a memory device context that is compatible with the display device context. To set up a rendering context, applications must first use the SetPixelFormat Win32 function to set up a pixel format for the device; next, they must call wglCreateContext with the device context handle as its parameter. If successful, wglCreateContext returns a rendering context handle of type HGLRC.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> Windows does not support drawing into a printer device context using the OpenGL Library. If you wish to print an image created with OpenGL, one possible workaround is to draw into a memory device context that is compatible with the display device and then transfer the resulting bitmap to the printer device.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>OpenGL under Windows recognizes two types of pixel data modes: RGBA formats and color index-based modes. When the RGBA mode is selected, pixel colors are specified in the form of RGB color values. When color index mode is selected, pixel colors are selected from the system palette using an index value. These two modes become relevant on palette-based 256-color devices (many VGA-compatible display cards). When your application uses the RGBA mode on such a device, it must manage its own palette, and respond to Windows palette notification messages.
+
+<BR></P>
+
+<P>There are specific requirements that must be met by a window that is to be used for OpenGL operations. Specifically, such windows cannot be created using a window class that has the CS_PARENTDC style set. The window itself must have the WS_CLIPCHILDREN and the WS_CLIPSIBLINGS styles in order to be compatible with OpenGL.
+
+<BR></P>
+
+<P>Note that to increase your application's performance, you may wish to use a window class that has a null background brush; the window background will be erased through the OpenGL Library anyway.
+
+<BR></P>
+
+<P>Before a rendering context can be used, it must be set up as the current context using the wglMakeCurrent function. This function takes two parameters, one of which is a device-context handle. Interestingly, this handle does not need to be identical to the handle used in wglCreateContext&#151;but it must refer to the same device). Thus it is possible, for example, to set up an OpenGL rendering context using a device-context handle returned by GetDC, but use wglMakeCurrent with a device-context handle returned by BeginPaint.
+
+<BR></P>
+
+<P>Once a rendering context is ready to accept commands, you may wish to send additional initialization commands; for example, you may wish to erase the frame buffer before drawing, set up coordinate transformations, configure light sources, or enable and disable other options.
+
+<BR></P>
+
+<P>One initialization step that cannot be omitted is the call to the glViewport function. Through this function, you can set up or modify the size of the rendering viewport. Typically, you should call this function once when the rendering context is initialized, and subsequently every time your application receives a WM_SIZE message indicating that its window size has changed.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Drawing with OpenGL</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Most OpenGL drawing consists of a series of vertex operations enclosed between a pair of glBegin and glEnd calls. The glBegin call identifies the type of primitive that subsequent vertex operations define; glEnd marks the end of constructing the primitive. For example, the following series of calls constructs a pentagon:
+
+<BR></P>
+
+<PRE>glBegin(GL_POLYGON);
+
+glVertex2d(0.0, 1.0);
+
+glVertex2d(-0.951057, 0.309017);
+
+glVertex2d(-0.587785, -0.809017);
+
+glVertex2d(0.587785, -0.809017);
+
+glVertex2d(0.951057, 0.309017);
+
+glEnd();</PRE>
+
+<P>The glBegin function can be used to define a variety of primitives. Table 41.1 lists the allowable parameters for this function.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 41.1. Primitives constructed through </B><B>glBegin</B><B>.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>glBegin</I></B><B><I> Parameter</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>GL_POINTS</P>
+
+<TD>
+
+<P>A series of points</P>
+
+<TR>
+
+<TD>
+
+<P>GL_LINES</P>
+
+<TD>
+
+<P>A series of lines</P>
+
+<TR>
+
+<TD>
+
+<P>GL_LINE_STRIP</P>
+
+<TD>
+
+<P>A connected group of line segments</P>
+
+<TR>
+
+<TD>
+
+<P>GL_LINE_LOOP</P>
+
+<TD>
+
+<P>A connected, closed group of line segments</P>
+
+<TR>
+
+<TD>
+
+<P>GL_TRIANGLES</P>
+
+<TD>
+
+<P>A set of triangles</P>
+
+<TR>
+
+<TD>
+
+<P>GL_TRIANGLE_STRIP</P>
+
+<TD>
+
+<P>A set of connected triangles</P>
+
+<TR>
+
+<TD>
+
+<P>GL_TRIANGLE_FAN</P>
+
+<TD>
+
+<P>A set of connected triangles</P>
+
+<TR>
+
+<TD>
+
+<P>GL_QUADS</P>
+
+<TD>
+
+<P>A set of quadrilaterals</P>
+
+<TR>
+
+<TD>
+
+<P>GL_QUAD_STRIP</P>
+
+<TD>
+
+<P>A set of connected quadrilaterals</P>
+
+<TR>
+
+<TD>
+
+<P>GL_POLYGON</P>
+
+<TD>
+
+<P>A polygon</P></TABLE>
+
+<P>In the case when glBegin defines a set of connected primitives, specific rules govern how vertices of a primitive are reused as vertices of the subsequent primitive. For example, if GL_LINE_STRIP is specified, the vertex representing the end point of a line segment also becomes the starting point of the next line segment.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Additional Libraries</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In addition to basic OpenGL functions, Microsoft's OpenGL implementation provides two additional OpenGL libraries.
+
+<BR></P>
+
+<P>The OpenGL Utility Library (GLU) contains a series of functions that deal with texture support; coordinate transformation; rendering of spheres, disks, and cylinders; B-spline curves and surfaces; and error handling. Additionally, the GLU Library provides <I>polygon tessellation</I> functions; these functions can be used to break down complex or concave polygons into simple convex polygons (the only kind that OpenGL can handle).
+
+<BR></P>
+
+<P>The OpenGL Programming Guide Auxiliary Library (GLAUX), in addition to providing functions for handling several three-dimensional objects, also provides functions to manage and run an OpenGL application. These functions are most useful for quick porting OpenGL applications from other environments. In particular, these functions provide basic window management, implement a simple message loop, and provide a window procedure for basic message handling. However, these library functions are not intended for use in production applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>Writing OpenGL Windows Applications in C</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Now for a look at a very simple OpenGL application. This application, shown in Listing 41.1, displays a cube. The cube is slightly rotated to show a three-dimensional appearance, and is lit from the side. In its simplicity, this application is the OpenGL version of a Windows Hello, World application.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 41.1. A simple OpenGL application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;GL/gl.h&gt;
+
+#include &lt;GL/glu.h&gt;
+
+HGLRC hglrc;
+
+void DrawHello(HWND hwnd)
+
+{
+
+    HDC hDC;
+
+    PAINTSTRUCT paintStruct;
+
+    RECT clientRect;
+
+    GLfloat lightPos[4] = {-1.0F, 2.0F, 0.2F, 0.0F};
+
+    hDC = BeginPaint(hwnd, &amp;paintStruct);
+
+    if (hDC != NULL)
+
+    {
+
+        GetClientRect(hwnd, &amp;clientRect);
+
+        wglMakeCurrent(hDC, hglrc);
+
+        glViewport(0, 0, clientRect.right, clientRect.bottom);
+
+        glLoadIdentity();
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glColor4d(1.0, 1.0, 1.0, 1.0);
+
+        glRotated(30.0, 0.0, 1.0, 0.0);
+
+        glRotated(15.0, 1.0, 0.0, 0.0);
+
+        glEnable(GL_LIGHTING);
+
+        glEnable(GL_LIGHT0);
+
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
+        glBegin(GL_QUADS);
+
+        glNormal3d(0.0, -1.0, 0.0);
+
+        glVertex3d(0.5, -0.5, 0.5);
+
+        glVertex3d(-0.5, -0.5, 0.5);
+
+        glVertex3d(-0.5, -0.5, -0.5);
+
+        glVertex3d(0.5, -0.5, -0.5);
+
+        glNormal3d(0.0, 0.0, -1.0);
+
+        glVertex3d(-0.5, -0.5, -0.5);
+
+        glVertex3d(-0.5, 0.5, -0.5);
+
+        glVertex3d(0.5, 0.5, -0.5);
+
+        glVertex3d(0.5, -0.5, -0.5);
+
+        glNormal3d(1.0, 0.0, 0.0);
+
+        glVertex3d(0.5, -0.5, -0.5);
+
+        glVertex3d(0.5, 0.5, -0.5);
+
+        glVertex3d(0.5, 0.5, 0.5);
+
+        glVertex3d(0.5, -0.5, 0.5);
+
+        glNormal3d(0.0, 0.0, 1.0);
+
+        glVertex3d(-0.5, -0.5, 0.5);
+
+        glVertex3d(-0.5, 0.5, 0.5);
+
+        glVertex3d(0.5, 0.5, 0.5);
+
+        glVertex3d(0.5, -0.5, 0.5);
+
+        glNormal3d(-1.0, 0.0, 0.0);
+
+        glVertex3d(-0.5, -0.5, 0.5);
+
+        glVertex3d(-0.5, 0.5, 0.5);
+
+        glVertex3d(-0.5, 0.5, -0.5);
+
+        glVertex3d(-0.5, -0.5, -0.5);
+
+        glNormal3d(0.0, 1.0, 0.0);
+
+        glVertex3d(-0.5, 0.5, 0.5);
+
+        glVertex3d(0.5, 0.5, 0.5);
+
+        glVertex3d(0.5, 0.5, -0.5);
+
+        glVertex3d(-0.5, 0.5, -0.5);
+
+        glEnd();
+
+        glFlush();
+
+        wglMakeCurrent(NULL, NULL);
+
+        EndPaint(hwnd, &amp;paintStruct);
+
+    }
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case WM_PAINT:
+
+            DrawHello(hwnd);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                        LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    HDC hDC;
+
+    PIXELFORMATDESCRIPTOR pfd;
+
+    int iPixelFormat;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.lpszClassName = &quot;HELLO&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;HELLO&quot;, &quot;HELLO&quot;,
+
+           WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    hDC = GetDC(hwnd);
+
+    memset(&amp;pfd, 0, sizeof(pfd));
+
+    pfd.nSize = sizeof(pfd);
+
+    pfd.nVersion = 1;
+
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+
+    pfd.iPixelType = PFD_TYPE_RGBA;
+
+    pfd.iLayerType = PFD_MAIN_PLANE;
+
+    pfd.cDepthBits = 16;
+
+    iPixelFormat = ChoosePixelFormat(hDC, &amp;pfd);
+
+    SetPixelFormat(hDC, iPixelFormat, &amp;pfd);
+
+    hglrc = wglCreateContext(hDC);
+
+    ReleaseDC(hwnd, hDC);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    wglMakeCurrent(NULL, NULL);
+
+    wglDeleteContext(hglrc);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>The following sections explain this application's method of operation.
+
+<BR></P>
+
+<P>Note that for the sake of simplicity, I did not include any palette initialization in this application. For this reason, the application may not behave properly on systems configured for 16 or 256 colors.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>OpenGL Initialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The first series of OpenGL calls in this application begins in WinMain, immediately after the application's window has been created. After obtaining a device-context handle for the client area of this window, the device context's pixel format is set to a pixel format obtained through ChoosePixelFormat. The ChoosePixelFormat function can be used to identify pixel formats for a specific device that best match a set of required characteristics.
+
+<BR></P>
+
+<P>Note that although we are using the RGBA data mode, this application does not handle palette notification messages. This is done in order to keep the application as simple as possible; in a production application, you would certainly not want to omit creating and managing a palette that is appropriate for your application.
+
+<BR></P>
+
+<P>After the pixel format has been specified, a rendering context is created by a call to wglCreateContext. The rendering context handle is saved in a global variable that will be accessed from within other functions.
+
+<BR></P>
+
+<P>When all initializations have been completed, the application enters its message loop. After the message loop terminates, cleanup is performed by calling wglMakeCurrent and wglDeleteContext before the application terminates.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The Window Procedure</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The application's simple window procedure processes only two messages: WM_PAINT and WM_DESTROY. When a WM_PAINT message is received, the window procedure calls the DrawHello function; it is in this function where OpenGL drawing operations take place.
+
+<BR></P>
+
+<P>The first step in DrawHello is to select the rendering context as the current context and set the viewport size by calling glViewport. The viewport size was obtained by a call to the Win32 GetClientRect function. Next, the frame buffer is erased, and an identity transformation matrix is loaded.
+
+<BR></P>
+
+<P>The transformation matrix is changed by two subsequent rotations, specified by calls to glRotated. The first call rotates the view around the vertical axis. The second call tips the view forward by rotating it around the horizontal axis. As a result, we will see the cube from a viewpoint somewhat above and to the left of the cube.
+
+<BR></P>
+
+<P>The rotations are followed by calls that enable lighting mode and specify a light source. The code specifies a single light source that illuminates the cube from the left and above.
+
+<BR></P>
+
+<P>With all this initialization work complete, actual drawing can begin. A series of six quadrilaterals is drawn, representing the six sides of the cube. For each of the quadrilaterals, the normal vector is defined by a separate call to glNormal3d. When the construction of the six primitives is complete, a call to glFlush is used to ensure that all OpenGL operations are complete, and then the device context is released and the function returns.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Compiling and Running the Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>This application can be compiled simply from the command line. I called the source file cube.c; to compile this file, type the following:
+
+<BR></P>
+
+<PRE>cl cube.c user32.lib gdi32.lib opengl32.lib</PRE>
+
+<P>Note that applications that use the GLU Library or the GLAUX Library must also specify glaux.lib or glu32.lib on the command line. And because OpenGL is computation-intensive, it might be a useful idea to compile with the appropriate optimization flags set.
+
+<BR></P>
+
+<P>The application should display a window with a three-dimensional image of a cube rendered in it, similar to that shown in Figure 41.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="41vcu02.gif">Figure 41.2. Running the </B><B>cube.exe</B><B> Windows </B><B>application.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>OpenGL in MFC Applications</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The OpenGL Library can easily be utilized from MFC applications as well. To enable the OpenGL libraries, add the appropriate library names to your project settings (Figure 41.3).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="41vcu03.gif">Figure 41.3. Adding the OpenGL libraries to MFC project </B><B>settings.</A></B>
+
+<BR></P>
+
+<P>When initializing the OpenGL Library in an MFC application, it is important to remember which window you wish to use for a rendering context. For example, if it is a view window that will serve as the rendering context, it is this window that should be used when the OpenGL rendering context is created.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>OpenGL initialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC OpenGL application I created is based on an AppWizard-generated single document interface application skeleton.
+
+<BR></P>
+
+<P>In this application, we draw a cube identical to the cube drawn in the C application discussed earlier. The cube is drawn into the application's view window. Accordingly, the first task after creating the application's skeleton is to modify the view class's PreCreateWindow member function, to ensure that the view window is created with the appropriate flags.
+
+<BR></P>
+
+<P>The modified version of this function is shown in Listing 41.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 41.2. Modified version of </B><B>CCubeView::PreCreateWindow.</B></LH></UL>
+
+<PRE>BOOL CCUBEView::PreCreateWindow(CREATESTRUCT&amp; cs)
+
+{
+
+    // TODO: Modify the Window class or styles here by modifying
+
+    //  the CREATESTRUCT cs
+
+    cs.style |= WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+
+    return CView::PreCreateWindow(cs);
+
+}</PRE>
+
+<P>As you can see, the change to this function is simple; it consists only of adding the WS_CLIPSIBLINGS and WS_CLIPCHILDREN flags to the window style to ensure proper operation of the OpenGL libraries.
+
+<BR></P>
+
+<P>Much more extensive initialization work is performed in the view class's OnCreate member function. This member function must be added using ClassWizard or the WizardBar, as a handler function for WM_CREATE messages. The implementation of this function, shown in Listing 41.3, creates a rendering context after setting a pixel format for the view window's device context.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 41.3. Implementation of </B><B>CCubeView::OnCreate</B><B>.</B></LH></UL>
+
+<PRE>int CCUBEView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+
+{
+
+    PIXELFORMATDESCRIPTOR pfd;
+
+    int iPixelFormat;
+
+    CDC *pDC;
+
+    if (CView::OnCreate(lpCreateStruct) == -1)
+
+        return -1;
+
+    // TODO: Add your specialized creation code here
+
+    pDC = GetDC();
+
+    memset(&amp;pfd, 0, sizeof(pfd));
+
+    pfd.nSize = sizeof(pfd);
+
+    pfd.nVersion = 1;
+
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+
+    pfd.iPixelType = PFD_TYPE_RGBA;
+
+    pfd.iLayerType = PFD_MAIN_PLANE;
+
+    pfd.cDepthBits = 16;
+
+    iPixelFormat = ChoosePixelFormat(pDC-&gt;m_hDC, &amp;pfd);
+
+    SetPixelFormat(pDC-&gt;m_hDC, iPixelFormat, &amp;pfd);
+
+    m_hglrc = wglCreateContext(pDC-&gt;m_hDC);
+
+    ReleaseDC(pDC);
+
+    return 0;
+
+}</PRE>
+
+<P>The rendering context handle is stored in the member variable m_hglrc. This member variable should be added to the declaration of the view class in the Attributes section, as follows:
+
+<BR></P>
+
+<PRE>class CCUBEView : public CView
+
+{
+
+    ...
+
+// Attributes
+
+public:
+
+    CCUBEDoc* GetDocument();
+
+HGLRC m_hglrc;
+
+...</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Drawing the Cube</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The actual drawing of the cube is performed in the OnDraw member function of the view class. This member function, shown in Listing 41.4, is very similar to the DrawHello function of the C application presented earlier in this chapter. After making the rendering context current, the function performs a series of initializations, including setting the size of the viewport, applying coordinate transformations, and setting up lighting. Afterwards, four quadrilaterals that together comprise the cube are drawn.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 41.4. Implementation of </B><B>CCubeView::OnDraw</B><B>.</B></LH></UL>
+
+<PRE>void CCUBEView::OnDraw(CDC* pDC)
+
+{
+
+    CRect clientRect;
+
+    GLfloat lightPos[4] = {-1.0F, 2.0F, 0.2F, 0.0F};
+
+    CCUBEDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: add draw code for native data here
+
+    GetClientRect(&amp;clientRect);
+
+    wglMakeCurrent(pDC-&gt;m_hDC, m_hglrc);
+
+    glViewport(0, 0, clientRect.right, clientRect.bottom);
+
+    glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor4d(1.0, 1.0, 1.0, 1.0);
+
+    glRotated(30.0, 0.0, 1.0, 0.0);
+
+    glRotated(15.0, 1.0, 0.0, 0.0);
+
+    glEnable(GL_LIGHTING);
+
+    glEnable(GL_LIGHT0);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
+    glBegin(GL_QUADS);
+
+    glNormal3d(0.0, -1.0, 0.0);
+
+    glVertex3d(0.5, -0.5, 0.5);
+
+    glVertex3d(-0.5, -0.5, 0.5);
+
+    glVertex3d(-0.5, -0.5, -0.5);
+
+    glVertex3d(0.5, -0.5, -0.5);
+
+    glNormal3d(0.0, 0.0, -1.0);
+
+    glVertex3d(-0.5, -0.5, -0.5);
+
+    glVertex3d(-0.5, 0.5, -0.5);
+
+    glVertex3d(0.5, 0.5, -0.5);
+
+    glVertex3d(0.5, -0.5, -0.5);
+
+    glNormal3d(1.0, 0.0, 0.0);
+
+    glVertex3d(0.5, -0.5, -0.5);
+
+    glVertex3d(0.5, 0.5, -0.5);
+
+    glVertex3d(0.5, 0.5, 0.5);
+
+    glVertex3d(0.5, -0.5, 0.5);
+
+    glNormal3d(0.0, 0.0, 1.0);
+
+    glVertex3d(-0.5, -0.5, 0.5);
+
+    glVertex3d(-0.5, 0.5, 0.5);
+
+    glVertex3d(0.5, 0.5, 0.5);
+
+    glVertex3d(0.5, -0.5, 0.5);
+
+    glNormal3d(-1.0, 0.0, 0.0);
+
+    glVertex3d(-0.5, -0.5, 0.5);
+
+    glVertex3d(-0.5, 0.5, 0.5);
+
+    glVertex3d(-0.5, 0.5, -0.5);
+
+    glVertex3d(-0.5, -0.5, -0.5);
+
+    glNormal3d(0.0, 1.0, 0.0);
+
+    glVertex3d(-0.5, 0.5, 0.5);
+
+    glVertex3d(0.5, 0.5, 0.5);
+
+    glVertex3d(0.5, 0.5, -0.5);
+
+    glVertex3d(-0.5, 0.5, -0.5);
+
+    glEnd();
+
+    glFlush();
+
+    wglMakeCurrent(NULL, NULL);
+
+}</PRE>
+
+<P>Note that this implementation does not take into account the fact that the MFC framework also calls the view class's OnDraw function when drawing into a printer-device context. In its present state, attempts to use this application for printing will fail.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Running the Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To run the application, compile and execute it from the Build menu. The application's window should appear similar to that shown in Figure 41.4.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="41vcu04.gif">Figure 41.4. Running the </B><B>cube.exe</B><B> MFC application.</A></B>
+
+<BR></P>
+
+<P>Note that this application, as its non-MFC counterpart, includes no palette initialization and may not work properly on systems configured with 16 or 256 colors.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>OpenGL is a library of high-quality three-dimensional graphics and rendering functions. The library's device- and platform-independence make it a library of choice for developing portable graphical applications.
+
+<BR></P>
+
+<P>OpenGL drawings are constructed from primitives; primitives are simple items such as lines or polygons, which in turn are composed of vertices.
+
+<BR></P>
+
+<P>The OpenGL Library assembles primitives from vertices while taking into account a variety of settings, such as color, lighting, and texture. Primitives are then processed in accordance with transformations, clipping settings, and other parameters; at the end of the rasterization process is pixel data deposited into a frame buffer.
+
+<BR></P>
+
+<P>The Windows implementation of the OpenGL Library consists of the core library, utility functions (GLU), and auxiliary functions (GLAUX). The auxiliary library can be used to easily create simple stand-alone OpenGL applications, as it implements a message loop and a window procedure internally. However, due to the simplicity of implementation, this library should not be used in production applications.
+
+<BR></P>
+
+<P>Windows also provides a set of extension functions (WGL) that facilitate the use of OpenGL functions in the context of the Windows GDI. Furthermore, a set of new functions has been added to the Win32 API to support pixel formats and OpenGL double buffering.
+
+<BR></P>
+
+<P>The main steps of creating a Windows OpenGL application are as follows:
+
+<BR></P>
+
+<OL>
+
+<LI>Ensure that your window class is not created with the CS_PARENTDC style. Ensure that your window is created with the styles WM_CLIPCHILDREN and WM_CLIPSIBLINGS set.
+
+<BR>
+
+<BR></LI>
+
+<LI>Create an OpenGL rendering context; a good spot for doing so is in the WM_CREATE handler function for the window that you intend to use with OpenGL.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add appropriate calls in your handler for WM_PAINT messages to draw the OpenGL image.
+
+<BR>
+
+<BR></LI>
+
+<LI>Optionally, add a handler for WM_SIZE messages to reflect changes in the viewport size. Use glViewport to set the viewport size.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>If you plan to run your application on 256-color devices, add handling for custom palettes.
+
+<BR></P>
+
+<P><A HREF="vcu40fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu42fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

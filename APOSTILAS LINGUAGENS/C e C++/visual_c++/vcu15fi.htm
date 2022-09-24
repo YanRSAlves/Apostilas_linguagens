@@ -1,0 +1,1074 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu15fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu16fi.htm">
+
+<LINK REL="Previous" HREF="vcu14fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu14fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu16fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">15 &#151; The Windows Clipboard</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Clipboard Formats</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Standard Clipboard Formats</A></LI>
+
+<LI>
+
+<A HREF="#I5">Registered Formats</A></LI>
+
+<LI>
+
+<A HREF="#I6">Private Formats</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">Clipboard Operations</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">Transferring Data to the Clipboard</A></LI>
+
+<LI>
+
+<A HREF="#I9">Delayed Rendering</A></LI>
+
+<LI>
+
+<A HREF="#I10">Pasting Data from the Clipboard</A></LI>
+
+<LI>
+
+<A HREF="#I11">Controls and the Clipboard</A></LI>
+
+<LI>
+
+<A HREF="#I12">Clipboard Messages</A></LI>
+
+<LI>
+
+<A HREF="#I13">Clipboard Viewers</A></LI></UL>
+
+<LI>
+
+<A HREF="#I14">A Simple Implementation</A></LI>
+
+<LI>
+
+<A HREF="#I15">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>15 &#151; The Windows Clipboard</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Not too long ago, the Windows Clipboard represented the only means for applications to exchange data with each other. Before the glorious days of OLE embedding and Drag and Drop, users had to use clipboard operations such as cutting, copying, and pasting to transfer data from one application to another, or even to move data within the same application.
+
+<BR></P>
+
+<P>These days, the clipboard is often forgotten; yet just because it is overshadowed by OLE, it does not mean that applications can stop supporting clipboard operations. Furthermore, various clipboard-related concepts survive even when applications exchange data using more advanced methods.
+
+<BR></P>
+
+<P>What exactly is the clipboard? Perhaps it is best defined as a Win32 facility where applications can place data. Such data becomes accessible to all applications. Data can be retrieved in a variety of formats, some of which are supported by the operating system, some by applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Clipboard Formats</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Applications place data on the clipboard using the SetClipboardData function. In addition to providing a handle to the data object, this function also accepts a parameter specifying the format of the data. Applications are encouraged to provide data in a variety of formats; for example, a word processor program may place data on the clipboard using both a private format and a plain text format that is usable by other applications such as the Notepad.
+
+<BR></P>
+
+<P>The three types of clipboard formats available to applications include standard formats, registered formats, and private formats.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Standard Clipboard Formats</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A multitude of standard clipboard formats exists, identified by symbolic constants. These formats are summarized in Table 15.1. In the cases when the application is supposed to provide a handle of a specific type when calling SetClipboardData, the handle type is indicated. In other cases, the handle passed to SetClipboardData is typically a handle to a block of memory allocated via the GlobalAlloc function.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 15.1. Standard clipboard formats.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><I>Format Type</I>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><I>Description</I>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>Text Formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_OEMTEXT</P>
+
+<TD>
+
+<P>Text containing characters from the OEM character set</P>
+
+<TR>
+
+<TD>
+
+<P>CF_TEXT</P>
+
+<TD>
+
+<P>Text containing characters from the ANSI character set</P>
+
+<TR>
+
+<TD>
+
+<P>CF_UNICODETEXT</P>
+
+<TD>
+
+<P>Text containing Unicode characters</P>
+
+<TR>
+
+<TD>
+
+<P>Bitmap formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_BITMAP</P>
+
+<TD>
+
+<P>Device-dependent bitmap (HBITMAP)</P>
+
+<TR>
+
+<TD>
+
+<P>CF_DIB</P>
+
+<TD>
+
+<P>Device independent bitmap (HBITMAPINFO)</P>
+
+<TR>
+
+<TD>
+
+<P>CF_TIFF</P>
+
+<TD>
+
+<P>Tagged Image File Format</P>
+
+<TR>
+
+<TD>
+
+<P>Metafile formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_ENHMETAFILE</P>
+
+<TD>
+
+<P>Enhanced metafile (HENHMETAFILE)</P>
+
+<TR>
+
+<TD>
+
+<P>CF_METAFILEPICT</P>
+
+<TD>
+
+<P>Windows Metafile (METAFILEPICT)</P>
+
+<TR>
+
+<TD>
+
+<P>Substitute formats for private formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_DSPBITMAP</P>
+
+<TD>
+
+<P>Bitmap representation of private data</P>
+
+<TR>
+
+<TD>
+
+<P>CF_DSPENHMETAFILE</P>
+
+<TD>
+
+<P>Enhanced metafile representation of private data</P>
+
+<TR>
+
+<TD>
+
+<P>CF_DSPMETAFILEPICT</P>
+
+<TD>
+
+<P>Metafile representation of private data</P>
+
+<TR>
+
+<TD>
+
+<P>CF_DSPTEXT</P>
+
+<TD>
+
+<P>Text representation of private data</P>
+
+<TR>
+
+<TD>
+
+<P>Sound formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_RIFF</P>
+
+<TD>
+
+<P>Resource Interchange File Format</P>
+
+<TR>
+
+<TD>
+
+<P>CF_WAVE</P>
+
+<TD>
+
+<P>Standard wave file format audio data</P>
+
+<TR>
+
+<TD>
+
+<P>Special formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_DIF</P>
+
+<TD>
+
+<P>Data Interchange Format from Software Arts</P>
+
+<TR>
+
+<TD>
+
+<P>CF_OWNERDISPLAY</P>
+
+<TD>
+
+<P>Data displayed by the owner of the clipboard data</P>
+
+<TR>
+
+<TD>
+
+<P>CF_PALETTE</P>
+
+<TD>
+
+<P>Color palette (HPALETTE)</P>
+
+<TR>
+
+<TD>
+
+<P>CF_PENDATA</P>
+
+<TD>
+
+<P>Microsoft Pen Extensions data</P>
+
+<TR>
+
+<TD>
+
+<P>CF_PRIVATEFIRST through CF_PRIVATELAST</P>
+
+<TD>
+
+<P>Private data</P>
+
+<TR>
+
+<TD>
+
+<P>CF_SYLK</P>
+
+<TD>
+
+<P>Microsoft Symbolic Link format</P>
+
+<TR>
+
+<TD>
+
+<P>Windows 95 only formats</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>CF_GDIOBJFIRST through CF_GDIOBJLAST</P>
+
+<TD>
+
+<P>Application-defined GDI objects</P>
+
+<TR>
+
+<TD>
+
+<P>CF_HDROP</P>
+
+<TD>
+
+<P>List of files (HDROP)</P>
+
+<TR>
+
+<TD>
+
+<P>CF_LOCALE</P>
+
+<TD>
+
+<P>Locale information for CF_TEXT data</P></TABLE>
+
+<P>Under certain circumstances, Windows is capable of synthesizing data in formats not explicitly provided by an application. For example, if the application provides data in CF_TEXT format, Windows can render that data in the CF_OEMTEXT format at the request of another application. Windows can perform this conversion of formats between the text formats CF_TEXT, CF_OEMTEXT, and (under Windows NT) CF_UNICODETEXT; the bitmap formats CF_BITMAP and CF_DIB; and the metafile formats CF_ENHMETAFILE and CF_METAFILEPICT. Finally, Windows can also synthesize a CF_PALETTE format from the CF_DIB format.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Registered Formats</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Applications that need to place data on the clipboard in a format other than any of the standard formats can register a new clipboard format using the RegisterClipboardFormat function. For example, an application that wishes to place RTF text on the clipboard may make the following call to register this format:
+
+<BR></P>
+
+<PRE>cfRTF = RegisterClipboardFormat(&quot;Rich Text Format&quot;);</PRE>
+
+<P>If several applications call RegisterClipboardFormat with the same format name, the format is only registered once.
+
+<BR></P>
+
+<P>There are many clipboard formats registered by Windows. For example, some registered formats are related to OLE, some others to the Windows 95 shell. The name of a registered format can be obtained by calling the GetClipboardFormatName function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Private Formats</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Sometimes it is not necessary for an application to register a new clipboard format. This is the case when the clipboard is used, for example, to transfer data internally within the application and the data is not expected to be used by other applications. For such application-defined private formats, an application can use the CF_PRIVATEFIRST through CF_PRIVATELAST range of values.
+
+<BR></P>
+
+<P>In order to enable clipboard viewers to display data stored in a private format, the clipboard owner must provide data in any of the display formats CF_DSPBITMAP, CF_DSPTEXT, CF_DSPMETAFILEPICT, or CF_DSPENHMETAFILE. These formats are identical to their standard counterparts (CF_BITMAP, CF_TEXT, CF_METAFILEPICT, and CF_ENHMETAFILE) except that they are used solely for display purposes and not for pasting.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Clipboard Operations</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In order to utilize the clipboard, an application has to perform a variety of operations. These include setting up the clipboard data, obtaining ownership of the clipboard, transferring the data, and responding the clipboard-related events. The application should also provide, as part of its user interface, clipboard-specific user commands (such as commands under its Edit menu).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Transferring Data to the Clipboard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before data can be transferred to the clipboard, an application has to do two things. First, the data object must be allocated; second, ownership of the clipboard must be obtained.
+
+<BR></P>
+
+<P>The data object must be a handle. This handle can refer to a block of memory allocated using GlobalAlloc with the GMEM_MOVEABLE and GMEM_DDESHARE flags (note that the presence of the GMEM_DDESHARE flag does not indicate that the block of memory is shared between applications); or it can be a handle to a GDI object such as a bitmap. It is important to note that once the handle is passed to the clipboard, the application transfers the object's ownership; it should no longer lock the object and should definitely not make an attempt to delete it.
+
+<BR></P>
+
+<P>The application obtains ownership of the clipboard by opening the clipboard using OpenClipboard and then emptying the clipboard by calling the EmptyClipboard function. All handles to data that was previously transferred to the clipboard will be freed. Next, the application transfers data to the clipboard using SetClipboardData and closes it by calling CloseClipboard.
+
+<BR></P>
+
+<P>The application can call SetClipboardData multiple times if data is available in several formats. For example, an application may call SetClipboardData using the CF_DIB and CF_ENHMETAFILE formats to provide a graphic image in both bitmap and metafile forms.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Delayed Rendering</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Delayed rendering is a performance-enhancing technique that are most useful for applications that routinely place large blocks of data on the clipboard.
+
+<BR></P>
+
+<P>An application can specify delayed rendering by passing NULL as the second parameter of SetClipboardData. The system informs the application that data in a specific format must be rendered by sending the application a WM_RENDERFORMAT message. In response to this message, the application must call SetClipboardData and place the requested data on the clipboard.
+
+<BR></P>
+
+<P>An application that placed data on the clipboard using delayed rendering may also receive a WM_RENDERALLFORMATS message. This message is sent to the clipboard owner before it is destroyed to ensure that the data on the clipboard remains available to other applications.
+
+<BR></P>
+
+<P>When processing a WM_RENDERFORMAT or WM_RENDERALLFORMATS message, the application must not open the clipboard before calling SetClipboardData or close it afterwards.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Pasting Data from the Clipboard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>An application can use the IsClipboardFormatAvailable function to determine if data in a specific format is available on the clipboard. If it wishes to obtain a copy of the data on the clipboard, the application can call OpenClipboard, followed by a call to GetClipboardData. The handle obtained by calling GetClipboardData will not be assumed to remain persistent; applications should immediately copy any data associated with that handle, preferably before calling CloseClipboard. After the call to CloseClipboard, it is possible for other applications to empty the clipboard, rendering the handle obtained through GetClipboardData useless.
+
+<BR></P>
+
+<P>The IsClipboardFormatAvailable function can also be used to update the application's Edit menu items. For example, if IsClipboardFormatAvailable indicates that no clipboard data is available in a format that the application understands, the application should disable its Paste command.
+
+<BR></P>
+
+<P>Applications can also obtain information about the data formats available in the clipboard by calling CountClipboardFormats or EnumClipboardFormats.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Controls and the Clipboard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Edit controls have built-in clipboard support (also supported by the edit control in combo boxes). Edit controls respond to a series of messages by performing clipboard operations. When receiving a WM_COPY message, edit controls copy the current selection to the clipboard using the CF_TEXT format. When receiving a WM_CUT message, edit controls transfer the current selection to the clipboard using the CF_TEXT format and erase the selection from the control. In response to a WM_PASTE message, edit controls take the clipboard contents (if anything is available in the CF_TEXT format) and use it to replace the current selection. Finally, edit controls also process the WM_CLEAR message (erasing the current selection).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Clipboard Messages</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are several Windows messages associated with the clipboard.
+
+<BR></P>
+
+<P>Applications that use delayed rendering must process the WM_RENDERFORMAT and WM_RENDERALLFORMATS messages.
+
+<BR></P>
+
+<P>The WM_DESTROYCLIPBOARD message is sent to the clipboard owner when the contents of the clipboard are destroyed. In response to this message, an application may free up any resources associated with rendering or drawing clipboard items.
+
+<BR></P>
+
+<P>A series of messages is sent to applications that place data on the clipboard using the CF_OWNERDISPLAY format. These include WM_ASKCBFORMATNAME, WM_DRAWCLIPBOARD, WM_HSCROLLCLIPBOARD, WM_VSCROLLCLIPBOARD, and WM_PAINTCLIPBOARD.
+
+<BR></P>
+
+<P>Another set of messages is sent to or used by clipboard viewer applications.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Clipboard Viewers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A <I>clipboard viewer</I> is an application that displays the current contents of the clipboard. An example of a clipboard viewer is the Windows Clipboard Viewer application.
+
+<BR></P>
+
+<P>A clipboard viewer merely exists for the user's convenience and does not disrupt or alter clipboard operations.
+
+<BR></P>
+
+<P>There can be several clipboard viewers in operation. An application inserts a window in the chain of clipboard viewers by calling the SetClipboardViewer function with the handle of the window. Once added to the chain, the clipboard viewer will receive WM_CHANGECBCHAIN and WM_DRAWCLIPBOARD messages. The clipboard viewer can remove itself from the chain by calling the ChangeClipboardChain function.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=4><B>A Simple Implementation</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The program shown in Listing 15.1 (yes; yet another Hello, World program) puts all this nice theory into practice. This very simple application provides an implementation for the four basic clipboard commands: Cut, Copy, Paste, and Delete. The program's resource file is shown in Listing 15.2, and its header file in Listing 15.3. To compile this application from the command line, you need to enter the following two commands in a DOS window (still not complex enough to warrant a make file):
+
+<BR></P>
+
+<PRE>rc hellocf.rc
+
+cl hellocf.c hellocf.res user32.lib gdi32.lib</PRE>
+
+<UL>
+
+<LH><B>Listing 15.1. A simple clipboard-aware application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &quot;hellocf.h&quot;
+
+HINSTANCE hInstance;
+
+char *pszData;
+
+void DrawHello(HWND hwnd)
+
+{
+
+    HDC hDC;
+
+    PAINTSTRUCT paintStruct;
+
+    RECT clientRect;
+
+    if (pszData != NULL)
+
+    {
+
+        hDC = BeginPaint(hwnd, &amp;paintStruct);
+
+        if (hDC != NULL)
+
+        {
+
+            GetClientRect(hwnd, &amp;clientRect);
+
+            DPtoLP(hDC, (LPPOINT)&amp;clientRect, 2);
+
+            DrawText(hDC, pszData, -1, &amp;clientRect,
+
+                     DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+            EndPaint(hwnd, &amp;paintStruct);
+
+        }
+
+    }
+
+}
+
+void CopyData(HWND hwnd)
+
+{
+
+    HGLOBAL hData;
+
+    LPVOID pData;
+
+    OpenClipboard(hwnd);
+
+    EmptyClipboard();
+
+    hData = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE,
+
+                        strlen(pszData) + 1);
+
+    pData = GlobalLock(hData);
+
+    strcpy((LPSTR)pData, pszData);
+
+    GlobalUnlock(hData);
+
+    SetClipboardData(CF_TEXT, hData);
+
+    CloseClipboard();
+
+}
+
+void DeleteData(HWND hwnd)
+
+{
+
+    free(pszData);
+
+    pszData = NULL;
+
+    InvalidateRect(hwnd, NULL, TRUE);
+
+}
+
+void PasteData(HWND hwnd)
+
+{
+
+    HANDLE hData;
+
+    LPVOID pData;
+
+    if (!IsClipboardFormatAvailable(CF_TEXT)) return;
+
+    OpenClipboard(hwnd);
+
+    hData = GetClipboardData(CF_TEXT);
+
+    pData = GlobalLock(hData);
+
+    if (pszData) DeleteData(hwnd);
+
+    pszData = malloc(strlen(pData) + 1);
+
+    strcpy(pszData, (LPSTR)pData);
+
+    GlobalUnlock(hData);
+
+    CloseClipboard();
+
+    InvalidateRect(hwnd, NULL, TRUE);
+
+}
+
+void SetMenus(HWND hwnd)
+
+{
+
+    EnableMenuItem(GetMenu(hwnd), ID_EDIT_CUT,
+
+                   pszData ? MF_ENABLED : MF_GRAYED);
+
+    EnableMenuItem(GetMenu(hwnd), ID_EDIT_COPY,
+
+                   pszData ? MF_ENABLED : MF_GRAYED);
+
+    EnableMenuItem(GetMenu(hwnd), ID_EDIT_PASTE,
+
+                   IsClipboardFormatAvailable(CF_TEXT) ?
+
+                                           MF_ENABLED : MF_GRAYED);
+
+    EnableMenuItem(GetMenu(hwnd), ID_EDIT_DELETE,
+
+                   pszData ? MF_ENABLED : MF_GRAYED);
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case WM_COMMAND:
+
+            switch (LOWORD(wParam))
+
+            {
+
+                case ID_FILE_EXIT:
+
+                    DestroyWindow(hwnd);
+
+                    break;
+
+                case ID_EDIT_CUT:
+
+                    CopyData(hwnd);
+
+                    DeleteData(hwnd);
+
+                    break;
+
+                case ID_EDIT_COPY:
+
+                    CopyData(hwnd);
+
+                    break;
+
+                case ID_EDIT_PASTE:
+
+                    PasteData(hwnd);
+
+                    break;
+
+                case ID_EDIT_DELETE:
+
+                    DeleteData(hwnd);
+
+                    break;
+
+            }
+
+            break;
+
+        case WM_PAINT:
+
+            DrawHello(hwnd);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        case WM_INITMENUPOPUP:
+
+            if (LOWORD(lParam) == 1)
+
+            {
+
+                SetMenus(hwnd);
+
+                break;
+
+            }
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hThisInstance,
+
+                   HINSTANCE hPrevInstance,
+
+                   LPSTR d3, int nCmdShow)
+
+{
+
+    HWND hwnd;
+
+    MSG msg;
+
+    WNDCLASS wndClass;
+
+    HANDLE hAccTbl;
+
+    pszData = malloc(14);
+
+    strcpy(pszData, &quot;Hello, World!&quot;);
+
+    hInstance = hThisInstance;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszMenuName = &quot;HelloMenu&quot;;
+
+        wndClass.lpszClassName = &quot;Hello&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;Hello&quot;, &quot;Hello&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    hAccTbl = LoadAccelerators(hInstance, &quot;HelloMenu&quot;);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+    {
+
+        if (!TranslateAccelerator(hwnd, hAccTbl, &amp;msg))
+
+        {
+
+            TranslateMessage(&amp;msg);
+
+            DispatchMessage(&amp;msg);
+
+        }
+
+    }
+
+    return msg.wParam;
+
+}</PRE>
+
+<UL>
+
+<LH><B>Listing 15.2. Resource file for the sample clipboard-aware application.</B></LH></UL>
+
+<PRE>#include &quot;windows.h&quot;
+
+#include &quot;hellocf.h&quot;
+
+HelloMenu MENU
+
+BEGIN
+
+    POPUP        &quot;&amp;File&quot;
+
+    BEGIN
+
+        MENUITEM &quot;E&amp;xit&quot;,             ID_FILE_EXIT
+
+    END
+
+    POPUP        &quot;&amp;Edit&quot;
+
+    BEGIN
+
+        MENUITEM &quot;Cu&amp;t\tCtrl+X&quot;,      ID_EDIT_CUT, GRAYED
+
+        MENUITEM &quot;&amp;Copy\tCtrl+C&quot;,     ID_EDIT_COPY, GRAYED
+
+        MENUITEM &quot;&amp;Paste\tCtrl+V&quot;,    ID_EDIT_PASTE, GRAYED
+
+        MENUITEM &quot;&amp;Delete\tDel&quot;,      ID_EDIT_DELETE, GRAYED
+
+    END
+
+END
+
+HelloMenu ACCELERATORS
+
+BEGIN
+
+        &quot;X&quot;, ID_EDIT_CUT, VIRTKEY, CONTROL
+
+        &quot;C&quot;, ID_EDIT_COPY, VIRTKEY, CONTROL
+
+        &quot;V&quot;, ID_EDIT_PASTE, VIRTKEY, CONTROL
+
+        VK_DELETE, ID_EDIT_DELETE, VIRTKEY
+
+END</PRE>
+
+<UL>
+
+<LH><B>Listing 15.3. Header file for the sample clipboard-aware application.</B></LH></UL>
+
+<PRE>#define ID_FILE_EXIT   1000
+
+#define ID_EDIT_CUT    1001
+
+#define ID_EDIT_COPY   1002
+
+#define ID_EDIT_PASTE  1003
+
+#define ID_EDIT_DELETE 1004</PRE>
+
+<P>To see how this application works, try using its clipboard functions. You can use the Cut or Copy functions to copy the text it displays to the clipboard; you can also use another application (for example, the Windows Notepad) to create a block of text, copy it to the clipboard, and then paste it into this application.
+
+<BR></P>
+
+<P>This program has a simple data object; a pointer that is initially set to point to the character string &quot;Hello, World!&quot; The application also has a simple set of menus containing an Edit menu with the clipboard functions Cut, Copy, Paste, and Delete.
+
+<BR></P>
+
+<P>Clipboard operations are performed in response to the user selecting these Edit menu commands. The function CopyData copies the current string to the clipboard by first gaining ownership of it through EmptyClipboard and then performing a SetClipboardData call. The function PasteData copies data from the clipboard; it does so by first freeing any current data, and then obtaining clipboard data by calling GetClipboardData.
+
+<BR></P>
+
+<P>The function SetMenus updates the enabled state of menu items in the Edit menu based on the availability of data in the CF_TEXT format on the clipboard. If no such data is available, the Paste command is disabled. The state of the Cut, Copy, and Delete menu items is also updated to reflect whether the application has any data that can be placed on the clipboard.
+
+<BR></P>
+
+<P>To ensure that the application's window is properly updated when the data changes, both the DeleteData and the PasteData functions call InvalidateRect.
+
+<BR></P>
+
+<P>Note that the data handle allocated in CopyData is never freed by the application. After this handle has been passed to the clipboard, freeing it (when the clipboard is emptied) is no longer the responsibility of the application. Similarly, the application never frees the handle obtained through GetClipboardData (in PasteData); after the clipboard data has been obtained and the clipboard is closed, this handle is simply discarded.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Windows clipboard represents one of the oldest mechanisms for transferring data between applications. The clipboard is a Windows facility where applications can place data in a variety of formats, to be retrieved later by other applications.
+
+<BR></P>
+
+<P>Windows defines several standard clipboard formats. Applications can also register additional clipboard formats or use private clipboard formats.
+
+<BR></P>
+
+<P>An application transfers data to the clipboard by first gaining ownership of it calling the function EmptyClipboard. It may transfer data immediately or choose to use delayed rendering by passing a NULL handle to the SetClipboardData function. When using delayed rendering, applications must process the WM_RENDERFORMAT and WM_RENDERALLFORMATS messages.
+
+<BR></P>
+
+<P>Edit controls (and the edit control parts of combo boxes) have built-in clipboard support. They respond the WM_CUT, WM_COPY, WM_PASTE, and WM_CLEAR messages by performing a cut, copy, paste, or delete operation using data in the CF_TEXT format.
+
+<BR></P>
+
+<P>Clipboard viewers are programs that show the current contents of the clipboard. These programs merely serve the user's convenience and do not alter the clipboard's contents or affect clipboard operations.</P>
+
+<P><A HREF="vcu14fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu16fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

@@ -1,0 +1,1134 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu16fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu17fi.htm">
+
+<LINK REL="Previous" HREF="vcu15fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu15fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu17fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">16 &#151; The Registry</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Registry Structure</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Registry Values</A></LI>
+
+<LI>
+
+<A HREF="#I5">Registry Capacity</A></LI>
+
+<LI>
+
+<A HREF="#I6">Predefined Registry Keys</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">Manually Editing the Registry</A></LI>
+
+<LI>
+
+<A HREF="#I8">Commonly Used Registry Keys</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Subtrees in HKEY_LOCAL_MACHINE</A></LI>
+
+<LI>
+
+<A HREF="#I10">Subtrees in HKEY_CLASSES_ROOT</A></LI>
+
+<LI>
+
+<A HREF="#I11">Subtrees in HKEY_USERS</A></LI>
+
+<LI>
+
+<A HREF="#I12">Subtrees in HKEY_CURRENT_USER</A></LI>
+
+<LI>
+
+<A HREF="#I13">The Registry and INI Files</A></LI></UL>
+
+<LI>
+
+<A HREF="#I14">Application Programs and the Registry</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I15">Opening a Registry Key</A></LI>
+
+<LI>
+
+<A HREF="#I16">Querying a Value</A></LI>
+
+<LI>
+
+<A HREF="#I17">Setting a Value</A></LI>
+
+<LI>
+
+<A HREF="#I18">Creating a New Key</A></LI>
+
+<LI>
+
+<A HREF="#I19">Other Registry Functions</A></LI>
+
+<LI>
+
+<A HREF="#I20">A Working Example</A></LI></UL>
+
+<LI>
+
+<A HREF="#I21">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>16 &#151; The Registry</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Ah, the Registry. This mysterious object that appeared with the introduction of OLE under Windows 3.1. No matter how hard we programmer types were trying to ignore it, it is here to stay; in fact, while we were looking the other way it quietly took over the role of initialization, or INI files, among other things.
+
+<BR></P>
+
+<P>But what is it? Perhaps more importantly, what should you, the Win32 programmer, know about it? How can you access and manipulate it from within your applications? These are the questions that I attempt to answer in this chapter.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Registry Structure</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Registry is a hierarchically organized store of information. Each entry in this tree-like information structure is called a <I>key</I>. A key may contain any number of subkeys; it can also contain data entries called <I>values</I>. In this form, the Registry stores information about the system, its configuration, hardware devices, and software applications. It also assumes the role of the ubiquitous INI files by providing a place where application-specific settings can be stored.
+
+<BR></P>
+
+<P>A Registry key is identified by its name. Keynames consist of printable ASCII characters except the backslash (\), space, and wildcard (* or ?) characters. The use of keynames that begin with a period (.) is reserved. Keynames are not case sensitive.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Registry Values</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A value in the Registry is identified by its name. Value names consist of the same characters as keynames. The value itself can be a string, binary data, or a 32-bit unsigned value.
+
+<BR></P>
+
+<P>There are some apparent differences between the behavior of the Windows 95 and the Windows NT Registries. The Windows 95 Registry appears to allow for the assignment of a value to a Registry key (as opposed to a value name); this appears as the default value for that key. Upon closer examination, however, one finds that this is a superficial difference. The default value for a key is really a value with an empty name; empty names are also permitted in the Windows NT Registry. Perhaps the only difference is that the value with the empty name appears to be always defined for a key in the Windows 95 Registry, while it must be explicitly created in the Windows NT Registry.
+
+<BR></P>
+
+<P>Another apparent difference between the two Registries is the existence of a variety of string types in the Windows NT Registry, whereas Windows 95 appears to support only one string type. But is this really the case? Jumping a bit ahead of myself here, let me show you some of the output created by the Registry reader program that we examine later in this chapter. For example, look at the following output:
+
+<BR></P>
+
+<PRE>Enter key: HKEY_CURRENT_USER\Environment\include
+
+Expandable string: f:\msvc20\include;f:\msvc20\mfc\include</PRE>
+
+<P>However, if you examine the same value using the Windows 95 Registry Editor, it will appear as a binary value. But this is a shortcoming of the Registry Editor, not the Registry itself.
+
+<BR></P>
+
+<P>Table 16.1 contains a list of all value types that can go into the Windows 95 and Windows NT Registries.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 16.1. Registry value types.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Symbolic Identifier</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>REG_BINARY</P>
+
+<TD>
+
+<P>Raw binary data</P>
+
+<TR>
+
+<TD>
+
+<P>REG_DWORD</P>
+
+<TD>
+
+<P>Double word in machine format (low-endian on Intel)</P>
+
+<TR>
+
+<TD>
+
+<P>REG_DWORD_LITTLE_ENDIAN</P>
+
+<TD>
+
+<P>Double word in little-endian format</P>
+
+<TR>
+
+<TD>
+
+<P>REG_DWORD_BIG_ENDIAN</P>
+
+<TD>
+
+<P>Double word in big-endian format</P>
+
+<TR>
+
+<TD>
+
+<P>REG_EXPAND_SZ</P>
+
+<TD>
+
+<P>String with unexpanded environment variables</P>
+
+<TR>
+
+<TD>
+
+<P>REG_LINK</P>
+
+<TD>
+
+<P>Unicode symbolic link</P>
+
+<TR>
+
+<TD>
+
+<P>REG_MULTI_SZ</P>
+
+<TD>
+
+<P>Multiple strings ended by two null characters</P>
+
+<TR>
+
+<TD>
+
+<P>REG_NONE</P>
+
+<TD>
+
+<P>Undefined type</P>
+
+<TR>
+
+<TD>
+
+<P>REG_RESOURCE_LIST</P>
+
+<TD>
+
+<P>Device-driver resource list</P>
+
+<TR>
+
+<TD>
+
+<P>REG_SZ</P>
+
+<TD>
+
+<P>Null-terminated string</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Registry Capacity</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Generally, it is not recommended to store items larger than a kilobyte or two in the Registry. For larger items, use a separate file, and use the Registry for storing the filename.
+
+<BR></P>
+
+<P>Under Windows 95, Registry values are limited to 64KB in size.
+
+<BR></P>
+
+<P>Another consideration when using the Registry is that storing a key generally requires substantially more storage space than storing a value. Whenever possible, organize values under a common key rather than using several keys for the same purpose.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Predefined Registry Keys</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Registry contains several predefined keys.
+
+<BR></P>
+
+<P>The HKEY_LOCAL_MACHINE key contains entries that describe the computer and its configuration. This includes information about the processor, system board, memory, and installed hardware and software.
+
+<BR></P>
+
+<P>The HKEY_CLASSES_ROOT key is the root key for information relating to document types and OLE types. This key is a subordinate key to HKEY_LOCAL_MACHINE. (It is equivalent to HKEY_LOCAL_MACHINE\SOFTWARE\Classes.) Information that is stored here is used by shell applications such as the Program Manager, File Manager, or the Explorer, and by OLE applications.
+
+<BR></P>
+
+<P>The HKEY_USERS key serves as the root key for the default user preference settings as well as individual user preferences.
+
+<BR></P>
+
+<P>The HKEY_CLASSES_USER key is the root key for information relating to the preferences of the current (logged in) user.
+
+<BR></P>
+
+<P>Under Windows 95, there are two additional predefined keys. The HKEY_CURRENT_CONFIG key contains information about the current system configuration settings. This key is equivalent to a subkey (such as 0001) of the key HKEY_LOCAL_MACHINE\Config.
+
+<BR></P>
+
+<P>The HKEY_DYN_DATA key provides access to dynamic status information, such as information about plug and play devices.
+
+<BR></P>
+
+<P>The predefined keys and their relationships are illustrated in Figure 16.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="16vcu01.gif">Figure 16.1. Predefined Registry keys.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Manually Editing the Registry</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Registry can be manually edited using the Registry Editor. This program is named regedt32.exe under Windows NT and regedit.exe under Windows 95. The Windows NT program regedit.exe is a version of the Registry Editor that offers behavior similar to the 16-bit Windows Registry Editor. This program is not very useful when editing the Registry as it only sees a subset of Registry keys.
+
+<BR></P>
+
+<P>Figure 16.2 shows the Windows 95 Registry Editor in operation.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="16vcu02.gif">Figure 16.2. The Windows 95 Registry Editor.</A></B>
+
+<BR></P>
+
+<P>Needless to say, using the Registry Editor is a last resort solution. Programmers may need to frequently access the Registry this way (for example, to remove keys that have been placed there by misbehaving applications that are under development). However, end users should never be required to manually change Registry settings.
+
+<BR></P>
+
+<P>Many Registry settings are controlled implicitly through configuration applications such as the Control Panel. Other Registry settings are created during application installation. OLE applications that have been created using AppWizard update their Registry settings every time they run.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>Commonly Used Registry Keys</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Information about Registry keys is often difficult to find. For this reason, I decided to collect information on some frequently used Registry keys here that are of interest to the programmer.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Subtrees in </B><B><I>HKEY_LOCAL_MACHINE</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Keys in HKEY_LOCAL_MACHINE contain information about the computer's software and hardware configuration. Of these, the Config and Enum subkeys are specific to Windows 95 and its plug and play capabilities. The Config subkey is where Windows 95 stores various hardware configurations; the Enum subkey contains Windows 95 bus enumerators that build the tree of hardware devices.
+
+<BR></P>
+
+<P>Both Windows 95 and Windows NT maintain the System subkey under HKEY_LOCAL_MACHINE. The System\CurrentControlSet subkey contains configuration information for services and device drivers.
+
+<BR></P>
+
+<P>Other subkeys in HKEY_LOCAL_MACHINE include Software and Classes. The Software subkey is where information about installed software packages can be found. The Classes subkey is where HKEY_CLASSES_ROOT points to.
+
+<BR></P>
+
+<P>The Software subtree is of peculiar interest to application programmers. This is where you should store configuration and installation information specific to your application. Microsoft recommends that you build a series of subtrees under HKEY_LOCAL_MACHINE\Software. These subkeys should represent your company name, the name of your product, and the product's version number:
+
+<BR></P>
+
+<PRE>HKEY_LOCAL_MACHINE\Software\CompanyName\ProductName\1.0</PRE>
+
+<P>For example, configuration information pertaining to the version of Microsoft Bookshelf that is installed on my computer can be found under the following key:
+
+<BR></P>
+
+<PRE>HKEY_LOCAL_MACHINE\Software\Microsoft\Bookshelf '95\95.0.0.39</PRE>
+
+<P>What you store under such a key is entirely application-dependent. Note that you should not store anything here that is user-specific; user-specific information pertinent to your application should be organized under a subkey of HKEY_CURRENT_USER.
+
+<BR></P>
+
+<P>Of particular interest is the key
+
+<BR></P>
+
+<PRE>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion</PRE>
+
+<P>which describes the current Windows configuration. Another important key is
+
+<BR></P>
+
+<PRE>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion</PRE>
+
+<P>This key actually has a curious, unexpected role under Windows 95. I presume the reason is to maintain compatibility with 32-bit debuggers originally written for Windows NT, but debugger information stored under the key
+
+<BR></P>
+
+<PRE>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Aedebug</PRE>
+
+<P>will affect debugger behavior under Windows 95.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Subtrees in </B><B><I>HKEY_CLASSES_ROOT</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The HKEY_CLASSES_ROOT key contains two types of subkeys: subkeys that correspond to filename extensions and class definition subkeys.
+
+<BR></P>
+
+<P>A filename extension subkey has a name that corresponds to the filename extension (such as .doc). The key typically contains one unnamed value, which holds the name of the class definition subkey.
+
+<BR></P>
+
+<P>A class definition subkey describes the behavior of a document class. The information stored here includes data on shell and OLE-related properties.
+
+<BR></P>
+
+<P>A subkey under HKEY_CLASSES_ROOT is CLSID. This is the place where OLE class identifiers are stored.
+
+<BR></P>
+
+<P>When you create an MFC application using the Visual C++ AppWizard, a series of subkeys that are to be installed under HKEY_CLASSES_ROOT are also created. These identify the document type and filename extension of your new application and also its OLE properties such as the OLE class identifier. For example, creating an MFC application named Test with a file extension .tst for its document files yielded the following Registry entries under HKEY_CLASSES_ROOT:
+
+<BR></P>
+
+<PRE>.TST = Test.Document
+
+Test.Document\shell\open\command = TEST.EXE %1
+
+Test.Document\shell\open\ddeexec = [open(&quot;%1&quot;)]
+
+Test.Document\shell\open\ddeexec\application = TEST
+
+Test.Document = Test Document
+
+Test.Document\protocol\StdFileEditing\server = TEST.EXE
+
+Test.Document\protocol\StdFileEditing\verb\0 = &amp;Edit
+
+Test.Document\Insertable =
+
+Test.Document\CLSID = {FC168A60-F1EA-11CE-87C3-00403321BFAC}</PRE>
+
+<P>The following entries were also created under HKEY_CLASSES_ROOT\CLSID:
+
+<BR></P>
+
+<PRE>{FC168A60-F1EA-11CE-87C3-00403321BFAC} = Test Document
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\DefaultIcon = TEST.EXE,1
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\LocalServer32 = TEST.EXE
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\ProgId = Test.Document
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\MiscStatus = 32
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\AuxUserType\3 = test
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\AuxUserType\2 = Test
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\Insertable =
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\verb\1 = &amp;Open,0,2
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\verb\0 = &amp;Edit,0,2
+
+{FC168A60-F1EA-11CE-87C3-00403321BFAC}\InprocHandler32 = ole32.dll</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Subtrees in </B><B><I>HKEY_USERS</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The key HKEY_USERS contains a subkey named .Default and zero or more subkeys corresponding to users on the system. The .Default subkey corresponds to the default user profile. Other entries correspond to profiles of existing users.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Subtrees in </B><B><I>HKEY_CURRENT_USER</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The HKEY_CURRENT_USER key corresponds to the profile of the currently logged in user. This key has several subkeys, some common to both Windows 95 and Windows NT, some specific to one or the other.
+
+<BR></P>
+
+<P>Application configuration information specific to the current user should be stored under the subkey Software. Information should be organized by keys corresponding to company name, product name, and product version number. For example, user settings for Microsoft Excel 5.0 can be found under the key
+
+<BR></P>
+
+<PRE>HKEY_CURRENT_USER\Software\Microsoft\Excel\5.0</PRE>
+
+<P>The user's settings and preferences for Windows, its components, and applets can be found under the key
+
+<BR></P>
+
+<PRE>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion</PRE>
+
+<P>and its subkeys.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>The Registry and INI Files</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In new applications, the Registry should be used instead of INI files. This is obvious; but what about old applications, how would they behave under 32-bit Windows?
+
+<BR></P>
+
+<P>As it turns out, their behavior is different under Windows NT and Windows 95. In order to maintain maximum backward compatibility, Windows 95 still maintains INI files, such as a win.ini file or a system.ini file. These files do not exist under Windows NT. Instead, Windows NT maps these files to the Registry.
+
+<BR></P>
+
+<P>Which files are mapped and which are not is determined by the settings under the key
+
+<BR></P>
+
+<PRE>SOFTWARE\Microsoft\Windows NT\CurrentVersion\IniFileMapping</PRE>
+
+<P>This key contains a subkey for every mapped INI file. Values under such a subkey correspond to sections in the INI file and typically point to other keys in the Registry.
+
+<BR></P>
+
+<P>The mapping of INI files affects the operation of functions such as ReadProfileString or WriteProfileString. If a mapping exists for the specified INI file, these functions will read from and write to the Registry as opposed to an actual INI file.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=4><B>Application Programs and the Registry</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Win32 API offers a variety of functions for manipulating the Registry.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Opening a Registry Key</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>All access to the Registry is performed through handles. In order to access a key in the Registry, applications must use a handle to an existing, open key. There are several predefined key handles that are assumed to be always open. These handles include the following: HKEY_LOCAL_MACHINE, HKEY_CLASSES_ROOT, HKEY_USERS, HKEY_CURRENT_USER.
+
+<BR></P>
+
+<P>A Registry key is accessed through the function RegOpenKeyEx. For example, in order to obtain a handle to the Registry key HKEY_LOCAL_MACHINE\Software, one would issue the following call:
+
+<BR></P>
+
+<PRE>RegOpenKeyEx(HKEY_LOCAL_MACHINE, &quot;Software&quot;, 0, KEY_READ, &amp;hKey);</PRE>
+
+<P>To access a subkey under the key HKEY_LOCAL_MACHINE\Software, it is necessary to call RegOpenKeyEx again. For example, to obtain a handle to HKEY_LOCAL_MACHINE\Software\Classes, one would have to issue the following two calls:
+
+<BR></P>
+
+<PRE>RegOpenKeyEx(HKEY_LOCAL_MACHINE, &quot;Software&quot;, 0, KEY_READ, &amp;hKey);
+
+RegOpenKeyEx(hKey, &quot;Classes&quot;, 0, KEY_READ, &amp;hSubKey);</PRE>
+
+<P>Logical as it may appear, it is not possible to use concatenated key values delimited by a backslash as the keyname parameter to RegOpenKeyEx. Thus, the following call is an error:
+
+<BR></P>
+
+<PRE>RegOpenKeyEx(hKey, &quot;Key\\Subkey&quot;, 0, KEY_READ, &amp;hSubKey); // ERROR!</PRE>
+
+<P>When an application is finished using a Registry key, it should close the key by calling RegCloseKey.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Querying a Value</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A Registry value can be retrieved by calling the RegQueryValueEx function. Before this function can be called, the appropriate subkey must be opened using RegOpenKey.
+
+<BR></P>
+
+<P>RegQueryValueEx offers a mechanism that enables applications to find out the memory requirements for storing a value before the value is actually retrieved. If you call this function with a NULL pointer passed as the data buffer pointer, the function will return the requested length of the data buffer without actually copying any data. Thus, it is possible to call RegQueryValueEx twice: first to obtain the length of the buffer, and next to actually copy the data, as in the following example:
+
+<BR></P>
+
+<PRE>RegQueryValueEx(hKey, &quot;MyValue&quot;, NULL, &amp;dwType, NULL, &amp;dwSize);
+
+pData = malloc(dwSize);
+
+RegQueryValueEx(hKey, &quot;MyValue&quot;, NULL, &amp;dwType, pData, &amp;dwSize);</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Setting a Value</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A value in the Registry can be set using the RegSetValueEx function. Before this function can be used, the appropriate subkey must be opened with KEY_SET_VALUE access using RegOpenKeyEx.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Creating a New Key</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Applications can also create a new subkey in the Registry. The RegCreateKeyEx function creates the new key, opens it, and obtains a key handle. This function can also be used to open existing keys; thus it is ideal in situations when the application wishes to access a key whether it already exists or not&#151;during an installation procedure, for example.
+
+<BR></P>
+
+<P>Under Windows NT, when creating a new key, the application also assigns security attributes to it. The key's security attributes determine who can access the key for reading and writing. Security information can be obtained about an open key using RegGetKeySecurity and set using RegSetKeySecurity (that is, if the application has the necessary privileges).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Other Registry Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are several other functions that assist in dealing with the Registry efficiently. For example, the RegEnumKeyEx and RegEnumValue functions can be used to enumerate the subkeys and values under a specific Registry key. Registry keys can be deleted using the RegDeleteKey function. Several other functions exist to deal with saving and loading subkeys, connecting to remote Registries, and performing other administrative functions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>A Working Example</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To demonstrate the use of the Registry from application programs, I decided to create a simple command-line program to read Registry settings. This program is shown in Listing 16.1. To compile this program from the command line, you must specify the advanced API library: cl readreg.cpp advapi32.lib.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 16.1. A simple Registry reader.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;iostream.h&gt;
+
+#include &lt;iomanip.h&gt;
+
+#include &lt;string.h&gt;
+
+#define STR_HKEY_LOCAL_MACHINE &quot;HKEY_LOCAL_MACHINE&quot;
+
+#define STR_HKEY_CLASSES_ROOT &quot;HKEY_CLASSES_ROOT&quot;
+
+#define STR_HKEY_USERS &quot;HKEY_USERS&quot;
+
+#define STR_HKEY_CURRENT_USER &quot;HKEY_CURRENT_USER&quot;
+
+#define LEN_HKEY_LOCAL_MACHINE (sizeof(STR_HKEY_LOCAL_MACHINE)-1)
+
+#define LEN_HKEY_CLASSES_ROOT (sizeof(STR_HKEY_CLASSES_ROOT)-1)
+
+#define LEN_HKEY_USERS (sizeof(STR_HKEY_USERS)-1)
+
+#define LEN_HKEY_CURRENT_USER (sizeof(STR_HKEY_CURRENT_USER)-1)
+
+#define SWAP_ENDIAN(x) (((x&lt;&lt;24)&amp;0xFF000000)|((x&lt;&lt;8)&amp;0xFF0000)|\
+
+                       ((x&gt;&gt;8)&amp;0xFF00)|((x&gt;&gt;24)|0xFF))
+
+void printval(unsigned char *pBuffer, DWORD dwType, DWORD dwSize)
+
+{
+
+    switch (dwType)
+
+    {
+
+        case REG_BINARY:
+
+            cout &lt;&lt; &quot;Binary data:&quot;;
+
+            {
+
+                for (unsigned int i = 0; i &lt; dwSize; i++)
+
+                {
+
+                    if (i % 16 == 0) cout &lt;&lt; '\n';
+
+                    cout.fill('0');
+
+                    cout &lt;&lt; hex &lt;&lt; setw(2) &lt;&lt;
+
+                            (unsigned int)(pBuffer[i]) &lt;&lt; ' ';
+
+                }
+
+            }
+
+            cout &lt;&lt; '\n';
+
+            break;
+
+        case REG_DWORD:
+
+            cout.fill('0');
+
+            cout &lt;&lt; &quot;Double word: &quot; &lt;&lt; hex &lt;&lt; setw(8) &lt;&lt;
+
+                    *((unsigned int *)pBuffer) &lt;&lt; '\n';
+
+            break;
+
+        case REG_DWORD_BIG_ENDIAN:  // Intel specific!
+
+            cout.fill('0');
+
+            cout &lt;&lt; &quot;Big-endian double word: &quot; &lt;&lt; hex &lt;&lt; setw(8) &lt;&lt;
+
+                   SWAP_ENDIAN(*((unsigned int *)pBuffer)) &lt;&lt; '\n';
+
+            break;
+
+        case REG_EXPAND_SZ:
+
+            cout &lt;&lt; &quot;Expandable string: &quot; &lt;&lt; pBuffer &lt;&lt; '\n';
+
+            break;
+
+        case REG_LINK:
+
+            cout &lt;&lt; &quot;Unicode link.&quot;;
+
+            break;
+
+        case REG_MULTI_SZ:
+
+            cout &lt;&lt; &quot;Multiple strings:\n&quot;;
+
+            {
+
+                char *pStr;
+
+                int i;
+
+                for (i = 0, pStr = (char *)pBuffer; *pStr != '\0';
+
+                     i++, pStr += strlen((char *)pStr) + 1)
+
+                {
+
+                    cout &lt;&lt; &quot;String &quot; &lt;&lt; i &lt;&lt; &quot;: &quot; &lt;&lt; pStr &lt;&lt; '\n';
+
+                }
+
+            }
+
+            break;
+
+        case REG_NONE:
+
+            cout &lt;&lt; &quot;Undefined value type.\n&quot;;
+
+            break;
+
+        case REG_RESOURCE_LIST:
+
+            cout &lt;&lt; &quot;Resource list.\n&quot;;
+
+            break;
+
+        case REG_SZ:
+
+            cout &lt;&lt; &quot;String: &quot; &lt;&lt; pBuffer &lt;&lt; '\n';
+
+            break;
+
+        default:
+
+            cout &lt;&lt; &quot;Invalid type code.\n&quot;;
+
+            break;
+
+    }
+
+}
+
+void main(void)
+
+{
+
+    char szKey[1000];
+
+    char *pKey;
+
+    HKEY hKey, hSubKey;
+
+    DWORD dwType;
+
+    DWORD dwSize;
+
+    unsigned char *pBuffer;
+
+    int nKey;
+
+    while (1)
+
+    {
+
+        cout &lt;&lt; &quot;Enter key: &quot;;
+
+        cin.getline(szKey, 1000);
+
+        nKey = strcspn(szKey, &quot;\\&quot;);
+
+        hKey = NULL;
+
+        if (!strncmp(szKey, STR_HKEY_LOCAL_MACHINE, nKey) &amp;&amp;
+
+                 nKey == LEN_HKEY_LOCAL_MACHINE)
+
+            hKey = HKEY_LOCAL_MACHINE;
+
+        if (!strncmp(szKey, STR_HKEY_CLASSES_ROOT, nKey) &amp;&amp;
+
+                 nKey == LEN_HKEY_CLASSES_ROOT)
+
+            hKey = HKEY_CLASSES_ROOT;
+
+        if (!strncmp(szKey, STR_HKEY_USERS, nKey) &amp;&amp;
+
+                 nKey == LEN_HKEY_USERS)
+
+            hKey = HKEY_USERS;
+
+        if (!strncmp(szKey, STR_HKEY_CURRENT_USER, nKey) &amp;&amp;
+
+                 nKey == LEN_HKEY_CURRENT_USER)
+
+            hKey = HKEY_CURRENT_USER;
+
+        if (hKey == NULL || szKey[nKey] != '\\')
+
+        {
+
+            cout &lt;&lt; &quot;Invalid key.\n&quot;;
+
+            continue;
+
+        }
+
+        pKey = szKey + nKey + 1;
+
+        nKey = strcspn(pKey, &quot;\\&quot;);
+
+        while (pKey[nKey] == '\\')
+
+        {
+
+            pKey[nKey] = '\0';
+
+            if (RegOpenKeyEx(hKey, pKey, NULL, KEY_READ,&amp;hSubKey)
+
+                == ERROR_SUCCESS)
+
+            {
+
+                RegCloseKey(hKey);
+
+                hKey = hSubKey;
+
+            }
+
+            else
+
+            {
+
+                RegCloseKey(hKey);
+
+                hKey = NULL;
+
+                break;
+
+            }
+
+            pKey += nKey + 1;
+
+            nKey = strcspn(pKey, &quot;\\&quot;);
+
+        }
+
+        if (hKey == NULL)
+
+        {
+
+            cout &lt;&lt; &quot;Invalid key.\n&quot;;
+
+            continue;
+
+        }
+
+        if (RegQueryValueEx(hKey, pKey, NULL, &amp;dwType, NULL,
+
+                            &amp;dwSize) == ERROR_SUCCESS)
+
+        {
+
+            pBuffer = (unsigned char *)malloc(dwSize);
+
+            if (pBuffer == NULL)
+
+            {
+
+                cout &lt;&lt; &quot;Insufficient memory.\n&quot;;
+
+                break;
+
+            }
+
+            if (RegQueryValueEx(hKey, pKey, NULL, &amp;dwType, pBuffer,
+
+                                &amp;dwSize) == ERROR_SUCCESS)
+
+                printval(pBuffer, dwType, dwSize);
+
+            else
+
+                cout &lt;&lt; &quot;Error reading key.\n&quot;;
+
+            free(pBuffer);
+
+        }
+
+        else
+
+            cout &lt;&lt; &quot;Error reading key.\n&quot;;
+
+        RegCloseKey(hKey);
+
+    }
+
+}</PRE>
+
+<P>This program demonstrates many aspects of handling the Registry. Execution begins in the main function where the program immediately enters a forever loop (terminate the program by hitting Ctrl+C). After displaying a prompt and reading in a Registry key typed by the user, the program first checks for the presence of the name of any of the top-level keys in the string the user typed. If such a keyname is found, the program begins an iteration.
+
+<BR></P>
+
+<P>The string typed by the user is expected to contain backslash characters as key delimiters. In the iteration part, subsequent strings are extracted from the input string using the strcspn function. The iteration proceeds until the last string is extracted, which is assumed to be a value name. The iteration allows for empty (zero-length) names for both keys and values.
+
+<BR></P>
+
+<P>During the iteration, a key handle is obtained through RegOpenKeyEx for every string extracted from the user input. If obtaining the key handle fails (presumably because the user specified an invalid key) the iteration stops with an error. However, if the iteration succeeds, the value corresponding to the last extracted string is retrieved by calling RegQueryValueEx. This function is in fact called twice: once to determine the amount of memory required to store the data and a second time to actually retrieve the data.
+
+<BR></P>
+
+<P>The value is printed in the printval function. This function takes a pointer to the value and takes the value's type and its length, from which it produces formatted output.
+
+<BR></P>
+
+<P>Here is some sample output produced by this program:
+
+<BR></P>
+
+<PRE>Enter key: HKEY_CURRENT_USER\Software\Microsoft\Hover!\HighScoreNames
+
+Multiple strings:
+
+String 0: Viktor
+
+String 1: Steve
+
+String 2: John
+
+String 3: Patrick
+
+String 4: Jennifer
+
+String 5: Julie
+
+String 6: Jon
+
+String 7: Tony
+
+String 8: Larry
+
+String 9: Harley
+
+Enter key: HKEY_LOCAL_MACHINE\Enum\Monitor\Default_Monitor\0001\ConfigFlags
+
+Binary data:
+
+00 00 00 00
+
+Enter key: HKEY_CURRENT_USER\Environment\include
+
+Expandable string: f:\msvc20\include;f:\msvc20\mfc\include</PRE>
+
+<P>You may even find this program useful when trying to determine the exact type of a value in the Registry, above and beyond the information provided by the Registry Editor. With some work, the program could be modified to have the capability to actually write to the Registry as well.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Registry is a place where Windows and applications can store configuration data. The Registry is a tree-like, hierarchically organized information store. Registry entries, or keys, are identified by a name and may contain any number of subkeys or values.
+
+<BR></P>
+
+<P>At the top level of the Registry are the root keys HKEY_USERS and HKEY_LOCAL_MACHINE. Other predefined keys include HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, HKEY_CURRENT_CONFIG, and HKEY_DYN_DATA.
+
+<BR></P>
+
+<P>A Registry value can be a 4-byte integer, a string or a series of strings, or arbitrary binary data. Registry values are usually created by application programs, installation procedures, or configuration utilities such as the Control Panel. However, the Registry can also be manually edited using the Registry Editor.
+
+<BR></P>
+
+<P>Applications typically store configuration information under HKEY_LOCAL_MACHINE\Software, and user-specific data under HKEY_CURRENT_USER\Software. In both cases, subkeys should be created to correspond to a company name, product name, and product version number.
+
+<BR></P>
+
+<P>Additionally, applications that manage specific document types created a filename extension and a class definition entry under HKEY_CLASSES_ROOT. OLE applications also store OLE information here.
+
+<BR></P>
+
+<P>The Win32 API provides a series of functions for applications to access the Registry. Using one of the predefined Registry keys, applications can access any subkey for reading and writing, query values, and set values. Applications can also create new keys or delete existing keys.</P>
+
+<P><A HREF="vcu15fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu17fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

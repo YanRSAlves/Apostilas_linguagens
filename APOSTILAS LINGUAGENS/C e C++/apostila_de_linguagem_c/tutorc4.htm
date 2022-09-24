@@ -1,0 +1,1442 @@
+<HTML>
+<HTML><HEAD>
+
+   <TITLE>TutoriaL sobre C - Nocturnus Labs. Inc.</TITLE>
+</HEAD>
+</HEAD>
+<BODY>
+
+<CENTER><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT><IMG SRC="c.jpg" HEIGHT=75 WIDTH=160></CENTER>
+
+<CENTER><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>&nbsp;</CENTER>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">25. <A HREF="#25">Teoria
+- Integra&ccedil;&otilde;es Clipper e Btrieve</A></FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">26. <A HREF="#26">Montagem
+de Cadastro</A></FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">27. <A HREF="#27">Integra&ccedil;&otilde;es</A></FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><A HREF="#ap1">AP&Ecirc;NDICE
+I</A> - BIBLIOGRAFIA E PROGRAMA DO CURSO</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><A HREF="#ap2">AP&Ecirc;NDICE
+II</A> - Lista de Exerc&iacute;cios Bimestrais</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><A HREF="#ap3">AP&Ecirc;NDICE
+III</A> - Respostas de Alguns Exerc&iacute;cios Propostos</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF"><FONT SIZE=+0>Montagem
+de Cadastro&nbsp;</FONT></FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Analise o programa
+Cadastro e monte uma pequena agenda com nomes e telefones.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Sugest&otilde;es:</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Defina claramente
+as op&ccedil;&otilde;es do programa (exemplo: Adicionar, Buscar, etc).</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Defina as fun&ccedil;&otilde;es
+a serem criadas (exemplo: add_nome, find_nome, etc).</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Crie o Algoritmo
+do Programa e de cada Rotina.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Divida a Tarefa
+entre os componentes do grupo.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Crie um pseudo c&oacute;digo
+e depois (depois mesmo) digite o programa em C.</FONT></FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lembramos que o
+Turbo C possui mais recursos que o Classic C, por&eacute;m erros neste
+compilador s&atilde;o potencialmente muito mais complicados de serem encontrados
+e corrigidos do que falhas similares no Classic C.</FONT></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O pr&eacute;-processador</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O pr&eacute;-processador
+&eacute; executado antes da compila&ccedil;&atilde;o propriamente dita.
+Ele atua como se fosse um processador de textos "inteligente", fazendo
+substitui&ccedil;&otilde;es de textos, inclus&otilde;es de arquivos e at&eacute;
+processamento condicional.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Todas as diretivas
+para o processador devem ser iniciadas com o sinal #, que dever&aacute;
+estar no in&iacute;cio da linha.</FONT></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">#define</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Sintaxe:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#define &lt;identificador> &lt;defini&ccedil;&atilde;o></FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Exemplo:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#define PI 3.14159
+#define quadrado(a) (a)*(a)</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Assim se no programa
+existir:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>y = quadrado(x-2);</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">a express&atilde;o
+ser&aacute; interpretada como y = (x-2) * (x-2);</FONT></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">#include</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Sintaxe:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#include &lt;arquivo></FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Exemplo:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#include "stdio.h"</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Devemos observar
+que existem poucos comandos na linguagem C, e que a maioria das fun&ccedil;&otilde;es
+deve ser escrita em C. Isto realmente ocorre, por&eacute;m os produtores
+dos compiladores C fornecem todas estar fun&ccedil;&otilde;es previamente
+escritas para seus</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">compiladores,
+necessitando apenas serem "inclu&iacute;das" nos programas pelo programador
+conforme for necess&aacute;rio.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Nada impede que
+desenvolvamos novas bibliotecas espec&iacute;ficas a nossas necessidades
+que poder&atilde;o facilmente ser transportadas entre ambientes (D.O.S.
+e Unix por exemplo).</FONT></FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">#undef</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Sintaxe:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#undef &lt;identificador></FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Faz com que o #define
+atribu&iacute;do a algum identificador seja cancelado.</FONT></FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">#if, #else e #endif</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">A diretiva if &lt;express&atilde;o>
+faz com que, caso a express&atilde;o seja diferente de zero, o c&oacute;digo
+entre a linha do #if at&eacute; o #else seja inclu&iacute;dos, sen&atilde;o
+ser&aacute; inclu&iacute;do o trecho entre #else e o #endif.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Exemplo:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#define teste 100
+#if teste > 50
+
+#else
+#endif</FONT></FONT></FONT></PRE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">#ifdef e #ifndef</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">ifdef &lt;identificador>
+permite verificar se certo identificador foi definido.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Se existir &eacute;
+retornado Verdadeiro.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">ifndef &lt;identificador>
+permite verificar se certo identificador foi definido.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Se n&atilde;o
+existir &eacute; retornado Verdadeiro.</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#define pi 3.14159
+main()
+
+#ifndef eu
+printf("'eu' n&atilde;o foi definido.\n");
+#endif
+
+#ifndef pi
+printf("Nunca ser&aacute; executado, pois pi existe!\n");
+#endif</FONT></FONT></FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Uni&otilde;es</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Imaginemos um caso
+onde tenhamos um programa muito grande e que precisemos execut&aacute;-lo
+sem que possamos fazer qualquer redu&ccedil;&atilde;o em suas estruturas.
+Caso pudermos usar o mesmo local de mem&oacute;ria para armazenarmos duas
+vari&aacute;veis distintas, resolveremos nosso problema.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Exemplo:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+union data
+&nbsp; {
+int dia;
+int mes;
+int ano;
+&nbsp; };
+union data d;
+d.dia = 30;
+printf("%d\n",d.dia);
+d.mes = 3;
+printf("%d\n",d.mes);
+printf("%d\n",sizeof(d));
+}</FONT></FONT></FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=+0>Montagem
+do Cadastro (Aula 25L)</FONT></FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Digita&ccedil;&atilde;o
+do Exemplo Acima.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Critique a forma
+de recupera&ccedil;&atilde;o dos dados previamente digitados.</FONT></FONT></LI>
+</MENU>
+<A NAME="25"></A>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF"><FONT SIZE=+0>Teoria/Laborat&oacute;rio
+- Integra&ccedil;&otilde;es&nbsp;</FONT></FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Integra&ccedil;&atilde;o
+C com Clipper</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Devido ao fato da
+linguagem Clipper ter sido escrita em C, a integra&ccedil;&atilde;o das
+duas linguagens &eacute; relativamente simples, por&eacute;m devemos observar
+as seguintes condi&ccedil;&otilde;es:</FONT></FONT>
+<OL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">As vari&aacute;veis
+C tem uma tipologia mais rica (n&atilde;o suportada pelo Clipper), de forma
+que a passagem de vari&aacute;veis entre Clipper e C tem que levar em considera&ccedil;&atilde;o
+esta caracter&iacute;stica. Felizmente a Nantucket (produtora original
+do Clipper) providenciou os fontes em C, extend.h e nandef.h, que devem
+ser compilados juntamente com as rotinas em C a serem utilizadas pelo Clipper.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">A Rotina deve ser
+declarada sem utilizar a palavra main() e a fun&ccedil;&atilde;o dever
+ser precedida pela palavra CLIPPER (Exemplo: CLIPPER apaga()).</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">A biblioteca LLIBCR.LIB
+(da Microsoft), deve ser linkeditada juntamente com as bibliotecas CLIPPER,
+EXTEND.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Para rotinas profissionais,
+sugerimos a utiliza&ccedil;&atilde;o do linkeditor BLINKER (da BLINK),
+ou o RTLINK (da Nantucket), que criam execut&aacute;veis mais eficientes
+que &agrave;queles criados pelo TLINK (Borland), LINK (Microsoft) ou PLINK
+(Phoenix), embora todos estes possam ser utilizados.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Devido ao fato do
+Clipper ter sido escrito em C, mais especificamente no Microsoft C, preferencialmente
+este deve ser o compilador a gerar o c&oacute;digo objeto para ser posteriormente
+ligado ao c&oacute;digo Clipper. Outro compilador poder&aacute; eventualmente
+gerar c&oacute;digo que resulte em alguma incompatibilidade imprevista.</FONT></FONT></LI>
+</OL>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Exemplo: Inverter
+Cores de Setor da Tela</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Programa em Clipper</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>TelaLs = 04
+TelaCe = 14
+TelaLi = 23
+TelaCd = 67
+Tela = SaveScreen(TelaLs,TelaCe,TelaLi,TelaCd)
+Atributo = "RB/N"
+C_CHCOLOR(@Tela,Atributo)
+Return</FONT></FONT></FONT></PRE>
+
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Fun&ccedil;&atilde;o
+em C</FONT></FONT></H4>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>#include &lt;dos.h>
+#include &lt;stdio.h>
+#include &lt;conio.h>
+#include &lt;bios.h>
+#include &lt;mem.h>
+#include &lt;string.h>
+#include &lt;nandef.h>
+#include &lt;extend.h>
+/* SO ACEITA LETRAS MAIUSCULA */
+#define B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x01
+#define G&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x02
+#define R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x04
+#define W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x07
+#define BB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x10
+#define BG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x20
+#define BR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x40
+#define BW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x70
+#define I&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0x08
+#define BLI&nbsp;&nbsp;&nbsp;&nbsp; 0x80
+#define MAXATRIB 20
+#define VIDEO&nbsp;&nbsp; 0xB800
+
+CLIPPER c_chcolor()
+{
+register int i,j;
+unsigned int len_tel;
+char&nbsp;&nbsp;&nbsp;&nbsp; *tela,atr ;
+if ( PCOUNT != 2 || !ISCHAR(1) || !ISCHAR(2) ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf( "parametro incorreto em c_chcolor \n" ) ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit( 2 ) ;
+&nbsp;&nbsp;&nbsp; }
+tela&nbsp;&nbsp;&nbsp; = _parc( 1 );
+len_tel = _parcsiz( 1 );
+atr&nbsp;&nbsp;&nbsp;&nbsp; = _atr_color( _parc(2) , _parclen(2) );
+for ( i=1 ; i&lt;len_tel ; i=i+2 )&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tela[ i ] = atr ;
+retni(0) ;
+return&nbsp;&nbsp; ;
+}
+/* str_atr - 'WNBGR*+/WNBGR*+' retorna o caracter atributo da cor */
+int _atr_color( char *str_atr , int len_atr )
+{
+register int i ;
+char atr=0x00 ;
+int&nbsp; charpos ;
+
+if (( charpos = _charpos( str_atr, '/' , len_atr )) != 0 )&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for ( i=1+charpos ; i &lt; len_atr &amp;&amp; str_atr[ i ] != ',' ; i++ ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch(str_atr[i])&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'B' : atr = atr|BB&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'G' : atr = atr|BG&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'R' : atr = atr|BR&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'W' : atr = atr|BW&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '*' : atr = atr|BLI ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '+' : atr = atr|I&nbsp;&nbsp; ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp; }
+
+for (i = 0;i &lt; len_atr &amp;&amp; str_atr[i] != '/' &amp;&amp; str_atr[i] != ',';i++){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch(str_atr[i]) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'B' : atr = atr|B&nbsp;&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'G' : atr = atr|G&nbsp;&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'R' : atr = atr|R&nbsp;&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'W' : atr = atr|W&nbsp;&nbsp; ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '*' : atr = atr|BLI ; break ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '+' : atr = atr|I&nbsp;&nbsp; ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return( atr );
+}
+
+
+/* retorna a posicao do caracter na string */
+int _charpos( char *string , char charac , int len_str )
+{
+register int charpos ;
+for( charpos = 0 ; charpos &lt; len_str ; charpos++ )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( string[charpos] == charac )&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return( charpos ) ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return( 0 ) ;
+}</FONT></FONT></FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Integra&ccedil;&atilde;o
+C com Btrieve</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Gerenciadores de
+Arquivo como o Btrieve (Novell) ou Gerenciadores de Bancos de Dados como
+o Oracle (Oracle), podem ser acessados por programas escritos em C, desde
+que estes recebam/passem par&acirc;metros da forma especificada pelo gerenciador
+de Arquivo/Banco de Dados. De forma a exemplificar a utiliza&ccedil;&atilde;o
+de C integrado a gerenciadores, segue trecho de programa em C, abrindo
+um Arquivo de Dados (Btrieve) e escrevendo no mesmo um registro. Obviamente,
+&eacute; necess&aacute;rio profundo conhecimento em Gerenciadores, para
+a elabora&ccedil;&atilde;o de programas utilizando-se deste recurso.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Exemplo: Busca
+de uma Chave (Fun&ccedil;&atilde;o 9 do Btrieve)</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">strcpy(chave,"AMARELO");
+/* string */</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">funcao = 9; /*
+inteiro */</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">buffer = 128;
+/* inteiro */</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">canal = fp; /*
+ponteiro de arquivo */</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">/* retorno &eacute;
+uma vari&aacute;vel previamente criada para acomodar o tamanho de</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">um registro */</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">status = 0; /*
+inteiro */</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">call btrv(funcao,canal,buffer,chave,retorno,status);</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Status dever&aacute;
+assumir valor 4 se a chave n&atilde;o existir, 0 se existir e um n&uacute;mero
+qualquer entre 1 e 99 indicando que tipo de erro ocorreu.</FONT></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Biblioteca DBE e
+ODBC</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">A recente tend&ecirc;ncia
+de mercado em voltar a utilizar linguagens de 3&ordf; gera&ccedil;&atilde;o
+(principalmente C, BASIC, COBOL e Pascal), que n&atilde;o possuem intrinsecamente
+gerenciadores de Base de Dados como as linguagens xBase (Clipper, dBase,
+Fox, etc), criou novamente mercado para os gerenciadores de arquivo como
+os que existiam at&eacute; meados da d&eacute;cada de 80 (MicroB, KISSBasic,
+Btrieve).</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">De fato o Btrieve,
+por ser o mais utilizado e tamb&eacute;m por pertencer a uma empresa bastante
+poderosa (Novell, que adquiriu a SoftCraft produtora original deste programa),
+foi o &uacute;nico gerenciador que "sobreviveu" a era xBase. Com o retorno
+das linguagens acima citadas e com o desinteresse da Novell em adequar
+o Btrieve aos novos dialetos surgidos das linguagens de 3&ordf; gera&ccedil;&atilde;o,
+criou-se um mercado promissor que Borland (DBE) e Microsoft (ODBC) est&atilde;o
+agora disputando. Em favor da Microsoft temos o fato de seu pacote interagir
+muito bem com o Visual BASIC e o Visual C, pacotes de grande utiliza&ccedil;&atilde;o
+no mercado americano (principalmente o primeiro). Os pontos positivos da
+Borland residem no suporte de seu gerenciador ao acesso por registro, al&eacute;m
+do acesso via SQL (Structed Query Language), que &eacute; a linguagem padr&atilde;o
+(sic) de acesso aos Bancos de Dados mais utilizados (Oracle, SyBase, Informix
+e Ingres), al&eacute;m da perfeita intera&ccedil;&atilde;o de seu programa
+com o Borland C++, a vers&atilde;o de linguagem C mais utilizada para desenvolvimento
+nos Estados Unidos.</FONT></FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=+0>Projeto
+em C (Aulas 26L)</FONT></FONT></FONT></H1>
+
+<OL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Elabore sistema
+para Controle de Estoque de Pe&ccedil;as, contendo arquivo de produtos
+e de movimentos.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Elabore Jogo Senha.
+O computador dever&aacute; permitir que dois humanos joguem entre si, atuando
+apenas como validador do resultado e indicando quantos d&iacute;gitos est&atilde;o
+no local correto/pr&oacute;ximo (bom/&oacute;timo).</FONT></FONT></LI>
+</OL>
+<A NAME="ap1"></A>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF"><FONT SIZE=+0>AP&Ecirc;NDICE
+I - BIBLIOGRAFIA E PROGRAMA DO CURSO</FONT></FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Bibliografia:</FONT></FONT></H2>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">B&aacute;sica</FONT></FONT></H3>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Diagramas de Blocos
+- Dirceu D. Salvetti</FONT></FONT></LI>
+</UL>
+
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">EDUSP</FONT></FONT></H4>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Turbo C - Herbert
+Schildt</FONT></FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Makron Books</FONT></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Complementares</FONT></FONT></H3>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Linguagem C - Thelmo
+J.M. Mesquita</FONT></FONT></LI>
+</UL>
+
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&Eacute;rica</FONT></FONT></H4>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Linguagem Algor&iacute;tmica
+- Dirceu D. Salvetti</FONT></FONT></LI>
+</UL>
+
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">EDUSP</FONT></FONT></H4>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Programa&ccedil;&atilde;o
+Sistem&aacute;tica - Niklaus Wirth</FONT></FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Campus</FONT></FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Programa do Curso:</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Apresenta&ccedil;&atilde;o
+(Aula 01T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Linguagem C (Aula
+02T) - HELLO.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">C- Uma Vis&atilde;o
+Geral e Instru&ccedil;&otilde;es de Entrada e Sa&iacute;da (Aula 03T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Instru&ccedil;&otilde;es
+de Entrada e Sa&iacute;da (Aula 04T) - QUADR.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Tomada de Decis&atilde;o
+(Aula 05T) - MAIOR.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Tipos de Dados (Aula
+06T) - FAT1.C at&eacute; FAT5.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Vari&aacute;veis
+e Operadores (Aula 07T) - DOSTIME.C, TIPOS.C, FAHRCELC.C, REPRES.C, INC1.C
+e INC2.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Tomadas de Decis&atilde;o
+- Parte II (Aula 08T) - SWITCH.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Loops (Aula 09T)
+- PRIMO1.C at&eacute; PRIMO3.C e FOR.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Comandos Desestruturadores
+(Aula 10T) - ALO_VEJA.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Matrizes (Aula 11T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ordena&ccedil;&atilde;o
+(Aula 12T) - ORDENA.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ponteiros - Apresenta&ccedil;&atilde;o
+(Aula 13T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ponteiros - Conceitos
+de Endere&ccedil;os (Aula 14T) - PONT_7.C e PONT_1.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ponteiros - Conceitos
+Avan&ccedil;ados (Aula 15T) - PONT_3.C, PONT_4.C, PONT_2.C, PONT_5.C, INV1.C
+e INV2.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ponteiros - Pilhas
+(Aula 16T) - PILHA.C e PILHA2.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ponteiros - Conceitos
+Complementares (Aula 17T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ponteiros x Matrizes
+e Entradas e Sa&iacute;das - Arquivos (Aula 18T) - PONT_8.C, PONT_9.C e
+PONT_6.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Operadores e Fun&ccedil;&otilde;es
+String (Aula 19T) - MAIUSC.C, MES.C e NUMEROLO.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Entradas e Sa&iacute;das
+em Dispositivos (Aulas 20T) - IMP.C e ATOI.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Opera&ccedil;&otilde;es
+com Arquivo (Aula 21T) - REGS.C e REGS2.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Opera&ccedil;&otilde;es
+com Arquivo - Continua&ccedil;&atilde;o (Aula 22T) - CAD1.C, ESCARQ.C,
+ESCARQ2.C e LESEQ.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Opera&ccedil;&otilde;es
+com Arquivo - Continua&ccedil;&atilde;o (Aula 23T) - TYPE.C e TYPE2.C</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Opera&ccedil;&otilde;es
+com Arquivo - Conceitos de Chaves (Aula 23T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Teoria - Integra&ccedil;&otilde;es
+Clipper e Btrieve (Aulas 24T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Montagem de Cadastro
+(Aula 25T)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Integra&ccedil;&otilde;es
+(Aula 26T)</FONT></FONT></LI>
+</MENU>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Marcas Registradas
+citadas nesta apostila</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Os produtos citados
+anteriormente, pertencem aos seus respectivos fabricantes,</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">a saber:</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Turbo C, Turbo Pascal,
+Borland C++, DBE - Borland Internacional Co.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Visual BASIC, Visual
+C, ODBC - Microsoft Co.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Fox- Fox Software
+Inc. (Microsoft)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Clipper- Nantucket
+Co. (Computer Associates)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Ingress- ASK (Computer
+Associates)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Oracle- Oracle Inc.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Btrieve- SoftCraft
+System, Inc. (Novell)</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">SyBase- SyBase Co.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Informix- Informix
+Co.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">dBase- Ashton Tate,
+Inc. (Borland)</FONT></FONT></LI>
+</MENU>
+<A NAME="ap2"></A>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF"><FONT SIZE=+0>Ap&ecirc;ndice
+II - Lista de Exerc&iacute;cios Bimestrais</FONT></FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lista de Exerc&iacute;cios
+de TAPD - 1<SUP>o</SUP>. Bimestre</FONT></FONT></H4>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">1- Elaborar programa
+que construa os "n primeiros n&uacute;meros da s&eacute;rie de Fibonacci
+(0 1 1 2 3 5 8 ...).</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">2- Elaborar programa
+que imprima os n&uacute;meros primos entre os n&uacute;meros "a" e "b",
+fornecidos pelo usu&aacute;rio.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">3- Crie programa
+que calcule a somat&oacute;ria de uma seq&uuml;&ecirc;ncia de n&uacute;meros
+dados.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">4- Traduzir o algoritmo
+a seguir para C, simular e dizer qual problema foi resolvido.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">declare i,lim,a
+como inteiras</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">inicio</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">iniciar i com 1,
+ler a, ler lim</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">enquanto i &lt;
+lim fa&ccedil;a</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">i recebe i + 1</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">a recebe a - 1</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">imprima a</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">final</FONT></FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">5- Certo usu&aacute;rio
+resolveu testar se um n&uacute;mero inteiro qualquer "n" era divis&iacute;vel
+(resto = 0) pelos seguintes n&uacute;meros: 3 e 5. Simule para 15 e 19.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">6- Traduzir o algoritmo
+a seguir para C, simular e dizer qual problema foi resolvido.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">declare i,num como
+inteiras</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">inicio</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">solicitar e ler
+num</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">iniciar i com 1</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">enquanto num > 0
+fa&ccedil;a</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">i recebe num * i</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">num recebe num -
+1</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">final</FONT></FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">7- Elabore um programa
+que totalize uma s&eacute;rie de "n" n&uacute;meros inteiros informados
+pelo teclado e imprima sua m&eacute;dia.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">8- Codifique o algoritmo
+abaixo em C.</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>declare i,j,k
+leia k
+se k > 100
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; para i de 1 at&eacute; 4 fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; leia j
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; se j > 7
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima j
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sen&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; leia j
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; se j = 10
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima k
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sen&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima j</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule para: 200
+3 5 6 8 e tamb&eacute;m para: 20 10</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">9- Codifique o algoritmo
+abaixo em C.</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>declare i,j,k,r
+leia j,k
+para i de j at&eacute; k fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r = resto(i/2)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if r = 0 ent&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima i</FONT></FONT></FONT></PRE>
+
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule para: 3 12</FONT></FONT></H4>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">10- Elabore programa
+que apresente a s&eacute;rie abaixo apresentada:</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">0 4 7 10 13 16 ....</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O usu&aacute;rio
+deve informar o total de n&uacute;mero a serem apresentados.</FONT></FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Elabore Algoritmos,
+Programas em C e Simula&ccedil;&otilde;es.</FONT></FONT>
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lista de Exerc&iacute;cios
+de TAPD- 2<SUP>o</SUP>. Bimestre</FONT></FONT></H4>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">1- Ordene de forma
+crescente o conte&uacute;do da matriz "m" com 10 elementos.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">2- Dado o programa
+a seguir</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{&nbsp;
+int i,j,l;
+printf("Entre com 2 n&uacute;meros: ");
+scanf("%d%,&amp;i); scanf("%d",&amp;j);
+if (i > j)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l = i + j;
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l = i;
+printf("%d",l);
+}</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O que faz este programa</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule para i
+= 2, j = 3 e para j = 5 e i = 2</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Caso troc&aacute;ssemos
+"scanf("%d",&amp;i)" por "scanf(i)", o que aconteceria.</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">3- Traduzir o algoritmo
+a seguir para C, simular e dizer se este programa imprime sempre o menor
+n&uacute;mero. Justifique ou corrija o programa, caso este esteja errado.</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>Leia a, b, c
+Se a &lt; b ent&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d &lt;-- a
+Se a &lt; c ent&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d &lt;-- a
+Se b &lt; c ent&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d &lt;-- b
+imprima d</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">4- Elabore um programa
+que imprima valores de acordo com a tabela abaixo, sem usar o comando if.</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>i &lt; 20 --> 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 20 --> 4 5 6
+i > 20 e i &lt; 50 --> 5 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 50 --> 6
+i > 50 e i &lt; 75 --> 7 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i >= 75 --> 9
+i = 90 --> 8</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Sugest&atilde;o:
+Use switch</FONT></FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">5- Dado o Programa</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+int x,y;
+for (x = 1, y = 2; x + y &lt; 20; x = y++ + x + 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",x+y);
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">a- Simule a execu&ccedil;&atilde;o
+deste programa, o que ser&aacute; impresso</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">b- O que ocorreria
+caso fossem feitas as altera&ccedil;&otilde;es abaixo,</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>for (x = 1, y = 2; x + y &lt; 20; x = ++y + x + 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",x+y);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y = 2;</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">c- Rescreva este
+programa para que o usu&aacute;rio possa decidir, a cada impress&atilde;o,
+se deseja ou n&atilde;o prosseguir a execu&ccedil;&atilde;o.</FONT></FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">6- Traduza para
+a linguagem C</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>principal
+declarar i=0,j=1,m,k como inteiras&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima i,j
+para k de 1 at&eacute; 20 fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m = i + j
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima m
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = j&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = m</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule</FONT></FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">7- Dado o Programa
+a seguir:</FONT></FONT>
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{
+int y,a;
+printf("Digite um valor: ");&nbsp;&nbsp;&nbsp;&nbsp;
+scanf("%d",&amp;a);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for(y=a;y&lt;=100;y++);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",y);
+for(y=100;y>0;y--) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d\n",y);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+a=y+5;
+}
+printf("%d",a);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule, o que ser&aacute;
+impresso?</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O programador
+cometeu um erro l&oacute;gico. Identifique-o, corrigindo o programa.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Rescreva o programa,
+sem usar o comando "for".</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">8- Traduza para
+a linguagem C</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>principal
+declarar i,j,k,t como inteiras&nbsp;
+a como matriz de inteiros com 11 elementos
+leia i,j
+para k de i at&eacute; j fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima linha em branco
+para t de 0 at&eacute; 10 fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[t] = k * t
+imprima k,t,a[t]</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O que faz este programa?</FONT></FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">9- Dado o algoritmo
+a seguir</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>Programa X&nbsp;
+i,n,j&nbsp; &lt;-- Inteiro
+A &lt;-- Matriz de Inteiros
+Limpar a Tela
+Leia n (Limite da S&eacute;rie)
+j &lt;-- 1&nbsp;&nbsp;
+Para i que varia de 1 at&eacute; n fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Se resto (i/4) = 0 ent&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A[j] &lt;-- i
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j &lt;-- j + 1
+Para i que varia de 1 at&eacute; j fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Imprima A[j]</FONT></FONT></FONT></PRE>
+
+<OL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O que faz este programa
+.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Traduzir para C.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simula&ccedil;&atilde;o.
+Considerar n=17.</FONT></FONT></LI>
+</OL>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">10- Calcule e apresente
+os "n" primeiros n&uacute;meros primos solicitados pelo usu&aacute;rio.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Elabore Algoritmos,
+Programas em C e Simula&ccedil;&otilde;es.</FONT></FONT>
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lista de Exerc&iacute;cios
+de TAPD - 3<SUP>o</SUP>. Bimestre</FONT></FONT></H4>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">1- Elabore programa
+que atribua um valor constante em uma vari&aacute;vel "b" para uma vari&aacute;vel
+"a", ambas inteiras, obrigatoriamente atrav&eacute;s de ponteiros.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">2- Crie uma fun&ccedil;&atilde;o
+que acumule em uma vari&aacute;vel "x", passada como par&acirc;metro pelo
+programa principal (seu endere&ccedil;o naturalmente) um valor digitado
+pelo operador na pr&oacute;pria fun&ccedil;&atilde;o.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">3- Crie programa
+que acumule em uma vari&aacute;vel "x" passada do programa principal, recursivamente,
+5 vezes o n&uacute;mero 5.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">4- Elabore fun&ccedil;&atilde;o
+que troque os valores das vari&aacute;veis "a" e "b" passadas pelo programa
+principal.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">5- Elabore programa
+que armazene n&uacute;meros em uma pilha e recupere-os a ordem do usu&aacute;rio.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">6- Considere o programa
+abaixo:</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()&nbsp;
+char c,*pc,d;
+{
+c = 'A';
+*pc = c;
+d = &amp;pc;
+printf("%c",d);
+}</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O programador deseja
+transferir o valor da vari&aacute;vel "c" para "d" usando ponteiros.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">O que ocorre
+quando executado o programa acima, simule.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Programa correto,
+se necess&aacute;rio.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Comente a utiliza&ccedil;&atilde;o
+do ponteiro neste programa, na vers&atilde;o acima.</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">7- Considere o programa
+abaixo:</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+char a = '1', b = '9';
+Troca(&amp;a,&amp;b);
+printf("%c e %c",a,b);
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Escrever "Troca()",
+de forma que sejam impressos "9 e 1"</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">8- Considere o programa
+a seguir:</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()&nbsp;
+int i,k,*pi,*pk;
+&nbsp;{
+i = 2; k = 0;
+puts("Qual ser&aacute; o valor de k? ");
+*pk = i;
+pk = &amp;k;
+printf("%d",k);</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">}</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Simule a execu&ccedil;&atilde;o
+deste programa</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Qual &eacute;
+o valor de k ap&oacute;s a execu&ccedil;&atilde;o. Justifique.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Se trocarmos
+"*pk = i" por "pk = &amp;i" o que ocorreria.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Caso seja necess&aacute;rio,
+corrija este programa para que no seu final "k" ter o valor de "i".</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">9- Sabendo que o
+programa principal l&ecirc; um n&uacute;mero, escreva fun&ccedil;&atilde;o
+que mostre na tela a tabuada deste n&uacute;mero digitado e retorne ao
+programa principal o valor da somat&oacute;ria das parcelas da tabuada.</FONT></FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">10- Monte programa
+que acesse n&uacute;meros inteiros previamente armazenados em uma pilha,
+por&eacute;m propositadamente cause um estouro inferior da pilha. Qual
+ser&aacute; o resultado apresentado?</FONT></FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Elabore Algoritmos,
+Programas em C e Simula&ccedil;&otilde;es.</FONT></FONT>
+<H4>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lista de Exerc&iacute;cios
+de TAPD - 4<SUP>o</SUP>. Bimestre</FONT></FONT></H4>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">1- Monte programa
+que transfira os dados do arquivo DADO.DAT, n&atilde;o necessariamente
+existente, para o arquivo DADO.BAK.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">2- Elabore programa
+que crie um arquivo chamado DADO.DAT e escreva um registro neste arquivo.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">3- Dado um Nome
+qualquer, inverta-o.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">4- Crie programa
+que exiba os dados do arquivo DADO.DAT, caso este arquivo exista. Se n&atilde;o
+existir envie mensagem "Arquivo Inexistente" ao operador.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">5- Crie programa
+que exiba os dados do arquivo DADO.DAT, caso este arquivo exista. Se n&atilde;o
+existir envie mensagem "Arquivo Inexistente" ao operador.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">6- Elabore Programa
+que crie e armazene registros em arquivo a ser acessado rand&ocirc;micamente.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">7- Crie Programa
+que altere registros criados previamente.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">8- Elabore Programa
+que liste em tela registros criados previamente.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">9- Crie Lista de
+Registros usando ponteiros como apontadores.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">10- Crie Registros
+ordenados de forma alfab&eacute;tica com ponteiros.</FONT></FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Elabore Algoritmos,
+Programas em C e Simula&ccedil;&otilde;es.</FONT></FONT><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"></FONT></FONT>
+
+<P><A NAME="ap3"></A>
+<BR><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF"><FONT SIZE=+0>Ap&ecirc;ndice
+III - Respostas de Alguns Exerc&iacute;cios Propostos</FONT></FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 1L - Exerc&iacute;cio
+1</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+printf("Hello, world!\n");
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 7L - Exerc&iacute;cio
+6</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+char ac[80];
+int format, n;
+char *acpoint;
+for(n = 1; n &lt; 8; n++){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; format = n;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dostime(ac, format);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Acessando a funcao 'dostime' no formato,;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %d que representa: ",format);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts(ac);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 8L - Exerc&iacute;cio
+6</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+char c;
+printf("Digite 1, 2 ou 3 ou outro caracter:");
+c = getch();
+switch &copy; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '1':
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nVoce Escolheu 1");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '2':
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nVoce Escolheu 2");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case '3':
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nVoce Escolheu 3");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nVoce Escolheu algo diferente de 1,2 ou 3");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+puts("Fim!");
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 9L - Exerc&iacute;cio
+3</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+char ac[80];
+int j,i,ini,fim,n,nao;
+double r;
+cls();
+printf("Digite extremo inferior: "); scanf("%d",&amp;ini);
+printf("\nDigite extremo superior: ");scanf("%d",&amp;fim);
+dostime(ac, 2);
+puts(ac);
+for(i=ini;i&lt;=fim;i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i % 2 == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = 3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r = i;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r = sqrt( r );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (j&lt;=r) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i % j == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j =j + 2;
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (nao || i == 2)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d ",i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+printf("\n");
+dostime(ac, 2);
+puts(ac);
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 23L - Exerc&iacute;cio
+2</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>struct date {
+int day;
+int month;
+char mon_name[12];
+};
+main()
+{
+static struct date months[3] = { {5,1,"JANEIRO"}, {4,2,"FEVEREIRO"},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {10,3,"MARCO"} };
+int a;
+struct date *p_months;
+p_months=&amp;months[1];&nbsp;&nbsp;&nbsp; /* observe que o 1<SUP>o</SUP>. esta' armazenado&nbsp;&nbsp;&nbsp;&nbsp; */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* na posicao 0 */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* da matriz, sempre usada em C. */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Portanto Fevereiro sera' o 2<SUP>o</SUP>. mes */
+printf("Nome do Mes No. %d e': %s.",;
+p_months->month, p_months->mon_name);
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 24L - Exerc&iacute;cio
+2</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+FILE *fo;
+char c, dest[25];
+int i;
+char *cp;
+double d;
+printf("Arquivo a ser Criado: ");
+gets(dest);
+if((fo = fopen(dest,"w")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Nao posso criar %s\n",dest);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+c = 'A';
+i = 999;
+cp = "String criada para exemplo.";
+d = 123.456;
+fprintf(fo,"%c %d %s %lf\n", c, i, cp, d);
+fclose(fo);
+puts("Resposta Correta (no arquivo):A 999 String criada ;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; para exemplo. 123.456000");
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 24L - Exerc&iacute;cio
+3</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+FILE *ler;
+int i;
+char x;
+char name[50];
+double d;
+if((ler = fopen("TESTE.TST","r")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Nao Posso Abrir TESTE.TST");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+fscanf(ler,"%c %d %s %lf", &amp;x, &amp;i, name, &amp;d);
+printf("%c %d %s %lf", x, i, name, d);
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 24L - Exerc&iacute;cio
+4</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+int ret;
+FILE *fi, *fo;
+char c, source[50], dest[50];
+printf("Nome do Arquivo: ");
+gets(source);
+fi = fopen(source, "w+");
+ret = fputs("abcdefghijklmnopqrstuvwxyz", fi);
+fclose(fi);
+puts("Feito");
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Aula 24L - Exerc&iacute;cio
+5</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>/* programa leitor de arquivo, semelhante ao type do DOS */
+#define MAXLEN 80
+main()&nbsp;&nbsp;
+{
+FILE *fi;
+char source[25], line[MAXLEN], *p;
+printf("Nome do Arquivo: ");
+gets(source);
+if((fi = fopen(source, "r")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\tNao posso abrir %s\n",source);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+p = line;
+while(p != NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p = fgets(line,MAXLEN,fi);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+fclose(fi);
+puts("\n{FEITO}");
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lista 1 - Exerc.
+1 (Fibonnaci)</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+int n,i,j,l,p;
+printf("Digite um numero: ");
+scanf("%d",&amp;n);
+i=0;
+j=1;
+printf("%d %d ",i,j);
+for(l=1;l&lt;=n-2;l++) {
+&nbsp; p=i+j;
+&nbsp; printf("%d ",p);
+&nbsp; i=j;
+&nbsp; j=p;
+&nbsp; }
+}</FONT></FONT></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">Lista 3 - Exerc.
+2 (Passagem de Valores e Vari&aacute;veis)</FONT></FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT COLOR="#000000"><FONT SIZE=-1>main()
+{
+int x;
+soma(&amp;x)
+printf("\nO valor digitado foi %d\n",x);
+}
+
+
+soma(z)
+int *z;
+{
+int y;
+printf("Digite um Valor: ");
+scanf("%d",&amp;y);
+*z=y;
+}</FONT></FONT></FONT></PRE>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+<DIV ALIGN=right><FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT></DIV>
+<FONT FACE="Courier New,Courier"><FONT COLOR="#000000">&nbsp;</FONT></FONT>
+</BODY>
+</HTML>

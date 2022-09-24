@@ -1,0 +1,1108 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu05fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu06fi.htm">
+
+<LINK REL="Previous" HREF="vcu04fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu04fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu06fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">5 &#151; Debugging and Profiling</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">The Integrated Debugger</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Preparing an Application for Debugging</A></LI>
+
+<LI>
+
+<A HREF="#I5">Running an Application with the Debugger</A></LI>
+
+<LI>
+
+<A HREF="#I6">Debug Windows</A></LI>
+
+<LI>
+
+<A HREF="#I7">Breakpoints and Single-Stepping</A></LI>
+
+<LI>
+
+<A HREF="#I8">QuickWatch and DataTips</A></LI>
+
+<LI>
+
+<A HREF="#I9">Threads and Exceptions</A></LI></UL>
+
+<LI>
+
+<A HREF="#I10">Simple Debugging Techniques</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I11">Using Message Boxes</A></LI>
+
+<LI>
+
+<A HREF="#I12">Debugging Output</A></LI>
+
+<LI>
+
+<A HREF="#I13">Assertions</A></LI>
+
+<LI>
+
+<A HREF="#I14">Object Dumping</A></LI>
+
+<LI>
+
+<A HREF="#I15">Detecting Memory Leaks and the CMemoryState class</A></LI>
+
+<LI>
+
+<A HREF="#I16">MFC Tracing</A></LI>
+
+<LI>
+
+<A HREF="#I17">Remote Debugging</A></LI>
+
+<LI>
+
+<A HREF="#I18">Just-in-Time Debugging</A></LI></UL>
+
+<LI>
+
+<A HREF="#I19">Application Profiling</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I20">Setting Up an Application for Profiling</A></LI>
+
+<LI>
+
+<A HREF="#I21">Profiler Operation</A></LI>
+
+<LI>
+
+<A HREF="#I22">Running the Profiler</A></LI>
+
+<LI>
+
+<A HREF="#I23">Types of Profiling</A></LI>
+
+<LI>
+
+<A HREF="#I24">Advanced Profiler Settings</A></LI>
+
+<LI>
+
+<A HREF="#I25">Analyzing Profiler Data</A></LI></UL>
+
+<LI>
+
+<A HREF="#I26">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>5 &#151; Debugging and Profiling</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>One of the great features of Visual C++ is its excellent integrated symbolic debugger. This debugger has many features, such as Just-in-Time debugging (the ability to debug programs that crash while launched outside the development environment), or remote debugging. It is also fully integrated with other features of the Development Studio, such as the Source Browser or source editors.
+
+<BR></P>
+
+<P>When you are faced with the task of having to identify performance bottlenecks in your application, the debugger is often of little help. Fortunately, you can use another tool, the Source Profiler, for this purpose. The Profiler uses the same debugging information as the debugger and analyzes how frequently elements of your code are accessed.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>The Integrated Debugger</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Visual C++ integrated debugger is launched when you run an application in debug mode. This is accomplished by selecting the Go, Step Into, or Run to Cursor commands from the Debug submenu in the Developer Studio's Build menu. However, before you can start the debugger, you must ensure that the application you are about to debug has been compiled with debugging information.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Preparing an Application for Debugging</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order for the symbolic debugger to function, you must compile an application with debugging information. If your application is an MFC application that was originally created through AppWizard, chances are that you do not have to do anything; the AppWizard already created a debug configuration for your project and made it the default configuration.
+
+<BR></P>
+
+<P>However, if you need to create a debug configuration yourself, you can do so in the Project Settings dialog. You must do set the appropriate compiler and linker options that make debugging possible.
+
+<BR></P>
+
+<P>To set the compiler options, invoke the Project Settings dialog through the Settings command in the Build menu, and select the C/C++ tab. Select the General category, and select the configuration you wish to use as the debug configuration in the left side of the Project Settings window. To enable debugging, you must alter two settings: in the Debug info field, select Program Database, and in the Optimizations field select Disable (Debug), as shown in Figure 5.1. If you wish to utilize the Developer Studio's source browser features, you may also set the Generate browse info check box; for AppWizard-generated debug configurations, this check box is turned off by default to save compiler time.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu01.gif">Figure 5.1. Setting up the compiler for debugging.</A></B>
+
+<BR></P>
+
+<P>If you are using the compiler from the command line or from within a custom make file, you may need to set these debugging options manually. To turn off optimization, use the /Od compiler option; to turn on the generation of debugging information, specify the /Zi option.
+
+<BR></P>
+
+<P>Another setting that is relevant for debugging specifies that your project be linked with the debug version of the C Run-time Library. This is specified by selecting the Code Generation category and picking the desired debug library in the Use run-time library field (Figure 5.2). The equivalent compiler command-line option is /MDd (debug DLL), /MLd (debug single-threaded library), or /MTd (debug multithreaded library).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu02.gif">Figure 5.2. Specifying a debug run-time library.</A></B>
+
+<BR></P>
+
+<P>In addition to compiler settings, linker settings must also be modified. This can also be done from the Project Settings dialog. Select the Linker tab and the General category. To turn on the generation of debugging information, set the Generate debug info check box (Figure 5.3).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu03.gif">Figure 5.3. Setting up the linker for debugging.</A></B>
+
+<BR></P>
+
+<P>The command-line equivalent for this option is /debug on the linker command line.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Running an Application with the Debugger</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Once you recompile your application with debug settings, you can run it in debug mode by using any of the commands in the Debug submenu in the Build menu.
+
+<BR></P>
+
+<P>How an application is run when it is being debugged is also controlled through the Project Settings dialog. A setting of special interest is the Executable for debug session field (Figure 5.4). Use of this field enables you to debug dynamic link library (DLL) projects. Instead of specifying the name of the DLL, you should specify the name of a program that loads and exercises the DLL. For example, to debug an OLE control (which is a special type of a DLL), you can use the Visual C++ utility tstcon32.exe as the debug session executable.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu04.gif">Figure 5.4. Debug options.</A></B>
+
+<BR></P>
+
+<P>When you begin a debug session, depending on your Developer Studio settings, any one of a variety of debug windows may appear. Other windows (such as the Project Workspace window) that are normally present may also disappear. The Developer Studio menu bar also changes: the Debug menu replaces the Build menu.
+
+<BR></P>
+
+<P>The application selected for debugging starts executing until a breakpoint is reached or its execution is interrupted by the Break command from the Debug menu.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Debug Windows</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>During a debugging session, the Developer Studio presents debugging information in a series of debug windows. These windows, if not displayed, can be invoked through the appropriate command in the Developer Studio's View menu. All of these windows can be displayed as normal windows or as docking windows. If they are used as docking windows, they also appear in the toolbar popup menu&#151;the menu that appears if you right-click in an empty toolbar area.
+
+<BR></P>
+
+<P>Source windows are regular source editor windows. However, during a debugging session, special debugging functions are also available through the popup menu that is invoked by right-clicking inside a source window. You can set, clear, or enable/disable breakpoints. You can also execute single-stepping commands. The Disassembly window and the QuickWatch dialog can also be invoked from this menu.
+
+<BR></P>
+
+<P>The Variables window (Figure 5.5) presents a look on the variables in the current function. This window has three tabs; the Auto tab shows variables that are used in the current line and the previous line; the Locals tab shows all variables that are local to the current function including function parameters; and the this tab shows the object pointed to by the this pointer.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu05.gif">Figure 5.5. The Variables window.</A></B>
+
+<BR></P>
+
+<P>The Variables window can also be used to view variables in the scope of functions that called the current function.
+
+<BR></P>
+
+<P>As you single-step through your code, the Variables window shows all changed variables with a different color.
+
+<BR></P>
+
+<P>The Variables window can also be utilized to modify the values of data items that are of a simple type (for example, int, double, or pointer types). To modify a value, double-click on it in the Variables window; if the value can be modified, a text cursor will appear.
+
+<BR></P>
+
+<P>The Watch window (Figure 5.6) can be used to monitor the values of expressions. You can enter an expression in the Name field using the keyboard, or you can paste it (or drag it) from a source window.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu06.gif">Figure 5.6. The Watch window.</A></B>
+
+<BR></P>
+
+<P>The Watch window has four tabs. You can use these tabs to maintain four different sets of watch expressions (for example, representing the context of four different functions).
+
+<BR></P>
+
+<P>The Watch window also uses a different color to mark expressions that change as you single-step through your code. Like the Variables window, the Watch window can also be used to modify the values of data items of a simple type.
+
+<BR></P>
+
+<P>The Registers window (Figure 5.7) shows the current values in the registers of the computer's processor, including (optionally) its floating-point registers. This is another window that uses a different color to mark values that change during single-stepping.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu07.gif">Figure 5.7. The Registers window.</A></B>
+
+<BR></P>
+
+<P>The Memory window (Figure 5.8) enables you to view memory contents in the address space of the process that is being debugged.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu08.gif">Figure 5.8. The Memory window.</A></B>
+
+<BR></P>
+
+<P>The Memory window can display memory contents in byte format, word (short hex) format, and double word (long hex) format. If byte format is used, the ASCII characters represented by those bytes are also displayed. You can select the format through the Memory window popup menu; to invoke this menu, right-click anywhere in the Memory window.
+
+<BR></P>
+
+<P>To display memory at a specific location, type an expression in the Address field of the Memory window's toolbar. Note that the Memory window displays memory locations that precede the specified address; if the address is specified as a symbolic expression, this may make it a bit difficult to interpret the Memory window contents. However, the caret (text cursor) is positioned at the correct location, so use this cursor's position as a guide as to where the requested block of memory begins.
+
+<BR></P>
+
+<P>The Memory window also uses color to highlight changed values.
+
+<BR></P>
+
+<P>The Call Stack window (Figure 5.9) lists the hierarchy of function calls that led to the current function. Double-clicking on a function in this window updates source windows and other debugger windows to reflect the context of that function. Selecting a function in the Call Stack window and pressing the F7 key executes code until the specified function is reached.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu09.gif">Figure 5.9. The Call Stack window.</A></B>
+
+<BR></P>
+
+<P>The Disassembly window (Figure 5.10) provides a view on the assembly language code that the compiler generates for your application. While this window has the focus, the single-stepping features of the debugger work differently; instead of stepping through source lines, they enable you to step through individual assembly language instructions.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu10.gif">Figure 5.10. The Disassembly window.</A></B>
+
+<BR></P>
+
+<P>A special feature of the Disassembly window is available through the popup menu that appears when you right-click anywhere within the window. The Set Next Statement command enables you to alter the processor's instruction pointer, setting it to the address of the statement that is under the text cursor. You can use this feature, for example, to skip portions of your code. However, you should use this command with care; do not set the next statement to be one in the body of another function, and make sure that the stack is maintained properly. Otherwise, the results will be unpredictable and the application you are debugging will probably crash.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Breakpoints and Single-Stepping</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The two most fundamental features of any debugger are the ability to insert breakpoints into code and the ability to execute code step-by-step.
+
+<BR></P>
+
+<P>The simplest way to place a breakpoint in your code is to move the text cursor over the specific location in a source window and press the F9 key. The presence of a breakpoint is marked by a large red dot to the left of the source line (Figure 5.11). Note that you can also set breakpoints in the Disassembly window.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu11.gif">Figure 5.11. Breakpoints in a source window.</A></B>
+
+<BR></P>
+
+<P>Much finer control of breakpoint settings can be achieved through the Breakpoints command in the Edit menu. This command displays the Breakpoints dialog, where three different kinds of breakpoints can be set.
+
+<BR></P>
+
+<P>Location breakpoints are those that interrupt program execution at a specific location. These are the breakpoints that you set using the F9 key. You can also add a conditional check to a location breakpoint; instead of interrupting your program every time, the breakpoint will interrupt your code only when the specific condition is satisfied.
+
+<BR></P>
+
+<P>Data breakpoints interrupt program expression when a specific expression's value changes. For both data and location breakpoints, you can invoke the Advanced Breakpoint dialog (Figure 5.12) by clicking on the triangular button next to the breakpoint identifier. Here, you can specify the context of the breakpoint; the function, source file, and executable file in which it is located.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu12.gif">Figure 5.12. The Advanced Breakpoint dialog.</A></B>
+
+<BR></P>
+
+<P>The third type of breakpoint is a message breakpoint (Figure 5.13). Such a breakpoint interrupts your program's execution when a specific message is received by one of your program's window procedures.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu13.gif">Figure 5.13. Setting a message breakpoint.</A></B>
+
+<BR></P>
+
+<P>A breakpoint can be active or disabled. When a breakpoint is active, a checkmark appears next to it in the Breakpoints dialog's list of breakpoints. If you click this checkmark, the breakpoint turns inactive.
+
+<BR></P>
+
+<P>Program execution can also be interrupted using the Break command in the Debug menu. However, such an interruption is asynchronous by nature and may cause the program to be interrupted deep inside nested system function calls. You can use the Step Out command in the Debug menu to step out of such functions until you reach a recognizable location in your code.
+
+<BR></P>
+
+<P>The Step Out command is just one of several single-stepping commands that you can use to execute your program one step at a time. The most basic single-stepping command is the Step Into command; this command executes the next line in your source file or the next instruction in the Disassembly window, stepping into the bodies of functions if the instruction is a function call.
+
+<BR></P>
+
+<P>The Step Over command is similar to Step Into except that this command does not step into the body of a function; instead, the function call is completed and execution stops at the next source line or assembly instruction in the calling function.
+
+<BR></P>
+
+<P>The Run to Cursor command effectively places a one-shot breakpoint at the cursor's current location in a source window or the Disassembly window; execution continues until the cursor position is reached or until another breakpoint is triggered.
+
+<BR></P>
+
+<P>The Step Into Specific Function command can be used to control which function is entered in the case of nested function calls in a single source line.
+
+<BR></P>
+
+<P>Many of these commands have keyboard shortcuts; these are shown in Table 5.1. These shortcuts are different from the keyboard shortcuts in Visual C++ 2.0 or earlier versions. (Note that if you selected Version 2.0 compatibility during installation, the keyboard shortcuts will default to those used in these earlier versions, not the ones shown in Table 5.1). You can of course also customize these shortcuts by selecting the Customize command from the Developer Studio's Tools menu, and clicking on the Keyboard tab in the Customize dialog.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 5.1. Keyboard shortcuts to single-stepping commands.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><I>Command</I>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><I>Function key</I>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>Step Into</P>
+
+<TD>
+
+<P>F11</P>
+
+<TR>
+
+<TD>
+
+<P>Step Over</P>
+
+<TD>
+
+<P>F10</P>
+
+<TR>
+
+<TD>
+
+<P>Step Out</P>
+
+<TD>
+
+<P>Shift+F11</P>
+
+<TR>
+
+<TD>
+
+<P>Run to Cursor</P>
+
+<TD>
+
+<P>Ctrl+F10</P></TABLE>
+
+<P>While a program is halted, you can specify the instruction at which execution should continue. Use the Set Next Statement command in either a source window or the Disassembly window. Be careful when using this command; never set the next statement to one in a different function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>QuickWatch and DataTips</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Often it is necessary to examine the value of a specific symbol that does not appear in the Variables or Watch windows. The Visual C++ debugger provides two features for this purpose: the QuickWatch window and DataTips.
+
+<BR></P>
+
+<P>DataTips are similar to the familiar tooltips the show hints for a button or other user-interface object when the cursor rests over them for a brief period of time. If during a debugging session you position the mouse cursor over the name of a symbol that can be evaluated, the symbol's value is displayed in a tooltip-like window (Figure 5.14).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu14.gif">Figure 5.14. DataTips.</A></B>
+
+<BR></P>
+
+<P>Sometimes, you need to evaluate expressions for which the DataTips feature is insufficient. In these cases, you can invoke the QuickWatch dialog (Figure 5.15) through the QuickWatch command in the Debug menu. If the text cursor was positioned over a symbol name, it automatically appears in the QuickWatch dialog; if an expression was highlighted, that expression appears instead.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu15.gif">Figure 5.15. The QuickWatch dialog.</A></B>
+
+<BR></P>
+
+<P>The function and appearance of the QuickWatch dialog are similar to those of the Watch window. In particular, you can use this window to alter the values of data items that are of a simple type.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Threads and Exceptions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Threads dialog (Figure 5.16), invoked through the Threads command in the Debug menu, lists all current threads in your application. This dialog can be used to set the focus to a specific thread when debugging a multithreaded application.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu16.gif">Figure 5.16. The Threads dialog.</A></B>
+
+<BR></P>
+
+<P>The Exceptions dialog (Figure 5.17) specifies how your program responds to exceptions during a debug session. You can select a standard exception or specify a user-defined exception. The Action field specifies how the debugger responds when it is notified of a specific exception.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu17.gif">Figure 5.17. The Exceptions window.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=4><B>Simple Debugging Techniques</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Visual C++ integrated debugger and the various debugging features in the Microsoft Foundation classes provide for a variety of different debugging techniques.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Using Message Boxes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Sometimes it is not convenient to use the integrated debugger. For example, the presence of the debugger window may interfere with your program's execution, or the bug that you are trying to resolve appears only in the release version of your program. In this case, a well-placed message box may be all you need to catch an elusive bug. For example, when you determined that a two-parameter function named foo in your application misbehaves, you can easily verify that the function receives correct parameters by adding a call to AfxMessageBox as follows:
+
+<BR></P>
+
+<PRE>...
+
+char temp[100];
+
+wsprintf(temp, &quot;Calling foo(x = %d, y = %d)&quot;, x, y);
+
+AfxMessageBox(temp);
+
+foo(x, y);</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Debugging Output</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>When an MFC application is compiled with debug libraries, many MFC functions generate debugging output. You can also generate debugging output in your own code, using the TRACE, or TRACE0, TRACE1, TRACE2, TRACE3 macros. Debugging output is sent to afxDump, a predefined object of type CDumpContext, and usually appears in the Developer Studio's Output window; to see debug output, select the Debug tab in this window.
+
+<BR></P>
+
+<P>For example, to examine the values passed to the foo function, you could write:
+
+<BR></P>
+
+<PRE>...
+
+TRACE2(&quot;Calling foo(x = %d, y = %d)&quot;, x, y);
+
+AfxMessageBox(temp);
+
+foo(x, y);</PRE>
+
+<P>Note that this type of debugging output appears only if your application has been compiled for debugging. It also requires that your application be launched from the debugger, even if you do not wish to use other debugging features.
+
+<BR></P>
+
+<P>Using the TRACE0, TRACE1, TRACE2, TRACE3 macros is recommended when appropriate, as these macros require slightly less memory and resources than TRACE.
+
+<BR></P>
+
+<P>The TRACE family of macros is nonfunctional unless an application has been built for debugging.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Assertions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The ASSERT macro can be used to interrupt program execution when a specific condition is false. This macro can be used in debug versions of your application to verify, for example, that a function received proper parameters:
+
+<BR></P>
+
+<PRE>void foo(int x)
+
+{
+
+    ASSERT (x &gt;= 0 &amp;&amp; x &lt; 100);
+
+    ...</PRE>
+
+<P>The ASSERT_VALID macro is used to verify that a pointer points to a valid CObject-derived object. For example, when you have a function called GetDocument that returns a pointer to an object of CMyDoc, you may verify that this pointer is valid as follows:
+
+<BR></P>
+
+<PRE>CMyDoc *pDoc;
+
+pDoc = GetDocument();
+
+ASSERT_VALID(pDoc);
+
+...</PRE>
+
+<P>ASSERT macros, after displaying a message box indicating the line number at which the assertion failed, interrupt program execution. However, in programs that have not been built for debugging, assertion macros do nothing.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Object Dumping</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CObject class has a member function, Dump, that dumps the contents of an object to the debugging output. If you intend to use this feature, implement the Dump member function for classes that you derive from CObject either directly or indirectly.
+
+<BR></P>
+
+<P>For example, if your application has a CDocument-derived class, CMyDoc, with two member variables, m_x and m_y, your CMyDoc::Dump implementation may look like this:
+
+<BR></P>
+
+<PRE>#ifdef _DEBUG
+
+void CMyDoc::Dump(CDumpContext&amp; dc) const
+
+{
+
+    CDocument::Dump(dc);
+
+    dc &lt;&lt; &quot;m_x = &quot; &lt;&lt; m_x &lt;&lt; '\n';
+
+    dc &lt;&lt; &quot;m_y = &quot; &lt;&lt; m_y &lt;&lt; '\n';
+
+}
+
+#endif //_DEBUG</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Detecting Memory Leaks and the </B><B><I>CMemoryState</I></B><B> class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMemoryState class can be used to detect memory leaks that occur due to inappropriate use of the C++ new or delete operators. To take a snapshot of memory allocation, create a CMemoryState object and call its Checkpoint member function. Later, you can call the DumpAllObjectsSince member function to dump the contents of all objects since the last time Checkpoint was called. For example, to dump any objects allocated by foo that the function fails to deallocate, you could use the following code:
+
+<BR></P>
+
+<PRE>...
+
+CMemoryState memState;
+
+memState.Checkpoint();
+
+foo(x, y);
+
+memState.DumpAllObjectsSince();</PRE>
+
+<P>If you do not need to see a complete dump of all allocated objects, you can also use the DumpStatistics member function. DumpStatistics can be called after the difference between two memory states has been evaluated using the Difference member function. This technique requires altogether three CMemoryState objects; the first two are used to take snapshots of the state of memory, while the third is used to evaluate their differences as in the following example:
+
+<BR></P>
+
+<PRE>CMemoryState msBefore, msAfter, msDiff;
+
+...
+
+msBefore.Checkpoint();
+
+foo(x,y);
+
+msAfter.Checkpoint();
+
+if (msDiff.Difference(msBefore, msAfter))
+
+    msDiff.DumpStatistics();</PRE>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> CMemoryState objects cannot be used to detect memory leaks caused by incorrect calls to malloc/free, GlobalAlloc/GlobalFree, or LocalAlloc/LocalFree.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>MFC Tracing</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The debug version of the MFC Library sends a variety of trace messages to the debugging output. These messages can be enabled or disabled through the MFC Tracer application, tracer.exe. This application can be invoked from the Tools menu.
+
+<BR></P>
+
+<P>The MFC Tracer presents a simple dialog interface (Figure 5.18) where you can specify the MFC trace messages that you are interested in.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu18.gif">Figure 5.18. The MFC Trace Options.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Remote Debugging</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Remote debugging enables you to debug code running on another machine. The local and the remote machines are connected through a serial connection or a local area network; the local machine runs the Visual C++ Developer Studio and its integrated debugger, while the application that is being debugged runs on the remote machine with the Visual C++ Debug Monitor (Figure 5.19).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu19.gif">Figure 5.19. Remote debugging.</A></B>
+
+<BR></P>
+
+<P>In order to be enabled for remote debugging, the remote machine must run the Visual C++ Debug Monitor application, msvcmon.exe. In order for this application to run properly, you must also have the following DLLs installed on the remote computer: msvcrt40.dll, tln0com.dll, tln0t.dll, and dmn0.dll. Copy all these files into a directory that is on your path (for example, the Windows system directory).
+
+<BR></P>
+
+<P>To use remote debugging, first you must run the debug monitor on the remote computer. The debug monitor appears as a dialog (Figure 5.19) where you can specify its settings. You can use remote debugging over a serial line or using a TCP/IP network connection. Use the Settings button to specify the details of the connection after the desired connection type has been selected.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu20.gif">Figure 5.20. The Visual C++ debug monitor.</A></B>
+
+<BR></P>
+
+<P>When remote debugging has been fully configured, click on the Connect button. Clicking this button puts the debug monitor in a state where it waits for an incoming connection.
+
+<BR></P>
+
+<P>You must also configure the Developer Studio on the local machine for remote debugging. To do so, use the Remote Connection command in the Tools menu. This invokes the Remote Connection dialog (Figure 5.21) where you can specify the type of connection to use for debugging and set connection options using the Settings button.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu21.gif">Figure 5.21. The Remote Connection dialog.</A></B>
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> When setting up a TCP/IP connection for debugging, you are also asked to specify a password. Make sure that the password you specify is the same on both the local and the remote computer.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>The major advantage of remote debugging is that the application runs in a machine unaffected by the presence of the debugger. Remote debugging is ideal, for example, for debugging applications that take over the Windows display and keyboard&#151;like full-screen game applications).
+
+<BR></P>
+
+<P>Remote debugging can also be used during cross-platform development. For example, you can use remote debugging to debug a Visual C++ application running on a Macintosh computer. You can also use remote debugging with a remote computer running Windows 3.1 and Win32s.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Just-in-Time Debugging</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Just-in-Time debugging represents the ability of the Visual C++ debugger to attach itself to a running program that was just interrupted with an unhandled exception. Just-in-Time debugging is useful to debug applications that have not been launched from within the integrated debugger.
+
+<BR></P>
+
+<P>Just-in-Time debugging is turned on using the Options command in the Tools menu. In the Options dialog, select the Debug tab and set the Just-in-Time debugging checkbox.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=4><B>Application Profiling</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Visual C++ Profiler is a performance analysis tool that collects reliable statistics on the number of times certain elements of your code are executed, and the amount of elapsed time spent executing them. The Profiler can be used from within the Developer Studio or from the command line.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> If you installed Visual C++ with default settings, the Profiler may not be installed on your system. In this case, profiling features may not be available. To install the profiler, rerun the Visual C++ installation program.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Setting Up an Application for Profiling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order to profile an application, you must link it with the appropriate flags. This is accomplished easily, by linking your application with the /profile linker command-line flag. If you are compiling from within the Developer Studio, you can set this flag in the Project Settings dialog; invoke this dialog through the Settings command in the Build menu, select the Link tab, select the General category, and make sure that the Enable profiling check box is set.
+
+<BR></P>
+
+<P>The Profiler can be used for <I>function profiling</I> and for <I>line profiling</I>. Function profiling analyses the way functions in your program are executed; line profiling performs a similar analysis on a per source line basis. In order for line profiling to work, you must compile your code with debugging information. If you do function profiling, debugging information is ignored.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>Profiler Operation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>How does the Profiler work? The Profiler actually consists of not one, but three tools that can be executed from the command line. These are the PREP, PROFILE, and PLIST tools. A simplified view of how these tools operate is shown in Figure 5.22.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu22.gif">Figure 5.22. Profiling operation.</A></B>
+
+<BR></P>
+
+<P>The PREP tool is run twice during profiling. First, it reads the application's executable file and produces a PBI and a PBT file. The PBI file serves as the input to the PROFILE tool; this tool runs and profiles the application, and writes its results to a PBO file. The PBO file and the PBT file serve as the input when the PREP tool is run for the second time, this time generating a new PBT file; finally, the PLIST tool is used to generate human readable results.
+
+<BR></P>
+
+<P>The Profiler is typically run from batch files that invoke PREP, PROFILE, and PLIST as appropriate.
+
+<BR></P>
+
+<P>The output of PLIST is a readable (natural language) summary of profiling results.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Running the Profiler</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>From within the Developer Studio, the Profiler is invoked through the Profile command in the Tools menu. This command invokes the Profile dialog, shown in Figure 5.23.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="05vcu23.gif">Figure 5.23. The Profile dialog.</A></B>
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> If you have remote debugging enabled, you may not be able to invoke the Profile command from the Tools menu. To disable remote debugging, use the Remote Connection command in the Tools menu and select Local as the connection type in the Remote Connection dialog.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>Types of Profiling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Profiler can be used to perform a variety of different types of profiling operations. Some of these can be invoked from the Profile dialog; others require the use of batch files that are typically found in your msdev\bin directory.
+
+<BR></P>
+
+<P><I>Function timing</I> evaluates the amount of time your application spends executing specific functions. By default, timing statistics for all functions are generated. You can invoke this type of profiling by selecting Function timing in the Profile dialog.
+
+<BR></P>
+
+<P><I>Function coverage</I> is used to record whether specific functions have been called. You can use this capability, for example, to verify whether certain portions of your code are executed. Function coverage can also be invoked from the Profile dialog.
+
+<BR></P>
+
+<P><I>Function counting</I> evaluates the number of times specific functions are called. To invoke function counting from the Profile dialog, select the Custom profile type and specify the fcount.bat batch file (usually located in msdev\bin) in the Custom Settings field.
+
+<BR></P>
+
+<P><I>Line counting</I> evaluates the number of times specific lines in your code are executed. To invoke line counting, select Custom in the Profile dialog and specify lcount.bat in the Custom Settings field.
+
+<BR></P>
+
+<P><I>Line coverage</I> evaluates whether specific lines in your code have been executed or not. Note that line coverage is much faster than line counting, as after a line has been executed once, the Profiler can remove its breakpoint from that line. Line coverage can be directly invoked from the Profile dialog by selecting the Line coverage option.
+
+<BR></P>
+
+<P>In addition to these profiler options, the Profile dialog also provides a Merge option. This option enables you to combine profiler statistics from several sessions (with identical settings).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>Advanced Profiler Settings</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Profiling your entire application rarely makes sense. By identifying specific sections of your code for profiling analysis, you can also greatly speed up program execution during a profiling session.
+
+<BR></P>
+
+<P>There are three ways to fine-tune the profiler. You can modify your tools.ini and profiler.ini files; you can specify advanced settings in the Profile dialog in Developer Studio; or you can write custom batch files for profiling.
+
+<BR></P>
+
+<P>The tools.ini and profiler.ini files contain profiler related settings in the [profiler] section. In this section, you can specify library (LIB) and object (OBJ) files that are to be excluded from profiling. For example, your tools.ini file may contain the following lines:
+
+<BR></P>
+
+<PRE>[profiler]
+
+exclude:user32.lib
+
+exclude:gdi32.lib</PRE>
+
+<P>When reading tools.ini and profiler.ini, the Profiler reads settings from both files and merges them. Note that the location of tools.ini is defined by the INIT environment variable; in contrast, profiler.ini can be found in the msdev\bin directory.
+
+<BR></P>
+
+<P>If you select the Function timing, Function coverage, or Line coverage options in the Profile dialog, you can specify additional parameters that will be passed to the PREP tool in its Phase I invocation. For example, if you wish to invoke the profile to analyze only a specific range of source lines in the file MyApp.cpp, you could specify the following in the Advanced settings field:
+
+<BR></P>
+
+<PRE>/EXCALL /INC MyApp.cpp(30-67)</PRE>
+
+<P>Finally, you can develop your own custom profiling batch files. Use the batch files that are installed in your msdev\bin directory (fcount.bat, fcover.bat, ftime.bat, lcount.bat, and lcover.bat) as examples for developing profiler batch files.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=3><B>Analyzing Profiler Data</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Normally, the PLIST tool provides profiler output in a human readable form. However, it is also possible to generate output in an exportable tab-delimited format.
+
+<BR></P>
+
+<P>This tab-delimited output can be read by other applications. For example, it can be imported into a Microsoft Excel spreadsheet. Provided with your Visual C++ installation is a Microsoft Excel 4 macro file, profiler.xlm, that provides some profile analysis tools.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The integrated debugger in the Developer Studio is launched when you start an application using one of the Debug commands in the Build menu. The debugger offers a variety of views on your application and its memory; these include source windows, the Variables window, the Watch window, the Registers window, the Call Stack window, the Memory window, and the Disassembly window.
+
+<BR></P>
+
+<P>To prepare an application for debugging, you must compile and link it with the appropriate flags. This is accomplished automatically for MFC applications that were created with the AppWizard; for these applications, AppWizard creates a Debug configuration and makes it the default configuration.
+
+<BR></P>
+
+<P>When an application is being debugged, its execution can be interrupted using a variety of breakpoint settings. Location breakpoints are the most common; however, you can also specify data breakpoints that interrupt program execution when the value of an expression changes, and message breakpoints that interrupt program execution when a specific window procedure receives a specific message.
+
+<BR></P>
+
+<P>There are many debugging techniques you can use to debug MFC and other applications. These include the use of the TRACE and ASSERT family of macros, the CObject::Dump function and its override versions, and various MFC tracing options. You can also use objects of type CMemoryState in MFC applications to detect and analyze memory leaks.
+
+<BR></P>
+
+<P>A specific debugging technique is remote debugging. Remote debugging enables you to debug an application on a remote computer using a debugger on the local computer. Remote debugging requires that the Visual C++ Debug Monitor be set up on the remote computer. Remote debugging is most useful when debugging applications without interference from the debugger or when debugging applications running on non-Win32 platforms such as Win32s or Macintosh.
+
+<BR></P>
+
+<P>Visual C++ also offers the Just-in-Time debugging feature that enables you to invoke the debugger on applications that fail outside the integrated debugger environment.
+
+<BR></P>
+
+<P>The Visual C++ Source Profiler is a powerful analysis tool. To enable profiling, your application must be linked with profiling enabled.
+
+<BR></P>
+
+<P>The Profiler consists of three tools: PREP, PROFILE, and PLIST. These tools are used to prepare an application for profiling, profile the application, and interpret the results.
+
+<BR></P>
+
+<P>The Profiler can be used for line profiling and function profiling. Line profiling can be used to analyze line coverage and hit counts; function profiling can be used to analyze function timing, function coverage, and hit counts.
+
+<BR></P>
+
+<P>Function timing, Function coverage, and Line coverage are options available in the Profile dialog in the Developer Studio. In addition, two more batch files, fcount.bat and lcount.bat, can be used with the Custom option to perform function counting and line counting.
+
+<BR></P>
+
+<P>Profiler settings can be refined through the Advanced settings option in the Profile dialog, or through using custom batch files. For example, you can limit profiling analysis to a specific set of functions or source lines.
+
+<BR></P>
+
+<P>The PLIST tool normally generates human-readable output. You can override this using the /T command-line switch to generated tab-delimited output that can be imported by other applications. A set of Microsoft Excel analysis tools for profiler output is provided in the form of the profiler.xlm macro file.</P>
+
+<P><A HREF="vcu04fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu06fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

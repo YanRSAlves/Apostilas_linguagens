@@ -1,0 +1,1478 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu28fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu29fi.htm">
+
+<LINK REL="Previous" HREF="p04vcufi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="p04vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu29fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">28 &#151; Object Linking and Embedding: An Overview</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">OLE Basics and the Component Object Model</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Interfaces and Methods</A></LI>
+
+<LI>
+
+<A HREF="#I5">Methods and Memory Allocation</A></LI>
+
+<LI>
+
+<A HREF="#I6">Inheritance and Reusing Objects</A></LI>
+
+<LI>
+
+<A HREF="#I7">Interface Identifiers</A></LI>
+
+<LI>
+
+<A HREF="#I8">Interface Definition Through IUnknown</A></LI>
+
+<LI>
+
+<A HREF="#I9">OLE Class Objects and Registration</A></LI>
+
+<LI>
+
+<A HREF="#I10">Inter-Object Communication</A></LI>
+
+<LI>
+
+<A HREF="#I11">Monikers</A></LI>
+
+<LI>
+
+<A HREF="#I12">OLE and Threads</A></LI></UL>
+
+<LI>
+
+<A HREF="#I13">OLE and Compound Documents</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I14">Structured Storage</A></LI>
+
+<LI>
+
+<A HREF="#I15">Data Transfer</A></LI>
+
+<LI>
+
+<A HREF="#I16">Compound Documents</A></LI></UL>
+
+<LI>
+
+<A HREF="#I17">Applications of OLE</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I18">OLE Document Containers and Servers</A></LI>
+
+<LI>
+
+<A HREF="#I19">OLE Automation</A></LI>
+
+<LI>
+
+<A HREF="#I20">OLE Drag and Drop</A></LI>
+
+<LI>
+
+<A HREF="#I21">OLE Controls</A></LI>
+
+<LI>
+
+<A HREF="#I22">OLE Custom Interfaces</A></LI></UL>
+
+<LI>
+
+<A HREF="#I23">A Simple Example</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I24">Functional Description</A></LI>
+
+<LI>
+
+<A HREF="#I25">The Hello Server Application</A></LI>
+
+<LI>
+
+<A HREF="#I26">Registering and Running the Server</A></LI></UL>
+
+<LI>
+
+<A HREF="#I27">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>28 &#151; Object Linking and Embedding: An Overview</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Object linking and embedding is at the core of most modern Windows applications. It is also a very complex technology that would be difficult to master without the help of MFC.
+
+<BR></P>
+
+<P>However, in order to use the MFC Library efficiently for OLE applications, it is helpful to have a solid understanding of OLE fundamentals. While not strictly needed if you are satisfied with the &quot;stock&quot; implementation of basic OLE features in your application (provided by AppWizard), this understanding becomes essential if you wish to implement more advanced features, such as OLE drag and drop, linked OLE objects, or OLE-based clipboard operations.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>OLE Basics and the Component Object Model</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>At the heart of OLE is a technology known as the <I>Component Object Model</I> (COM). COM is a binary standard that specifies how OLE components, or objects, interact with each other. It is important to note that COM is a language-independent standard; the only requirement is that the language used must support the concept of pointers and calling functions through pointers. Naturally, it is easier to develop OLE applications in object-oriented language environments.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Interfaces and Methods</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A COM object is accessed exclusively through one or more sets of <I>interfaces</I>. An interface is a set of functions, also referred to as <I>methods</I>.
+
+<BR></P>
+
+<P>The COM standard not only specifies the binary object standard, it also defines a series of standard interfaces that provide common functionality.
+
+<BR></P>
+
+<P>Let me attempt to translate this into different terms. An OLE interface should best be thought of as a table of function pointers and information relating to those function pointers that define the parameters and return values of those functions. For example, methods of an OLE automation object are exposed through a METHODDATA structure, which is defined as follows:
+
+<BR></P>
+
+<PRE>typedef struct FARSTRUCT tagMETHODDATA {
+
+    OLECHAR FAR* szName;
+
+    PARAMDATA FAR* ppdata;
+
+    DISPID dispid;
+
+    UINT iMeth;
+
+    CALLCONV cc;
+
+    UINT cArgs;
+
+    WORD wFlags;
+
+    VARTYPE vtReturn;
+
+} METHODDATA, FAR* LPMETHODDATA;</PRE>
+
+<P>Of particular interest in this structure is the iMeth member. This member is an index into a table of function pointers. In C++ implementations, it is used in conjunction with the virtual function table of a C++ class.
+
+<BR></P>
+
+<P>Virtual function tables are not often on the C++ programmer's mind. While we accept and use the benefits of virtual functions, we rarely think of the specifics of their implementation. Allow me to present a quick reminder as to the whys and hows of virtual function implementation.
+
+<BR></P>
+
+<P>Virtual functions in C++ have been introduced to answer a common problem: namely, how to refer to member functions in a derived class when all you have is a pointer of base class type. By referring to derived functions through a table of function pointers, the compiler ensures that the function appropriate to the object in question is called, even when it lacks type information on the object otherwise.
+
+<BR></P>
+
+<P>A recommendation found in Stroustrup's <I>The Annotated C++ Reference </I><I>Manual</I> suggests a table of function pointers preceding the object data. It is this table of functions that is also utilized through the indexes in the OLE METHODDATA structure.
+
+<BR></P>
+
+<P>Naturally, if you implement OLE in C or another language that does not automatically build virtual function tables, it may become necessary to construct those tables by hand.
+
+<BR></P>
+
+<P>An obvious consequence of this is that all OLE methods, if declared as C++ member functions, must be declared with the virtual keyword. This is accomplished by using a standard set of macros; more about it later in this chapter.
+
+<BR></P>
+
+<P>It is important to realize that a COM interface is not the same as the C++ class, object, or C structure that is used to implement the interface. The COM standard specifies how interfaces are exposed; it does not specify the implementation of methods. In other words, we know through the COM standard how to interpret tables that reference function addresses; however, the standard says nothing about how those functions implement the expected behavior.
+
+<BR></P>
+
+<P>Interfaces are strongly typed. Furthermore, an interface cannot be changed or altered. It is not possible to add methods to, or remove methods from, an interface; doing so creates a new interface. (Of course, COM objects can implement multiple interfaces.)
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Methods and Memory Allocation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Of particular interest when implementing methods is the issue of memory allocation. OLE defines specific rules for cases when it becomes necessary for the caller to pass a pointer to the called method, or for the method to return data in the form of a pointer to the caller.
+
+<BR></P>
+
+<P>When memory is allocated by the caller, it must be freed by the caller.
+
+<BR></P>
+
+<P>When memory is allocated by the method, it must be freed by the caller. The exception is error conditions; in such cases, the method must ensure that memory allocated by it will be reliably freed and furthermore, that all returned pointers are explicitly set to NULL as appropriate.
+
+<BR></P>
+
+<P>When a pointer is passed to the method, the method may free the memory associated with it and reallocate. The caller is responsible for freeing the final value. However, if an error occurs, the method is responsible for releasing any memory allocations it made.
+
+<BR></P>
+
+<P>OLE provides a memory allocation interface (the IMalloc interface) that provides thread-safe memory allocation methods. A pointer to this allocator can be obtained by calling the CoGetMalloc OLE function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Inheritance and Reusing Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Inheritance and reusability are terms with specific meanings for the developer of object-oriented code. These terms imply the capability of deriving your own classes from base classes, replacing methods with customized versions, and adding methods of your own. None of this is available with respect to COM objects. Although it is possible to inherit an interface, that does not mean inheritance of functionality; the interface contains no implementation.
+
+<BR></P>
+
+<P>Instead, COM objects are treated as black boxes. Nothing is known about the details of the implementation of the interface, only the specifications of the interface itself. In other words, what we know is the object's behavior, not how that behavior is implemented.
+
+<BR></P>
+
+<P>OLE offers two specific mechanisms for reusability. Containment/delegation is a mechanism whereas &quot;outer&quot; objects act as clients to &quot;inner&quot; objects acting as servers. Sounds familiar? Think of an OLE drawing embedded in a Word document. The other mechanism, aggregation, enables outer objects to expose interfaces from inner objects, making it appear as if the outer object implemented those interfaces itself.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Interface Identifiers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Interfaces are identified through <I>globally unique identifiers</I>, or GUIDs. GUIDs are 128-bit identifiers that are unique (hopefully) throughout the world. Thus, a programmer assigning a GUID to an interface can reasonably expect that no other interface, no matter who develops it, would conflict with this one with an identical identifier.
+
+<BR></P>
+
+<P>The Visual C++ development system provides two utilities that help you generate globally unique identifiers. Both the command-line utility uuidgen.exe and the Windows utility guidgen.exe can be used for this purpose. The guidgen.exe utility can create identifiers in a form suitable for pasting into source code.
+
+<BR></P>
+
+<P>These programs rely on the OLE API function CoCreateGuid, which in turn uses the RPC function UuidCreate to create an identifier that is globally unique to a high degree of certainty.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Interface Definition Through </B><B><I>IUnknown</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>All COM objects must implement the interface known as IUnknown. This interface defines three essential methods: QueryInterface, AddRef, and Release.
+
+<BR></P>
+
+<P>The AddRef and Release methods are used to manage the lifetime of an object. They are typically implemented as functions that increase or decrease a reference count. When the reference count in Release reaches zero, the object should be destroyed.
+
+<BR></P>
+
+<P>QueryInterface is used to query the object about specific interfaces. This method receives a unique identifier for the interface requested; upon return, it should supply an indirect pointer to the interface, or an error if the requested interface is not supported by the object.
+
+<BR></P>
+
+<P>To add support for the IUnknown interface in a C++ class, you can derive the class from the class IUnknown, which is declared in unknwn.h. The member functions QueryInterface, AddRef, and Release are declared as pure virtual functions; you must supply your own implementation.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>OLE Class Objects and Registration</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>An OLE class object should not be confused with the concept of a class in object-oriented languages. It is merely another COM object, one that specifically implements the IClassFactory interface. This interface is the key to a fundamental OLE capability. Through the IClassFactory interface, applications that were written without any knowledge as to the particular class can still create objects for that class.
+
+<BR></P>
+
+<P>This is accomplished in part by <I>registering</I> the class, and in part by specific methods within the class.
+
+<BR></P>
+
+<P>A class is identified through a CLSID, which is just another GUID. The operating system maintains a database of all registered CLSIDs in the system. What this means in the Windows environment is a set of entries in the Windows Registry. Registration entries are made in the form of a subkey under HKEY_CLASSES_ROOT\CLSID, identified by the CLSID in string form.
+
+<BR></P>
+
+<P>Applications that are aware of a CLSID can use the OLE API functions CoGetClassObject and CoCreateInstance to create a class object, or create an uninitialized object of the kind associated with the CLSID.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Inter-Object Communication</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Once you have obtained a pointer to an interface, you can call the methods in that interface. If the interface is within the same process as the caller, the call is made directly to the functions implementing the methods of the interface, with no intervening operating system code. However, if the interface is outside the boundaries of the current process, an intervening infrastructure becomes essential. (Remember that Win32 processes run in their own private memory space and do not see each others' processes or data.)
+
+<BR></P>
+
+<P>In order for a call to reach a server across process boundaries, it is necessary for a mechanism to exist that packages the call's parameters in the client side, and unpackages them on the server side. The process of packaging parameters for transmission across process boundaries is called <I>marshaling</I>; the process of unpackaging them on the server side is called <I>unmarshaling</I>. OLE provides a useful and efficient marshaling mechanism (standard marshaling) but also enables developers to implement customized marshaling techniques (custom marshaling).
+
+<BR></P>
+
+<P>Marshaling is always performed by a <I>proxy object</I>, an object which, from the client's point of view, looks, feels, and smells like the real thing. The only difference is that the table of function pointers representing the object's methods point to stub implementations instead of actual ones. The stub implementations translate a call on the client side into a call on the server side using a communication mechanism such as Remote Procedure Calls (RPCs). Neither the client nor the server sees any difference between calls made in-process, and calls made across process boundaries.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Monikers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Monikers are COM objects that implement the IMoniker interface. Through this interface, applications can obtain a pointer to an object identified by the moniker. They can do so by calling the IMoniker method BindToObject.
+
+<BR></P>
+
+<P>OLE identifies several types of monikers. File monikers are those that identify objects stored in their own files. Item monikers identify objects contained within another object; for example, an embedded object in an OLE container document or a user selection such as a range of cells in a spreadsheet. Composite monikers are concatenations of monikers; you can think of them, for example, as concatenated partial pathnames that form a complete pathname. Finally, anti-monikers serve the same role in composite monikers as the &quot;..&quot; symbol does in pathnames, effectively removing parts of a composite moniker just like using &quot;..&quot; removes parts of a path from a pathname.
+
+<BR></P>
+
+<P>Monikers are used as a method of naming COM objects. Monikers can be saved so the naming is persistent. A special, rarely used moniker type, the pointer moniker, provides a moniker-like wrapping of interface pointers that can be passed whenever a moniker is expected. However, pointer monikers are not persistent; they cannot be saved.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>OLE and Threads</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE defines a specific approach for thread-safe implementation. This <I>apartment model</I> defines a set of rules applications must follow if they wish to create and access objects from within separate threads of the same process.
+
+<BR></P>
+
+<P>The apartment model groups objects by owner thread. Objects can only live in a single thread (an <I>apartment</I>). Within the same thread, methods can be called directly; however, when calls are made across thread boundaries, the same marshaling technique must be used as with calls across process boundaries. The OLE libraries provide a set of helper functions for this purpose.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=4><B>OLE and Compound Documents</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The most commonly known use of OLE technology is in the form of OLE containers and servers. Together, container and server applications enable users to manipulate, within a single application, data coming from different sources and several applications.
+
+<BR></P>
+
+<P>Compound document technology is based, in addition to the Component Object Model, on OLE Structured Storage and OLE Uniform Data Transfer.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Structured Storage</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE provides two interfaces that closely mimic traditional functions found in most disk-based file systems.
+
+<BR></P>
+
+<P>The IStorage interface provides functionality analogous to that of file systems (directories). Just like disk-based directories, a storage object can contain hierarchical references to other storage objects. It also tracks the locations and sizes of other objects stored within.
+
+<BR></P>
+
+<P>The IStream interface is analogous to a file. As its name implies, a stream object contains data as a contiguous sequence of bytes.
+
+<BR></P>
+
+<P>OLE compound files consist of a root storage object with at least one stream object representing native data. Additional storage objects can represent linked or embedded items. File-based storage is implemented with the help of the IRootStorage interface.
+
+<BR></P>
+
+<P>Objects that can be embedded within container application documents must implement the IPersistStorage interface, which enables the object to be saved in a storage object. Other persistent storage-related interfaces include IPersistStream and IPersistFile.
+
+<BR></P>
+
+<P>Structured storage has many benefits other than providing the means to treat a hierarchical set of objects as a single file. As in the case of real file systems, replacing a single object does not require that the entire compound file be rewritten. Objects can be accessed individually, without having to load the entire file. Structured storage also provides facilities for concurrent access by several processes and for transaction-based processing (commit and reverse functionality).
+
+<BR></P>
+
+<P>The OLE compound file implementation is operating system and file system independent. A compound file created, for example, on a FAT file system under Windows 95 can be reused from within a Windows NT application on an NTFS file system or by a Macintosh application using the Macintosh file system.
+
+<BR></P>
+
+<P>Storage and stream objects are named according to a set of conventions. The root storage object is named as the underlying file, with the same restrictions on naming as applicable for the file system. Names of nested elements that are up to 32 characters in length (including any terminating null characters) must be supported by implementations. Whether a case conversion is applied to names or not is an implementation-defined behavior.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Data Transfer</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Transferring data between applications is accomplished through the IDataObject interface. This interface provides a mechanism for transferring data and also for notifications of changes in the data.
+
+<BR></P>
+
+<P>Data transfer occurs with the help of two structures: FORMATETC and STGMEDIUM. The FORMATETC structure is defined as follows:
+
+<BR></P>
+
+<PRE>typedef struct tagFORMATETC
+
+{
+
+    CLIPFORMAT  cfFormat;
+
+    DVTARGETDEVICE  *ptd;
+
+    DWORD  dwAspect;
+
+    LONG  lindex;
+
+    DWORD  tymed;
+
+}FORMATETC;  *LPFORMATETC;</PRE>
+
+<P>This structure generalizes the idea of clipboard formats, providing, in addition to the cfFormat parameter, parameters that identify the target device for which the data was composed and information on how the data should be rendered.
+
+<BR></P>
+
+<P>The STGMEDIUM structure generalizes the idea of global memory handles used in traditional Windows clipboard operations. This structure is defined as follows:
+
+<BR></P>
+
+<PRE>typedef struct tagSTGMEDIUM
+
+{
+
+    DWORD tymed;
+
+    union {
+
+        HBITMAP hBitmap;
+
+        HMETAFILEPICT hMetafilePict;
+
+        HENHMETAFILE hEnhMetaFile;
+
+        HGLOBAL hGlobal;
+
+        LPOLESTR lpszFileName;
+
+        IStream *pstm;
+
+        IStorage *pstg;
+
+    };
+
+    IUnknown *pUnkForRelease;
+
+}STGMEDIUM;</PRE>
+
+<P>Through these two structures, providers and recipients of data can negotiate the types of data they can send and accept along with the most efficient storage mechanism used in transmitting the data.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Compound Documents</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE compound documents may, in addition to native data, contain two types of items: <I>linked objects</I> and <I>embedded objects</I>.
+
+<BR></P>
+
+<P>Linked objects represent objects that continue to reside where they were originally created (for example, in a file). The compound document contains a reference to this item (a <I>link</I>) and information on how the item should be presented. The container can present the linked item without activating the link&#151;indeed, it can present the item even if the application that created the item is not available on a particular system. Activating the link means invoking the server application for editing and manipulating link data. The use of links results in small container documents and is also beneficial if the linked item is routinely maintained by a user other than the owner of the container document.
+
+<BR></P>
+
+<P>Embedded objects reside physically within the container document. The advantage of using embedded objects is that documents can be manipulated as single files; in contrast, when linked items are used, several files may need to be exchanged between users. Furthermore, links are easily broken if linked items are moved. (Windows currently does not implement a tracking mechanism for linked items.)
+
+<BR></P>
+
+<P>Servers for objects in a container document are implemented either as <I>in-process servers</I> or as <I>local servers</I>. An in-process server is essentially a DLL running in the process space of the container application. The major advantage of an in-process server is performance; methods in such a server are called directly, without the associated OLE overhead. However, local servers offer several benefits also. They can support links (in-process servers cannot); they provide compatibility with OLE1; and they provide the added benefits of running in a separate process space (increased robustness, ability to serve multiple concurrent clients).
+
+<BR></P>
+
+<P>Compound documents also support <I>in-place activation</I>. The in-place activation mechanism enables embedded items to be edited within the container application's window.
+
+<BR></P>
+
+<P>Basic support for compound document containers and servers comes in the form of the IOleClientSite and IOleObject interfaces. Servers also implement the IDataObject and IPersistStorage interface; furthermore, in-process servers implement IViewObject2 and IOleCache2. In-place activation is accomplished via the IOleInPlaceSite, IOleInPlaceObject, IOleInPlaceFrame, and IOleInPlaceActiveObject interfaces.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>Applications of OLE</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Calling OLE Object Linking and Embedding is somewhat of a misnomer. As the discussion to this point should have made obvious, OLE is a set of specifications going far beyond mere object linking and embedding capability. Indeed, compound documents are just one of the many applications of OLE; other uses include OLE automation, OLE drag and drop, and OLE controls, which we review shortly. OLE also finds its way into specialized areas; for example, much of MAPI, the Messaging Application Programming Interface, is based on OLE.
+
+<BR></P>
+
+<P>Most OLE applications require specific registration entries. Entries in the Windows Registry are typically made under the keys HKEY_CLASSES_ROOT\CLSID and HKEY_CLASSES_ROOT\Interface.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>OLE Document Containers and Servers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE containers and servers together implement compound document technology. OLE containers maintain compound documents consisting of linked and embedded items; OLE servers provide such linked and embedded items and the functionality required for their activation.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>OLE Automation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE automation enables an OLE automation server application to expose automation objects through a series of properties and methods. Information about properties and methods is published through the IDispatch interface. By querying this interface, automation clients can obtain information about the properties and methods identified by name.
+
+<BR></P>
+
+<P>OLE automation objects need not be visible objects. For example, an OLE automation server may perform scientific calculations, do spell checking, or supply physical constants identified by name, without ever presenting a visual interface on its own.
+
+<BR></P>
+
+<P>OLE automation clients, also known as automation controllers, are applications that manipulate OLE automation objects. Automation controllers can be generic (for instance a programming environment, such as Visual Basic) or can be developed to control specific automation objects.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>OLE Drag and Drop</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE drag and drop provides a powerful mechanism for implementing drag and drop functionality.
+
+<BR></P>
+
+<P>OLE drag and drop capabilities are implemented through the IDropSource and IDropTarget interfaces and the DoDragDrop function. After receiving the data item that is the object of the drag and drop operation and a pointer to an IDropSource interface, DoDragDrop enters a loop during which it tracks mouse events. If the mouse is over a window, DoDragDrop checks whether that window registered as a valid drop target. DoDragDrop calls various methods of IDropTarget and IDropSource to carry out its operation.
+
+<BR></P>
+
+<P>Drag and drop functionality and clipboard cut and paste are very similar. Often it is beneficial to implement these two areas of functionality together, reusing code as much as possible.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>OLE Controls</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE controls represent a 32-bit replacement technology for Visual Basic controls. OLE controls are OLE objects that provide an extended interface, which implements the behavior of a Windows control. OLE control servers are typically implemented as in-process servers (an OCX file is simply a dynamic link library with a special filename extension).
+
+<BR></P>
+
+<P>OLE control containers are applications that support OLE controls in their windows or dialogs.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>OLE Custom Interfaces</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>For specialized applications, you can also develop your own OLE custom interfaces. Custom interfaces are developed using the tools available in the Microsoft Windows Software Development Kit, including the Microsoft Interface Definition Language (MIDL) compiler.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=4><B>A Simple Example</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Before I began writing this chapter, I did not think that including a meaningful example was possible. While programs with OLE capabilities are simple to write through the MFC Library, use of MFC frequently obscures the underlying technology. Presenting a set of instructions that tell you which buttons to push in the Developer Studio would have helped little in furthering your understanding of the underlying concepts and principles. Pasting a large, complex piece of AppWizard-generated code into my manuscript would have helped even less.
+
+<BR></P>
+
+<P>However, after spending some time thinking on this issue, I realized that it is possible to write an OLE program that is small, compact, yet demonstrates some of the OLE fundamentals. The application I am going to present in the remainder of this chapter is little more than 300 lines in length, is contained within a single file, yet provides all the capabilities of an OLE automation server.
+
+<BR></P>
+
+<P>Why an automation server? In a sense, OLE automation exposes the underlying mechanisms in their purest form. Were I to implement, for example, an OLE container, it would require dealing with formats, visual presentation of the data, management of windows, and other issues. The same applies for OLE drag and drop. The complexity of these applications would have ruled out their utility in demonstrating fundamental concepts in any meaningful manner.
+
+<BR></P>
+
+<P>In contrast, an automation server can be implemented with a minimum of fuss, and its use can be easily demonstrated with a few lines of script in an automation client, such as Visual Basic.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>Functional Description</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>What should the simplest automation server do? The venerable traditions of C and C++ programming dictate the only reasonable answer: Obviously, it should present the string &quot;Hello, World!&quot;
+
+<BR></P>
+
+<P>The automation server that I set out to write does exactly that; it presents a string containing this text in the middle of its window, while also exposing the string as an OLE automation property through a pair of get and put methods.
+
+<BR></P>
+
+<P>Assuming that the server has been properly installed, it can be used from any OLE automation client. To exercise the server from Visual Basic, create a form with a single button, and attach the code shown in Listing 28.1 to the button. This code activates the server and changes the default text of the server to the text specified in the Visual Basic code.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 28.1. Using the HELLO automation server from Visual Basic.</B></LH></UL>
+
+<PRE>Sub Command1_Click ()
+
+Dim hello As object
+
+Set hello = CreateObject(&quot;HELLO.Application&quot;)
+
+hello.text = &quot;Hello from Visual Basic!&quot;
+
+End Sub</PRE>
+
+<P>As this Visual Basic code demonstrates, the Hello application exposes exactly one property that is a property of the application object. This text property determines what text is shown in the middle of the application's window and can be both read from and written to. Figure 28.1 shows the Hello application after its text has been changed from within Visual Basic.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="28vcu01.gif">Figure 28.1. Manipulating the Hello server from Visual </B><B>Basic.</A></B>
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Visual Basic is an excellent tool for testing OLE Automation servers. As this example demonstrates, you can test a server by adding a button to a Visual Basic form and writing a few lines of code in mere seconds. However, if you do not have Visual Basic installed on your system, do not despair; Microsoft has included the program disptest.exe, a simplified version of Visual Basic 3.0, for the express purpose of aiding OLE automation server development.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=3><B>The Hello Server Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Listing 28.2 shows the complete Hello server application. We begin our review of its operations at the WinMain function. But first, a note: For the sake of compactness, this application contains no error checking code. If it works, it works; if it doesn't, strange things are bound to happen.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 28.2. An OLE automation server.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;initguid.h&gt;
+
+#ifndef INITGUID
+
+#define INITGUID
+
+#endif
+
+DEFINE_GUID(CLSID_CHello, 0xfeb8c280, 0xfd2d, 0x11ce, 0x87, 0xc3,
+
+                               0x0, 0x40, 0x33, 0x21, 0xbf, 0xac);
+
+static PARAMDATA rgpDataTEXT = { OLESTR(&quot;TEXT&quot;), VT_BSTR };
+
+enum IMETH_CTEXT
+
+{
+
+    IMETH_SET = 0,
+
+    IMETH_GET,
+
+};
+
+enum IDMEMBER_CTEXT
+
+{
+
+    IDMEMBER_TEXT = DISPID_VALUE
+
+};
+
+static METHODDATA rgmdataCHello[] =
+
+{
+
+    { OLESTR(&quot;TEXT&quot;), &amp;rgpDataTEXT, IDMEMBER_TEXT, IMETH_SET,
+
+      CC_CDECL, 1, DISPATCH_PROPERTYPUT, VT_EMPTY },
+
+    { OLESTR(&quot;TEXT&quot;), NULL, IDMEMBER_TEXT, IMETH_GET,
+
+      CC_CDECL, 0, DISPATCH_PROPERTYGET, VT_BSTR }
+
+};
+
+INTERFACEDATA idataCHello =
+
+{
+
+    rgmdataCHello, 2
+
+};
+
+class CHello;
+
+class CText
+
+{
+
+public:
+
+    STDMETHOD_(void, Set)(BSTR text);
+
+    STDMETHOD_(BSTR, Get)(void);
+
+    CText(CHello *pHello, char *p = NULL);
+
+    ~CText();
+
+    void Paint();
+
+    HWND m_hwnd;
+
+private:
+
+    char *m_text;
+
+    CHello *m_pHello;
+
+};
+
+class CHello : public IUnknown
+
+{
+
+public:
+
+    static CHello *Create(char *p);
+
+    STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
+
+    STDMETHOD_(unsigned long, AddRef)(void);
+
+    STDMETHOD_(unsigned long, Release)(void);
+
+    CHello(char *p = NULL);
+
+    CText m_text;
+
+private:
+
+    IUnknown *m_punkStdDisp;
+
+    unsigned long m_refs;
+
+};
+
+class CHelloCF : public IClassFactory
+
+{
+
+public:
+
+    static IClassFactory *Create();
+
+    STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
+
+    STDMETHOD_(unsigned long, AddRef)(void);
+
+    STDMETHOD_(unsigned long, Release)(void);
+
+    STDMETHOD(CreateInstance)(IUnknown *punkOuter,
+
+                              REFIID riid, void **ppv);
+
+    STDMETHOD(LockServer)(BOOL fLock);
+
+    CHelloCF() { m_refs = 1; }
+
+private:
+
+    unsigned long m_refs;
+
+};
+
+CHello *pHello;
+
+CText::CText(CHello *pHello, char *p)
+
+{
+
+    m_pHello = pHello;
+
+    if (p != NULL)
+
+    {
+
+        m_text = new char[strlen(p) + 1];
+
+        strcpy(m_text, p);
+
+    }
+
+    else m_text = NULL;
+
+    m_hwnd = NULL;
+
+}
+
+CText::~CText()
+
+{
+
+    delete[] m_text;
+
+}
+
+STDMETHODIMP_(void) CText::Set(BSTR p)
+
+{
+
+    char *bf;
+
+    int size;
+
+    size =
+
+     WideCharToMultiByte(CP_ACP, NULL, p, -1, NULL, 0, NULL, NULL);
+
+    bf = new char[size];
+
+    WideCharToMultiByte(CP_ACP, NULL, p, -1, bf, size, NULL, NULL);
+
+    delete[] m_text;
+
+    if (p != NULL)
+
+    {
+
+        m_text = new char[strlen(bf) + 1];
+
+        strcpy(m_text, bf);
+
+    }
+
+    else m_text = NULL;
+
+    if (m_hwnd != NULL) InvalidateRect(m_hwnd, NULL, TRUE);
+
+}
+
+STDMETHODIMP_(BSTR) CText::Get()
+
+{
+
+    static WCHAR *wbf;
+
+    BSTR bbf;
+
+    int size;
+
+    size = MultiByteToWideChar(CP_ACP, 0, m_text, -1, NULL, 0);
+
+    wbf = new WCHAR[size];
+
+    MultiByteToWideChar(CP_ACP, 0, m_text, -1, wbf, size);
+
+    bbf = SysAllocString(wbf);
+
+    delete[] wbf;
+
+    return bbf;
+
+}
+
+void CText::Paint()
+
+{
+
+    HDC hDC;
+
+    PAINTSTRUCT paintStruct;
+
+    RECT clientRect;
+
+    if (m_text != NULL)
+
+    {
+
+        hDC = BeginPaint(m_hwnd, &amp;paintStruct);
+
+        if (hDC != NULL)
+
+        {
+
+            GetClientRect(m_hwnd, &amp;clientRect);
+
+            DPtoLP(hDC, (LPPOINT)&amp;clientRect, 2);
+
+            DrawText(hDC, m_text, -1, &amp;clientRect,
+
+                     DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+            EndPaint(m_hwnd, &amp;paintStruct);
+
+        }
+
+    }
+
+}
+
+CHello *CHello::Create(char *p)
+
+{
+
+    ITypeInfo *pTI;
+
+    IUnknown *pUnk;
+
+    CHello *pHello = new CHello(p);
+
+    pHello-&gt;AddRef();
+
+    CreateDispTypeInfo(&amp;idataCHello, LOCALE_SYSTEM_DEFAULT, &amp;pTI);
+
+    CreateStdDispatch(pHello, &amp;(pHello-&gt;m_text), pTI, &amp;pUnk);
+
+    pTI-&gt;Release();
+
+    pHello-&gt;m_punkStdDisp = pUnk;
+
+    return pHello;
+
+}
+
+STDMETHODIMP CHello::QueryInterface(REFIID riid, void **ppv)
+
+{
+
+    if (IsEqualIID(riid, IID_IUnknown))
+
+        *ppv = this;
+
+    else
+
+    if (IsEqualIID(riid, IID_IDispatch))
+
+        return m_punkStdDisp-&gt;QueryInterface(riid, ppv);
+
+    else
+
+    {
+
+        *ppv = NULL;
+
+        return ResultFromScode(E_NOINTERFACE);
+
+    }
+
+    AddRef();
+
+    return NOERROR;
+
+}
+
+STDMETHODIMP_(unsigned long) CHello::AddRef()
+
+{
+
+    return ++m_refs;
+
+}
+
+STDMETHODIMP_(unsigned long) CHello::Release()
+
+{
+
+    if (--m_refs == 0)
+
+    {
+
+        if(m_punkStdDisp != NULL) m_punkStdDisp-&gt;Release();
+
+        PostQuitMessage(0);
+
+        delete this;
+
+        return 0;
+
+    }
+
+    return m_refs;
+
+}
+
+#pragma warning(disable:4355)
+
+CHello::CHello(char *p) : m_text(this, p)
+
+{
+
+    m_refs = 0;
+
+}
+
+IClassFactory *CHelloCF::Create()
+
+{
+
+    return new CHelloCF;
+
+}
+
+STDMETHODIMP CHelloCF::QueryInterface(REFIID riid, void **ppv)
+
+{
+
+    if(IsEqualIID(riid, IID_IUnknown) ||
+
+       IsEqualIID(riid, IID_IClassFactory))
+
+    {
+
+        AddRef();
+
+        *ppv = this;
+
+        return NOERROR;
+
+    }
+
+    *ppv = NULL;
+
+    return ResultFromScode(E_NOINTERFACE);
+
+}
+
+STDMETHODIMP_(unsigned long) CHelloCF::AddRef()
+
+{
+
+    return m_refs++;
+
+}
+
+STDMETHODIMP_(unsigned long) CHelloCF::Release()
+
+{
+
+    if (--m_refs == 0)
+
+    {
+
+        delete this;
+
+        return 0;
+
+    }
+
+    return m_refs;
+
+}
+
+STDMETHODIMP CHelloCF::CreateInstance(IUnknown *punkOuter,
+
+                                      REFIID riid, void **ppv)
+
+{
+
+    if(punkOuter != NULL)
+
+        return ResultFromScode(CLASS_E_NOAGGREGATION);
+
+    return pHello-&gt;QueryInterface(riid, ppv);
+
+}
+
+STDMETHODIMP CHelloCF::LockServer(BOOL fLock)
+
+{
+
+    return NOERROR;
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case WM_PAINT:
+
+            pHello-&gt;m_text.Paint();
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                        LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    IClassFactory *pHelloCF;
+
+    unsigned long dwHelloCF = 0;
+
+    unsigned long dwRegHello = 0;
+
+    OleInitialize(NULL);
+
+    pHello = CHello::Create(&quot;Hello, World!&quot;);
+
+    pHelloCF = CHelloCF::Create();
+
+    CoRegisterClassObject(CLSID_CHello, pHelloCF,
+
+        CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE, &amp;dwHelloCF);
+
+    RegisterActiveObject(pHello, CLSID_CHello, NULL, &amp;dwRegHello);
+
+    pHelloCF-&gt;Release();
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;HELLO&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;HELLO&quot;, &quot;HELLO&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    pHello-&gt;m_text.m_hwnd = hwnd;
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    RevokeActiveObject(dwRegHello, NULL);
+
+    CoRevokeClassObject(dwHelloCF);
+
+    pHello-&gt;Release();
+
+    OleUninitialize();
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>WinMain begins with a call to OleInitialize. Calling this function is necessary to initialize the OLE libraries.
+
+<BR></P>
+
+<P>Next, two objects are created; an object of type CHello and an object of type CHelloCF. The first represents the interfaces of the application object; the send provides an IClassFactory interface. More about this in a moment.
+
+<BR></P>
+
+<P>The availability of the class object is published through the call to CoRegisterClassObject. The active object that the class represents is registered through the call to RegisterActiveObject. Subsequently, the class object can be released.
+
+<BR></P>
+
+<P>The rest of WinMain simply implements a plain window in which the application's text will be displayed and a standard message loop. When the application is about to terminate, calls are made to revoke the OLE registrations, the application object is destroyed, and the OLE library is uninitialized.
+
+<BR></P>
+
+<P>Before we start exploring the CHello and CHelloCF classes, we should take a brief peek at the WndProc function. This function processes two messages. When a WM_PAINT message is received, the content of the application's window is refreshed with data taken from the application's one and only CHello object. When a WM_DESTROY message is received, the application terminates.
+
+<BR></P>
+
+<P>At the heart of the OLE automation implementation are the classes CHello and CHelloCF. Both classes implement the IUnknown interface. The implementations of the AddRef and Release functions are trivial and require little explanation. In the implementations of QueryInterface, CHello responds to requests for IUnknown and IDispatch; CHelloCF responds to requests for IUnknown and IClassFactory.
+
+<BR></P>
+
+<P>CHelloCF provides a simple implementation of CreateInstance, in which it returns a pointer to the appropriate interface provided by CHello.
+
+<BR></P>
+
+<P>Both CHello and CHelloCF objects are created through a static member function named Create. The creation of CHelloCF is trivial. However, in CHello::Create some odd things are taking place. In order to provide an IDispatch interface, CHello relies on a standard implementation; this implementation is created through the calls to CreateDispTypeInfo and CreateStdDispatch. The information used by the standard implementation is encoded in the form of structures at the top of the file.
+
+<BR></P>
+
+<P>The actual implementations of the get and set methods that implement the text property are contained in a third class, CText. The first two member functions of this class, Get and Set, retrieve the value of its m_text member variable and set the value of that variable, respectively. An additional member function, Paint, is used to display the text within the window identified by the m_hwnd member variable. The Set member function causes this window to be redrawn (thus ensuring that the modified text is displayed) by calling InvalidateRect.
+
+<BR></P>
+
+<P>Notice how the CText::Get and CText::Set functions handle strings; in particular, the conversion between OLE strings and plain ASCII strings that can be displayed by the application. Also notice how, in accordance with memory allocation rules, CText::Set does not free the memory allocated for its BSTR parameter. Nor does CText::Get free the memory it allocates for its return value; that will be freed by the caller (the OLE library).
+
+<BR></P>
+
+<P>The CLSID for this server has been obtained using the guidgen.exe application.
+
+<BR></P>
+
+<P>Finally, here comes the horror of horrors: This application can simply be compiled from the command line! (If you abhor so-called examples in which the make file alone exceeds the length of this simple program here, you are not alone.) To compile this program, type the following:
+
+<BR></P>
+
+<PRE>cl hello.cpp user32.lib gdi32.lib ole32.lib oleaut32.lib uuid.lib</PRE>
+
+<P>Of course, if you plan to experiment with OLE using this application as a basis and wish to use the debugging features of Developer Studio, you can easily create a Visual C++ project file for this program.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=3><B>Registering and Running the Server</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Although as soon as it is compiled, the Hello server can be run stand-alone, in order for it to work as an automation server, entries must be made in the Registry. (Well, you didn't really expect a 300-line example program to do that for you, did you?)
+
+<BR></P>
+
+<P>In the Registry, the following entries must be made:
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 28.3: Registry entries.</B></LH></UL>
+
+<PRE>HKEY_CLASSES_ROOT\
+
+  HELLO.Application = HELLO Application
+
+HKEY_CLASSES_ROOT\
+
+  HELLO.Application\CLSID = {FEB8C280-FD2D-11ce-87C3-00403321BFAC}
+
+HKEY_CLASSES_ROOT\
+
+  CLSID\{FEB8C280-FD2D-11ce-87C3-00403321BFAC} = HELLO Application
+
+HKEY_CLASSES_ROOT\
+
+  CLSID\{FEB8C280-FD2D-11ce-87C3-00403321BFAC}\LocalServer32 =
+
+    HELLO.EXE /Automation
+
+HKEY_CLASSES_ROOT\
+
+  CLSID\{FEB8C280-FD2D-11ce-87C3-00403321BFAC}\ProgId =
+
+    HELLO.Application</PRE>
+
+<P>Note that unless the location of the Hello executable is in your path, it may be necessary to change the LocalServer32 key to reflect the complete pathname of the executable.
+
+<BR></P>
+
+<P>Adding these entries to the Registry manually can be error-prone. To avoid potentially corrupting the Registry, you can add the entries using the Registry Editor's import feature. Copy the entries in Listing 28.3 into an ASCII file (for example, hello.reg). Note that the entries cannot be broken up as they appear here on the printed page; each of the five entries must be presented in a single line. This file can then be added to the Registry using the import feature of either the Windows 95 or the Windows NT version of the Registry Editor.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I27" NAME="I27">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The complex technology behind OLE is at the core of many modern Windows applications.
+
+<BR></P>
+
+<P>At the heart of OLE is the Component Object Model (COM). COM objects are accessed through a set of interfaces, each consisting of a set of methods. The standard defines the interface, but does not define the implementation of the interface, which is completely at the discretion of the programmer providing that implementation (to the point of choosing a programming language for the implementation).
+
+<BR></P>
+
+<P>COM objects are black boxes. Although they represent reusable components, reusability is not possible in the fashion of object-oriented languages. COM objects can contain other COM objects and delegate the implementation of specific interfaces to other COM objects; however, you cannot derive an object from an existing object in the fashion of deriving a class from a base class in C++.
+
+<BR></P>
+
+<P>COM objects are identified through GUIDs, globally unique interface identifiers. GUIDs are 128-byte numbers that are statistically unique; programmers need not worry about anyone else using the same GUID that has been generated through tools or functions provided for this purpose.
+
+<BR></P>
+
+<P>All COM objects implement a specific interface, IUnknown. Through this interface, information about other interfaces a COM object may support can be obtained.
+
+<BR></P>
+
+<P>Through the IClassFactory interface, implemented by COM class objects, applications that were written with no prior knowledge of an object can create such an object. Class objects are registered in a system-wide registration database (in Windows, the Registry) through their CLSID, which is just another GUID.
+
+<BR></P>
+
+<P>Objects communicate with each other in one of two ways. If the method called is within the process space of the caller, the function implementing that method is called directly, with no overhead. However, if the method is outside the process space of the calling process, the call is made through an intervening infrastructure. This interface makes use of proxy objects and the techniques of marshaling and unmarshaling, which is used to render the parameters of a method for transmission and unpackaging those parameters at the receiving end.
+
+<BR></P>
+
+<P>COM objects can also be identified by name through monikers. Various types of monikers can be used to identify objects stored in files, or objects stored within other objects. Monikers can also be concatenated and used in conjunction with antimonikers to create new monikers.
+
+<BR></P>
+
+<P>Using OLE for linking and embedding objects is based on the OLE compound document technology. This technology relies, in addition to COM, on OLE Structured Storage and OLE Uniform Data Transfer. The former provides a means where compound data can be stored in a single file in a hierarchical form reminiscent of directories and files in a file system. The latter represents a mechanism for communicating objects between applications.
+
+<BR></P>
+
+<P>Other uses of OLE include OLE automation, OLE controls, and OLE drag and drop. Specialized applications can also implement custom OLE interfaces using the Microsoft Windows Software Development Kit.</P>
+
+<P><A HREF="p04vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu29fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

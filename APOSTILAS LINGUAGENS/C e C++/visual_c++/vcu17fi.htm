@@ -1,0 +1,1190 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu17fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="p03vcufi.htm">
+
+<LINK REL="Previous" HREF="vcu16fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu16fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p03vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">17 &#151; Exception Handling</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Exception Handling in C and C++</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">C Exceptions</A></LI>
+
+<LI>
+
+<A HREF="#I5">C Termination Handling</A></LI>
+
+<LI>
+
+<A HREF="#I6">C++ Exception Handling</A></LI>
+
+<LI>
+
+<A HREF="#I7">Termination Handling in C++</A></LI>
+
+<LI>
+
+<A HREF="#I8">C++ Exception Classes</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">Mixing C and C++ Exceptions</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I10">The Ellipsis Handler</A></LI>
+
+<LI>
+
+<A HREF="#I11">Translating C Exceptions</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>17 &#151; Exception Handling</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The Win32 API supports <I>structured exception handling</I>. Through this mechanism, applications can handle various hardware- and software-related conditions. Structured exception handling is not to be confused with the concept of exceptions in the C++ language, which is a feature of that language. The Win32 exception handling mechanism is not dependent on its implementation in a specific language. To avoid confusion, I decided to follow the conventions used in Microsoft documentation and use the term &quot;C exception&quot; to refer to Win32 structured exceptions, and &quot;C++ exception&quot; to refer to the typed exception handling mechanism of the C++ language.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Exception Handling in C and C++</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Microsoft provides a set of extensions to the C language, which enable C programs to handle Win32 structured exceptions. This exception handling mechanism is markedly different from the typed exceptions in the C++ language. This section offers a review of both mechanisms in the context of exceptions in the Win32 environment.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>C Exceptions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>What is, indeed, an exception? How do exceptions work? In order to understand the exception handling mechanism, first take a look at the program shown in Listing 17.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.1. A program that generates an exception.</B></LH></UL>
+
+<PRE>void main(void)
+
+{
+
+    int x, y;
+
+    x = 5;
+
+    y = 0;
+
+    x = x / y;
+
+}</PRE>
+
+<P>Needless to say, an integer division by zero is likely to cause a program to terminate abnormally. If you compile the above program and run it under Windows 95, it generates the dialog shown in Figure 17.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="17vcu01.gif">Figure 17.1. Division by zero error.</A></B>
+
+<BR></P>
+
+<P>What exactly happened here? Obviously, when you attempt to divide by zero, the processor will generate an error condition (the actual mechanism is hardware dependent and not of our concern). This error condition is detected by the operating system, which looks for an <I>exception handler</I> for the specific error condition. As no such handler was detected, the default exception handling mechanism took over, displaying the dialog.
+
+<BR></P>
+
+<P>Using the C exception handling mechanism, it is possible for us to <I>catch</I> this exception and handle the divide by zero condition gracefully. Consider the program shown in Listing 17.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.2. Handling the divide by zero exception.</B></LH></UL>
+
+<PRE>#include &quot;windows.h&quot;
+
+void main(void)
+
+{
+
+    int x, y;
+
+    __try
+
+    {
+
+        x = 5;
+
+        y = 0;
+
+        x = x / y;
+
+    }
+
+    __except (GetExceptionCode() == EXCEPTION_INT_DIVIDE_BY_ZERO ?
+
+              EXCEPTION_EXECUTE_HANDLER :
+
+              EXCEPTION_CONTINUE_SEARCH)
+
+    {
+
+        printf(&quot;Divide by zero error.\n&quot;);
+
+    }
+
+}</PRE>
+
+<P>Running this program no longer produces the dialog shown in Figure 17.1; instead, the message &quot;Divide by zero error.&quot; is printed and the program terminates gracefully.
+
+<BR></P>
+
+<P>The block of statements following the __try instruction is often called a <I>guard block</I>. This block of statements is executed unconditionally. When an exception is raised within the guard block, the expression following the __except statement (often called the <I>filter expression</I>) is evaluated. This expression should be an integer expression yielding one of the following values:
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 17.1. Filter expression values.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Symbolic constant</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Value</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_CONTINUE_EXECUTION</P>
+
+<TD>
+
+<P>-1</P>
+
+<TD>
+
+<P>Continue execution at the location where exception was raised</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_CONTINUE_SEARCH</P>
+
+<TD>
+
+<P>0</P>
+
+<TD>
+
+<P>Pass control to next exception handler</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_EXECUTE_HANDLER</P>
+
+<TD>
+
+<P>1</P>
+
+<TD>
+
+<P>Execute exception handler</P></TABLE>
+
+<P>If the filter expression's value is -1 (EXCEPTION_CONTINUE_EXECUTION), execution continues at the location where the exception was raised. That is, <I>at</I> the location, not <I>after</I><I>&#151;</I><I>w</I>hich means that the offending piece of code may get executed again. Whether it actually does get executed or not depends on the type of the exception. For example, in the case of an integer division by zero, it does; in the case of a floating-point division by zero, it does not. In any case, care should be taken to avoid creating an infinite loop by returning control to the point where the error occurs without eliminating the conditions which caused the exception in the first place.
+
+<BR></P>
+
+<P>In the other two cases, the first thing that happens is that the guard block goes out of scope. Any function calls that might have been interrupted by the exception are terminated and the stack is unwound.
+
+<BR></P>
+
+<P>If the filter expression evaluates to 1 (EXCEPTION_EXECUTE_HANDLER), control is transferred to the statement block following the __except statement.
+
+<BR></P>
+
+<P>The third filter value, 0 (EXCEPTION_CONTINUE_SEARCH), hints at the possibility of nested exceptions. Indeed, consider the program shown in Listing 17.3. In this program, two exceptions are generated, one for a floating-point division by zero, one for an integer division by zero. The two exceptions are handled very differently.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.3. Nesting exception handlers.</B></LH></UL>
+
+<PRE>#include &lt;stdio.h&gt;
+
+#include &lt;float.h&gt;
+
+#include &lt;windows.h&gt;
+
+unsigned int divzerofilter(unsigned int code, int *j)
+
+{
+
+    printf(&quot;Inside divzerofilter\n&quot;);
+
+    if (code == EXCEPTION_INT_DIVIDE_BY_ZERO)
+
+    {
+
+        *j = 2;
+
+        printf(&quot;Handling an integer division error.\n&quot;);
+
+        return EXCEPTION_CONTINUE_EXECUTION;
+
+    }
+
+    else return EXCEPTION_CONTINUE_SEARCH;
+
+}
+
+void divzero()
+
+{
+
+    double x, y;
+
+    int i, j;
+
+    __try
+
+    {
+
+        x = 10.0;
+
+        y = 0.0;
+
+        i = 10;
+
+        j = 0;
+
+        i = i / j;
+
+        printf(&quot;i = %d\n&quot;, i);
+
+        x = x / y;
+
+        printf(&quot;x = %f\n&quot;, x);
+
+    }
+
+    __except (divzerofilter(GetExceptionCode(), &amp;j))
+
+    {
+
+    }
+
+}
+
+void main(void)
+
+{
+
+    _controlfp(_EM_OVERFLOW, _MCW_EM);
+
+    __try
+
+    {
+
+        divzero();
+
+    }
+
+    __except (GetExceptionCode() == EXCEPTION_FLT_DIVIDE_BY_ZERO ?
+
+              EXCEPTION_EXECUTE_HANDLER :
+
+              EXCEPTION_CONTINUE_SEARCH)
+
+    {
+
+        printf(&quot;Floating point divide by zero error.\n&quot;);
+
+    }
+
+}</PRE>
+
+<P>When an exception is raised inside the divzero function, the filter expression is evaluated. This results in a call to the divzerofilter function. The function checks if the exception was an integer division by zero exception; if so, it corrects the value of the divisor (j) and returns the EXCEPTION_CONTINUE_EXECUTION value, which causes the exception handling mechanism to return control to the point where the exception was raised. In the case of any other exceptions, divzerofilter returns EXCEPTION_CONTINUE_SEARCH; this causes the exception handling mechanism to seek another exception handler.
+
+<BR></P>
+
+<P>This other exception handler has been installed in the main function. This handler handles floating-point division by zero exceptions. Instead of returning to the point where execution was interrupted, it simply prints an error message.
+
+<BR></P>
+
+<P>Running this program produces the following output:
+
+<BR></P>
+
+<PRE>Inside divzerofilter
+
+Handling an integer division error.
+
+i = 5
+
+Inside divzerofilter
+
+Floating point divide by zero error.</PRE>
+
+<P>As you can see, both times an exception is raised, the exception filter installed in the function divzero is activated. However, in the case of the floating-point division, the exception remains unhandled; therefore, the exception is propagated to the next level, the exception handler installed in the main function.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> To handle floating-point exceptions, it was necessary to call the _controlfp function. This function can be used to enable floating-point exceptions. By default, floating-point exceptions on the Intel architecture are disabled; instead, the floating-point library generates IEEE-compatible infinite results.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>A discussion of C exception handling would not be complete without a list of some of the commonly occurring C exceptions. These exceptions are shown in Table 17.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 17.1. Filter expression values.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Symbolic constant</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_ACCESS_VIOLATION</P>
+
+<TD>
+
+<P>Reference to invalid memory location</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_PRIV_INSTRUCTION</P>
+
+<TD>
+
+<P>Attempt to execute privileged instruction</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_STACK_OVERFLOW</P>
+
+<TD>
+
+<P>Stack overflow</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_FLT_DIVIDE_BY_ZERO</P>
+
+<TD>
+
+<P>Floating-point division</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_FLT_OVERFLOW</P>
+
+<TD>
+
+<P>Floating point result too large</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_FLT_UNDERFLOW</P>
+
+<TD>
+
+<P>Floating point result too small</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_INT_DIVIDE_BY_ZERO</P>
+
+<TD>
+
+<P>Integer division</P>
+
+<TR>
+
+<TD>
+
+<P>EXCEPTION_INT_OVERFLOW</P>
+
+<TD>
+
+<P>Integer result too large</P></TABLE>
+
+<P>In addition to system-generated exceptions, applications can raise software exceptions using the RaiseException function. Windows reserves exception values with bit 29 set for user-defined software exceptions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>C Termination Handling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Closely related to the handling of C exceptions is the topic of C termination handling. To better understand the problem of which termination handling provides a solution, consider the program shown in Listing 17.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.4. Resource allocation problem.</B></LH></UL>
+
+<PRE>#include &lt;stdio.h&gt;
+
+#include &lt;windows.h&gt;
+
+void badmem()
+
+{
+
+    char *p;
+
+    printf(&quot;allocating p\n&quot;);
+
+    p = malloc(1000);
+
+    printf(&quot;p[1000000] = %c\n&quot;, p[1000000]);
+
+    printf(&quot;freeing p\n&quot;);
+
+    free(p);
+
+}
+
+void main(void)
+
+{
+
+    __try
+
+    {
+
+        badmem();
+
+    }
+
+    __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+
+              EXCEPTION_EXECUTE_HANDLER :
+
+              EXCEPTION_CONTINUE_SEARCH)
+
+    {
+
+        printf(&quot;An access violation has occurred.&quot;);
+
+    }
+
+}</PRE>
+
+<P>In this program, the function badmem allocates the p character array. However, its execution is interrupted when it refers to an invalid array element. Because of this, the function never has a chance to free up the allocated array, as demonstrated by its output:
+
+<BR></P>
+
+<PRE>allocating p
+
+An access violation has occurred.</PRE>
+
+<P>This problem can be solved by installing a termination handler in the badmem function, as shown in Listing 17.5.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.5. A termination handler.</B></LH></UL>
+
+<PRE>#include &lt;stdio.h&gt;
+
+#include &lt;windows.h&gt;
+
+void badmem()
+
+{
+
+    char *p;
+
+    __try
+
+    {
+
+        printf(&quot;allocating p\n&quot;);
+
+        p = malloc(1000);
+
+        printf(&quot;p[1000000] = %c\n&quot;, p[1000000]);
+
+    }
+
+    __finally
+
+    {
+
+        printf(&quot;freeing p\n&quot;);
+
+        free(p);
+
+    }
+
+}
+
+void main(void)
+
+{
+
+    __try
+
+    {
+
+        badmem();
+
+    }
+
+    __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+
+              EXCEPTION_EXECUTE_HANDLER :
+
+              EXCEPTION_CONTINUE_SEARCH)
+
+    {
+
+        printf(&quot;An access violation has occurred.&quot;);
+
+    }
+
+}</PRE>
+
+<P>Running this program produces the desired result:
+
+<BR></P>
+
+<PRE>allocating p
+
+freeing p
+
+An access violation has occurred.</PRE>
+
+<P>As you can see, the instructions in the badmem function are now enclosed in a __try block, which is now followed by the __finally keyword. The __finally keyword is special in that the instruction block that follows it is <I>always</I> executed, no matter under what circumstances the function terminates. So when badmem goes out of scope due to the exception, the instructions in the __finally block are given a chance to clean up any resources that might have been allocated within this function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>C++ Exception Handling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Win32 exception handling mechanism uses the GetExceptionCode function to determine the nature of the exception. In contrast, C++ exception handling is type-based; the nature of the exception is determined by its type.
+
+<BR></P>
+
+<P>Most examples that demonstrate C++ exception handling do so in the context of a class declaration. This is not necessary, and in my opinion often hides the simplicity of C++ exception handling. Consider the simple example in Listing 17.6. (When you compile this example or any other program that uses C++ exceptions, do not forget to add the -GX switch to the cl command line.)
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.6. C++ Exception handling.</B></LH></UL>
+
+<PRE>#include &lt;iostream.h&gt;
+
+int divide(int x, int y)
+
+{
+
+    if (y == 0) throw int();
+
+    return x / y;
+
+}
+
+void main(void)
+
+{
+
+    int x, y;
+
+    try
+
+    {
+
+        x = 5;
+
+        y = 0;
+
+        x = divide(x, y);
+
+    }
+
+    catch (int)
+
+    {
+
+        cout &lt;&lt; &quot;A division by zero was attempted.\n&quot;;
+
+    }
+
+}</PRE>
+
+<P>In this example, the function divide raises an exception of type int when a division by zero is attempted. This exception is caught by the exception handler in main.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Termination Handling in C++</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>C++ exceptions can also be used for termination handling. For termination handling, a C++ program can wrap a block of code using a &quot;catchall&quot; exception handler, and perform resource cleanup before propagating all exceptions to a higher level handler by using throw. Consider the example in Listing 17.7, which is a C++ variant of the program shown in Listing 17.5.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.7. Termination handling with C++ exceptions.</B></LH></UL>
+
+<PRE>#include &lt;stdio.h&gt;
+
+#include &lt;windows.h&gt;
+
+void badmem()
+
+{
+
+    char *p;
+
+    try
+
+    {
+
+        printf(&quot;allocating p\n&quot;);
+
+        p = (char *)malloc(1000);
+
+        printf(&quot;p[1000000] = %c\n&quot;, p[1000000]);
+
+    }
+
+    catch(...)
+
+    {
+
+        printf(&quot;freeing p\n&quot;);
+
+        free(p);
+
+        throw;
+
+    }
+
+}
+
+void main(void)
+
+{
+
+    try
+
+    {
+
+        badmem();
+
+    }
+
+    catch(...)
+
+    {
+
+        printf(&quot;An exception was raised.&quot;);
+
+    }
+
+}</PRE>
+
+<P>Running this program produces the following output:
+
+<BR></P>
+
+<PRE>allocating p
+
+freeing p
+
+An exception was raised.</PRE>
+
+<P>The exception handler in the function badmem plays the role of the __finally block in the C exception handling mechanism.
+
+<BR></P>
+
+<P>Although these examples demonstrate the power of C++ exception handling with C-style code, the use of classes in exception handling has some obvious advantages. For example, when the exception is thrown, an object of the type of the exception is actually created; thus it is possible to provide additional information about the exception in the form of member variables. Also, appropriate use of constructors and destructors can replace the relatively inelegant resource cleanup mechanism shown in Listing 17.7.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>C++ Exception Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Visual C++ Version 4.0 provides an implementation of the exception class hierarchy, as put forward in the draft ANSI C++ standard. This hierarchy consists of the exception class and derived classes representing various conditions, such as run-time errors. The exception class and derived classes are declared in the header file stdexcpt.h. Because these classes are based on an evolving draft standard, it is possible that they will change with future releases of Visual C++.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>Mixing C and C++ Exceptions</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>While the C compiler does not support C++ exceptions, the C++ compiler supports both C++ exceptions and the Microsoft extensions for C exceptions. Sometimes it is necessary to mix these two in order to use the C++ exception syntax while catching Win32 structured exceptions. There are basically two methods for this: You can use an ellipsis handler, or you can use a translator function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The Ellipsis Handler</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the termination handling example shown in Listing 17.7, we already made use of the <I>ellipsis handler</I>. This catchall handler, which has the form
+
+<BR></P>
+
+<PRE>catch(...)
+
+{
+
+}</PRE>
+
+<P>can be used to catch exceptions of any type, including C exceptions. This offers a simple exception handling mechanism like the one used in Listing 17.7. Unfortunately, the ellipsis handler does not have any information about the actual type of the structured exception.
+
+<BR></P>
+
+<P>This should be easy, you say. (Well, I certainly said that when I first read about the differences between C and C++ exception handling.) Why not just catch an exception of type unsigned int (after all, the Microsoft Visual C++ documentation states that this is the type of C exceptions) and examine its value? Consider the program in Listing 17.8:
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.8. Failed attempt to catch C exceptions as C++ exceptions of </B><B>type </B><B>unsigned int.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;iostream.h&gt;
+
+void main(void)
+
+{
+
+    int x, y;
+
+    try
+
+    {
+
+        x = 5;
+
+        y = 0;
+
+        x = x / y;
+
+    }
+
+    catch (unsigned int e)
+
+    {
+
+        if (e == EXCEPTION_INT_DIVIDE_BY_ZERO)
+
+        {
+
+            cout &lt;&lt; &quot;Division by zero.\n&quot;;
+
+        }
+
+        else throw;
+
+    }
+
+}</PRE>
+
+<P>Alas, this elegant solution is no solution at all. C exceptions can only be caught by an ellipsis handler. But not all is lost just yet; could we not simply use the GetExceptionCode function in the C++ catch block and obtain the structured exception type? For example, consider the program in Listing 17.9.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.9. C++ exception handlers cannot call </B><B>GetExceptionCode.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;iostream.h&gt;
+
+void main(void)
+
+{
+
+    int x, y;
+
+    try
+
+    {
+
+        x = 5;
+
+        y = 0;
+
+        x = x / y;
+
+    }
+
+    catch (...)
+
+    {
+
+        // The following line results in a compiler error
+
+        if (GetExceptionCode() == EXCEPTION_INT_DIVIDE_BY_ZERO)
+
+        {
+
+            cout &lt;&lt; &quot;Division by zero.\n&quot;;
+
+        }
+
+        else throw;
+
+    }
+
+}</PRE>
+
+<P>As they say, nice try but no cigar. The function GetExceptionCode is implemented as an intrinsic function and can only be called as part of the filter expression in a C __except statement. It seems that some other mechanism is necessary to differentiate between C exceptions in C++ code.
+
+<BR></P>
+
+<P>There is yet another possible solution. We could create a C exception handler to catch all C exceptions and throw a C++ exception of type unsigned int with the value of the C exception code. An example program for this is shown in Listing 17.10.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.10. Raising C++ exceptions in a C exception filter.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;iostream.h&gt;
+
+int divide(int x, int y)
+
+{
+
+    try
+
+    {
+
+        x = x / y;
+
+    }
+
+    catch(unsigned int e)
+
+    {
+
+        cout &lt;&lt; &quot;Inside C++ exception.\n&quot;;
+
+        if (e == EXCEPTION_INT_DIVIDE_BY_ZERO)
+
+        {
+
+            cout &lt;&lt; &quot;Division by zero.\n&quot;;
+
+        }
+
+        else throw;
+
+    }
+
+    return x;
+
+}
+
+unsigned int catchall(unsigned int code)
+
+{
+
+    cout &lt;&lt; &quot;inside catchall: &quot; &lt;&lt; code &lt;&lt; '\n';
+
+    if (code != 0xE06D7363) throw (unsigned int)code;
+
+    return EXCEPTION_CONTINUE_SEARCH;
+
+}
+
+void main(void)
+
+{
+
+    int x, y;
+
+    __try
+
+    {
+
+        x = 10;
+
+        y = 0;
+
+        x = divide(x, y);
+
+    }
+
+    __except(catchall(GetExceptionCode())) {}
+
+}</PRE>
+
+<P>This approach has but one problem. When the catchall function throws a C++ exception that is <I>not</I> handled by a C++ exception handler, it is treated as yet another C exception, resulting in another call to catchall. This would go on forever, were it not for the test for the value 0xE06D7363, which appears to be a magic value associated with C++ exceptions. But we are getting into seriously undocumented stuff here; there has to be another solution!
+
+<BR></P>
+
+<P>At this point, you might ask the obvious question: if C++ programs can use the Microsoft C exception handling mechanism, why go through this dance at all? Why not just use __try and __except and get it over with? Indeed, this is a valid solution; however, to improve code portability, you may want to use the C++ exception handling mechanism when possible, and localize and dependence on Microsoft extensions as much as possible.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Translating C Exceptions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Fortunately, the Win32 API provides a function that allows a much more elegant solution for translating a C exception into a C++ exception. The name of the function is _set_se_translator. Using this function, one can finally obtain an elegant, satisfactory solution for translating C exceptions to C++ exceptions. An example for this is shown in Listing 17.11.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 17.11. Using </B><B>_set_se_translator</B><B> to translate C exceptions.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;iostream.h&gt;
+
+#include &lt;eh.h&gt;
+
+int divide(int x, int y)
+
+{
+
+    try
+
+    {
+
+        x = x / y;
+
+    }
+
+    catch(unsigned int e)
+
+    {
+
+        cout &lt;&lt; &quot;Inside C++ exception.\n&quot;;
+
+        if (e == EXCEPTION_INT_DIVIDE_BY_ZERO)
+
+        {
+
+            cout &lt;&lt; &quot;Division by zero.\n&quot;;
+
+        }
+
+        else throw;
+
+    }
+
+    return x;
+
+}
+
+void se_translator(unsigned int e, _EXCEPTION_POINTERS* p)
+
+{
+
+    throw (unsigned int) ;
+
+}
+
+void main(void)
+
+{
+
+    int x, y;
+
+    _set_se_translator(se_translator);
+
+    x = 10;
+
+    y = 0;
+
+    x = divide(x, y);
+
+}</PRE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Win32 programmers using the C++ language must face two separate, only partially compatible exception handling mechanisms. Win32-structured exceptions are often generated by the operating system. These exceptions are not dependent on any language-specific implementation and are used to communicate a condition to the application's exception handler using a 32-bit unsigned value.
+
+<BR></P>
+
+<P>In contrast, C++ exceptions are typed expressions; the nature of the exception is often derived from the type of the object that is used when the expression is thrown.
+
+<BR></P>
+
+<P>C programs can use the __try and __except keywords (which are Microsoft extensions to the C language) to handle structured exceptions. It is possible for exception handlers to be nested. The type of the expression is obtained by calling the GetExceptionCode function in the __except filter expression. Depending on the value of the filter expression, an exception may be handled by the exception handler, execution may continue at the point where the exception occurred, or control can be transferred to the next exception handler. An unhandled exception causes an application error.
+
+<BR></P>
+
+<P>C programs can also use termination handlers. These handlers, installed using the __try and __finally keywords, can ensure that a function which is abnormally terminated by an exception is given a chance to perform cleanup.
+
+<BR></P>
+
+<P>C++ programs use the C++ try and catch keywords to handle exceptions. The type of the exception is declared following the catch keyword. The catch keyword with an ellipsis declaration (...) can be used to catch all exceptions; one possible use of this construct is to act as a termination handler, analogous to the __finally block in C exception handling.
+
+<BR></P>
+
+<P>As C++ programs can also use C exceptions, it is possible to mix the two exception handling mechanisms. C++ programs can catch C exceptions using an ellipsis handler. Unfortunately, this method does not allow C++ programs to obtain the exception code. However, C++ programs can install an exception translator function, which can be used to translate C structured exceptions into C++ typed exceptions.</P>
+
+<P><A HREF="vcu16fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p03vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

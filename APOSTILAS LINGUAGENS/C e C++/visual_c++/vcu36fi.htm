@@ -1,0 +1,1934 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu36fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu37fi.htm">
+
+<LINK REL="Previous" HREF="vcu35fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu35fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu37fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">36 &#151; OLE Control Development</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Creating a Skeleton Control with AppWizard</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Creating the Skeleton Control</A></LI>
+
+<LI>
+
+<A HREF="#I5">Custom Control Code Overview</A></LI></UL>
+
+<LI>
+
+<A HREF="#I6">Customizing the Control</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I7">Changing the Control's Bitmap</A></LI>
+
+<LI>
+
+<A HREF="#I8">Adding Properties</A></LI>
+
+<LI>
+
+<A HREF="#I9">Making a Property Persistent</A></LI>
+
+<LI>
+
+<A HREF="#I10">Adding Methods</A></LI>
+
+<LI>
+
+<A HREF="#I11">Adding Events</A></LI>
+
+<LI>
+
+<A HREF="#I12">Drawing the Control</A></LI></UL>
+
+<LI>
+
+<A HREF="#I13">Adding a Property Page Interface</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I14">Editing the Property Page</A></LI>
+
+<LI>
+
+<A HREF="#I15">Connecting the Property Page with Control Properties</A></LI>
+
+<LI>
+
+<A HREF="#I16">Additional Property Pages</A></LI></UL>
+
+<LI>
+
+<A HREF="#I17">Testing, Distributing and Using a Custom Control</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I18">Testing an OLE Custom Control</A></LI>
+
+<LI>
+
+<A HREF="#I19">Custom Control Distribution</A></LI>
+
+<LI>
+
+<A HREF="#I20">Using a Custom Control in Applications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I21">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>36 &#151; OLE Control Development</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Constructing an OLE custom control used to be a mysterious task best left to gurus who write even their love letters in C++. Version 4 of Visual C++ changes that by adding advanced AppWizard support for OLE control development.
+
+<BR></P>
+
+<P>It is now possible to create simple OLE controls with relatively little work. AppWizard provides the OLE custom control framework that consists of control registration and initialization code, and skeleton code for the control's class and property pages.
+
+<BR></P>
+
+<P>An OLE control is defined in terms of its appearance, properties, methods, and events. Control properties, methods, and events can be defined through the ClassWizard.
+
+<BR></P>
+
+<P>To demonstrate the capabilities of an OLE custom control, I developed a simple control. This control, OCTL, consists of a single button that can have three different shapes (ellipse, rectangle, triangle). When the control is clicked on, it changes its state from deselected to selected or vice versa. When the control is selected, it appears red; otherwise, its color is green. The control generates events whenever its state changes.
+
+<BR></P>
+
+<P>Figure 36.1 demonstrates the OCTL custom control in action.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu01.gif">Figure 36.1. The OCTL control in action.</A></B>
+
+<BR></P>
+
+<P>This control, like any other control, can be embedded in dialogs or used otherwise by OLE control container applications. The Developer Studio fully supports the construction of dialogs that contain OLE custom controls and the use of OLE custom controls in applications through wrapper classes.
+
+<BR></P>
+
+<P>The steps of creating a custom control are as follows:
+
+<BR></P>
+
+<OL>
+
+<LI>Create the custom control skeleton through AppWizard.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add the control's properties, methods, and events through ClassWizard.
+
+<BR>
+
+<BR></LI>
+
+<LI>Update the control's representative bitmap using the Developer Studio bitmap editor.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add drawing code to your control.
+
+<BR>
+
+<BR></LI>
+
+<LI>Develop code for methods and events.
+
+<BR>
+
+<BR></LI>
+
+<LI>Create the control's property page.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add code handling the property page.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>In the remainder of this chapter, we review each of these steps in detail. As we proceed, the OCTL control will serve as an example of putting the principles into practice.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Creating a Skeleton Control with AppWizard</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The first step in constructing an OLE custom control is creating a custom control skeleton through AppWizard&#151;or, to be more precise, through ControlWizard, which is a custom AppWizard developed specifically for the purposes of creating OLE custom controls.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Creating the Skeleton Control</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To begin, select New from the Developer Studio File menu, then select Project Workspace in the New dialog. In the New Project Workspace dialog select OLE ControlWizard as the project type, type in a name for the new project (for example, OCTL), and select a suitable directory (Figure 36.2).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu02.gif">Figure 36.2. Creating the OCTL control.</A></B>
+
+<BR></P>
+
+<P>After you click Create, the first page of the two-page OLE ControlWizard appears (Figure 36.3). On this page, you can specify the number of controls in your project (a single OLE control project can contain multiple controls), whether you want licensing support, and whether you want source comments and support for a help file. (Specifying help file support is generally a good idea; it is much easier to throw out code later than trying to add it to your project.)
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu03.gif">Figure 36.3. ControlWizard Page One.</A></B>
+
+<BR></P>
+
+<P>If you decide to add licensing support, the ControlWizard will create a default LIC file for your control. It will also add functions to your control class that support verification of licensing information. Without a valid license (LIC) file, it will not be possible to use the control in design mode. This is how users of your control should redistribute your control to end users (that is, without the license file); you, on the other hand, provide the control to your users with a valid license file that enables them to do development work with your control.
+
+<BR></P>
+
+<P>In the second page of ControlWizard (Figure 36.4), you can review and modify the class names that AppWizard generated for your controls. For every control in your project, AppWizard creates two classes: a control class and a class for the control's property page.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu04.gif">Figure 36.4. ControlWizard Page Two.</A></B>
+
+<BR></P>
+
+<P>If your control requires more than one property page, don't worry; you will have an opportunity to create additional property pages. Use the ControlWizard to specify the parameters for the first property page.
+
+<BR></P>
+
+<P>On this ControlWizard page, several additional properties can also be defined. I would like to bring your attention to two of these. The Invisible at runtime option enables you to create controls (such as the Microsoft Comm control) that do not have a visible interface at runtime. The Available in &quot;Insert Object&quot; dialog option enables you to create a control that can be inserted into OLE container documents. This option should typically remain unchecked; after all, when you create a new button meant to be used in dialogs, you may not want someone include it in a Word for Windows document!
+
+<BR></P>
+
+<P>You can also specify a control class that the new custom control will subclass. For example, you can specify the BUTTON class to create a custom control that inherits some of the behavior of the standard Button control.
+
+<BR></P>
+
+<P>The OCTL control was created with all ControlWizard settings left at their default values.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Custom Control Code Overview</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before proceeding, we need to take a look at the code generated by ControlWizard and familiarize ourselves with the new custom control's classes and resources. As always, it is a good idea to develop a basic understanding of these components before proceeding with custom modifications.
+
+<BR></P>
+
+<P>If you look at your project in ClassView (Figure 36.5), you can see that the ControlWizard generated three classes for you. One represents the custom control library object; the other two represent the control object and the control's property page. (If you elected to create a project with more than one control, additional pairs of classes were also created by ControlWizard to represent additional control objects and their property pages.)
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu05.gif">Figure 36.5. Classes generated by ControlWizard.</A></B>
+
+<BR></P>
+
+<P>Of the three classes in the OCTL project, the COCTLApp class is perhaps the simplest. Derived from COleControlModule, this class represents the OCX object, that is, the library that contains your OLE custom controls. Only two member functions are declared (Listing 36.1).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.1. </B><B>COCTLApp</B><B> class declaration.</B></LH></UL>
+
+<PRE>class COCTLApp : public COleControlModule
+
+{
+
+public:
+
+    BOOL InitInstance();
+
+    int ExitInstance();
+
+};</PRE>
+
+<P>These functions have a trivial implementation (Listing 36.2). In the same file, OCTL.cpp, there is also a pair of additional functions, DllRegisterServer and DllUnregisterServer. These two functions store and remove OLE registration information for your new controls in the Registry. The redistributable program regsvr32.exe calls these functions to register or unregister OLE custom controls.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.2. </B><B>COCTLApp</B><B> class implementation and control registration </B><B>functions.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// COCTLApp::InitInstance - DLL initialization
+
+BOOL COCTLApp::InitInstance()
+
+{
+
+    BOOL bInit = COleControlModule::InitInstance();
+
+    if (bInit)
+
+    {
+
+        // TODO: Add your own module initialization code here.
+
+    }
+
+    return bInit;
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLApp::ExitInstance - DLL termination
+
+int COCTLApp::ExitInstance()
+
+{
+
+    // TODO: Add your own module termination code here.
+
+    return COleControlModule::ExitInstance();
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// DllRegisterServer - Adds entries to the system registry
+
+STDAPI DllRegisterServer(void)
+
+{
+
+    AFX_MANAGE_STATE(_afxModuleAddrThis);
+
+    if (!AfxOleRegisterTypeLib(AfxGetInstanceHandle(), _tlid))
+
+        return ResultFromScode(SELFREG_E_TYPELIB);
+
+    if (!COleObjectFactoryEx::UpdateRegistryAll(TRUE))
+
+        return ResultFromScode(SELFREG_E_CLASS);
+
+    return NOERROR;
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// DllUnregisterServer - Removes entries from the system registry
+
+STDAPI DllUnregisterServer(void)
+
+{
+
+    AFX_MANAGE_STATE(_afxModuleAddrThis);
+
+    if (!AfxOleUnregisterTypeLib(_tlid))
+
+        return ResultFromScode(SELFREG_E_TYPELIB);
+
+    if (!COleObjectFactoryEx::UpdateRegistryAll(FALSE))
+
+        return ResultFromScode(SELFREG_E_CLASS);
+
+    return NOERROR;
+
+}</PRE>
+
+<P>In terms of simplicity, the COCTRLPropPage class follows. This class implements the property page of the control that design applications (such as the dialog template editor in Developer Studio) can display in a property sheet interface.
+
+<BR></P>
+
+<P>The ControlWizard generates a blank property page for you (Figure 36.6). It is up to you to add controls to this property page as they fit the requirements of your control.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu06.gif">Figure 36.6. The default ControlWizard-generated </B><B>property page.</A></B>
+
+<BR></P>
+
+<P>Correspondingly, the default version of the COCTLPropPage is equally simple. The class declaration (Listing 36.3) only contains declarations for a constructor and a DoDataExchange member function. Notice the use of the DECLARE_DYNCREATE and DECLARE_OLECREATE_EX macros; the latter makes the run-time creation of the OLE custom control property page possible.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.3. </B><B>COCTLPropPage</B><B> class declaration.</B></LH></UL>
+
+<PRE>class COCTLPropPage : public COlePropertyPage
+
+{
+
+    DECLARE_DYNCREATE(COCTLPropPage)
+
+    DECLARE_OLECREATE_EX(COCTLPropPage)
+
+// Constructor
+
+public:
+
+    COCTLPropPage();
+
+// Dialog Data
+
+    //{{AFX_DATA(COCTLPropPage)
+
+    enum { IDD = IDD_PROPPAGE_OCTL };
+
+        // NOTE - ClassWizard will add data members here.
+
+ //    DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_DATA
+
+// Implementation
+
+protected:
+
+    virtual void DoDataExchange(CDataExchange* pDX);
+
+// Message maps
+
+protected:
+
+    //{{AFX_MSG(COCTLPropPage)
+
+        // NOTE - ClassWizard will add and remove member functions
+
+        //  here.  DO NOT EDIT what you see in these blocks of
+
+        //  generated code !
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>Although this class is derived from COlePropertyPage, for all practical intents and purposes it works the same way as any CPropertyPage-derived class. In particular, you can use the ClassWizard to add member variables that correspond to controls in the property page. However, it is sometimes necessary to use additional data exchange functions and macros (for example, when specifying a persistent custom control property). But more about that later.
+
+<BR></P>
+
+<P>The implementation file of COCTLPropPage contains, in addition to trivial skeletal definitions of the constructor and the DoDataExchange member function, additional OLE-related elements (Listing 36.4). Fortunately, it is rarely necessary to modify these elements manually; where necessary, the ClassWizard will insert items as applicable.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.4. </B><B>COCTLPropPage</B><B> class implementation.</B></LH></UL>
+
+<PRE>IMPLEMENT_DYNCREATE(COCTLPropPage, COlePropertyPage)
+
+///////////////////////////////////////////////////////////////////
+
+// Message map
+
+BEGIN_MESSAGE_MAP(COCTLPropPage, COlePropertyPage)
+
+    //{{AFX_MSG_MAP(COCTLPropPage)
+
+    // NOTE - ClassWizard will add and remove message map entries
+
+    // DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// Initialize class factory and guid
+
+IMPLEMENT_OLECREATE_EX(COCTLPropPage, &quot;OCTL.OCTLPropPage.1&quot;,
+
+                       0xabe328d7, 0xf792, 0x11ce, 0x87, 0xc3, 0,
+
+                       0x40, 0x33, 0x21, 0xbf, 0xac)
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLPropPage::COCTLPropPageFactory::UpdateRegistry -
+
+// Adds or removes system registry entries for COCTLPropPage
+
+BOOL
+
+COCTLPropPage::COCTLPropPageFactory::UpdateRegistry(BOOL bRegister)
+
+{
+
+    if (bRegister)
+
+     return AfxOleRegisterPropertyPageClass(AfxGetInstanceHandle(),
+
+            m_clsid, IDS_OCTL_PPG);
+
+    else
+
+        return AfxOleUnregisterClass(m_clsid, NULL);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLPropPage::COCTLPropPage - Constructor
+
+COCTLPropPage::COCTLPropPage() :
+
+    COlePropertyPage(IDD, IDS_OCTL_PPG_CAPTION)
+
+{
+
+    //{{AFX_DATA_INIT(COCTLPropPage)
+
+    // NOTE: ClassWizard will add member initialization here
+
+    // DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_DATA_INIT
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLPropPage::DoDataExchange -
+
+// Moves data between page and properties
+
+void COCTLPropPage::DoDataExchange(CDataExchange* pDX)
+
+{
+
+    //{{AFX_DATA_MAP(COCTLPropPage)
+
+    // NOTE: ClassWizard will add DDP, DDX, and DDV calls here
+
+    // DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_DATA_MAP
+
+    DDP_PostProcessing(pDX);
+
+}</PRE>
+
+<P>In fact, under normal circumstances, you will rarely need to edit this code manually at all; code supporting member variables that correspond to controls in the property page will be inserted automatically by ClassWizard. Instances involving the need for manual modification include the case when nonstandard control behavior is desired; but even in those cases, changes are often confined to the DoDataExchange member function.
+
+<BR></P>
+
+<P>The last of the three ControlWizard-generated classes for the OCTL control is the class COCTLCtrl. As its name implies, this class encapsulates the overall behavior of the custom control, and as such, can be considered perhaps the central element of the custom control project.
+
+<BR></P>
+
+<P>The declaration of the COCTLCtrl class is shown in Listing 36.5. I would like to call your attention to several elements in this declaration.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.5. </B><B>COCTLCtrl</B><B> class declaration.</B></LH></UL>
+
+<PRE>class COCTLCtrl : public COleControl
+
+{
+
+    DECLARE_DYNCREATE(COCTLCtrl)
+
+// Constructor
+
+public:
+
+    COCTLCtrl();
+
+// Overrides
+
+    // Drawing function
+
+    virtual void OnDraw(
+
+          CDC* pdc, const CRect&amp; rcBounds, const CRect&amp; rcInvalid);
+
+    // Persistence
+
+    virtual void DoPropExchange(CPropExchange* pPX);
+
+    // Reset control state
+
+    virtual void OnResetState();
+
+// Implementation
+
+protected:
+
+    ~COCTLCtrl();
+
+    DECLARE_OLECREATE_EX(COCTLCtrl)    // Class factory and guid
+
+    DECLARE_OLETYPELIB(COCTLCtrl)      // GetTypeInfo
+
+    DECLARE_PROPPAGEIDS(COCTLCtrl)     // Property page IDs
+
+    DECLARE_OLECTLTYPE(COCTLCtrl)      // Type name and misc status
+
+// Message maps
+
+    //{{AFX_MSG(COCTLCtrl)
+
+   // NOTE - ClassWizard will add and remove member functions here.
+
+   //  DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+// Dispatch maps
+
+    //{{AFX_DISPATCH(COCTLCtrl)
+
+   // NOTE - ClassWizard will add and remove member functions here.
+
+   //  DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_DISPATCH
+
+    DECLARE_DISPATCH_MAP()
+
+    afx_msg void AboutBox();
+
+// Event maps
+
+    //{{AFX_EVENT(COCTLCtrl)
+
+   // NOTE - ClassWizard will add and remove member functions here.
+
+   //  DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_EVENT
+
+    DECLARE_EVENT_MAP()
+
+// Dispatch and event IDs
+
+public:
+
+    enum {
+
+    //{{AFX_DISP_ID(COCTLCtrl)
+
+        // NOTE: ClassWizard will add and remove enumeration
+
+        //  elements here.  DO NOT EDIT what you see in these
+
+        //  blocks of generated code !
+
+    //}}AFX_DISP_ID
+
+    };
+
+};</PRE>
+
+<P>The Implementation section of this declaration begins with a series of four macro calls that declare various OLE-related elements. There are corresponding macro calls implementing these elements in the implementation file. Of particular interest is the call to DECLARE_OLECREATE_EX; this macro call is different in the case of an OLE custom control that supports licensing. (It is replaced by a block of function declarations enclosed between a BEGIN_OLEFACTORY and an END_OLEFACTORY macro call.)
+
+<BR></P>
+
+<P>In the remainder of the class declaration, the OLE control's message map, dispatch map, event map, and dispatch/event identifiers are declared. These maps are used to route messages and to define the control's OLE interface of properties, methods, and events. The ClassWizard adds items automatically to these sections of code; you rarely need to modify them directly.
+
+<BR></P>
+
+<P>The implementation file of class COCTLCtrl (Listing 36.6) contains several elements that you may need to be familiar with.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.6. </B><B>COCTLCtrl</B><B> class implementation.</B></LH></UL>
+
+<PRE>IMPLEMENT_DYNCREATE(COCTLCtrl, COleControl)
+
+///////////////////////////////////////////////////////////////////
+
+// Message map
+
+BEGIN_MESSAGE_MAP(COCTLCtrl, COleControl)
+
+    //{{AFX_MSG_MAP(COCTLCtrl)
+
+    // NOTE - ClassWizard will add and remove message map entries
+
+    // DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_MSG_MAP
+
+    ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
+
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// Dispatch map
+
+BEGIN_DISPATCH_MAP(COCTLCtrl, COleControl)
+
+    //{{AFX_DISPATCH_MAP(COCTLCtrl)
+
+    // NOTE - ClassWizard will add and remove dispatch map entries
+
+    // DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_DISPATCH_MAP
+
+    DISP_FUNCTION_ID(COCTLCtrl, &quot;AboutBox&quot;, DISPID_ABOUTBOX,
+
+                     AboutBox, VT_EMPTY, VTS_NONE)
+
+END_DISPATCH_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// Event map
+
+BEGIN_EVENT_MAP(COCTLCtrl, COleControl)
+
+    //{{AFX_EVENT_MAP(COCTLCtrl)
+
+    // NOTE - ClassWizard will add and remove event map entries
+
+    // DO NOT EDIT what you see in these blocks of generated code !
+
+    //}}AFX_EVENT_MAP
+
+END_EVENT_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// Property pages
+
+// TODO: Add more property pages as needed.
+
+//  Remember to increase the count!
+
+BEGIN_PROPPAGEIDS(COCTLCtrl, 1)
+
+    PROPPAGEID(COCTLPropPage::guid)
+
+END_PROPPAGEIDS(COCTLCtrl)
+
+///////////////////////////////////////////////////////////////////
+
+// Initialize class factory and guid
+
+IMPLEMENT_OLECREATE_EX(COCTLCtrl, &quot;OCTL.OCTLCtrl.1&quot;,
+
+                       0x677600e7, 0xf6c5, 0x11ce, 0x87, 0xc3, 0,
+
+                       0x40, 0x33, 0x21, 0xbf, 0xac)
+
+///////////////////////////////////////////////////////////////////
+
+// Type library ID and version
+
+IMPLEMENT_OLETYPELIB(COCTLCtrl, _tlid, _wVerMajor, _wVerMinor)
+
+///////////////////////////////////////////////////////////////////
+
+// Interface IDs
+
+const IID BASED_CODE IID_DOCTL =
+
+               { 0xabe328d5, 0xf792, 0x11ce,
+
+                 { 0x87, 0xc3, 0, 0x40, 0x33, 0x21, 0xbf, 0xac } };
+
+const IID BASED_CODE IID_DOCTLEvents =
+
+               { 0xabe328d6, 0xf792, 0x11ce,
+
+                 { 0x87, 0xc3, 0, 0x40, 0x33, 0x21, 0xbf, 0xac } };
+
+///////////////////////////////////////////////////////////////////
+
+// Control type information
+
+static const DWORD BASED_CODE _dwOCTLOleMisc =
+
+    OLEMISC_ACTIVATEWHENVISIBLE |
+
+    OLEMISC_SETCLIENTSITEFIRST |
+
+    OLEMISC_INSIDEOUT |
+
+    OLEMISC_CANTLINKINSIDE |
+
+    OLEMISC_RECOMPOSEONRESIZE;
+
+IMPLEMENT_OLECTLTYPE(COCTLCtrl, IDS_OCTL, _dwOCTLOleMisc)
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::COCTLCtrlFactory::UpdateRegistry -
+
+// Adds or removes system registry entries for COCTLCtrl
+
+BOOL COCTLCtrl::COCTLCtrlFactory::UpdateRegistry(BOOL bRegister)
+
+{
+
+    if (bRegister)
+
+        return AfxOleRegisterControlClass(
+
+            AfxGetInstanceHandle(),
+
+            m_clsid,
+
+            m_lpszProgID,
+
+            IDS_OCTL,
+
+            IDB_OCTL,
+
+            FALSE,                      //  Not insertable
+
+            _dwOCTLOleMisc,
+
+            _tlid,
+
+            _wVerMajor,
+
+            _wVerMinor);
+
+    else
+
+        return AfxOleUnregisterClass(m_clsid, m_lpszProgID);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::COCTLCtrl - Constructor
+
+COCTLCtrl::COCTLCtrl()
+
+{
+
+    InitializeIIDs(&amp;IID_DOCTL, &amp;IID_DOCTLEvents);
+
+    // TODO: Initialize your control's instance data here.
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::~COCTLCtrl - Destructor
+
+COCTLCtrl::~COCTLCtrl()
+
+{
+
+    // TODO: Cleanup your control's instance data here.
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::OnDraw - Drawing function
+
+void COCTLCtrl::OnDraw(
+
+           CDC* pdc, const CRect&amp; rcBounds, const CRect&amp; rcInvalid)
+
+{
+
+    // TODO: Replace the following code with your own drawing code.
+
+    pdc-&gt;FillRect(rcBounds,
+
+          CBrush::FromHandle((HBRUSH)GetStockObject(WHITE_BRUSH)));
+
+    pdc-&gt;Ellipse(rcBounds);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::DoPropExchange - Persistence support
+
+void COCTLCtrl::DoPropExchange(CPropExchange* pPX)
+
+{
+
+    ExchangeVersion(pPX, MAKELONG(_wVerMinor, _wVerMajor));
+
+    COleControl::DoPropExchange(pPX);
+
+   // TODO: Call PX_ functions for each persistent custom property.
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::OnResetState - Reset control to default state
+
+void COCTLCtrl::OnResetState()
+
+{
+
+    COleControl::OnResetState();
+
+    // TODO: Reset any other control state here.
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTLCtrl::AboutBox - Display an &quot;About&quot; box to the user
+
+void COCTLCtrl::AboutBox()
+
+{
+
+    CDialog dlgAbout(IDD_ABOUTBOX_OCTL);
+
+    dlgAbout.DoModal();
+
+}</PRE>
+
+<P>The Message Map, Dispatch Map, and Event Map sections of this implementation are usually maintained by the ClassWizard. However, should you need to create additional property pages as part of your control's property page interface, you must manually modify the Property Pages section. For example, in a control that has three property pages, this section may contain the following code:
+
+<BR></P>
+
+<PRE>BEGIN_PROPPAGEIDS(COCTLCtrl, 3)
+
+    PROPPAGEID(COCTLPropPage1::guid)
+
+    PROPPAGEID(COCTLPropPage2::guid)
+
+    PROPPAGEID(COCTLPropPage3::guid)
+
+END_PROPPAGEIDS(COCTLCtrl)</PRE>
+
+<P>Of the functions defined in this file, three are of importance to the control programmer. The member function OnDraw is used to actually draw the control. The ControlWizard generates this member function with some default drawing instructions in it (either drawing a circle or, in the case of a subclassed control, calling the superclass's drawing function). The member function DoPropExchange implements property persistency; that is, the capability of saving properties at design time and reloading them when the control is displayed at runtime. More about this later. The function OnResetState is used to reset property values to their defaults. Although the call to the base class implementation COleControl::OnResetState resets all persistent properties, it may be necessary to reset other properties manually in OnResetState.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=4><B>Customizing the Control</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Control properties, methods, and events can be added through the ClassWizard.
+
+<BR></P>
+
+<P>A property is analogous to a data member of a C++ class, even though control properties are often implemented using get/set methods as opposed to member variables.
+
+<BR></P>
+
+<P>A method is analogous to a member function (and is, in fact, implemented as a member function of the control class).
+
+<BR></P>
+
+<P>Events are messages that the control can send to its parent window. When you add an event through the ClassWizard, the ClassWizard creates a member function in the control class that fires the event. You can call this member function from your own code as required.
+
+<BR></P>
+
+<P>The OCTL control has two properties and one event.
+
+<BR></P>
+
+<P>The first of the two properties is the Selected property; this Boolean property reflects the selected/deselected state of the control. Whenever the left mouse button is clicked on the control, the control's state will change from selected to deselected or vice versa. The Selected property will be implemented using get/set methods; this form of implementation enables us to create a read-only control by simply omitting the set method.
+
+<BR></P>
+
+<P>The second property, Shape, is an integer property determining the control's shape. Its value can be 0 (elliptical shape), 1 (rectangular shape), or 2 (triangular shape). Although this is a read/write property, we will make it writeable only in design mode. For this reason, this property will also be implemented using get/set methods, with a check for design mode as part of the set method member function.
+
+<BR></P>
+
+<P>The single control event, the Select event, indicates to the parent window that the control's state changes. We will fire this event whenever the control receives a left mouse button click. (Needless to say, we must add a handler function for that event first.)
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Changing the Control's Bitmap</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before we charge ahead adding code to the control, we must focus on the mundane task of updating the control bitmap. As mundane a task as it is, it should not be neglected; for it is the control bitmap that users of your control will most often see in tool palettes. Figure 36.7 shows the bitmap I drew for the OCTL control. (Okay, okay... I know I am not a graphic artist!)
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu07.gif">Figure 36.7. OCTL control bitmap.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Adding Properties</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Now to add the Selected and Shape properties to our control. To do so, invoke the ClassWizard and select the OLE Automation tab. Select the COCTLCtrl class (Figure 36.8).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu08.gif">Figure 36.8. Adding control properties.</A></B>
+
+<BR></P>
+
+<P>To add the Selected property, click on the Add Property button. In the Add Property dialog, type the name Selected in the External name field; select BOOL as the property type; and select the get/set methods radio button under Implementation. At this point, the dialog automatically generates names for the property's get and set functions. To render this property read-only, simply erase the name of the set function before dismissing the dialog with the OK button (Figure 36.9).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu09.gif">Figure 36.9. Adding the </B><B>Selected</B><B> property.</A></B>
+
+<BR></P>
+
+<P>Adding the Shape property is an almost identical process. There are two differences. First, the property's type should be short; second, as this property is a read/write property, you should not erase the name of the set function this time.
+
+<BR></P>
+
+<P>At this point, the ClassWizard generates a total of three new member functions in the control class.
+
+<BR></P>
+
+<P>To reflect the control's selection state and shape, we must now manually add member variables to the control class declaration. Add the following two declarations to the declaration of the class COCTLCtrl in the header file OCTLctl.h:
+
+<BR></P>
+
+<PRE>BOOL m_fSelected;
+
+short m_nShape;</PRE>
+
+<P>It is also necessary to initialize these member variables to reasonable defaults in the constructor of the control class. Add the following lines to COCTLCtrl::COCTLCtrl:
+
+<BR></P>
+
+<PRE>m_fSelected = FALSE;
+
+m_nShape = 0;</PRE>
+
+<P>With these member variables at hand, we can proceed with the implementation of the new get/set functions for which ClassWizard created skeletons. The completed functions are shown in Listing 36.7.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.7. </B><B>COCTLCtrl</B><B> property get/set methods.</B></LH></UL>
+
+<PRE>short COCTLCtrl::GetShape()
+
+{
+
+    // TODO: Add your property handler here
+
+    return m_nShape;
+
+}
+
+void COCTLCtrl::SetShape(short nNewValue)
+
+{
+
+    // TODO: Add your property handler here
+
+    if (AmbientUserMode())
+
+        ThrowError(CTL_E_SETNOTSUPPORTEDATRUNTIME);
+
+    else if (nNewValue &lt; 0 || nNewValue &gt; 2)
+
+        ThrowError(CTL_E_INVALIDPROPERTYVALUE);
+
+    else
+
+    {
+
+        m_nShape = nNewValue;
+
+        SetModifiedFlag();
+
+        InvalidateControl();
+
+    }
+
+}
+
+BOOL COCTLCtrl::GetSelected()
+
+{
+
+    // TODO: Add your property handler here
+
+    return m_fSelected;
+
+}</PRE>
+
+<P>The functions GetSelected and GetShape are trivially simple; they just return the value of the m_fSelected and m_nShape member variables, respectively. The function SetSelected is somewhat more complicated; it uses the AmbientUserMode function to check whether the control container is in user mode or design mode and disallows changing the control's shape in user mode. Note the use of the ThrowError function; this member function of COleControl is specifically intended to indicate an error while accessing a property via a get/set method.
+
+<BR></P>
+
+<P>The framework provides an implementation for several <I>stock properties</I>. Stock properties include, among other things, properties relating to font and color. When adding a stock property, you can elect to use the stock implementation in COleControl instead of implementing the property yourself.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Making a Property Persistent</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Having added a property is one thing; however, this does not automatically ensure that the property's value is retained when it is set during a design session, for example. To make it happen, we must add a call to a PX_ function in the DoPropExchange member function of the control class.
+
+<BR></P>
+
+<P>What does DoPropExchange do? Quite simply, this function is used to serialize property values into a <I>property exchange object</I>. The property achieves persistence by having its value stored in, and reloaded from, such an object. For example, the Developer Studio dialog editor writes the content of the property exchange object into the application's resource file, from which it is reloaded at runtime.
+
+<BR></P>
+
+<P>For every persistent property, a function call of the appropriate PX_ function must be inserted in DoPropExchange. There is a large variety of PX_ functions corresponding to properties of various types. These are summarized in Table 36.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 36.1. </B><B>PX_</B><B> functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Function Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Property Type</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>PX_Blob</P>
+
+<TD>
+
+<P>Binary Large Object (BLOB) data</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Bool</P>
+
+<TD>
+
+<P>Boolean value (type BOOL)</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Color</P>
+
+<TD>
+
+<P>Color value (type OLE_COLOR)</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Currency</P>
+
+<TD>
+
+<P>Currency value</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Double</P>
+
+<TD>
+
+<P>Value of type double</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Float</P>
+
+<TD>
+
+<P>Value of type float</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Font</P>
+
+<TD>
+
+<P>A font (pointer to a FONTDESC structure)</P>
+
+<TR>
+
+<TD>
+
+<P>PX_IUnknown</P>
+
+<TD>
+
+<P>An object with an OLE IUnknown-derived interface</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Long</P>
+
+<TD>
+
+<P>Value of type long</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Picture</P>
+
+<TD>
+
+<P>A picture (CPictureHolder reference)</P>
+
+<TR>
+
+<TD>
+
+<P>PX_Short</P>
+
+<TD>
+
+<P>Value of type short</P>
+
+<TR>
+
+<TD>
+
+<P>PX_String</P>
+
+<TD>
+
+<P>A character pointer (type LPCSTR)</P>
+
+<TR>
+
+<TD>
+
+<P>PX_ULong</P>
+
+<TD>
+
+<P>Value of type unsigned long (ULONG)</P>
+
+<TR>
+
+<TD>
+
+<P>PX_UShort</P>
+
+<TD>
+
+<P>Value of type unsigned short</P>
+
+<TR>
+
+<TD>
+
+<P>PX_VBXFontConvert</P>
+
+<TD>
+
+<P>Font-related properties of a VBX control</P></TABLE>
+
+<P>In the case of OCTL, the one property that we wish to make persistent is the Shape property, which is of type short. Correspondingly, the following line must be added to the COCTLCtrl::DoPropExchange function:
+
+<BR></P>
+
+<PRE>PX_Short(pPX, _T(&quot;Shape&quot;), m_nShape, 0);</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Adding Methods</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Adding methods to an OLE custom control is similar to adding properties. Methods are also added through the ClassWizard, using the OLE Automation tab.
+
+<BR></P>
+
+<P>Although we have not explicitly added any methods to the OCTL control, we have, in fact, added three methods nevertheless; these are the get/set methods that we used for our two properties.
+
+<BR></P>
+
+<P>A method can also have a list of parameters. These parameters are also defined through the ClassWizard.
+
+<BR></P>
+
+<P>The COleControl class supports two stock events: DoClick (fires a Click event) and Refresh (updates the control's appearance).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Adding Events</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Events are also added to an OLE custom control through the ClassWizard. To add an event, use the ClassWizard's OLE Events tab (Figure 36.10).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu10.gif">Figure 36.10. Adding OLE events.</A></B>
+
+<BR></P>
+
+<P>To add the Select event, click on the Add Event button. In the Add Event dialog, type Select as the event's External name. As you do that, ClassWizard automatically sets the internal name (the name of the function that causes the event to be fired) to FireSelect. Make sure to also add the IsSelected parameter to this event (this parameter will tell the recipient of the event whether the control has been selected or deselected) and specify this parameter's type as BOOL (Figure 36.11).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu11.gif">Figure 36.11. Adding the </B><B>Select</B><B> event.</A></B>
+
+<BR></P>
+
+<P>As I mentioned before, this event will be fired when the control's state changes; that is, when the user clicks on the control with the left mouse button. To implement this behavior, use the ClassWizard to add a handler for the WM_LBUTTONDOWN message to the COCTLCtrl class. In the handler function, shown in Listing 36.8, we change negate the value of the m_fSelected Boolean variable and fire a Select event with this variable's new value. We also ensure that the control is redrawn with the color properly indicating its selection state by calling the InvalidateControl function.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.8. Handling a mouse event in OCTL.</B></LH></UL>
+
+<PRE>void COCTLCtrl::OnLButtonDown(UINT nFlags, CPoint point)
+
+{
+
+    // TODO: Add your message handler code here and/or call default
+
+    COleControl::OnLButtonDown(nFlags, point);
+
+    m_fSelected = !m_fSelected;
+
+    InvalidateControl();
+
+    FireSelect(m_fSelected);
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Drawing the Control</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There is nothing mysterious about actually drawing a control. When the control class member function OnDraw is called, it receives a pointer to a device context object and a rectangle identifying the control's bounds. With this information at hand, drawing the control is easy.
+
+<BR></P>
+
+<P>Naturally, the control's appearance may depend on the values of various member variables representing the control's state. This is certainly the case with the OCTL control, where the m_nShape member variable determines the control's shape, and the m_fSelected member variable determines its color. Listing 36.9 shows my implementation of the OCTL control's drawing function.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 36.9. </B><B>COCTLCtrl::OnDraw</B><B> member function.</B></LH></UL>
+
+<PRE>void COCTLCtrl::OnDraw(
+
+           CDC* pdc, const CRect&amp; rcBounds, const CRect&amp; rcInvalid)
+
+{
+
+    // TODO: Replace the following code with your own drawing code.
+
+//  pdc-&gt;FillRect(rcBounds,
+
+//      CBrush::FromHandle((HBRUSH)GetStockObject(WHITE_BRUSH)));
+
+//  pdc-&gt;Ellipse(rcBounds);
+
+    CPen pen;
+
+    CBrush foreBrush, backBrush;
+
+    CPoint points[3];
+
+    pdc-&gt;SaveDC();
+
+    pen.CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
+
+    backBrush.CreateSolidBrush(TranslateColor(AmbientBackColor()));
+
+    foreBrush.CreateSolidBrush(GetSelected() ? RGB(255, 0, 0) :
+
+                                               RGB(0, 255, 0));
+
+    pdc-&gt;FillRect(rcBounds, &amp;backBrush);
+
+    pdc-&gt;SelectObject(&amp;pen);
+
+    pdc-&gt;SelectObject(&amp;foreBrush);
+
+    switch (m_nShape)
+
+    {
+
+        case 0:
+
+            pdc-&gt;Ellipse(rcBounds);
+
+            break;
+
+        case 1:
+
+            pdc-&gt;Rectangle(rcBounds);
+
+            break;
+
+        case 2:
+
+            points[0].x = rcBounds.left;
+
+            points[0].y = rcBounds.bottom - 1;
+
+            points[1].x = (rcBounds.left + rcBounds.right - 1) / 2;
+
+            points[1].y = rcBounds.top;
+
+            points[2].x = rcBounds.right - 1;
+
+            points[2].y = rcBounds.bottom - 1;
+
+            pdc-&gt;Polygon(points, 3);
+
+            break;
+
+    }
+
+    pdc-&gt;RestoreDC(-1);
+
+}</PRE>
+
+<P>Note the use of the function AmbientBackColor. This is just one of several functions that can be used to retrieve the control container's <I>ambient </I><I>properties</I>. In this case, we use this function to ensure that the control's background color matches the background color of the control container. Note also that we use the TranslateColor function to translate an OLE color into an RGB value. This translation is necessary because the OLE color may occasionally represent a palette index as opposed to an RGB value.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=4><B>Adding a Property Page Interface</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Although implementation of our new control's behavior is complete, our task is not yet done. We must also implement one or more property pages through which our control's property settings can be controlled. These property pages will be used typically by applications in design mode (such as the Developer Studio dialog editor).
+
+<BR></P>
+
+<P>The steps are no different from the steps used implementing an ordinary dialog. We must design the visual appearance of the property page and add the necessary code that connects the controls in the property page to the properties of the control. (As funny as the last sentence sounds, this is indeed the correct terminology. Controls in the property page refer to controls in a dialog; properties of the control refer to properties of the OLE control object. Unfortunately, the terminology of Windows, OLE, C++, and object-oriented programming do conflict at times.)
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Editing the Property Page</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To change the visual appearance of an OLE custom control's property page, just open the property page's dialog template. Editing it is no different from editing any other dialog resource.
+
+<BR></P>
+
+<P>In the case of OCTL's single property page, there are only two controls to be added: a static label and a combo box. The combo box should be of type Drop List, with the identifier IDC_CBSHAPE; the Developer Studio dialog editor can also be used to set its list box values (Figure 36.12). Note that in order to enter multiple values in the area reserved for list box initializers, you must use the Ctrl+Enter key combination to generate a line break, as pressing Enter alone would close the property sheet altogether.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu12.gif">Figure 36.12. Editing the OCTL property page.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Connecting the Property Page with Control Properties</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A member variable for the new property page can be added using regular ClassWizard procedures. What is not regular is how this member variable (that will be a member of the class COCTLPropPage) connects with the appropriate property of the OCTL control. To create this connection, you must also specify the name of the OLE property in ClassWizard's Add Member Variable dialog (Figure 36.13).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu13.gif">Figure 36.13. Connecting a control with an OLE property </B><B>through ClassWizard.</A></B>
+
+<BR></P>
+
+<P>As a result of this, the ClassWizard inserts, in addition to any DDX_ and DDV_ function calls, a set of DDP_ function calls in the DoDataExchange member function of the property page class. This is the line that is inserted for OCTL:
+
+<BR></P>
+
+<PRE>DDP_CBIndex(pDX, IDC_CBSHAPE, m_nShape, _T(&quot;Shape&quot;) );</PRE>
+
+<P>There are several DDP_ functions corresponding to the various control types. These are summarized in Table 36.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 36.2. </B><B>DDP_</B><B> functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Function name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>DDP_CBIndex</P>
+
+<TD>
+
+<P>Combo box int transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_CBString</P>
+
+<TD>
+
+<P>Combo box string transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_CBStringExact</P>
+
+<TD>
+
+<P>Combo box string transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_Check</P>
+
+<TD>
+
+<P>Check box</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_LBIndex</P>
+
+<TD>
+
+<P>List box int transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_LBString</P>
+
+<TD>
+
+<P>List box string transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_LBStringExact</P>
+
+<TD>
+
+<P>List box string transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_Radio</P>
+
+<TD>
+
+<P>Radio button int transfer</P>
+
+<TR>
+
+<TD>
+
+<P>DDP_Text</P>
+
+<TD>
+
+<P>Edit control transfer (string, numeric, and so on)</P></TABLE>
+
+<P>Additionally, the function DDP_PostProcessing should be called after the transfer of control properties through DDP_ functions has been completed.
+
+<BR></P>
+
+<P>Take a look at the result. Figure 36.14 illustrates the OCTL control property page as it appears as part of a property sheet displayed by the Developer Studio dialog editor when an OCTL control is being added to a dialog template.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="36vcu14.gif">Figure 36.14. OCTL control property sheet in Developer </B><B>Studio.</A></B>
+
+<BR></P>
+
+<P>At this point, implementation of the OCTL control is complete. If you have not yet done so, you can recompile the project to create the OCX file. Compiling the project also automatically registers the control.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Additional Property Pages</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>If your OLE custom control requires additional property pages, those can be created by using the ControlWizard-generated property page as a model. To actually create the class, use the ClassWizard and create a new class derived from COlePropertyPage.
+
+<BR></P>
+
+<P>In case you are using the stock implementation of the color, font, or picture properties, you can use stock properties pages to provide an interface to them. To use a stock property page, just specify its class identifier when adding property pages in the implementation file of the control class. You do not need to create a class yourself for a stock property page.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>Testing, Distributing and Using a Custom Control</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Testing an OLE custom control is an important part of the development process. Not all real-life control projects are as simple as my tiny OCTL control.
+
+<BR></P>
+
+<P>As reusable components, OLE custom controls are often created by one programmer but used by others. For this reason, it is important to know how a control can be distributed to its users.
+
+<BR></P>
+
+<P>These issues and a brief reminder of how OLE custom controls are used in other applications are described in the remainder of this chapter.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Testing an OLE Custom Control</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order to test an OLE custom control, you do not need to write your own control container application. Instead, you can use the OLE Control Test Container application that is supplied with Visual C++. You can use the Settings command under the Build menu in Developer Studio to specify tstcon32.exe as the debug executable; this way, you can exercise your control, set breakpoints, and control its execution through the Visual C++ debugger.
+
+<BR></P>
+
+<P>You can also test your OLE custom control by attempting to use it within the Developer Studio dialog editor.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Custom Control Distribution</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Distributing a custom control raises two questions. First, which files need to be distributed to control users and, in turn, by control users to end users of their applications? Second, what actions need to be taken during control installation to ensure that the control is correctly registered?
+
+<BR></P>
+
+<P>The end user needs only the file with the .ocx extension. This file is the actual DLL containing the control's code. Control users (developers), on the other hand, may also need the TLB (type library) file, the EXP file, and the LIB file, all of which are generated when your control project is built.
+
+<BR></P>
+
+<P>To register the control, run the server registration program supplied by Microsoft:
+
+<BR></P>
+
+<PRE>\msdev\bin\regsvr32.exe /s &lt;controlname&gt;.ocx</PRE>
+
+<P>The regsvr32.exe file is freely redistributable. If you are writing a setup program that includes installation of OLE custom controls, you may want to use this file for control installation. However, you could also load the OCX file directly as a DLL, and call its DllRegisterServer function.
+
+<BR></P>
+
+<P>If you decided to use licensing for your control, remember to include the license (LIC) file with the files supplied to control users. This file should not be redistributed to end users.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Using a Custom Control in Applications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Here is a brief summary of the steps that are required in order to use an OLE custom control in an application:
+
+<BR></P>
+
+<OL>
+
+<LI>Add OLE control container support by calling AfxEnableControlContainer during application initialization.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add the custom control to dialog templates as appropriate.
+
+<BR>
+
+<BR></LI>
+
+<LI>Set the control's initial properties using the control's property page interface.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add member variables to represent the control or its properties as appropriate.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add message handlers to handle messages from the control as appropriate.
+
+<BR>
+
+<BR></LI></OL>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Construction of an OLE custom control has been greatly simplified in Visual C++ 4 thanks to the ControlWizard.
+
+<BR></P>
+
+<P>Constructing a custom control involves the following steps:
+
+<BR></P>
+
+<OL>
+
+<LI>Create the custom control skeleton through ControlWizard.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add the control's properties, methods, and events through ClassWizard.
+
+<BR>
+
+<BR></LI>
+
+<LI>Update the control's bitmap.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add drawing code to your control.
+
+<BR>
+
+<BR></LI>
+
+<LI>Develop code for methods and events.
+
+<BR>
+
+<BR></LI>
+
+<LI>Create the control's property page.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add code handling the property page.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>Custom controls can be tested using the OLE Control Test Container that is supplied with Visual C++.
+
+<BR></P>
+
+<P>Distributing a control to end users requires distributing the OCX file. Distributing the control to developers also requires distributing the LIB, TLB, and EXP files. Additionally, if the control is a licensed control, developers also need the license (LIC) file.
+
+<BR></P>
+
+<P>Before use, the control must be registered. Registration can be accomplished by using the freely distributable regsvr32.exe utility. Alternatively, you can call the control's DllRegisterServer function from within your own setup program.</P>
+
+<P><A HREF="vcu35fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu37fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

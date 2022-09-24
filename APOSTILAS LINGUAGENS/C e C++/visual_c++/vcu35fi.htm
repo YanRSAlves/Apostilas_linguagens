@@ -1,0 +1,1024 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu35fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu36fi.htm">
+
+<LINK REL="Previous" HREF="vcu34fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu34fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu36fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">35 &#151; Writing Messaging Applications with MAPI</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">The MAPI Architecture</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Types of MAPI Support</A></LI>
+
+<LI>
+
+<A HREF="#I5">Service Providers</A></LI>
+
+<LI>
+
+<A HREF="#I6">MAPI Profiles</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">MAPI APIs</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">Simple MAPI</A></LI>
+
+<LI>
+
+<A HREF="#I9">Common Messaging Calls</A></LI>
+
+<LI>
+
+<A HREF="#I10">Extended MAPI</A></LI>
+
+<LI>
+
+<A HREF="#I11">OLE Messaging</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">MAPI Support in MFC</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">MAPI Support in CDocument</A></LI>
+
+<LI>
+
+<A HREF="#I14">MAPI and AppWizard</A></LI></UL>
+
+<LI>
+
+<A HREF="#I15">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>35 &#151; Writing Messaging Applications with MAPI</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Writing messaging-enabled applications is no longer the task of a few corporate programmers working on enterprise-wide system integration projects. Microsoft Exchange and MAPI services are now available on every Windows 95 desktop; and with the recent phenomenal growth of the Internet, users in increasing numbers demand messaging features in end-user applications. Solutions that were developed for corporate networks yesterday are used on home computers today; if this sounds like an outrageous claim, consider the fact that I am submitting the very pages of this manuscript by dragging the files into Microsoft Exchange and letting them go.
+
+<BR></P>
+
+<P>Microsoft recognized this fact when it decided to add the requirement for some level of MAPI support to its Windows 95 Logo Program. For applications to qualify under this program, it is now necessary for them to support, at the very minimum, a Send command that enables them to send a document to a MAPI recipient. (Obviously, if your application is conceptually different, such as a game program, MAPI support is not required.)
+
+<BR></P>
+
+<P>The MAPI acronym stands for Messaging Applications Programming Interface. But what exactly is MAPI? How is MAPI implemented? And, most importantly, in what way can applications utilize MAPI services most efficiently? These are the questions that I attempt to answer in the present chapter.
+
+<BR></P>
+
+<P>Be aware that the purpose of this chapter is <I>not</I> to provide an introduction to MAPI at the level required to develop MAPI providers. Such discussion would itself warrant a book. Instead, I am trying to present an overview of MAPI as an application interface, with special emphasis on MAPI usage from within MFC framework applications.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Throughout this chapter, the MAPI architecture I describe corresponds to MAPI in Windows 95 or in upcoming versions of Windows NT. Earlier versions of Microsoft Mail, although they provide limited support for Simple MAPI and CMC, do not provide full Extended MAPI support, nor are they compatible with the architecture described in this chapter.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>The MAPI Architecture</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>What exactly is MAPI? Is it the Microsoft Exchange Client that is supplied with Windows 95? Is it the much anticipated Exchange Server? Is it the MAPI spooler that is quietly running in the background whenever Exchange is started?
+
+<BR></P>
+
+<P>The answer is, none of the above. MAPI is not an application, a DLL, or a system service; rather, it is a series of specifications. Although Microsoft is the prime supplier of MAPI components, it is by no means necessary to have a single Microsoft component in order to use MAPI (nor is it necessary to use a Windows or Win32 platform, actually). You can have a MAPI-compliant system with third party message store, address book, and transport providers on a non-Windows operating system. MAPI is part of what Microsoft calls WOSA, the Windows Open Services Architecture, that consists of a common set of APIs for distributed computing.
+
+<BR></P>
+
+<P>MAPI, in fact, can be viewed as two independent sets of APIs that link client applications on the one hand with service providers on the other (Figure 35.1).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="35vcu01.gif">Figure 35.1. The MAPI architecture.</A></B>
+
+<BR></P>
+
+<P>Why several APIs? The reasons are partly historical. First, Microsoft released the specifications for Simple MAPI, which included about a dozen fundamental calls that enabled applications to use messaging. The Common Messaging Calls (CMC)API has been developed as a platform-independent replacement for Simple MAPI. It also contains about 10 fundamental calls that provide access to basic messaging services. In contrast, Extended MAPI is a large, complex, evolving specification that not only provides an application programming interface for client applications but for service providers as well. OLE Messaging, an API specifically developed for Visual Basic and Visual C++ applications, uses the OLE automation architecture.
+
+<BR></P>
+
+<P>Before we plunge into exploring the APIs, the next section gives us a closer look at the MAPI architecture itself.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Types of MAPI Support</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are three distinct levels of MAPI support that applications can provide.
+
+<BR></P>
+
+<P>The simplest MAPI applications are <I>messaging-aware</I> applications. These applications do not depend on the presence of MAPI to perform their functions; they merely provide some simple MAPI functionality. The Windows 95 WordPad, which provides a Send command in its File menu, is a good example for a messaging-aware application. In contrast, <I>messaging-enabled</I> applications require MAPI to be present in order to offer full functionality. While these applications may function when MAPI is not present, they cannot offer the full range of their services under these conditions. A perfect example for a messaging-enabled application is Microsoft Schedule+; while this program can be used as a stand-alone personal information manager, many of its capabilities do not make sense unless it is running on a system with MAPI installed.
+
+<BR></P>
+
+<P>At the top of the hierarchy are <I>messaging-based</I> applications. Running these applications requires that the full range of MAPI services (message store, address book, transport) be present and available. These applications are also often referred to as workgroup applications. A good example for a workgroup application is the Microsoft Exchange client; I will spare you the explanation why this application cannot be run on a stand-alone system with no MAPI support.
+
+<BR></P>
+
+<P>The next section presents a brief tour of MAPI service providers; then we can examine how the various APIs are used in applications that provide these different levels of support
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Service Providers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>MAPI service providers are the components that collectively implement MAPI service on a system. There are three distinct types of service providers: <I>message stores</I>, <I>address books</I>, and <I>transports</I>.
+
+<BR></P>
+
+<P>Address books contain one or more lists of recipients. An address book provider implements a specific set of interfaces through which messaging applications or other providers can gain access to address entries or lists of addresses.
+
+<BR></P>
+
+<P>Message stores are hierarchical depositories of MAPI messages. A message consists of a multitude of properties that include the sender of the message, the recipient, the date, subject, message body, and many other items. Message store providers implement some form of persistent storage for messages (for example, a local disk file) and provide a set of interfaces through which messaging applications and other providers can enumerate messages in the message store, retrieve specific message properties, or retrieve a set of messages.
+
+<BR></P>
+
+<P>Transport providers represent the link between the local system and remote systems. Transport providers take outgoing messages, establish connections to remote systems, and transmit messages in a format that the remote system can comprehend. Transport providers also accept incoming messages from the remote system, translate these into MAPI message objects as necessary, and place them into the local message store. A good example of a transport provider is the Microsoft Internet transport provider, which connects to remote systems using Windows Sockets and uses SMTP (Simple Mail Transfer Protocol) for outgoing and POP (Post Office Protocol) for incoming messages. Outgoing messages are translated into a readable ASCII form; incoming messages are translated from such form into MAPI message objects.
+
+<BR></P>
+
+<P>All providers are represented in the form of DLLs. The set of DLLs that are to be loaded for a MAPI session is determined by MAPI profiles.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>MAPI Profiles</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The &quot;glue&quot; that holds MAPI components together is the MAPI Spooler. The MAPI Spooler is a separate process that facilitates message receipt and delivery. It is typically the MAPI Spooler that passes submitted messages to transport providers and accepts incoming messages from them. The MAPI Spooler implements a store-and-forward architecture; that is, messages submitted are &quot;spooled&quot; by the spooler to the appropriate transport provider when it becomes available. This capability is vital on systems with large message volumes and many remote connections.
+
+<BR></P>
+
+<P>Actually, it is also the MAPI Spooler that is responsible for loading and initializing service providers. But how does the spooler know which service providers to load?
+
+<BR></P>
+
+<P>The answer is MAPI profiles. MAPI profiles are registry entries that specify the current MAPI configuration.
+
+<BR></P>
+
+<P>These registry entries can be found under the following registry key:
+
+<BR></P>
+
+<PRE>HKEY_CURRENT_USER\
+
+    Software\
+
+        Microsoft\
+
+            Windows Messaging Subsystem\
+
+                Profiles</PRE>
+
+<P>Note that the MAPI profile registry entries are generally not readable by human beings and should not be edited manually.
+
+<BR></P>
+
+<P>There can be several profiles defined for a user. Each profile describes a series of service providers and their operating parameters. For example, a typical profile may include the Microsoft Personal Information Store (message store provider), the Microsoft Personal Address Book (address book provider), Microsoft Fax (transport provider), and the Microsoft Network Online Service (address book and transport). MAPI profiles can be edited using the Microsoft Exchange client; select the Services command from its Tools menu (Figure 35.2).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="35vcu02.gif">Figure 35.2. Editing a MAPI profile.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>MAPI APIs</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The different APIs serve different types of MAPI applications.
+
+<BR></P>
+
+<P>Messaging-aware and messaging-enabled applications can use both Simple MAPI and CMC. The main advantage of using CMC is complete platform independence. It is recommended that newer applications use CMC in place of Simple MAPI.
+
+<BR></P>
+
+<P>Messaging-based applications (not to mention service providers) require access to the full MAPI API set and thus should use Extended MAPI.
+
+<BR></P>
+
+<P>OLE Messaging is used by Visual Basic and Visual C++ applications. OLE Messaging provides a richer API than CMC or Simple MAPI but falls short of the functionality of the full Extended MAPI set.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Simple MAPI</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Simple MAPI provides a series of functions that enable applications to establish a MAPI session, perform messaging functions, and shut down the session.
+
+<BR></P>
+
+<P>The simplest way to use Simple MAPI is via the MAPISendDocuments function. This function can be used to create a standard MAPI message with one or more file attachments. MAPISendDocuments always displays a dialog where the user can specify recipients, sending options, and the message text. This is demonstrated by the program in Listing 35.1. This program sends a message using MAPISendDocuments with the file c:\autoexec.bat embedded in it. You can compile this program from the command line by typing cl sendmsg.c user32.lib.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 35.1. Using </B><B>MAPISendDocuments</B><B>.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;mapi.h&gt;
+
+LPMAPISENDDOCUMENTS lpfnMAPISendDocuments;
+
+void SendMsg(HWND hwnd)
+
+{
+
+    (*lpfnMAPISendDocuments)((ULONG)hwnd, &quot;;&quot;, &quot;C:\\AUTOEXEC.BAT&quot;,
+
+                             &quot;AUTOEXEC.BAT&quot;, 0);
+
+    MessageBox(hwnd, &quot;Message sent&quot;, &quot;&quot;, MB_OK);
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case WM_LBUTTONDOWN:
+
+            SendMsg(hwnd);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                        LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    HANDLE hMAPILib;
+
+    hMAPILib = LoadLibrary(&quot;MAPI32.DLL&quot;);
+
+    lpfnMAPISendDocuments = (LPMAPISENDDOCUMENTS)GetProcAddress(
+
+                                  hMAPILib, &quot;MAPISendDocuments&quot;);
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;HELLO&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;HELLO&quot;, &quot;HELLO&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    FreeLibrary(hMAPILib);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>A much more flexible way of sending messages is through MAPISendMail. Through a series of structures, you can specify the recipient and contents of the message. MAPISendMail makes it possible to send mail without presenting a user interface whatsoever. Thus, MAPISendMail can also be used, for example, from command-line applications.
+
+<BR></P>
+
+<P>MAPISendMail is typically used within a MAPI session that is started by a call to MAPILogon and terminated by calling MAPILogoff. This usage of MAPISendMail is demonstrated by the program in Listing 35.2, which sends a simple text message to president@whitehouse.gov without displaying a user interface. (For the sake of the sanity of Mr. Clinton's staff, do change the mail address before you start experimenting with this program!)
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 35.2. Using Simple MAPI in a console application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;stdio.h&gt;
+
+#include &lt;mapi.h&gt;
+
+LPMAPILOGON lpfnMAPILogon;
+
+LPMAPISENDMAIL lpfnMAPISendMail;
+
+LPMAPILOGOFF lpfnMAPILogoff;
+
+MapiRecipDesc recipient =
+
+{
+
+    0, MAPI_TO,
+
+    &quot;Bill Clinton&quot;, &quot;SMTP:president@whitehouse.gov&quot;,
+
+    0, NULL
+
+};
+
+MapiMessage message =
+
+{
+
+    0, &quot;Greetings&quot;,
+
+    &quot;Hello, Mr. President!\n&quot;,
+
+    NULL, NULL, NULL, 0, NULL, 1, &amp;recipient, 0, NULL
+
+};
+
+void main(void)
+
+{
+
+    LHANDLE lhSession;
+
+    HANDLE hMAPILib;
+
+    hMAPILib = LoadLibrary(&quot;MAPI32.DLL&quot;);
+
+    lpfnMAPILogon =
+
+        (LPMAPILOGON)GetProcAddress(hMAPILib, &quot;MAPILogon&quot;);
+
+    lpfnMAPISendMail =
+
+        (LPMAPISENDMAIL)GetProcAddress(hMAPILib, &quot;MAPISendMail&quot;);
+
+    lpfnMAPILogoff =
+
+        (LPMAPILOGOFF)GetProcAddress(hMAPILib, &quot;MAPILogoff&quot;);
+
+    (*lpfnMAPILogon)(0, NULL, NULL, MAPI_ALLOW_OTHERS, 0,
+
+                     &amp;lhSession);
+
+    (*lpfnMAPISendMail)(lhSession, 0, &amp;message, 0, 0);
+
+    (*lpfnMAPILogoff)(lhSession, 0, 0, 0);
+
+    printf(&quot;Message to the White House sent.\n&quot;);
+
+    FreeLibrary(hMAPILib);
+
+}</PRE>
+
+<P>Simple MAPI can also be used to process incoming messages. Calls like MAPIFindNext and MAPIReadMail can be used, for example, to examine new messages in the user's Inbox.
+
+<BR></P>
+
+<P>Simple MAPI also offers a user interface for entering addresses. Instead of using MAPISendDocuments, you can utilize the MAPIAddress call to enable the user to select and enter addresses.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Common Messaging Calls</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Common Messaging Calls is an implementation of the X.400 API Association's Common Messaging Call API. It provides a series of high-level messaging functions that can be used in a fashion similar to Simple MAPI.
+
+<BR></P>
+
+<P>Table 35.1 compares CMC functions with Simple MAPI functions.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 35.1. CMC and Simple MAPI.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>CMC</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Simple MAPI</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>cmc_logon</P>
+
+<TD>
+
+<P>MAPILogon</P>
+
+<TD>
+
+<P>Log on to the service</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_logoff</P>
+
+<TD>
+
+<P>MAPILogoff</P>
+
+<TD>
+
+<P>Log off from the service</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_free</P>
+
+<TD>
+
+<P>MAPIFreeBuffer</P>
+
+<TD>
+
+<P>Free allocated memory</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_send</P>
+
+<TD>
+
+<P>MAPISendMail</P>
+
+<TD>
+
+<P>Send a message</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_send_documents</P>
+
+<TD>
+
+<P>MAPISendDocuments</P>
+
+<TD>
+
+<P>Send files in a message</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_list</P>
+
+<TD>
+
+<P>MAPIFindNext</P>
+
+<TD>
+
+<P>Find messages</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_read</P>
+
+<TD>
+
+<P>MAPIReadMail</P>
+
+<TD>
+
+<P>Retrieve messages</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_act_on</P>
+
+<TD>
+
+<P>MAPISaveMail</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>MAPIDeleteMail</P>
+
+<TD>
+
+<P>Save or delete messages</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_look_up</P>
+
+<TD>
+
+<P>MAPIAddress</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>MAPIDetails</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<TD>
+
+<P>MAPIResolveName</P>
+
+<TD>
+
+<P>Addressing</P>
+
+<TR>
+
+<TD>
+
+<P>cmc_query_configuration</P>
+
+<TD>
+
+<P>N/A</P>
+
+<TD>
+
+<P>CMC configuration data</P></TABLE>
+
+<P>The program in Listing 35.3 demonstrates the use of CMC calls from within a console application. You can compile and run this program from the command line. To compile, use cl cmcmsg.c.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 35.3. CMC in a console application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;xcmc.h&gt;
+
+typedef CMC_return_code (FAR PASCAL *LPFNCMCLOGON)(CMC_string,
+
+    CMC_string, CMC_string, CMC_enum, CMC_ui_id, CMC_uint16,
+
+    CMC_flags, CMC_session_id FAR *,CMC_extension FAR *);
+
+typedef CMC_return_code (FAR PASCAL *LPFNCMCSEND)(CMC_session_id,
+
+    CMC_message FAR *, CMC_flags, CMC_ui_id,CMC_extension FAR *);
+
+typedef CMC_return_code (FAR PASCAL *LPFNCMCLOGOFF)(CMC_session_id,
+
+    CMC_ui_id, CMC_flags, CMC_extension FAR *);
+
+LPFNCMCLOGON lpfnCMCLogon;
+
+LPFNCMCSEND lpfnCMCSend;
+
+LPFNCMCLOGOFF lpfnCMCLogoff;
+
+CMC_recipient recipient =
+
+{
+
+    &quot;Bill Clinton&quot;, CMC_TYPE_INDIVIDUAL,
+
+    &quot;SMTP:president@whitehouse.gov&quot;, CMC_ROLE_TO,
+
+    CMC_RECIP_LAST_ELEMENT, NULL
+
+};
+
+CMC_message message =
+
+{
+
+    NULL, &quot;CMC: IPM&quot;, &quot;Greetings&quot;, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+
+    &quot;Hello, Mr. President!\n&quot;, &amp;recipient, NULL,
+
+    CMC_MSG_LAST_ELEMENT, NULL
+
+};
+
+void main(void)
+
+{
+
+    char msg[1000];
+
+    CMC_session_id session;
+
+    CMC_return_code retcode;
+
+    HANDLE hMAPILib;
+
+    hMAPILib = LoadLibrary(&quot;MAPI32.DLL&quot;);
+
+    lpfnCMCLogon =
+
+        (LPFNCMCLOGON)GetProcAddress(hMAPILib, &quot;cmc_logon&quot;);
+
+    lpfnCMCSend =
+
+        (LPFNCMCSEND)GetProcAddress(hMAPILib, &quot;cmc_send&quot;);
+
+    lpfnCMCLogoff =
+
+        (LPFNCMCLOGOFF)GetProcAddress(hMAPILib, &quot;cmc_logoff&quot;);
+
+    (*lpfnCMCLogon)(NULL, NULL, NULL, (CMC_enum)0, 0, 100,
+
+      CMC_ERROR_UI_ALLOWED | CMC_LOGON_UI_ALLOWED, &amp;session, NULL);
+
+    (*lpfnCMCSend)(session, &amp;message, 0, 0, NULL);
+
+    (*lpfnCMCLogoff)(session, 0,
+
+               CMC_ERROR_UI_ALLOWED | CMC_LOGOFF_UI_ALLOWED, NULL);
+
+    printf(&quot;Message to the White House sent.\n&quot;);
+
+    FreeLibrary(hMAPILib);
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Extended MAPI</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Extended MAPI is a large, complex object-oriented programming interface to all aspects of MAPI. Its programming model is based on OLE COM, the OLE Component Object Model.
+
+<BR></P>
+
+<P>Extended MAPI defines a series of object types, including messages, message stores, folders, attachments, mail users, address books, providers, sessions, and many more supplementary objects. MAPI objects are characterized by a set of properties, themselves implemented as objects. MAPI objects are accessed through interfaces derived from the OLE IUnknown interface. For example, property objects implement the IMAPIProp interface, while message objects implement the IMessage interface.
+
+<BR></P>
+
+<P>Extended MAPI programming involves manipulating MAPI objects through their properties and methods and through event notifications. MAPI properties can be manipulated through property objects and the IMAPIProp interface, or through property tables. Methods are the IUnknown-derived interfaces that MAPI objects provide. Event notification is the mechanism of communication between MAPI objects.
+
+<BR></P>
+
+<P>Extended MAPI can be used to implement messaging-based applications that require finer control over messaging services than what is available through Simple MAPI or CMC. Extended MAPI can also be used to perform administrative functions, such as selecting and configuring services and creating user profiles.
+
+<BR></P>
+
+<P>Another use of Extended MAPI is to program with MAPI forms. MAPI forms represent special types of messages, implemented through a user interface and a form server, which manage the user's interaction with the forms message.
+
+<BR></P>
+
+<P>Extended MAPI can also be used to extend the Microsoft Exchange client. Customized versions of the Microsoft Exchange client can provide application-specific views on address books, message stores, and message objects, and can add new searching, addressing, and workgroup features to that application.
+
+<BR></P>
+
+<P>Lastly, Extended MAPI also represents the programming interface for creating MAPI service providers. These include address books, message stores, and transports.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>OLE Messaging</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE messaging exposes MAPI objects through the OLE automation interface. As such, it works best with OLE automation clients, such as Visual Basic applications or programs written in Visual Basic for Applications (that is, Microsoft Excel, Access, or Project programs).
+
+<BR></P>
+
+<P>Figure 35.3 illustrates the hierarchy of OLE automation objects exposed by OLE messaging.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="35vcu03.gif">Figure 35.3. OLE messaging objects.</A></B>
+
+<BR></P>
+
+<P>Demonstrating the use of OLE messaging from within Visual C++ is difficult, as it requires constructing an OLE automation client application. In order to demonstrate a simple OLE messaging session, I decided to resort to Visual Basic. The example shown in Listing 35.4 shows how a Visual Basic application can send a simple message without displaying a user interface.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 35.4. OLE messaging example in Visual Basic.</B></LH></UL>
+
+<PRE>Sub Command1_Click ()
+
+    Dim objSession As Object
+
+    Dim objMessage As Object
+
+    Dim objRecip As Object
+
+    Set objSession = CreateObject(&quot;MAPI.Session&quot;)
+
+    objSession.Logon &quot;&quot;, &quot;&quot;, False, False
+
+    Set objMessage = objSession.Outbox.Messages.Add
+
+    objMessage.Subject = &quot;Greetings&quot;
+
+    objMessage.Text = &quot;Hello again, Mr. President!&quot;
+
+    Set objRecip = objMessage.Recipients.Add
+
+    objRecip.Name = &quot;Bill Clinton&quot;
+
+    objRecip.Address = &quot;SMTP:president@whitehouse.gov&quot;
+
+    objRecip.Type = 1
+
+    objRecip.Resolve (False)
+
+    objMessage.Send True, False
+
+    MsgBox &quot;Message to the White House sent&quot;
+
+    objSession.Logoff
+
+    Exit Sub
+
+End Sub</PRE>
+
+<P>To test this simple example, attach this code to a button in a Visual Basic form (you can also use disptest.exe, the OLE automation test version of Visual Basic that came as part of your Visual C++ installation), run the program, and click on the button. Oh, and don't forget to change the address before exercising this code!
+
+<BR></P>
+
+<P>Note that this test will only work if you have OLE messaging installed on your computer. OLE messaging components are only available at present as part of the MAPI SDK, distributed through the Microsoft Developer Network level 2 subscription.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>MAPI Support in MFC</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Microsoft Foundation Classes Library provides MAPI support through a series of member functions in CDocument. This support, and how this support is incorporated into MFC framework applications, is the subject of the last part of this chapter.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>MAPI Support in </B><B><I>CDocument</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDocument class supports MAPI through the OnFileSendMail member function.
+
+<BR></P>
+
+<P>CDocument::OnFileSendMail serializes the document into a temporary file, and then calls Simple MAPI functions to prepare and send a message with this file as an attachment.
+
+<BR></P>
+
+<P>A variant of CDocument::OnFileSendMail is COleDocument::OnFileSendMail; this version handles compound files correctly.
+
+<BR></P>
+
+<P>The CDocument::OnUpdateFileSendMail member function determines whether MAPI support is available on the system and updates command items accordingly through a CCmdUI object.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>MAPI and AppWizard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The AppWizard can generate skeleton applications with minimal MAPI support. If requested, the AppWizard will add a Send menu item to the new application's File menu. This item will invoke the OnFileSendMail member function of the application's document class. AppWizard will also install a command update handler, referencing the OnUpdateFileSendMail member function.
+
+<BR></P>
+
+<P>In other words, if you only wish to make your application messaging-aware, you need not do anything other than enabling MAPI support when creating the application's skeleton with AppWizard. This is all you need to do in order to satisfy the new Windows 95 Logo requirements.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>MAPI, the Messaging Application Programming Interface, represents a comprehensive set of specifications that link messaging applications on the one hand and messaging service providers on the other, forming a messaging architecture.
+
+<BR></P>
+
+<P>Messaging applications include messaging-aware, messaging-enabled, and messaging-based programs. Messaging-aware applications such as the Windows 95 WordPad, although they provide some level of MAPI functionality, do not depend on the presence of MAPI for their functionality. Messaging-enabled applications such as Microsoft Schedule+ require the presence of MAPI to perform many of their functions. Messaging-based applications such as the Microsoft Exchange client require MAPI in order to function.
+
+<BR></P>
+
+<P>On the service provider side, MAPI recognizes message stores, address books, and transport providers. These providers, acting under the control of the MAPI Spooler, perform the services that together form the messaging system on your computer.
+
+<BR></P>
+
+<P>The MAPI configuration is stored in the form of MAPI profiles. MAPI profiles are registry entries that identify active MAPI services and their configuration. A user can have several MAPI profiles, with an active profile selected at the start of the MAPI session.
+
+<BR></P>
+
+<P>When developing MAPI applications, one can pick one of several APIs. Simple MAPI provides a set of functions essential for addressing sending simple messages and retrieving incoming messages. Similar functionality is offered by CMC, the Common Messaging Call API; however, CMC is completely platform-independent. CMC is an implementation of the X.400 API Association's Common Messaging Call API. Visual Basic and Visual C++ applications can also use OLE Messaging for an object-oriented interface to MAPI functions.
+
+<BR></P>
+
+<P>The full interface to MAPI, Extended MAPI, is used for developing messaging-based applications, service providers, new message types (MAPI forms), administrative applications, and extensions to the Microsoft Exchange client application.</P>
+
+<P><A HREF="vcu34fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu36fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

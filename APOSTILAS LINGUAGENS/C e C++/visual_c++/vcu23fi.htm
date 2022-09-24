@@ -1,0 +1,632 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu23fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu24fi.htm">
+
+<LINK REL="Previous" HREF="vcu22fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu22fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu24fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">23 &#151; Using OLE Controls</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Adding OLE Custom Controls to Your Application</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Creating a Control Container</A></LI>
+
+<LI>
+
+<A HREF="#I5">Adding a Custom Control to a Dialog Template</A></LI>
+
+<LI>
+
+<A HREF="#I6">Setting Control Properties</A></LI>
+
+<LI>
+
+<A HREF="#I7"> Adding Member Variables</A></LI>
+
+<LI>
+
+<A HREF="#I8">Handling Messages</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">Custom Controls Supplied with Visual C++</A></LI>
+
+<LI>
+
+<A HREF="#I10">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>23 &#151; Using OLE Controls</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Microsoft's Visual Basic programming environment introduced a new style of software development. Visual Basic Custom Controls, or VBXs, provided the basis for component-based programming.
+
+<BR></P>
+
+<P>While VBXs were not exactly revolutionary (they represented just another form of a dynamic link library), they fulfilled the promise of reusability to a degree not previously thought possible. Novice programmers who may not even have heard the acronym DLL manipulated VBXs with ease and created near-professional quality Visual Basic applications in days.
+
+<BR></P>
+
+<P>Although VBX technology was developed as a technology specific to Visual Basic, its unprecedented success prompted Microsoft to add VBX support to the Visual C++ development system. Interfacing C programs and a VBX library is not as hard as it sounds; after all, the VBX is also written in the C language. The difficulty lies in the fact that the data types used were tailored towards the Basic language, not C.
+
+<BR></P>
+
+<P>Unfortunately, the good days of VBX support in C programs were too good to last. Shortly after VBX support was introduced, ongoing development of the 16-bit version of Visual C++ ceased. The 32-bit version, which represented the development environment of choice for Windows NT and now Windows 95, was fundamentally incompatible with 16-bit VBX libraries.
+
+<BR></P>
+
+<P>Microsoft decided to address this issue and design a new custom control mechanism that also promised to resolve other VBX limitations. No longer a technology specific to a single programming environment, the new OLE Custom Controls use OLE technology for communicating with a <I>control </I><I>container</I> application and promise the same ease of use as VBX technology.
+
+<BR></P>
+
+<P>In the rest of this chapter, we examine OLE controls from the perspective of the <I>control user</I>; that is, the application programmer who takes an OLE control as some kind of a black box and incorporates it as a component into his or her application. This perspective markedly differs from that of the <I>control developer</I>, who creates the OLE control in the form of an OCX library; and that of the <I>end user,</I> who is the recipient of the application created by the control user.
+
+<BR></P>
+
+<P>For the purposes of demonstration, I developed a very simple OLE control with the uninspired name OCTL. OCTL is a button that can have a rectangular, elliptical, or triangular shape; when the button is clicked with the mouse, it changes color from green to red or back to indicate its selected or deselected state (Figure 23.1).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu01.gif">Figure 23.1. The OCTL control in action.</A></B>
+
+<BR></P>
+
+<P>What exactly is an OLE custom control? It can be viewed as an object that presents itself to the application programmer in the form of a series of properties, methods, and events. <I>Control properties</I> can be set or retrieved and are represented by values of various types, such as integers or character strings. <I>Control methods</I> are procedures that you can call in order for the control to perform a function. <I>Events</I> are messages that the control sends to its parent window indicating an occurrence of some kind, such as a mouse click.
+
+<BR></P>
+
+<P>Although many controls present a visual interface, a control does not necessarily have to be visible in order to be functional. It is possible to create controls that offer properties, respond to methods, and send event notifications without ever presenting a visual interface to the end user.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Adding OLE Custom Controls to Your Application</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Follow these steps to add custom control support to an application:
+
+<BR></P>
+
+<OL>
+
+<LI>Ensure that your application supports custom controls by calling AfxEnableControlContainer.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add the custom control to a dialog template.
+
+<BR>
+
+<BR></LI>
+
+<LI>Set the control's initial properties.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add member variables to represent the control or its properties as appropriate.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add message handlers to handle messages from the control as appropriate.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>To demonstrate custom control usage, I built an application named ODLG, which uses a dialog with my OCTL control in it. ODLG is an AppWizard-generated, dialog-based application; the only nondefault option when creating this application with AppWizard was OLE custom control support.
+
+<BR></P>
+
+<P>Although I describe OLE custom control use in the context of dialogs, custom control use is no more restricted to dialog boxes than is the use of standard Windows controls.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Creating a Control Container</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order to be capable of using OLE custom controls, an application must be a control container. This is accomplished by calling AfxEnableControlContainer during application initialization. Applications created by AppWizard and marked to support OLE custom controls have this call placed into the InitInstance member function of their application objects. If you created an application with AppWizard and did not include OLE custom control support, you can add this call manually any time.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Adding a Custom Control to a Dialog Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Custom controls can be added to a dialog template just like other controls, using the dialog editor in Developer Studio. However, custom controls, at least initially, may not appear in the palette of controls. Therefore, it is necessary to use the right mouse button to invoke a popup menu with the option of inserting a custom control (Figure 23.2).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu02.gif">Figure 23.2. Inserting an OLE custom control.</A></B>
+
+<BR></P>
+
+<P>When you select the Insert OLE Control option, the Developer Studio responds with a dialog listing all OLE controls that are installed on your system (Figure 23.3). Select a control and click on the OK button to have it placed in your dialog at a default location in the upper-left corner.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu03.gif">Figure 23.3. Installed OLE controls.</A></B>
+
+<BR></P>
+
+<P>Once the control has been placed in the dialog, you can move it around and resize it just as you would move and resize any other control.
+
+<BR></P>
+
+<P>In the ODLG application, I added a button in addition to the OCTL control. This button will be used by the end user to retrieve and display the control's Shape property. This button is identified as IDC_BUTTON; the OCTL control itself is identified as IDC_OCTLCTRL.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Setting Control Properties</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Although it may not be obvious at first sight, as soon as you insert a control in your dialog template, the code comprising the control becomes active. The Developer Studio actually loads the library code in the OCX file and activates the control in <I>design mode</I>. The behavior of many controls varies according to whether the control has been activated in this mode or in <I>user mode</I> when an application using the control is running.
+
+<BR></P>
+
+<P>The significance of this is that most OLE custom controls offer a property page interface where the control's properties can be set. Many control properties are <I>persistent</I>; settings configured at design time define the run-time appearance and behavior of the control.
+
+<BR></P>
+
+<P>The OCTL control has exactly two properties. IsSelected, a Boolean property, tells whether the control is in a selected or deselected state. This property is read-only (and so obviously cannot be set at design time). The other property, Shape, determines whether the control acquires an elliptical, rectangular, or triangular shape, and is meant to be used as a design-time property. (In fact, attempting to set this property at runtime results in an error.)
+
+<BR></P>
+
+<P>A control's properties can be set by right-clicking on the control in the dialog editor to invoke the control's property sheet interface (Figure 23.4).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu04.gif">Figure 23.4. OLE custom control properties.</A></B>
+
+<BR></P>
+
+<P>Of the three or more property pages that form part of this property sheet, the first and the last are supplied by Developer Studio; the ones in the middle are supplied by the control itself. For example, the OCTL control supplies a single property page where the value of its Shape property can be set (Figure 23.5).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu05.gif">Figure 23.5. OCTL property page: Control.</A></B>
+
+<BR></P>
+
+<P>The last property page (Figure 23.6) in this property sheet offers an interface to all control properties. This includes read-only properties as well, whose values cannot be modified.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu06.gif">Figure 23.6. All OCTL control properties.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B> Adding Member Variables</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The procedure for adding member variables for an OLE custom control is like the one for adding member variables for other types of controls. Select the control in the dialog editor and invoke the ClassWizard, select the Member Variables tab in ClassWizard, and double-click on the line containing the control's identifier to add a member variable.
+
+<BR></P>
+
+<P>However, at this point, something strange takes place. The ClassWizard responds with the dialog shown in Figure 23.7. In order to create variables corresponding to the OLE control, it is necessary to first create a CWnd-derived class representing the control. This is done automatically by ClassWizard when you first attempt to add a member variable for the control.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu07.gif">Figure 23.7. Creation of class for OLE custom </B><B>control.</A></B>
+
+<BR></P>
+
+<P>If you click OK, Developer Studio responds with yet another dialog (Figure 23.8) where you can modify any default class and file names that the ClassWizard generated for you.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu08.gif">Figure 23.8. Confirm OLE custom control classes.</A></B>
+
+<BR></P>
+
+<P>After the new classes, you can proceed adding a member variable (m_cOCTL) for the OLE custom control. This procedure occurs only once; subsequently, you can add member variables for the control normally.
+
+<BR></P>
+
+<P>Now we take a brief look at the code generated by ClassWizard. When I added a member variable for the OCTL control to my ODLG application, ClassWizard created the COCTL class; the header file was octl.h, the implementation file octl.cpp.
+
+<BR></P>
+
+<P>The declaration of class COCTL, shown in Listing 23.1, includes all member functions necessary to create the control, adjust its properties, and invoke its methods.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 23.1. </B><B>COCTL</B><B> class declaration.</B></LH></UL>
+
+<PRE>class COCTL : public CWnd
+
+{
+
+protected:
+
+    DECLARE_DYNCREATE(COCTL)
+
+public:
+
+    CLSID const&amp; GetClsid()
+
+    {
+
+        static CLSID const clsid
+
+            = { 0x677600e7, 0xf6c5, 0x11ce,
+
+              { 0x87, 0xc3, 0x0, 0x40, 0x33, 0x21, 0xbf, 0xac } };
+
+        return clsid;
+
+    }
+
+    virtual BOOL Create(LPCTSTR lpszClassName,
+
+        LPCTSTR lpszWindowName, DWORD dwStyle,
+
+        const RECT&amp; rect,
+
+        CWnd* pParentWnd, UINT nID,
+
+        CCreateContext* pContext = NULL)
+
+    { return CreateControl(GetClsid(), lpszWindowName, dwStyle,
+
+        rect, pParentWnd, nID); }
+
+    BOOL Create(LPCTSTR lpszWindowName, DWORD dwStyle,
+
+        const RECT&amp; rect, CWnd* pParentWnd, UINT nID,
+
+        CFile* pPersist = NULL, BOOL bStorage = FALSE,
+
+        BSTR bstrLicKey = NULL)
+
+    { return CreateControl(GetClsid(), lpszWindowName, dwStyle,
+
+        rect, pParentWnd, nID,
+
+        pPersist, bStorage, bstrLicKey); }
+
+// Attributes
+
+public:
+
+    short GetShape();
+
+    void SetShape(short);
+
+    BOOL GetSelected();
+
+    void SetSelected(BOOL);
+
+// Operations
+
+public:
+
+    void AboutBox();
+
+};</PRE>
+
+<P>There is nothing surprising in the implementation file (Listing 23.2) either. However, consider yourself strongly advised to heed the warnings at the top of these files. These pieces of code are machine-generated for the sole purpose of providing an interface to a control <I>written by </I><I>somebody else</I>. It is not your job as the application programmer to attempt to modify the control's behavior (nor are you able to do that without having access to the control's source code).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 23.2. </B><B>COCTL</B><B> class implementation.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// COCTL
+
+IMPLEMENT_DYNCREATE(COCTL, CWnd)
+
+///////////////////////////////////////////////////////////////////
+
+// COCTL properties
+
+short COCTL::GetShape()
+
+{
+
+    short result;
+
+    GetProperty(0x1, VT_I2, (void*)&amp;result);
+
+    return result;
+
+}
+
+void COCTL::SetShape(short propVal)
+
+{
+
+    SetProperty(0x1, VT_I2, propVal);
+
+}
+
+BOOL COCTL::GetSelected()
+
+{
+
+    BOOL result;
+
+    GetProperty(0x2, VT_BOOL, (void*)&amp;result);
+
+    return result;
+
+}
+
+void COCTL::SetSelected(BOOL propVal)
+
+{
+
+    SetProperty(0x2, VT_BOOL, propVal);
+
+}
+
+///////////////////////////////////////////////////////////////////
+
+// COCTL operations
+
+void COCTL::AboutBox()
+
+{
+
+   InvokeHelper(0xfffffdd8, DISPATCH_METHOD, VT_EMPTY, NULL, NULL);
+
+}</PRE>
+
+<P>Back to my ODLG sample application. I added a single member variable of type COCTL, which I named <I>m_cOCTL</I>. To utilize this variable, I added a message handler function for the Describe button. In this function, shown in Listing 23.3, I retrieve the control's Shape property by calling the COCTL::GetShape member function and display the result in a message box.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 23.3. Accessing a control's properties.</B></LH></UL>
+
+<PRE>void CODLGDlg::OnButton()
+
+{
+
+    // TODO: Add your control notification handler code here
+
+    CString shape;
+
+    switch (m_cOCTL.GetShape())
+
+    {
+
+        case 0: shape = &quot;Ellipse&quot;; break;
+
+        case 1: shape = &quot;Rectangle&quot;; break;
+
+        case 2: shape = &quot;Triangle&quot;; break;
+
+    }
+
+    AfxMessageBox(&quot;The control's shape is &quot; + shape + &quot;.&quot;);
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Handling Messages</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Handling messages from an OLE custom control is perhaps even simpler than handling properties. You can add handlers for any event the control supports via ClassWizard. For example, Figure 23.9 demonstrates adding a message handler for the single event that the OCTL control can generate, a Select event.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu09.gif">Figure 23.9. Adding a message map entry for an OLE </B><B>custom control event.</A></B>
+
+<BR></P>
+
+<P>Depending on the type of the event, the event handler may receive parameters. In the case of OCTL, a handler for the Select event received a Boolean parameter specifying whether the control has just been selected or deselected. The sample handler function in ODLG simply displays a message box to this effect, as shown in Listing 23.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 23.4. Handling an OLE custom control event.</B></LH></UL>
+
+<PRE>void CODLGDlg::OnSelectOctlctrl(BOOL IsSelected)
+
+{
+
+    // TODO: Add your control notification handler code here
+
+    if (IsSelected)
+
+        AfxMessageBox(&quot;The control has been selected.&quot;);
+
+    else
+
+        AfxMessageBox(&quot;The control has been deselected.&quot;);
+
+}</PRE>
+
+<P>That's all there is to it! All that remains is recompiling and running your application.
+
+<BR></P>
+
+<P>As you can see, the procedure for inserting an OLE custom control is no more complex than the procedure for inserting other types of controls. Moreover, in order to efficiently use an OLE custom control, you need not know the details of its implementation (or even how OLE custom controls are implemented in the first place). All you need is documentation on the control's purpose and behavior, its properties, methods, and events.
+
+<BR></P>
+
+<P>I believe Microsoft really delivered on its promise of providing a 32-bit custom control technology that is superior to VBX technology. All we need now is a variety of wonderful third-party custom controls.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>Custom Controls Supplied with Visual C++</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Microsoft supplies several OLE custom controls with Visual C++. These controls are similar in function and appearance to VBX controls found in earlier versions (for example, Version 3.0) of Visual Basic.
+
+<BR></P>
+
+<P>Among these controls is the Animated Button Control; this flexible control can be used to implement multistate or animated buttons.
+
+<BR></P>
+
+<P>The Grid Control presents a two-dimensional array of cells organized into rows and columns in a spreadsheet-like interface.
+
+<BR></P>
+
+<P>The Key State Control can be used to display the state of the Num Lock, Caps Lock, or Scroll Lock keys or the Insert/Overwrite status.
+
+<BR></P>
+
+<P>The Microsoft Comm control is an example of a control that is not visible at runtime. This control provides a communication port interface.
+
+<BR></P>
+
+<P>The Microsoft Masked Edit Control provides an edit control with customized, formatted editing capabilities.
+
+<BR></P>
+
+<P>The Microsoft Multimedia Control provides a programmatic multimedia interface.
+
+<BR></P>
+
+<P>The PicClip control is yet another control that is not visible at runtime; this control provides an efficient mechanism for organizing a large number of small icons or bitmaps.
+
+<BR></P>
+
+<P>Some of these controls (the Animated Button Control, the Grid Control, the Key State Control, and the Microsoft Multimedia Control) are demonstrated in a dialog box shown in Figure 23.10.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="23vcu10.gif">Figure 23.10. Some custom controls supplied with Visual </B><B>C++.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>OLE custom controls represent a technology that is a 32-bit successor to the Visual Basic custom control (VBX) technology.
+
+<BR></P>
+
+<P>In order for an application to act as an OLE control container, it is necessary to call the AfxEnableControlContainer function when the application is being initialized.
+
+<BR></P>
+
+<P>OLE custom controls can be used in applications just like ordinary controls. They can be inserted into a dialog template using the Developer Studio dialog editor. The control can be configured through a set of property page interfaces that appear in the control's property sheet in the dialog editor.
+
+<BR></P>
+
+<P>The control's properties can be accessed from within the application by using the ClassWizard to add member variables that correspond to the control. When adding a member variable for a certain type of control for the first time, ClassWizard creates a wrapper class for the control and adds it to the project.
+
+<BR></P>
+
+<P>The ClassWizard can also be used to add handler functions for control events.
+
+<BR></P>
+
+<P>Microsoft supplies several custom controls as part of the Visual C++ development environment.</P>
+
+<P><A HREF="vcu22fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu24fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

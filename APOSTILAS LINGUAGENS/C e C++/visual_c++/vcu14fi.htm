@@ -1,0 +1,1136 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu14fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu15fi.htm">
+
+<LINK REL="Previous" HREF="vcu13fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu13fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu15fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I1">14 &#151; File Management</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">File System Overview</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Supported File Systems</A></LI>
+
+<LI>
+
+<A HREF="#I5">CD-ROM</A></LI>
+
+<LI>
+
+<A HREF="#I6">Network Volumes</A></LI>
+
+<LI>
+
+<A HREF="#I7">File and Volume Compression</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">Win32 File Objects</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Creating and Opening Files</A></LI>
+
+<LI>
+
+<A HREF="#I10">Simple Input and Output</A></LI>
+
+<LI>
+
+<A HREF="#I11">Asynchronous I/O Operations</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">Low-Level I/O</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">File Descriptors</A></LI>
+
+<LI>
+
+<A HREF="#I14">Standard File Descriptors</A></LI>
+
+<LI>
+
+<A HREF="#I15">Low-Level I/O Functions</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Stream I/O</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I17">Stream I/O in C</A></LI>
+
+<LI>
+
+<A HREF="#I18">Stream I/O in C++ (The iostream Classes)</A></LI></UL>
+
+<LI>
+
+<A HREF="#I19">Special Devices</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I20">Console I/O</A></LI>
+
+<LI>
+
+<A HREF="#I21">Communication Ports</A></LI></UL>
+
+<LI>
+
+<A HREF="#I22">Summary</A></LI></UL></UL></UL>
+
+
+
+<H2 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>14 &#151; File Management</B>
+
+<BR></FONT></A></CENTER></H2>
+
+<P>The Win32 API offers a set of new functions and concepts for accessing and managing disk files. This is in addition to the low-level and stream I/O functions that are available as part of the C and C++ run-time libraries. This chapter reviews all forms of file handling that are available to 32-bit Windows applications.
+
+<BR></P>
+
+<P>Figure 14.1 illustrates the relationship between DOS/UNIX-style &quot;low-level&quot; I/O, C/C++ style stream I/O, and the Win32 file I/O functions.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="14vcu01.gif">Figure 14.1. I/O functions.</A></B>
+
+<BR></P>
+
+<P>Win32 applications should preferably use Win32 file I/O operations, which provide full access to Win32 security features and other attributes and also enable asynchronous, or <I>overlapped</I>, input and output operations.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>File System Overview</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>A typical file is a collection of data stored on nonvolatile media, such as a magnetic disk. Files are organized into <I>file systems</I>. File systems implement a particular scheme for storing files on physical media and for representing various file attributes such as filenames, permissions, and ownership information.
+
+<BR></P>
+
+<P>File system information can be obtained by calling the function GetVolumeInformation. Information about the nature of the storage device can be obtained by a call to GetDriveType.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Supported File Systems</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows NT recognizes four file systems. File Allocation Table (FAT) file systems are compatible with earlier versions of DOS. High Performance File System (HPFS) is the file system used by the OS/2 operating system. New Technology File System (NTFS) is the &quot;native&quot; file system of Windows NT. Finally, an extension of the FAT file system, the Protected Mode FAT file system, supports long filenames on volumes otherwise compatible with earlier versions of MS-DOS.
+
+<BR></P>
+
+<P>From an application's point of view, the major difference between the various file systems is the support for special attributes. For example, NTFS volumes support the concept of file ownership and security attributes, which are unavailable in the case of FAT file systems.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Windows 95 only recognizes FAT and Protected Mode FAT file systems.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>CD-ROM</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>ISO-9660 CD-ROM volumes appear as regular FAT volumes to applications. There is no support for long filenames or special attributes (&quot;Rock Ridge extensions&quot;).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Network Volumes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows supports file sharing across a network. Network file systems may appear under local drive letters through network redirection. Alternatively, applications may access files across a network using UNC (Universal Naming Convention) names, such as \\server\vol1\myfile.txt. Different networks may or may not support long filenames.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>File and Volume Compression</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Starting with Version 3.51, Windows NT now supports per-file compression on NTFS volumes. On the other hand, Windows 95 supports DriveSpace compression of FAT volumes. Unfortunately, the two compression mechanisms are not compatible; at present, only uncompressed FAT volumes can be accessed by both Windows 95 and Windows NT.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>Win32 File Objects</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In 32-bit Windows, an open file is treated as an operating system object. It is referenced through a Win32 handle; this is not to be confused with the DOS/UNIX style &quot;file handles,&quot; which are basically integers assigned by the operating system to represent open files.
+
+<BR></P>
+
+<P>Because a file is a kernel object, in addition to file system operations, many other handle-based operations are also possible. For example, it is possible to use the WaitForSingleObject function on a file handle opened for console I/O.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Creating and Opening Files</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A file object is created by a call to the CreateFile function. This function can be used to both create a new file and open an existing file. The function name may appear to be a misnomer unless you realize that what the function creates is the <I>file object</I>, which represents either a new or an existing file on the storage device.
+
+<BR></P>
+
+<P>Parameters to this function specify the access mode (read or write), file sharing mode, security attributes, creation flags, file attributes, and an optional file that serves as an attribute template.
+
+<BR></P>
+
+<P>For example, to open the file C:\README.TXT for reading, one would issue the following call to CreateFile:
+
+<BR></P>
+
+<PRE>hReadme = CreateFile(&quot;C:\\README.TXT&quot;, GENERIC_READ, 0, NULL,
+
+                     OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);</PRE>
+
+<P>The first parameter is a filename. Applications can also use the UNC name. The length of the filename is limited to the value of the MAX_PATH constant. Under Windows NT, this can be circumvented by prepending &quot;\\?\&quot; to the path and calling the wide version of CreateFile, CreateFileW. The prefix &quot;\\?\&quot; tells the operating system not to parse the path name.
+
+<BR></P>
+
+<P>Another parameter that deserves special interest is the fourth parameter; this is of type LPSECURITY_ATTRIBUTES. Through this parameter, applications request security attributes for the new file object and may also specify the security attributes for newly created files. However, for this parameter to have any effect, it must be supported by the operating system and the file system. In other words, unless the file is on an NTFS volume and the operating system is Windows NT, advanced security features will not be available. Nevertheless, one member of the SECURITY_ATTRIBUTES structure, the bInheritHandle member, is still useful; it controls whether a handle to the object is inherited by child processes.
+
+<BR></P>
+
+<P>Win32 applications should not use the OpenFile function for opening files; this function is provided only for compatibility with 16-bit Windows.
+
+<BR></P>
+
+<P>An open file object can be closed by calling the CloseHandle function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Simple Input and Output</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Input and output are accomplished with the help of the ReadFile and WriteFile functions. Need I say more? Listing 14.1 contains a simple program (compile with cl filecopy.c), which copies the contents of one file to another using the Win32 functions CreateFile, ReadFile, and WriteFile.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 14.1. Copying a file using Win32 file functions.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;iostream.h&gt;
+
+void main(int argc, char *argv[])
+
+{
+
+    HANDLE hSrc, hDest;
+
+    DWORD dwRead, dwWritten;
+
+    char pBuffer[1024];
+
+    if (argc != 3)
+
+    {
+
+        cout &lt;&lt; &quot;Usage: &quot; &lt;&lt; argv[0] &lt;&lt; &quot; srcfile destfile\n&quot;;
+
+        exit(1);
+
+    }
+
+    hSrc = CreateFile(argv[1], GENERIC_READ, 0, NULL,
+
+                      OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (hSrc == INVALID_HANDLE_VALUE)
+
+    {
+
+        cout &lt;&lt; &quot;Unable to open &quot; &lt;&lt; argv[1] &lt;&lt; '\n';
+
+        exit(1);
+
+    }
+
+    hDest = CreateFile(argv[2], GENERIC_WRITE, 0, NULL,
+
+                       CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (hDest == INVALID_HANDLE_VALUE)
+
+    {
+
+        cout &lt;&lt; &quot;Unable to create &quot; &lt;&lt; argv[2] &lt;&lt; '\n';
+
+        CloseHandle(hSrc);
+
+        exit(1);
+
+    }
+
+    do
+
+    {
+
+        ReadFile(hSrc, pBuffer, sizeof(pBuffer), &amp;dwRead, NULL);
+
+        if (dwRead != 0)
+
+            WriteFile(hDest, pBuffer, dwRead, &amp;dwWritten, NULL);
+
+    } while (dwRead != 0);
+
+    CloseHandle(hSrc);
+
+    CloseHandle(hDest);
+
+}</PRE>
+
+<P>For random-access files, Win32 provides the SetFilePointer function to position the <I>file pointer</I> before reading or writing. The file pointer is a 64-bit value that determines the position of the next read or write operation within the file. The SetFilePointer function fails if it is called with a handle to a device that cannot perform seek operations, such as the console or a communication port.
+
+<BR></P>
+
+<P>SetFilePointer can also be used to retrieve the current value of the file pointer. Call this function as follows:
+
+<BR></P>
+
+<PRE>dwPos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);</PRE>
+
+<P>This call does not move the file pointer but returns its present value.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Asynchronous I/O Operations</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A recurring problem when programming interactive applications that perform file I/O is the issue of responsiveness. Typical file system calls are <I>blocking</I> calls; for example, a call to scanf may not return until there are enough characters in the operating system's input buffer to complete the call. This is rarely a problem with fast, hard disk-based file systems; however, when the input operation is performed, for example, on a communication port, the problem becomes much more acute.
+
+<BR></P>
+
+<P>In 32-bit Windows, there are several solutions to this problem. An obvious solution is to use multiple threads; a dedicated thread may perform the input function and remain blocked indefinitely, without affecting the responsiveness of the application's user interface, managed by another thread. A simple communication program using the multithreaded approach is demonstrated in Listing 14.2. This program can be compiled from the command line by typing cl commthrd.c. (I return to the subject of using the console and communication ports in more detail later in this chapter.)
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Under Windows 95, overlapped I/O operations cannot be used on disk files.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<UL>
+
+<LH><B>Listing 14.2. Simple communication program using multiple threads.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+volatile BOOL bDoRun;
+
+DWORD WINAPI ReadComm(LPVOID hCommPort)
+
+{
+
+    HANDLE hConOut;
+
+    DWORD dwCount;
+
+    char c;
+
+    hConOut = CreateFile(&quot;CONOUT$&quot;, GENERIC_WRITE,
+
+                         FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+
+                         FILE_ATTRIBUTE_NORMAL, 0);
+
+    while (bDoRun)
+
+    {
+
+        ReadFile((HANDLE)hCommPort, &amp;c, 1, &amp;dwCount, NULL);
+
+        if (dwCount == 1)
+
+            WriteFile(hConOut, &amp;c, 1, &amp;dwCount, NULL);
+
+    }
+
+    CloseHandle(hConOut);
+
+}
+
+void main(void)
+
+{
+
+    HANDLE hConIn, hCommPort;
+
+    HANDLE hThread;
+
+    DWORD dwThread;
+
+    DWORD dwCount;
+
+    COMMTIMEOUTS ctmoCommPort;
+
+    DCB dcbCommPort;
+
+    char c;
+
+    hConIn = CreateFile(&quot;CONIN$&quot;, GENERIC_READ | GENERIC_WRITE,
+
+                         FILE_SHARE_READ, NULL, OPEN_EXISTING,
+
+                         FILE_ATTRIBUTE_NORMAL, 0);
+
+    SetConsoleMode(hConIn, 0);
+
+    hCommPort = CreateFile(&quot;COM2&quot;, GENERIC_READ | GENERIC_WRITE, 0,
+
+                    NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    ctmoCommPort.ReadIntervalTimeout = MAXDWORD;
+
+    ctmoCommPort.ReadTotalTimeoutMultiplier = MAXDWORD;
+
+    ctmoCommPort.ReadTotalTimeoutConstant = MAXDWORD;
+
+    ctmoCommPort.WriteTotalTimeoutMultiplier = 0;
+
+    ctmoCommPort.WriteTotalTimeoutConstant = 0;
+
+    SetCommTimeouts(hCommPort, &amp;ctmoCommPort);
+
+    dcbCommPort.DCBlength = sizeof(DCB);
+
+    GetCommState(hCommPort, &amp;dcbCommPort);
+
+    SetCommState(hCommPort, &amp;dcbCommPort);
+
+    bDoRun = TRUE;
+
+    hThread = CreateThread(NULL, 0, ReadComm, (LPDWORD)hCommPort,
+
+                           0, &amp;dwThread);
+
+    while (bDoRun)
+
+    {
+
+        ReadFile(hConIn, &amp;c, 1, &amp;dwCount, NULL);
+
+        if (c == 24) bDoRun = FALSE;
+
+        if (dwCount == 1)
+
+            WriteFile(hCommPort, &amp;c, 1, &amp;dwCount, NULL);
+
+    }
+
+    PurgeComm(hCommPort, PURGE_RXABORT);
+
+    if (WaitForSingleObject(hThread, 5000) == WAIT_TIMEOUT)
+
+        TerminateThread(hThread, 1);
+
+    CloseHandle(hConIn);
+
+    CloseHandle(hCommPort);
+
+}</PRE>
+
+<P>This program uses the COM2 port for communications. In order to test it, you should have a modem attached to that port. If your modem is attached to a different port, change the port name in the second CreateFile call and recompile the application.
+
+<BR></P>
+
+<P>After opening the communication port COM2 for reading and writing and the console for input, the program proceeds with initializing the port. As part of the initialization, it sets up an infinite time-out for reading; it also initializes communications through a DCB structure. (Yes, the seemingly superfluous GetCommState/SetCommState pair of calls is actually necessary.) After initializing the communication port, the program creates a secondary thread, which opens the console for writing. The purpose of the secondary thread is to perform input on the communication port in a loop, while the primary thread does the same on the console. Whenever the primary thread receives a character on the console, it outputs that character on the communication port. Whenever the secondary thread receives a character from the communication port, it writes that character to the console.
+
+<BR></P>
+
+<P>The loops are terminated when a Ctrl+X character is received from the keyboard. The primary thread sets the bDoRun variable (notice that it is declared volatile) to FALSE. It also calls PurgeComm to ensure that any pending ReadFile calls in the secondary thread would be interrupted so the secondary thread can terminate its execution.
+
+<BR></P>
+
+<P>While using multiple threads is always a viable option for 32-bit applications, it may not always be the most convenient solution. Another approach available to 32-bit applications is the use of overlapped I/O. Overlapped I/O enables an application to initiate an I/O operation in a nonblocking fashion. For example, if an application uses the ReadFile function for overlapped input, the function will return even if the input operation has not yet been completed. Once the operation is complete, the application can retrieve results using the GetOverlappedResult function. Applications can also use the ReadFileEx and WriteFileEx functions for overlapped I/O operations.
+
+<BR></P>
+
+<P>Overlapped input can also be used in combination with a synchronization event. Processes can use the synchronization event to receive notification when the I/O operation has been completed. Using events and the WaitForMultipleObjects function, it is possible to wait for input on several input devices at once. This is exactly the technique demonstrated by the second version of this simple communication program, shown in Listing 14.3. This program can also be compiled by a simple command-line instruction, cl commovio.c.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 14.3. Simple communication program using overlapped I/O.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+void main(void)
+
+{
+
+    HANDLE hConIn, hConOut, hCommPort;
+
+    HANDLE hEvents[2];
+
+    DWORD dwCount;
+
+    DWORD dwWait;
+
+    COMMTIMEOUTS ctmoCommPort;
+
+    DCB dcbCommPort;
+
+    OVERLAPPED ov;
+
+    INPUT_RECORD irBuffer;
+
+    BOOL fInRead;
+
+    char c;
+
+    int i;
+
+    hConIn = CreateFile(&quot;CONIN$&quot;, GENERIC_READ | GENERIC_WRITE,
+
+                         FILE_SHARE_READ, NULL, OPEN_EXISTING,
+
+                         FILE_ATTRIBUTE_NORMAL, 0);
+
+    SetConsoleMode(hConIn, 0);
+
+    hConOut = CreateFile(&quot;CONOUT$&quot;, GENERIC_WRITE,
+
+                         FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+
+                         FILE_ATTRIBUTE_NORMAL, 0);
+
+    hCommPort = CreateFile(&quot;COM2&quot;, GENERIC_READ | GENERIC_WRITE, 0,
+
+                       NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL |
+
+                       FILE_FLAG_OVERLAPPED, 0);
+
+    ctmoCommPort.ReadIntervalTimeout = MAXDWORD;
+
+    ctmoCommPort.ReadTotalTimeoutMultiplier = MAXDWORD;
+
+    ctmoCommPort.ReadTotalTimeoutConstant = MAXDWORD;
+
+    ctmoCommPort.WriteTotalTimeoutMultiplier = 0;
+
+    ctmoCommPort.WriteTotalTimeoutConstant = 0;
+
+    SetCommTimeouts(hCommPort, &amp;ctmoCommPort);
+
+    dcbCommPort.DCBlength = sizeof(DCB);
+
+    GetCommState(hCommPort, &amp;dcbCommPort);
+
+    SetCommState(hCommPort, &amp;dcbCommPort);
+
+    SetCommMask(hCommPort, EV_RXCHAR);
+
+    ov.Offset = 0;
+
+    ov.OffsetHigh = 0;
+
+    ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+    hEvents[0] = ov.hEvent;
+
+    hEvents[1] = hConIn;
+
+    fInRead = FALSE;
+
+    while (1)
+
+    {
+
+        if (!fInRead)
+
+            while (ReadFile(hCommPort, &amp;c, 1, &amp;dwCount, &amp;ov))
+
+                if (dwCount == 1)
+
+                    WriteFile(hConOut, &amp;c, 1, &amp;dwCount, NULL);
+
+        fInRead = TRUE;
+
+        dwWait =
+
+            WaitForMultipleObjects(2, hEvents, FALSE, INFINITE);
+
+        switch (dwWait)
+
+        {
+
+            case WAIT_OBJECT_0:
+
+                if (GetOverlappedResult(hCommPort, &amp;ov, &amp;dwCount,
+
+                                        FALSE))
+
+                    if (dwCount == 1)
+
+                        WriteFile(hConOut, &amp;c, 1, &amp;dwCount, NULL);
+
+                fInRead = FALSE;
+
+                break;
+
+            case WAIT_OBJECT_0 + 1:
+
+                ReadConsoleInput(hConIn, &amp;irBuffer, 1, &amp;dwCount);
+
+                if (dwCount == 1 &amp;&amp;
+
+                    irBuffer.EventType == KEY_EVENT &amp;&amp;
+
+                    irBuffer.Event.KeyEvent.bKeyDown)
+
+                  for (i = 0;
+
+                     i &lt; irBuffer.Event.KeyEvent.wRepeatCount; i++)
+
+                {
+
+                    if (irBuffer.Event.KeyEvent.uChar.AsciiChar)
+
+                    {
+
+                        WriteFile(hCommPort,
+
+                          &amp;irBuffer.Event.KeyEvent.uChar.AsciiChar,
+
+                          1, &amp;dwCount, NULL);
+
+                        if (irBuffer.Event.KeyEvent.uChar.AsciiChar
+
+                            == 24) goto EndLoop;
+
+                    }
+
+                }
+
+        }
+
+    }
+
+EndLoop:
+
+    CloseHandle(ov.hEvent);
+
+    CloseHandle(hConIn);
+
+    CloseHandle(hConOut);
+
+    CloseHandle(hCommPort);
+
+}</PRE>
+
+<P>As before, if your modem is not attached to COM2, it may be necessary to change the port name in the second CreateFile call and recompile the program before using it.
+
+<BR></P>
+
+<P>Like its multithreaded counterpart, this program also begins by opening the console and the communication port and initializing the port. Part of the port initialization is a call to the SetCommMask function, which enables read event notifications for that port.
+
+<BR></P>
+
+<P>The communication port is opened with the FILE_FLAG_OVERLAPPED attribute. This enables overlapped I/O operations. When the program's main loop is entered, a call is made to ReadFile, passing to it a pointer to an OVERLAPPED structure.
+
+<BR></P>
+
+<P>ReadFile may return data immediately if data is available on the port. If not, ReadFile still returns, but signals an error; GetLastError can be used to check for the error code ERROR_IO_PENDING. (For simplicity, this part has been left out from the code; we just assume that any ReadFile error indicates pending input.)
+
+<BR></P>
+
+<P>The heart of this program is the call to WaitForMultipleObjects. The function waits on two objects: an event object that was specified as part of the OVERLAPPED structure used in reading the communication port and the console input object. In the case of the latter, it is not necessary to use overlapped I/O; the console object has its own signaled state indicated that data is waiting in the console's input buffer.
+
+<BR></P>
+
+<P>When WaitForMultipleObjects returns, it indicates that data arrived either on the console or on the communication port. It is the subsequent switch statement that distinguishes between the two. Retrieving the console event requires code that is a bit tricky. Unfortunately, a simple ReadFile would not suffice as it leaves the key up event in the console's input buffer, leaving the console object in a signaled state. A subsequent ReadFile would then result in a blocking read, waiting until a key is pressed once again. Because of this behavior, it was necessary to use low-level console functions to retrieve (and discard) all console events, so when WaitForMultipleObjects is called again, the console object would no longer be signaled&#151;at least not until the user presses a key again.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>Low-Level I/O</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Figure 14.1 makes it obvious that the term &quot;low-level I/O&quot; is somewhat of a misnomer for file descriptor-based I/O operations. Indeed, this term is a relic, a leftover from DOS and UNIX; although Windows NT provides these functions for compatibility with those operating systems, they are effectively implemented using CreateFile, ReadFile, and WriteFile.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>File Descriptors</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A file descriptor is an integer identifying an open file. A file descriptor is obtained when an application uses the _open or _creat functions. Note that throughout the run-time library documentation, file descriptors are often referred to as file handles; once again, this is not to be confused with Win32 handles for file objects. A handle returned by CreateFile and a file descriptor obtained by calling _open are not compatible.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Standard File Descriptors</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Win32 console applications have access to the standard input and output file descriptors. These are summarized in Table 14.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 14.1. Standard file descriptors.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>File Descriptor</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Stream Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>0</P>
+
+<TD>
+
+<P>stdin</P>
+
+<TD>
+
+<P>Standard Input</P>
+
+<TR>
+
+<TD>
+
+<P>1</P>
+
+<TD>
+
+<P>stdout</P>
+
+<TD>
+
+<P>Standard Output</P>
+
+<TR>
+
+<TD>
+
+<P>2</P>
+
+<TD>
+
+<P>stderr</P>
+
+<TD>
+
+<P>Standard Error</P></TABLE>
+
+<P>Note that MS-DOS programs also have access to two additional file descriptors, _stdprn and _stdaux. These file descriptors are not available for Win32 applications.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Low-Level I/O Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A file can be opened for low-level I/O using the _open function. A new file can be created for low-level I/O using _creat. Both of these functions have wide character versions; that is, versions which accept a Unicode filename string under Windows NT: _wopen and _wcreat.
+
+<BR></P>
+
+<P>Reading and writing can be performed by calling the _read or _write functions. Seeking within the file is accomplished by calling _lseek. The current position within the file can be retrieved by calling _tell.
+
+<BR></P>
+
+<P>The contents of any buffers maintained by Windows can be committed to disk by calling _commit. The file can be closed by calling _close. The _eof function can be used to test for an end-of-file condition. All low-level I/O functions use the errno global variable to indicate other error conditions.
+
+<BR></P>
+
+<P>The names of all these functions begin with an underscore to indicate that they are not part of the standard ANSI function library. However, for programs that may use the old names of these functions, Microsoft provides the oldnames.lib library.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Stream I/O</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>C/C++ stream I/O functions are among the most frequently used I/O functions. Not too many programs exist that contain no calls to printf or at least one FILE pointer.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Stream I/O in C</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>C programs that use stream I/O utilize the FILE structure and related family of functions. A file is opened for stream I/O by calling the fopen function. This function, if successful, returns a pointer to a FILE structure, which can be used in subsequent operations, such as calls to fscanf, fprintf, fread, fwrite, fseek, ftell, or fclose. The Visual C++ run-time library supports all standard stream I/O functions as well as several Microsoft-specific functions.
+
+<BR></P>
+
+<P>For applications that mix calls to stream I/O and low-level I/O functions, the _fileno function can be used to obtain a file descriptor for a given stream (identified by a FILE pointer). The _fdopen function can be used to open a stream and associate it with a file descriptor that identifies a previously opened file.
+
+<BR></P>
+
+<P>Applications can also access the standard input, standard output, and standard error through the predefined streams stdin, stdout, and stderr.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Stream I/O in C++ (The </B><B><I>iostream</I></B><B> Classes)</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Visual C++ run-time library contains a complete implementation of the C++ iostream classes.
+
+<BR></P>
+
+<P>The iostream class library implements a family of C++ classes, shown in Figure 14.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="14vcu02.gif">Figure 14.2. The C++ </B><B>iostream</B><B> classes.</A></B>
+
+<BR></P>
+
+<P>The base class of all iostream classes is the ios class. Normally, applications do not derive classes from ios directly. Instead, they use one of the derived classes, istream or ostream.
+
+<BR></P>
+
+<P>Variants of the istream class include istrstream (operates on an array of characters stored in memory), ifstream (operates on a disk file), and istream_withassign (a variant of istream that enables assignments to work).
+
+<BR></P>
+
+<P>Variants of ostream include ostrstream (stream output to a character array), ofstream (stream output to a file), and ostream_withassign (variant of ostream that enables assignment).
+
+<BR></P>
+
+<P>The predefined stream object cin, representing standard input, is of type istream_withassign. The predefined objects cout, cerr, and clog, which represent standard output and standard error, are of type ostream_withassign.
+
+<BR></P>
+
+<P>The class iostream combines the functionality of the istream and ostream classes. Derived classes include fstream (for file I/O), strstream (for stream I/O on a character array), and stdiostream (for standard I/O).
+
+<BR></P>
+
+<P>All ios-derived objects make use of the streambuf class or the derived classes filebuf, stdiobuf, or strstreambuf for I/O buffering.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=4><B>Special Devices</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In addition to handling disk files, the Win32 file management routines can be used to handle many other types of devices. These include the console, communication ports, named pipes, and mailslots. Functions such as ReadFile or WriteFile may also accept socket handles created by the WinSock functions socket or accept depending on the WinSock implementation.
+
+<BR></P>
+
+<P>In the next section, we discuss console and communication port I/O.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Console I/O</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Win32 applications can use the CreateFile, ReadFile, and WriteFile functions to perform console input and output. Consoles provide an interface for character-based applications.
+
+<BR></P>
+
+<P>Unless its input or output are redirected, an application inherits file handles to the console that can be obtained by calling the function GetStdHandle. However, if the application's standard handles are redirected, GetStdHandle returns the redirected handles. In this case, applications can open the console explicitly by using the special filenames CONIN$ and CONOUT$.
+
+<BR></P>
+
+<P>When opening the console for input or output, make sure to specify the FILE_SHARE_READ or FILE_SHARE_WRITE sharing mode, respectively. Also, use the OPEN_EXISTING creation mode. For example:
+
+<BR></P>
+
+<PRE>CreateFile(&quot;CONIN$&quot;, GENERIC_READ, FILE_SHARE_READ, NULL,
+
+           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);</PRE>
+
+<P>In order to be able to perform certain operations on a console opened for reading (such as flushing the input buffer or setting the console mode), it may be necessary to open the console for reading and writing (GENERIC_READ | GENERIC_WRITE).
+
+<BR></P>
+
+<P>By default, the console is opened for line-oriented input. The SetConsoleMode function can be used to change the input and output mode. For example, to set the console to raw input mode (every character is returned immediately, no control character processing takes place) use the following call:
+
+<BR></P>
+
+<PRE>SetConsoleMode(<I>hConsole</I>, 0);</PRE>
+
+<P>The ReadFile function can be used to read keyboard input from the console. However, it is recommended that applications use ReadConsole instead where applicable; unlike ReadFile, ReadConsole can handle both ASCII and Unicode input on Windows NT.
+
+<BR></P>
+
+<P>To write to the console, the WriteFile function can be used. WriteConsole has the same functionality but it can also handle Unicode output on Windows NT, and thus it is the preferred function for console output.
+
+<BR></P>
+
+<P>What I explained so far may give the impression that using the console is just a glorified way of accomplishing what can easily be done using standard C/C++ library functions. This is not so. A console has many capabilities other than providing a facility for keyboard input and character output.
+
+<BR></P>
+
+<P>In addition to character input and output, a console also handles mouse input and provides some window management functions for the console window. The low-level console input functions ReadConsoleInput and PeekConsoleInput can be used to retrieve information about keyboard, mouse, and window events. On the output side, the low level output function WriteConsoleOutputAttribute can be used to write a text and background color attributes to the console.
+
+<BR></P>
+
+<P>Graphical Windows applications do not by default have access to a console. These applications can explicitly create a console by calling the AllocConsole function. A process can detach itself from its console by calling the FreeConsole function.
+
+<BR></P>
+
+<P>The console window's title and position can be controlled using the SetConsoleTitle and SetConsoleWindowInfo functions, respectively.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>Communication Ports</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Communication ports are opened and used via the CreateFile, ReadFile, and WriteFile functions. That said, there are several other functions that applications must use to set up the communication ports and control their behavior.
+
+<BR></P>
+
+<P>The basic setup of a communication port takes place using a DCB, or <I>device control block</I> structure. Members of this structure specify the baud rate, parity, data and stop bits, handshaking, and other aspects of port behavior. The current settings can be obtained using the GetCommState function and can be set by calling the SetCommState function. A helper function, BuildCommDCB, can be used to fill in parts of this structure on the basis of a string formatted in the style of an MS-DOS MODE command.
+
+<BR></P>
+
+<P>Read and write time-out behavior is controlled through the COMMTIMEOUTS structure. Current time-outs can be retrieved by calling GetCommTimeouts and set by calling SetCommTimeouts. The helper function BuildCommDCBAndTimeouts can be used to fill in both a DCB structure and a COMMTIMEOUTS structure using command strings.
+
+<BR></P>
+
+<P>The size of the input and output buffers can be controlled by calling the SetupComm function.
+
+<BR></P>
+
+<P>The WaitCommEvent function can be used to wait for a specific event to occur on the communication port.
+
+<BR></P>
+
+<P>The SetCommBreak function places the communication line in a break state. The state can be cleared by calling the ClearCommBreak function.
+
+<BR></P>
+
+<P>The ClearCommError function can be used to clear an error condition. This function also reports the status of the communication device.
+
+<BR></P>
+
+<P>The PurgeComm function can be used to clear any I/O buffers associated with the communication port, and to interrupt pending I/O operations.
+
+<BR></P>
+
+<P>The TransmitCommChar function transmits a character on the communication port ahead of any pending data in the output buffer. This function can be used, for example, to transmit interrupt characters such as Ctrl+C.
+
+<BR></P>
+
+<P>The communication port can also be opened for overlapped I/O operations. An event mask, which controls which events set the state of the event object (specified as part of the OVERLAPPED structure), can be set using the SetCommMask function. The current event mask can be retrieved by calling the GetCommMask function.
+
+<BR></P>
+
+<P>Low-level access to port functions is provided by the functions EscapeCommFunction and DeviceIoControl.
+
+<BR></P>
+
+<P>Further information about the communication port and its status can be obtained by calling the GetCommProperties and GetCommModemStatus functions.
+
+<BR></P>
+
+<P>Windows 95 also offers the function CommConfigDialog, which displays a driver-specific configuration dialog for the specified communication port.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Win32 applications can access files through three distinct sets of file management functions: stream and low-level I/O functions that are part of the C/C++ run-time libraries and Win32 file management functions.
+
+<BR></P>
+
+<P>A file is a collection of data on a storage device, such as a disk. Files are organized on the device into file systems. Windows NT recognizes the DOS FAT, protected-mode FAT, NTFS, and HPFS file systems. Windows 95, in contrast, can only deal with FAT and protected-mode FAT file systems. Windows NT supports file-level compression on NTFS file systems; Windows 95, in turn, supports volume compression through DriveSpace. On NTFS volumes, Windows NT also supports advanced security features.
+
+<BR></P>
+
+<P>In addition to disks, files may also be accessed on CD-ROM and remote volumes across the network.
+
+<BR></P>
+
+<P>The Win32 file management functions treat an open file as an operating system object, referred to by a handle. At the heart of Win32 file management are the functions CreateFile, ReadFile, and WriteFile. Through file handles, I/O operations can be performed synchronously and asynchronously; for the latter, applications can use the technique of overlapped I/O. Overlapped I/O enables an application to regain control after an I/O call, even before the I/O operation is finished, and do something else until it is notified of the operation's completion.
+
+<BR></P>
+
+<P>Win32 file management routines can also be used to perform I/O on the standard input, standard output, and standard error. Handles to these can be obtained by calling the GetStdHandle function.
+
+<BR></P>
+
+<P>Applications can also access files through DOS/UNIX style low-level I/O functions. The names of these functions are preceded by an underscore (for example, _open, _read) to indicate that they are not part of the standard ANSI library. However, applications can be linked with the oldnames.lib library file if the use of the old names without underscores is desired.
+
+<BR></P>
+
+<P>In addition to low-level I/O, applications can also use stream I/O. This includes C functions such as fopen, fprintf, fscanf, or fclose; it also includes the C++ iostream classes.
+
+<BR></P>
+
+<P>The Win32 file management functions can also be used to access special devices. They include the console, communication ports, named pipes and mailslots, and sockets opened by calls to socket or accept. Several special functions provide fine control over console and communication port I/O.</P>
+
+<P><A HREF="vcu13fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu15fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

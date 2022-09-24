@@ -1,0 +1,708 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu03fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu04fi.htm">
+
+<LINK REL="Previous" HREF="vcu02fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu02fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu04fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">3 &#151; The ClassWizard and the WizardBar</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">ClassWizard Features</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Message Maps</A></LI>
+
+<LI>
+
+<A HREF="#I5">Member Variables</A></LI>
+
+<LI>
+
+<A HREF="#I6">OLE Automation</A></LI>
+
+<LI>
+
+<A HREF="#I7">OLE Events</A></LI>
+
+<LI>
+
+<A HREF="#I8">Class Info</A></LI>
+
+<LI>
+
+<A HREF="#I9">Creating a New Class</A></LI>
+
+<LI>
+
+<A HREF="#I10">Editing Code</A></LI></UL>
+
+<LI>
+
+<A HREF="#I11">The WizardBar</A></LI>
+
+<LI>
+
+<A HREF="#I12">The Class Information File</A></LI>
+
+<LI>
+
+<A HREF="#I13">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>3 &#151; The ClassWizard and the WizardBar</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Next to the AppWizard, the ClassWizard represents the second most powerful tool in the Visual C++ development system. ClassWizard represents a unique way of looking at and managing certain types of classes; namely, classes that are command targets, from the MFC class CCmdTarget.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>ClassWizard Features</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The ClassWizard is typically invoked from the Developer Studio's View menu. It can also be invoked from many popup menus; for example, you can invoke the ClassWizard from the popup menu that appears during dialog editing. In such cases, the ClassWizard is invoked in a special mode. It usually appears with the relevant class (that is, the class associated with the dialog template you were editing) preselected. If such a class does not exist, the ClassWizard is invoked in class creation mode where a new class for the selected object (dialog) can be created.
+
+<BR></P>
+
+<P>The ClassWizard appears to the user as a large dialog with five tabs. Each of these tabs represents a special ClassWizard function. The Message Map tab presents options for defining and editing message handler functions. The Member Variables tab is where you assign member variables to dialog controls in classes that are associated with a dialog template. The OLE Automation tab offers a choice of OLE automation methods and properties of an OLE server application or DLL. The OLE Events tab is where you add events to an OLE control. Lastly, the Class Info tab presents a review of some of the overall characteristics of your class.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Message Maps</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC implements a special mechanism for the processing of Windows messages. These messages, after being received by the application's message loop, travel through the application's CCmdTarget-derived class objects in accordance with a set of specific rules. When an object receives a message it can handle, it does so; alternatively, it can also pass on the message for further routing.
+
+<BR></P>
+
+<P>Whether an object can handle a message or not depends on whether it has an entry for that particular type of message in its message map. The message map for MFC classes is maintained through the ClassWizard.
+
+<BR></P>
+
+<P>Figure 3.1 shows the message map for the property page of an OLE control. (I decided to use a simple OLE control project for the illustrations in this chapter for the simple reason that it is the classes of an OLE control that allow me to demonstrate all features of ClassWizard.)
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu01.gif">Figure 3.1. Editing message maps through </B><B>ClassWizard.</A></B>
+
+<BR></P>
+
+<P>Take a look at the left side of this dialog. The Object IDs list shows that you can specify message map entries for the class itself, COCTLPropPage; however, you can also specify message map entries for specific control identifiers. The IDC_CBSHAPE identifier in Figure 3.1 refers to a control (a combo box) in the dialog template that the COCTLPropPage class is associated with. If the class is a dialog or property page class, the ClassWizard will list the identifiers of all the controls of the dialog template associated with that class in the Object IDs column.
+
+<BR></P>
+
+<P>The list of selectable messages on the right side, in the Messages column, varies depending on which item you pick on the left side. If you select the class name, this list shows all Window Manager (WM_) messages that the class may respond to; if the class has overridable functions, those are also shown here.
+
+<BR></P>
+
+<P>If you select a control identifier in the Object IDs column, the list on the right side changes; it shows the list of WM_COMMAND messages that the control can send to its parent.
+
+<BR></P>
+
+<P>Adding a handler function for a specific message can be done by clicking on the Add Function button or double-clicking on the message item in the Messages column. Either way, ClassWizard responds with the Add Member Function dialog, shown in Figure 3.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu02.gif">Figure 3.2. Adding a message handler function to a </B><B>class.</A></B>
+
+<BR></P>
+
+<P>You can edit the suggested member function name or accept it as is; the member function is created when you click the OK button.
+
+<BR></P>
+
+<P>The name of the new member function then appears in the Member functions list at the bottom of the ClassWizard dialog. Invisible to you, the ClassWizard also modifies code files; it adds the member function name to the header file for this class and also adds a default member function implementation to the implementation file.
+
+<BR></P>
+
+<P>For example, when you add the member function shown in Figure 3.2 to the COCTLPropPage class, its message map declaration in its header file is modified as follows:
+
+<BR></P>
+
+<PRE>// Message maps
+
+protected:
+
+    //{{AFX_MSG(COCTLPropPage)
+
+    afx_msg void OnDblclkCbshape();
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()</PRE>
+
+<P>The ClassWizard identifies the location of the message map in your code by the special comments that enclose it. Message map declarations, for example, are marked by comments that begin with //{{AFX_MSG. Under normal circumstances, you should never modify code that is marked by such comments. It is easy to notice these ClassWizard-specific sections of code in your source files; by default, the Developer Studio editor shows these portions of your application with a special color.
+
+<BR></P>
+
+<P>The message map declaration is not the only place that the ClassWizard touched. It also modified the message map definition, in the implementation file of COCTLPropPage:
+
+<BR></P>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// Message map
+
+BEGIN_MESSAGE_MAP(COCTLPropPage, COlePropertyPage)
+
+    //{{AFX_MSG_MAP(COCTLPropPage)
+
+    ON_CBN_DBLCLK(IDC_CBSHAPE, OnDblclkCbshape)
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()</PRE>
+
+<P>Most importantly, the ClassWizard also added a skeleton implementation of the new function, OnDblclkCbshape. This implementation is simply appended to the file; it is your responsibility to move it elsewhere in order to keep your source file well organized:
+
+<BR></P>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// COCTLPropPage message handlers
+
+void COCTLPropPage::OnDblclkCbshape()
+
+{
+
+    // TODO: Add your control notification handler code here
+
+}</PRE>
+
+<P>The ClassWizard can also be used to remove handler functions. To remove a message handler, select it from the Member functions list in ClassWizard, and click the Delete Function button. The ClassWizard will warn you that removing the member function will not cause the automatic deletion of its implementation; indeed, the function will only be removed from the message map declaration and definition. You will have to manually remove, or comment out, your implementation of the function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Member Variables</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the second tab in the ClassWizard dialog, you can add and modify member variables (Figure 3.3).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu03.gif">Figure 3.3. Editing member variables with </B><B>ClassWizard.</A></B>
+
+<BR></P>
+
+<P>The member variables that you can edit here are those that are associated with controls in the dialog template for your class. (Needless to say, the class must represent a dialog or property page.)
+
+<BR></P>
+
+<P>The list in this ClassWizard page lists all control identifiers with which member variables can be associated. Any existing member variables are also shown. To add a new member variable to a control, select its identifier, and click on the Add Variable button (or simply double-click the control name).
+
+<BR></P>
+
+<P>In the Add Member Variable dialog (Figure 3.4), you can specify the name and type of the new variable.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu04.gif">Figure 3.4. Adding a member variable.</A></B>
+
+<BR></P>
+
+<P>Generally, there are two kinds of member variables that can be assigned to a control. Either a member variable representing the control's value, or a member variable representing the control object can be specified. However, for many control types (buttons, for example), only the latter kind of variable is available. You can select whether the variable is to represent the control's value or the control itself in the Category field.
+
+<BR></P>
+
+<P>Variables that represent a control's value are typically of a simple type, like CString or int. Variables that represent controls are of a class representing the control's type; for example, CButton or CComboBox.
+
+<BR></P>
+
+<P>You can normally add only one member variable for a specific control. However, if a control is of a type that enables member variables representing both the control's value and the object itself, you can add both to the control. Thus, it is possible, for example, to have an edit control with a CEdit member variable through which the control's appearance and behavior are controlled, while at the same time, another member variable of type CString represents the text typed into the same control.
+
+<BR></P>
+
+<P>For OLE controls, a new member variable added to the control's property page may represent a control property. This property is identified in the Optional OLE property field. You can assign a user-defined property name to the member variable, or you can select one predefined property from the list presented in this box.
+
+<BR></P>
+
+<P>When you define a new member variable, the ClassWizard updates your application's source code in several places. For example, adding the m_nShape member variable shown in Figure 3.3 is reflected by the following change in the COCTLPropPage header file:
+
+<BR></P>
+
+<PRE>// Dialog Data
+
+    //{{AFX_DATA(COCTLPropPage)
+
+    enum { IDD = IDD_PROPPAGE_OCTL };
+
+    int     m_nShape;
+
+    //}}AFX_DATA</PRE>
+
+<P>The ClassWizard also changed the class's implementation file. Initialization for the new variable has been added to the class's constructor:
+
+<BR></P>
+
+<PRE>COCTLPropPage::COCTLPropPage() :
+
+    COlePropertyPage(IDD, IDS_OCTL_PPG_CAPTION)
+
+{
+
+    //{{AFX_DATA_INIT(COCTLPropPage)
+
+    m_nShape = -1;
+
+    //}}AFX_DATA_INIT
+
+}</PRE>
+
+<P>Another function that is modified by ClassWizard is the class's DoDataExchange member function. It is in this function where information between the control object itself and the variable representing it or its value. In the case of COCTLPropPage, this function is modified as follows:
+
+<BR></P>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// COCTLPropPage::DoDataExchange - Moves data between page and properties
+
+void COCTLPropPage::DoDataExchange(CDataExchange* pDX)
+
+{
+
+    //{{AFX_DATA_MAP(COCTLPropPage)
+
+    DDP_CBIndex(pDX, IDC_CBSHAPE, m_nShape, _T(&quot;Shape&quot;) );
+
+    DDX_CBIndex(pDX, IDC_CBSHAPE, m_nShape);
+
+    //}}AFX_DATA_MAP
+
+    DDP_PostProcessing(pDX);
+
+}</PRE>
+
+<P>Not only is there a call to the Dialog Data Exchange (DDX) function facilitating the exchange of data between the control object and the member variable, a Property Page (DDP) function is also called; this function exchanges data between the member variable and the OLE control object.
+
+<BR></P>
+
+<P>In the case of classes representing records in databases, the ClassWizard may make modifications to other functions as well (for example, the DoFieldExchange member function of CRecordSet-derived classes).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>OLE Automation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The OLE Automation tab of ClassWizard (Figure 3.5) enables you to add or modify OLE automation properties and methods. A property is basically a member variable that is exposed to the outside world through the OLE Automation interface; a method is a member function exposed in a similar fashion. In addition to classes that have OLE automation enabled, classes representing OLE controls also have exposed properties and methods.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu05.gif">Figure 3.5. Defining OLE automation properties and </B><B>methods.</A></B>
+
+<BR></P>
+
+<P>Not all classes in your application support OLE automation. Although you can add OLE automation support to a class using the OLE Automation tool in the Component Gallery, you may have to manually update your application's Object Description Language (ODL) file to reflect this change in your application's type library. To find out what needs to be added to the ODL file, consider creating a dummy class with OLE automation support enabled and copying the relevant ODL entries.
+
+<BR></P>
+
+<P>You can tell whether a class supports OLE automation by simply looking at the buttons on the right side of the ClassWizard OLE Automation page; if the buttons (except for the Add Class button) are all grayed, the class does not support OLE automation.
+
+<BR></P>
+
+<P>To add an OLE automation method to a class, click the Add Method button. This displays the Add Method dialog, shown in Figure 3.6.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu06.gif">Figure 3.6. Adding an OLE automation method.</A></B>
+
+<BR></P>
+
+<P>The first thing you specify for a new method is its external name; the name by which it will be known to other applications. If the class represents an OLE control, you can also select the name of a standard method from the drop-down list in the External name field.
+
+<BR></P>
+
+<P>By default, the ClassWizard suggests the external name you specified as the method's internal name; that is, the name of the member function that implements the method. You must also specify the member function's return type and its parameter list. To add parameters to the parameter list, simply click in the Parameter list area with the mouse, type the name of the desired parameter, and select its type.
+
+<BR></P>
+
+<P>For stock properties (available for OLE controls only) you can also specify Stock Implementation. In this case, the Internal name, Return type, and Parameter list fields in this dialog will not be available.
+
+<BR></P>
+
+<P>To add a new property to your OLE automation class or OLE control class, click on the Add Property button in ClassWizard. This button invokes the Add Property dialog (Figure 3.7).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu07.gif">Figure 3.7. Adding an OLE automation property.</A></B>
+
+<BR></P>
+
+<P>There are two fundamentally different ways of implementing an OLE automation property. An OLE automation property can be represented by a member variable or by Get/Set methods; that is, a pair of functions that set or obtain the property's value.
+
+<BR></P>
+
+<P>The first thing to specify for a new property is its external name. Based on the property's external name and its implementation, the ClassWizard will suggest names for the member variable or Get/Set methods that represent the property. For example, if you add a property named X, the ClassWizard will suggest the member variable name m_x or the Get/Set method names GetX and SetX. For properties implemented through member variables, you can also specify a notification function that is called whenever the variable's value is changed. The ClassWizard also suggests a name for the notification function (OnXChanged for property X).
+
+<BR></P>
+
+<P>When you are adding a property with a Get/Set method implementation, you may also specify a list of additional parameters that will be added to the declaration of the Get/Set method functions. To specify a parameter, click in the parameter list area using the mouse, type the parameter's name, and select its type.
+
+<BR></P>
+
+<P>For OLE controls, you can also add stock properties. If you add a stock property, you may decide to use a stock implementation. In this case the Type, Variable name, Notification function, and Parameter list areas in the Add Property dialog remain unavailable.
+
+<BR></P>
+
+<P>In the ClassWizard dialog, once you have a series of OLE automation properties defined for your class, you can designate one as your class's default property.
+
+<BR></P>
+
+<P>For OLE controls, you can also specify the level of data binding support you wish to add to the control. Data binding is the capability to bind an OLE control's properties to fields in a database. Use the Data Binding button to designate a property as a bindable property and also to specify the level of data binding the property supports through the Data Binding dialog (Figure 3.8).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu08.gif">Figure 3.8. Data binding support.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>OLE Events</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>OLE events are events generated by OLE controls. Events represent a mechanism through which the control can communicate with its container.
+
+<BR></P>
+
+<P>OLE events for an OLE control class can be added or modified through the OLE Events tab in ClassWizard (Figure 3.9).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu09.gif">Figure 3.9. OLE events.</A></B>
+
+<BR></P>
+
+<P>To create a new OLE event, click on the Add Event button. This displays the Add Event dialog (Figure 3.10) where the new event can be specified.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu10.gif">Figure 3.10. Adding an OLE event.</A></B>
+
+<BR></P>
+
+<P>You can either specify a custom event or select one of several stock events. For stock events, you can specify the stock implementation or you can use a custom implementation. Custom implementation is the only available option for custom events.
+
+<BR></P>
+
+<P>For every event specified, the ClassWizard generates a function that fires the event. For this function, the ClassWizard suggests a name combining the word Fire with the event's external name; for example, for an event named Select, the function name suggested by ClassWizard will be FireSelect.
+
+<BR></P>
+
+<P>When a new event is added, the ClassWizard modifies your class's header file by adding the event to the event map. The event is added in the form of its firing function and its inline implementation. For example, for a custom Select event, ClassWizard modifies the event map as follows:
+
+<BR></P>
+
+<PRE>// Event maps
+
+    //{{AFX_EVENT(COCTLCtrl)
+
+    void FireSelect(BOOL IsSelected)
+
+      {FireEvent(eventidSelect,EVENT_PARAM(VTS_BOOL), IsSelected);}
+
+    //}}AFX_EVENT
+
+    DECLARE_EVENT_MAP()</PRE>
+
+<P>The event is invoked when you call the firing function from within other functions in your code.
+
+<BR></P>
+
+<P>The firing function can also have additional parameters. You can add parameters to the firing function when you add the event itself. In the Add Event dialog, click in the Parameter list area, type the desired parameter's name, and specify the parameter's type.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Class Info</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The last page in the ClassWizard dialog is the Class Info page (Figure 3.11). In this page, various properties of classes are displayed, and certain advanced options can be modified.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu11.gif">Figure 3.11. Class Info options.</A></B>
+
+<BR></P>
+
+<P>The first of the Advanced options, the Message filter option, enables you to specify which messages should be shown by ClassWizard in the Message Map page. Note that changing the Message filter does not affect your application code in any way; it merely affects what ClassWizard displays.
+
+<BR></P>
+
+<P>The Foreign class option is most relevant with database applications. In such applications, the application's view class, derived from CRecordView or CDaoRecordView, is associated with a recordset class, derived from CRecordSet or CDaoRecordSet. In these cases, the foreign class is the name of the recordset class; the foreign variable is the pointer variable in your application's view class that represents a foreign class object. It is necessary for ClassWizard to know the identity of the foreign class because it has to be able to refer to the member variables of the recordset class and update this class's OnFieldExchange member function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Creating a New Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>By clicking on the Add Class button, you can add a new class to your application. ClassWizard enables you to add a class using an existing implementation, create a class using a type library file, or create a new class from scratch.
+
+<BR></P>
+
+<P>Adding a class from an existing implementation really means importing class data to ClassWizard; the class is presumably already part of your project. This function is most useful if you imported a new class to your project by copying its header and implementation files and adding<S>ed</S> them to your project manually. It can also be used to recreate your applications Class Information File (CLW file) if it has been damaged. This is the file where ClassWizard keeps all class-related information.
+
+<BR></P>
+
+<P>Adding a class from an OLE type library means creating a new class that wraps the interface described in the type library. For example, you can use this feature to add a class that represents an OLE control or OLE automation object.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu12.gif">Figure 3.12. Adding a class from an OLE type </B><B>library.</A></B>
+
+<BR></P>
+
+<P>You can also add a new class from scratch. If you select the New option from the Add Class button's popup menu, you are presented with the Create New Class dialog (Figure 3.13).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu13.gif">Figure 3.13. Adding a new class.</A></B>
+
+<BR></P>
+
+<P>The first thing to specify for a new class is its name; you should also specify the base class from which the new class is derived. The available selections in the Base class field represent those CCmdTarget-derived classes that are recognized by ClassWizard.
+
+<BR></P>
+
+<P>ClassWizard derives a default pair of header and implementation filenames from the class name you specify. For example, if you specified CMyClass as the class name, ClassWizard would suggest MyClass.h and MyClass.cpp as the name for the class's header file and implementation file. However, you can change these names by clicking on the Change button.
+
+<BR></P>
+
+<P>If the selected base class represents a dialog template (for example, a dialog, form view, or property page class), the Dialog ID field becomes available. Here, you can select a dialog template identifier from the list of identifiers that are present in your application's resource file.
+
+<BR></P>
+
+<P>Similarly, if the base class provides support for OLE automation, the items in the OLE Automation area become available. Note that some classes support OLE automation but do not support creating objects; therefore, the Creatable by type ID field remains grayed.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> In order for the OLE automation settings to work properly, your application must have been created through AppWizard with OLE automation support enabled. Otherwise, your application will not have an Object Description Language (ODL) file. This will cause many ClassWizard operations to fail and you project may not compile and build properly.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>You can also add your newly created class to the Component Gallery. Doing so makes it possible for you to import the class into other projects.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> If you wish to add a class that is not derived from a class recognized by ClassWizard, you have to create the class's header and implementation files manually and add the files to your project by hand. Such a class will not appear in the list of classes in ClassWizard.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Editing Code</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Another common ClassWizard function is the Edit Code function, available in the Message Maps and OLE Automation pages. Clicking on the Edit Code button dismisses the ClassWizard dialog, opens the source file corresponding to the function that was most recently selected in ClassWizard, and positions the cursor over the implementation of the selected function. This is a great convenience feature of ClassWizard.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>The WizardBar</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>A new feature in Visual C++ 4 is that some ClassWizard functions are now available in the form of a toolbar that is part of source code windows (Figure 3.14).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="03vcu14.gif">Figure 3.14. The WizardBar.</A></B>
+
+<BR></P>
+
+<P>Specifically, the WizardBar provides a convenient shortcut for the ClassWizard functions relating to message handlers. Through the WizardBar, it is very easy to add new event handler functions or to jump to the implementation of a specific event handler.
+
+<BR></P>
+
+<P>The combo box on the left side of the WizardBar contains the identifier of the class itself, as well as the identifiers of any controls that can be the source of WM_COMMAND messages. The other combo box contains message identifiers, command identifiers, and the names of overridable functions. These two controls work in a fashion similar to the Message Maps page of ClassWizard. To jump to a specific function in your source code, simply select the appropriate function using these two combo boxes. If the function exists, the cursor will be positioned at the beginning of its implementation; however, if the function does not exist, you will be presented with the option of creating a handler for the specific message or event.
+
+<BR></P>
+
+<P>The WizardBar also contains two buttons. The Delete Function deletes the declaration of the specified function. (Note that, just as if you deleted the function from the ClassWizard itself, it remains your responsibility to manually remove the function's implementation.) The Open Header button opens the header file that corresponds to the currently open implementation file.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>The Class Information File</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>By this time, it should be plainly obvious that the ClassWizard, although it is capable of parsing your application's source files, also maintains a fair amount of information that cannot be extracted from source files. All this information is stored in a special file, the class information file; by default, this is a file with the same base name as the name of your project, and the .clw extension.
+
+<BR></P>
+
+<P>Usually, you do not need to modify your application's class information file in any way. However, there is one exception; and that is the case when you wish to add custom Dialog Data Exchange (DDX) and Dialog Data Validation (DDV) functions and desire ClassWizard support for these.
+
+<BR></P>
+
+<P>Information about custom DDX and DDV functions is added to the class information file in a special section marked by the [ExtraDDX] header. The specific procedure for adding custom DDX and DDV support to ClassWizard is described in MFC Technical Note 26.
+
+<BR></P>
+
+<P>Because of the relative complexity of the procedure, it is usually not beneficial to add custom DDX/DDV support this way unless you intend to reuse your custom DDX/DDV routines in other applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The ClassWizard is a fundamental tool in the Visual C++ development system; through this tool, you can manipulate your application's CCmdTarget-derived classes in a variety of ways.
+
+<BR></P>
+
+<P>The ClassWizard presents itself in the form of a dialog with five pages. The first of these five pages, the Message Maps page, enables you to define message handler functions for a variety of events, including WM_COMMAND messages generated by controls in dialogs. The Message Maps page is also where you specify your implementations for many overridable functions.
+
+<BR></P>
+
+<P>At the Member Variables page, you can add member variables that are associated with dialog controls. Two types of member variables can be added for each control; variables associated with the control's value and variables associated with the control object itself. A control can have one variable of each type; however, many kinds of controls do not support variables representing their value. If the member variable represents a control in an OLE control's property page, you can also associate an OLE control property with the variable.
+
+<BR></P>
+
+<P>The OLE Automation page presents the selection of OLE automation methods and properties to classes that support OLE automation. For OLE controls, you can also add stock method and properties in addition to user-defined ones. You can also specify the level of data binding that specific properties of an OLE control support.
+
+<BR></P>
+
+<P>The OLE Events page is specific to OLE controls and lets you specify what OLE events the control may generate. Adding an OLE event also adds a firing function for the event. You can also stock events to your OLE control.
+
+<BR></P>
+
+<P>The Class Info page shows some general information about classes. It can also be used to modify the behavior of ClassWizard as related to this class, by enabling you to change the message filter the ClassWizard applies when displaying the class's message map, and by setting up or changing the foreign class associated with this class.
+
+<BR></P>
+
+<P>A new class can be added to the project by clicking the New Class button. New classes can be added from scratch, can be generated from an OLE type library, or can be added from existing header and implementation files. Note that you can only add classes that are derived from base classes that ClassWizard recognizes; other types of classes can be added to your project manually but will not be visible in ClassWizard.
+
+<BR></P>
+
+<P>The WizardBar represents a shortcut to some Message Map related functions in ClassWizard. The WizardBar is visible when source files are being edited and lets you quickly and easily add message handlers or overridable functions to your application, or to position the cursor over an existing message handler or overridable.
+
+<BR></P>
+
+<P>Class information is stored in the class information file. While usually this file should not be modified manually, the exception to this rule is when you implement your own set of DDX/DDV functions and wish to have ClassWizard support for them.</P>
+
+<P><A HREF="vcu02fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu04fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

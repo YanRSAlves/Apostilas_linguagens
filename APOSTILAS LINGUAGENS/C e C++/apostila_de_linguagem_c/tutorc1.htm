@@ -1,0 +1,2030 @@
+<HTML>
+<HEAD>
+   <TITLE>Tutorial de C - Nocturnus Labs. Inc.</TITLE>
+</HEAD>
+<BODY>
+
+
+
+<P><FONT FACE="Courier New,Courier">1. <A HREF="#1">Apresenta&ccedil;&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">2. <A HREF="#2">Linguagem C</A></FONT>
+<BR><FONT FACE="Courier New,Courier">3. <A HREF="#3">C- Uma Vis&atilde;o
+Geral e Instru&ccedil;&otilde;es de Entrada e Sa&iacute;da</A></FONT>
+<BR><FONT FACE="Courier New,Courier">4. <A HREF="#4">Instru&ccedil;&otilde;es
+de Entrada e Sa&iacute;da</A></FONT>
+<BR><FONT FACE="Courier New,Courier">5. <A HREF="#5">Tomada de Decis&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">6. <A HREF="#6">Tipos de Dados</A></FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><A NAME="1"></A><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Apresenta&ccedil;&atilde;o</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Estas Notas de Aula, visam aumentar a
+produtividade dos alunos nas aulas te&oacute;ricas, evitando a c&oacute;pia
+das teorias expostas. Grande parte dos exemplos analisados em sala de aula
+e enunciados de exerc&iacute;cios constam nesta apostila, al&eacute;m da
+resolu&ccedil;&atilde;o de alguns destes. Os EC (exerc&iacute;cios de classe),
+ser&atilde;o normalmente baseados nos exerc&iacute;cios complementares
+de cada Aula a serem desenvolvidos preferencialmente no laborat&oacute;rio.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Habitualmente antes de resolvermos
+exemplos ou exerc&iacute;cios, elaboraremos o algoritmo, que nada mais
+&eacute; que uma seq&uuml;&ecirc;ncia de opera&ccedil;&otilde;es cuja execu&ccedil;&atilde;o
+produz um resultado que &eacute; a resposta de um problema proposto.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Um programa de computador nada mais
+&eacute; que a codifica&ccedil;&atilde;o de um algoritmo numa linguagem
+de programa&ccedil;&atilde;o. Linguagens como C, Pascal, BASIC, ALGOL,
+Clipper, COBOL, etc., s&atilde;o chamadas de procedurais, devido ao fato
+das instru&ccedil;&otilde;es serem executadas de forma seq&uuml;encial,
+enquanto que as linguagens baseadas no conceito de eventos como C++, Visual
+BASIC, Visual Objects, utilizam outra estrat&eacute;gia de programa&ccedil;&atilde;o
+(Programa&ccedil;&atilde;o Orientada ao Objeto), a ser vista em outro m&oacute;dulo
+do curso (OOP), em C utilizaremos a <B>metodologia estruturada.</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Os algoritmos podem ser estruturados
+ou n&atilde;o, conforme exemplificamos a seguir no c&aacute;lculo do m&aacute;ximo
+divisor comum entre dois n&uacute;meros inteiros positivos, com opera&ccedil;&otilde;es
+elementares:</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Linear</FONT></FONT></H2>
+
+<PRE><I><FONT FACE="Courier New,Courier">Leia m,n
+(1)&nbsp;&nbsp;&nbsp;&nbsp; se n = 0 ent&atilde;o
+imprima m
+pare
+k &lt;- m - Int(m / n) * n
+m &lt;- n&nbsp;
+n &lt;- k
+v&aacute; para (1)</FONT></I></PRE>
+<FONT FACE="Courier New,Courier"><I>Em Quick BASIC ter&iacute;amos Em BASICA
+ter&iacute;amos</I></FONT>
+<PRE><FONT FACE="Courier New,Courier">&nbsp;&nbsp; input m : input n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10 input m : input n
+10 if n = 0 then&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 20 if n &lt;> 0 then 50
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 30 imprima m
+&nbsp;&nbsp; end if&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 40 end
+&nbsp;&nbsp; k = m - Int(m / n) * n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50 k = m - Int(m / n) * n
+&nbsp;&nbsp; m = n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 60 m = n
+&nbsp;&nbsp; n = k&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 70 n = k
+&nbsp;&nbsp; goto 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 80 goto 20</FONT></PRE>
+<FONT FACE="Courier New,Courier">O Algoritmo de Euclides anteriormente
+apresentado , apesar de muito simples, executado normalmente por qualquer
+crian&ccedil;a de primeiro grau, ganha contornos de aparente dificuldade
+quando transcrito para o GW-BASIC, um dialeto BASIC, que exige numera&ccedil;&atilde;o
+de linhas, que nos obrigou a alterar um pouco a estrat&eacute;gia de resolu&ccedil;&atilde;o
+do problema. J&aacute; a vers&atilde;o em Quick BASIC, poderia ser transcrita
+por qualquer pessoa com um m&iacute;nimo de conhecimento em algoritmos
+e BASIC.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Estruturado</FONT></FONT></H2>
+
+<PRE><I><FONT FACE="Courier New,Courier">Inteiros m,n
+Leia m,n
+enquanto n &lt;> 0 fa&ccedil;a
+k &lt;- m - Int(m / n) * n
+m &lt;- n
+n &lt;- k
+imprima m
+pare</FONT></I></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Em C ter&iacute;amos Em
+Clipper ter&iacute;amos</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">main() input to a</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">{ input to b</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">int m,n,k; do while n &lt;> 0</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">scanf("%d",&amp;m); k = m - Int(m /
+n) * n</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">scanf("%d",&amp;n); m = n</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">while (n != 0) { n = k</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">k = m - m / n * n; enddo</FONT>
+<PRE><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m = n;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ? m
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n = k;
+&nbsp; }
+printf("%d",m);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Nas Linguagens estruturadas a representa&ccedil;&atilde;o
+fica id&ecirc;ntica, quer em C quer em Clipper. Ficaria a mesma forma em
+Quick BASIC, Pascal ou COBOL Estruturado, da&iacute; a prefer&ecirc;ncia
+na abordagem dita estruturada. No decorrer deste curso nos deteremos detalhadamente
+no estudo dos algoritmos estruturados e analisaremos alguns (poucos, por&eacute;m
+importantes) casos onde a programa&ccedil;&atilde;o linear &eacute; mais
+adequada que a estruturada.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Simula&ccedil;&atilde;o</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Por melhor que seja o conhecimento do
+Analista/Programador, este s&oacute; poder&aacute; ter certeza que sua
+"estrat&eacute;gia" foi bem sucedida ap&oacute;s testar o programa num
+computador.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Bons programadores tem poucas surpresas
+quando testam seus programas, fazendo normalmente umas poucas corre&ccedil;&otilde;es
+para que o programa funcione de maneira adequada.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Programadores iniciantes criam uma
+estrat&eacute;gia (algoritmo) muitas vezes ineficiente e normalmente "correm"
+para o computador visando testar o programa e acabam por perder um tempo
+enorme. N&atilde;o &eacute; raro ouvirmos de iniciantes a frase "Nunca
+conseguirei fazer um programa ...". Certamente, n&atilde;o conseguir&aacute;
+mesmo, caso n&atilde;o tenha uma estrat&eacute;gia definida.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Imagine uma "tarefa" muito simples,
+como por exemplo fritar um ovo. Caso voc&ecirc; n&atilde;o soubesse "operar"
+o fog&atilde;o provavelmente n&atilde;o conseguiria acend&ecirc;-lo. Se
+nunca tivesse visto algu&eacute;m quebrar um ovo, provavelmente n&atilde;o
+conseguiria faz&ecirc;-lo sem perder parte de seu conte&uacute;do. A fritura
+seria algo desastroso, caso voc&ecirc; desconhecesse a utilidade do &oacute;leo.
+E o sabor seria frustrante, caso o tempero utilizado fosse a&ccedil;&uacute;car.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O Programador iniciante que n&atilde;o
+simula seu algoritmo, se compara ao cozinheiro desastrado descrito acima.
+E como simular?</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Basta "agirmos" como se fossemos o
+pr&oacute;prio computador, ou seja devemos "fingir" que nosso racioc&iacute;neo
+&eacute; baseado no <B>conte&uacute;do de vari&aacute;veis</B>. De fato,
+usualmente antes de tomarmos alguma decis&atilde;o analisamos uma s&eacute;rie
+de fatores (as tais vari&aacute;veis dos programas). Desta forma, caso
+fizermos uma an&aacute;lise apurada sobre os conte&uacute;dos das vari&aacute;veis,
+poderemos "descobrir" a fun&ccedil;&atilde;o de cada programa.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Primeiramente vamos resolver o problema
+como aprendemos no primeiro grau.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Supondo M = 120 e N = 28.</FONT>
+<TABLE>
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">Dividendo</FONT></TD>
+
+<TD WIDTH="33">
+<CENTER><FONT FACE="Courier New,Courier">=</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">120</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier">28</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">8</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">Divisor</FONT></TD>
+
+<TD WIDTH="33">
+<CENTER><FONT FACE="Courier New,Courier">=</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">28</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier">8</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">4</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">MDC</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">Quociente</FONT></TD>
+
+<TD WIDTH="33">
+<CENTER><FONT FACE="Courier New,Courier">=</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">4</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier">3</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">2</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">Resto</FONT></TD>
+
+<TD WIDTH="33">
+<CENTER><FONT FACE="Courier New,Courier">=</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">8</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier">4</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">0</FONT></TD>
+
+<TD WIDTH="57"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Simula&ccedil;&atilde;o:</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="45">
+<CENTER><B><FONT FACE="Courier New,Courier">M</FONT></B></CENTER>
+</TD>
+
+<TD WIDTH="47">
+<CENTER><B><FONT FACE="Courier New,Courier">N</FONT></B></CENTER>
+</TD>
+
+<TD WIDTH="47">
+<CENTER><B><FONT FACE="Courier New,Courier">K</FONT></B></CENTER>
+</TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"><B>Impresso</B>&nbsp;</FONT></TD>
+
+<TD WIDTH="161"><B><FONT FACE="Courier New,Courier">Instru&ccedil;&otilde;es</FONT></B></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier"><B>Coment&aacute;rios</B>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier">120</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">28</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier">Declara&ccedil;&otilde;es
+e Leituras&nbsp;</FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">8</FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier">Enquanto n &lt;> 0&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">k = m - m / n * n&nbsp;</FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier">C&aacute;lculo do Resto</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier">28</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">8</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier">m = n; n = k</FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier">Novos Divisor e Dividendos&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">4</FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier">Enquanto n &lt;> 0&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">k = m - m / n * n&nbsp;</FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier">Voltando ao Teste&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">C&aacute;lculo do Resto&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier">4</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier">0</FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier">m = n; n = k</FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier">Novos Divisor e Dividendos&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier">Enquanto n &lt;> 0</FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier">N &eacute; Zero&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="45"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="47"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="85">
+<CENTER><FONT FACE="Courier New,Courier">4</FONT></CENTER>
+</TD>
+
+<TD WIDTH="161"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="199"><FONT FACE="Courier New,Courier">Achou MDC!</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><B>Observa&ccedil;&atilde;o Final:</B>
+Obviamente caso voc&ecirc; se sinta seguro a resolver diretamente o problema
+na linguagem diretamente no computador, fa&ccedil;a isto. Por&eacute;m
+se surgirem dificuldades, n&atilde;o se esque&ccedil;a de fazer o algoritmo
+e a simula&ccedil;&atilde;o. Lembre-se do cozinheiro desastrado, que se
+tivesse consultado uma simples receita (todo algoritmo n&atilde;o passa
+de uma receita sofisticada), poderia ao menos fritar o ovo!</FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Exerc&iacute;cios (Aula
+01L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Nunca esque&ccedil;a que os comandos da
+linguagem C devem ser escritos SEMPRE em letras min&uacute;sculas!</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Apresenta&ccedil;&atilde;o do Interpretador
+Classic C.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Elabore programa que apresente mensagem
+al&ocirc; mundo!</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Elabore programa para o c&aacute;lculo
+do m&aacute;ximo divisor comum entre 2 n&uacute;meros.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Elabore programa que imprima o seu
+nome.</FONT></LI>
+</MENU>
+<A NAME="2"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Linguagem C</FONT></FONT></TD>
+</TR>
+</TABLE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>&nbsp;Objetivos:</FONT></FONT></H1>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Tornar o Aluno apto a programar em C (pequenos
+programas).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Conhecimento do C Cl&aacute;ssico (Classic
+C).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Conhecimento do Turbo C (compilador voltado
+ao aprendizado e tamb&eacute;m usado comercialmente).</FONT></LI>
+</UL>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Estrutura do Curso:</FONT></FONT></H2>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Aulas Te&oacute;ricas: Exposi&ccedil;&atilde;o,
+Exemplos e Exerc&iacute;cios.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Aulas Pr&aacute;ticas: Processar Programas
+Prontos e Elabora&ccedil;&atilde;o de Exerc&iacute;cios.</FONT></LI>
+</UL>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Introdu&ccedil;&atilde;o</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Desenvolvida nos laborat&oacute;rios Bell
+na d&eacute;cada de 70, a partir da Linguagem B (criada no final dos anos
+60 por Ken Thompson), que foi reformulada por Brian Kernighan e Dennis
+M. Ritchie e posteriormente renomeada para C.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Podendo ser considerada como uma linguagem
+de m&eacute;dio n&iacute;vel, pois possui instru&ccedil;&otilde;es que
+a tornam ora uma linguagem de alto n&iacute;vel e estruturada como o Pascal,
+se assim se fizer necess&aacute;rio, ora uma linguagem de baixo n&iacute;vel
+pois possui instru&ccedil;&otilde;es t&atilde;o pr&oacute;ximas da m&aacute;quina,
+que s&oacute; o Assembler possui.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">De fato com a linguagem C podemos construir
+programas organizados e concisos (como o Pascal), ocupando pouco espa&ccedil;o
+de mem&oacute;ria com alta velocidade de execu&ccedil;&atilde;o (como o
+Assembler). Infelizmente, dada toda a flexibilidade da linguagem, tamb&eacute;m
+poderemos escrever programas desorganizados e dif&iacute;ceis de serem
+compreendidos (como usualmente s&atilde;o os programas em BASIC).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Devemos lembrar que a linguagem C foi
+desenvolvida a partir da necessidade de se escrever programas que utilizassem
+recursos pr&oacute;prios da linguagem de m&aacute;quina de uma forma mais
+simples e port&aacute;vel que o assembler.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Uma an&aacute;lise superficial dos
+programas escritos em C e Clipper (Aula 01 - Algoritmos Estruturados),
+nos permite perceber que a linguagem C supera em muito em dificuldade o
+programa an&aacute;logo em Clipper. Ora, ent&atilde;o porque n&atilde;o
+desenvolvermos programas somente em Clipper?</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">A in&uacute;meras raz&otilde;es para
+a escolha da linguagem C como a predileta para os desenvolvedores "profissionais".
+As caracter&iacute;sticas da Linguagem C servir&atilde;o para mostrar o
+porqu&ecirc; de sua ampla utiliza&ccedil;&atilde;o.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Caracter&iacute;sticas da
+Linguagem C</FONT></FONT></H2>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Portabilidade entre m&aacute;quinas e
+sistemas operacionais.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Dados compostos em forma estruturada.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Programas Estruturados.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Total intera&ccedil;&atilde;o com o Sistema
+Operacional.</FONT></LI>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">C&oacute;digo compacto e r&aacute;pido,
+quando comparado ao c&oacute;digo de outras linguagem de complexidade an&aacute;loga.</FONT></LI>
+</UL>
+</UL>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Aplica&ccedil;&otilde;es
+Escritas em C</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Atualmente, nos USA, C &eacute; a linguagem
+mais utilizada pelos programadores, por permitir, dadas suas caracter&iacute;sticas,
+a escrita de programas t&iacute;picos do Assembler, BASIC, COBOL e Clipper,
+sempre com maior efici&ecirc;ncia e portabilidade, como podemos constatar
+pelos exemplos abaixo relacionados:</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Sistema Operacional: UNIX (Sistema Operacional
+execut&aacute;vel em micro computadores e em mainframes).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Montadores: Clipper (O utilit&aacute;rio
+de banco de dados mais usado no Brasil).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Planilhas: 1,2,3 e Excel (A planilha eletr&ocirc;nica
+com maior volume de vendas mundial).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Banco de Dados: dBase III, IV e Access
+(o gerenciador de base de dados mais utilizado no mundo).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">InfoStar: O Editor de Texto mais utilizado
+nos USA no Sistema Operacional UNIX.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Utilit&aacute;rios: FormTool (Editor de
+formul&aacute;rio mais vendido no mundo).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Aplica&ccedil;&otilde;es Gr&aacute;ficas:
+Efeitos Especiais de filmes com Star Trek e Star War.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Linguagens como o Power Builder e o Visual
+Basic, respectivamente as linguagens mais utilizadas nos EUA e no Brasil.</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">No Brasil utilizada por empresas especializadas
+na elabora&ccedil;&atilde;o de vinhetas e outros efeitos especiais.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>C comparado a outras linguagens</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Devemos entender N&iacute;vel Alto como
+sendo a capacidade da linguagem em compreender instru&ccedil;&otilde;es
+escritas em "dialetos" pr&oacute;ximos do ingl&ecirc;s (Ada e Pascal, por
+exemplo) e N&iacute;vel Baixo para aquelas linguagens que se aproximam
+do assembly, que &eacute; a linguagem pr&oacute;pria da m&aacute;quina,
+compostas por instru&ccedil;&otilde;es bin&aacute;rias e outras incompreens&iacute;veis
+para o ser humano n&atilde;o treinado para este prop&oacute;sito. Infelizmente,
+quanto mais clara uma linguagem for para o humano (simplicidade >) mais
+obscura o ser&aacute; para a m&aacute;quina (velocidade &lt;).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Observemos o esquema a seguir:</FONT>
+<TABLE>
+<TR>
+<TD COLSPAN="3" WIDTH="275"><FONT FACE="Courier New,Courier">N&iacute;vel
+Baixo</FONT></TD>
+
+<TD COLSPAN="4" WIDTH="258">
+<CENTER><FONT FACE="Courier New,Courier">N&iacute;vel M&eacute;dio</FONT></CENTER>
+</TD>
+
+<TD COLSPAN="2" WIDTH="194"><FONT FACE="Courier New,Courier">N&iacute;vel
+Alto</FONT></TD>
+</TR>
+
+<TR>
+<TD COLSPAN="9" WIDTH="727"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD COLSPAN="5" WIDTH="398"><FONT FACE="Courier New,Courier">VELOCIDADE</FONT></TD>
+
+<TD COLSPAN="4" WIDTH="329"><FONT FACE="Courier New,Courier">CLAREZA&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD COLSPAN="9" WIDTH="727"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="80"><FONT FACE="Courier New,Courier">Assembler</FONT></TD>
+
+<TD WIDTH="125"><FONT FACE="Courier New,Courier">Macro Assembler&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Forth&nbsp;</FONT></TD>
+
+<TD COLSPAN="2" WIDTH="132"><FONT FACE="Courier New,Courier">C</FONT></TD>
+
+<TD COLSPAN="2" WIDTH="125"><FONT FACE="Courier New,Courier">Fortran&nbsp;</FONT></TD>
+
+<TD WIDTH="71"><FONT FACE="Courier New,Courier">Basic&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">COBOL</FONT></TD>
+
+<TD WIDTH="85"><FONT FACE="Courier New,Courier">Pascal</FONT></TD>
+
+<TD WIDTH="109"><FONT FACE="Courier New,Courier">Ada&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">MODULA-2</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Antes da linguagem C tornar-se um padr&atilde;o
+de fato (meados de 1.988, nos USA), t&iacute;nhamos aproximadamente, o
+seguinte perfil de mercado:</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Aplica&ccedil;&otilde;es de Banco de Dados</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Mainframe: COBOL e gerenciadores</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Micros: dBase, Clipper e BASIC e gerenciadores
+como Btrieve</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Aplica&ccedil;&otilde;es Gr&aacute;ficas:
+Pascal.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Aplica&ccedil;&otilde;es Cient&iacute;ficas:
+FORTRAN e Pascal.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Utilit&aacute;rios, Sistemas Operacionais
+e Compiladores: Assembler.</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">A chegada de poderosos compiladores C
+(Borland, Microsoft e Zortech-Symantec), revolucionou totalmente estes
+conceitos pois passou a permitir a constru&ccedil;&atilde;o de praticamente
+qualquer tipo de aplica&ccedil;&atilde;o na Linguagem C, normalmente mais
+r&aacute;pidas do que na linguagem original e port&aacute;vel entre os
+diversos ambientes ("roda" em DOS, UNIX, etc. com poucas mudan&ccedil;as).
+Devemos entender no entanto, que apenas temos uma <I>relativa portabilidade</I>,
+pois a verdadeira portabilidade depende necessariamente da implementa&ccedil;&atilde;o
+do sistema operacional, necessariamento aberto, o que n&atilde;o existe
+fora do mundo Unix.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Quadro de caracter&iacute;sticas de
+linguagens:</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="177"><FONT FACE="Courier New,Courier">Linguagens&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Caracter&iacute;sticas Ideais&nbsp;</FONT></TD>
+
+<TD WIDTH="94">
+<CENTER><FONT FACE="Courier New,Courier">Assembler</FONT></CENTER>
+</TD>
+
+<TD WIDTH="76">
+<CENTER><FONT FACE="Courier New,Courier">BASIC</FONT></CENTER>
+
+<CENTER><FONT FACE="Courier New,Courier">Pascal</FONT></CENTER>
+</TD>
+
+<TD WIDTH="95">
+<CENTER><FONT FACE="Courier New,Courier">Clipper</FONT></CENTER>
+</TD>
+
+<TD WIDTH="76">
+<CENTER><FONT FACE="Courier New,Courier">COBOL</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66">
+<CENTER><FONT FACE="Courier New,Courier">C</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="177"><FONT FACE="Courier New,Courier">Execut&aacute;veis Curtos&nbsp;</FONT></TD>
+
+<TD WIDTH="94"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">fraco&nbsp;</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">p&eacute;ssimo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">fraco&nbsp;</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="177"><FONT FACE="Courier New,Courier">Execut&aacute;veis R&aacute;pidos&nbsp;</FONT></TD>
+
+<TD WIDTH="94"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">bom</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">razo&aacute;vel&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">fraco&nbsp;</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">bom&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="177"><FONT FACE="Courier New,Courier">Port&aacute;veis</FONT></TD>
+
+<TD WIDTH="94"><FONT FACE="Courier New,Courier">p&eacute;ssimo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">bom&nbsp;</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">bom&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="177"><FONT FACE="Courier New,Courier">Manipula&ccedil;&atilde;o
+de Bits&nbsp;</FONT></TD>
+
+<TD WIDTH="94"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">razo&aacute;vel</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">p&eacute;ssimo&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">fraco&nbsp;</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">&oacute;timo&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">O quadro anterior, deixa claro o porqu&ecirc;
+da revolu&ccedil;&atilde;o causada pela Linguagem C, dados os in&uacute;meros
+pontos fortes da linguagem e a inexist&ecirc;ncia de pontos fracos da mesma.
+N&atilde;o devemos concluir apressadamente que poderemos desenvolver tudo
+em C e abandonarmos todas as outras linguagens, pelos seguintes motivos:</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Alta base de programas escritos em Assembler,
+COBOL, BASIC, Pascal.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Conhecimento amplo de linguagens concorrentes
+como COBOL, Clipper e BASIC.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Melhor adapta&ccedil;&atilde;o de alguma
+linguagem para tarefa espec&iacute;fica como Gr&aacute;ficos (Pascal),
+Intelig&ecirc;ncia Artificial (Prolog, LISP), matem&aacute;ticas (Pascal
+e FORTRAN), aplica&ccedil;&otilde;es comerciais (COBOL, Clipper e BASIC).</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">As vers&otilde;es atuais das linguagens
+BASIC, C, Clipper, Pascal e COBOL, est&atilde;o muito mais semelhantes
+do que o eram ao tempo em que este quadro foi elaborado, portanto na pr&aacute;tica
+muitas vezes este quadro, meramente te&oacute;rico, pode tornar-se inaplic&aacute;vel.</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">A m&eacute;dio prazo, podemos afirmar
+que a linguagem C dever&aacute; ir desalojando as outras linguagens podendo
+at&eacute; mesmo tornar-se um padr&atilde;o de direito, por&eacute;m devemos
+lembrar que algumas linguagens foram propostas para isto (Algol, PL/1)
+e n&atilde;o s&oacute; n&atilde;o conseguiram atingir seus objetivos como
+praticamente desapareceram.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">A tabela anteior n&atilde;o esgota
+todas as possibilidades, pois alguns dialetos de linguagem destacam recursos
+que na maior parte das implementa&ccedil;&otilde;es da linguagem n&atilde;o
+s&atilde;o muito fortes. O inverso tamb&eacute;m pode ocorrer, de modo
+que as vezes uma implementa&ccedil;&atilde;o corrige algum defeito da linguagem
+(por exemplo aumenta drasticamente seu desempenho) e piora outras (portabilidade
+inexistente). Este problema afeta sensivelmente o BASIC e as implementa&ccedil;&otilde;es
+xBase (Fox, dBase e Clipper) e em menor grau o Pascal e a pr&oacute;pria
+linguagem C.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>Nota de Revis&atilde;o: </B>Apesar
+da Linguagem C ter crescido de cerca de 3% das instala&ccedil;&otilde;es
+no Brasil, quando da escrita da primeira vers&atilde;o desta apostila (1989),
+para cerca de 20% das instala&ccedil;&otilde;es atualmente (1997), o n&uacute;mero
+atual esconde uma realidade que deve ser mencionada. Muitas das instala&ccedil;&otilde;es
+usu&aacute;rias da linguagem C, tamb&eacute;m s&atilde;o usu&aacute;rias
+do VB (Visual Basic) da Microsoft.Desta forma, a linguagem C est&aacute;
+presente normalmente para constru&ccedil;&atilde;o de rotinas mais sofisticadas
+imposs&iacute;veis de implementa&ccedil;&atilde;o em VB. Contrariamente
+as empresas usu&aacute;rias do Delphi (Borland) e do Power Builder (Sybase),
+geralmente est&atilde;o abrindo m&atilde;o em suas instala&ccedil;&otilde;es
+da Linguagem C, tendo em vista a capacidade destas implementa&ccedil;&otilde;es
+em realizar tarefas geralmente destinadas a linguagem C. A linguagem Java,
+que &eacute; claramente baseada em C, tamb&eacute;m come&ccedil;a a penetrar
+em &aacute;reas onde C reinava abosulta.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>Exemplo:</B> Desejo desenvolver
+um processador de textos, a partir do in&iacute;cio (n&atilde;o possuo
+qualquer c&oacute;digo de programa pronto). Qual linguagem escolherei?</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><I>Solu&ccedil;&atilde;o:</I></FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="195"><B><FONT FACE="Courier New,Courier">Caracter&iacute;sticas
+Ideais</FONT></B></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier"><B>Classe</B>&nbsp;</FONT></TD>
+
+<TD WIDTH="195"><B><FONT FACE="Courier New,Courier">Valor</FONT></B></TD>
+</TR>
+
+<TR>
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Execut&aacute;veis Curtos</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">N&atilde;o Importa&nbsp;</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">0</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Execut&aacute;veis R&aacute;pidos</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Fundamental&nbsp;</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">3</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Port&aacute;veis</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Desej&aacute;vel&nbsp;</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">1</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Simplicidade</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Desej&aacute;vel&nbsp;</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">1</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Manipula&ccedil;&atilde;o
+de Bits</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">Necess&aacute;rio&nbsp;</FONT></TD>
+
+<TD WIDTH="195"><FONT FACE="Courier New,Courier">2</FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Onde 0- N&atilde;o Importa,
+1- Desej&aacute;vel, 2- Necess&aacute;rio, 3- Fundamental</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Juntando as Caracter&iacute;sticas do
+Projeto as Caracter&iacute;sticas da Linguagem, temos:</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier">Linguagens&nbsp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Caracter&iacute;sticas Ideais&nbsp;</FONT></TD>
+
+<TD WIDTH="38">
+<CENTER><FONT FACE="Courier New,Courier">Pt</FONT></CENTER>
+</TD>
+
+<TD WIDTH="95">
+<CENTER><FONT FACE="Courier New,Courier">Assembler</FONT></CENTER>
+</TD>
+
+<TD WIDTH="76">
+<CENTER><FONT FACE="Courier New,Courier">Basic Pascal</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66">
+<CENTER><FONT FACE="Courier New,Courier">Clipper</FONT></CENTER>
+</TD>
+
+<TD WIDTH="76">
+<CENTER><FONT FACE="Courier New,Courier">COBOL</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66">
+<CENTER><FONT FACE="Courier New,Courier">C</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier">Execut&aacute;veis Curtos&nbsp;</FONT></TD>
+
+<TD WIDTH="38"><FONT FACE="Courier New,Courier">0</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">7x0=0&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">1x0=0</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">0x0=0&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">0*0=0</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">7*0=0&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier">Execut&aacute;veis R&aacute;pidos&nbsp;</FONT></TD>
+
+<TD WIDTH="38"><FONT FACE="Courier New,Courier">3</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">7*3=21&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">5x3=15</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">3x3=9&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">1x3=3</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">5x3=15&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier">Port&aacute;veis</FONT></TD>
+
+<TD WIDTH="38"><FONT FACE="Courier New,Courier">1</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">0*1=0&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">3*1=3</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">1*1=1&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">5*1=5</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">7*1=7&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier">Simplicidade</FONT></TD>
+
+<TD WIDTH="38"><FONT FACE="Courier New,Courier">1</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">0*1=0&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">5*1=5</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">7*1=7&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">7*1=7</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">5*1=5&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier">Manipula&ccedil;&atilde;o
+de Bits&nbsp;</FONT></TD>
+
+<TD WIDTH="38"><FONT FACE="Courier New,Courier">2</FONT></TD>
+
+<TD WIDTH="95"><FONT FACE="Courier New,Courier">7*2=14&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">3*2=5</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">1*2=2&nbsp;</FONT></TD>
+
+<TD WIDTH="76"><FONT FACE="Courier New,Courier">0*2=0</FONT></TD>
+
+<TD WIDTH="66"><FONT FACE="Courier New,Courier">7*2=14&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="168"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="38"><FONT FACE="Courier New,Courier"></FONT></TD>
+
+<TD WIDTH="95">
+<CENTER><FONT FACE="Courier New,Courier">35&nbsp;</FONT></CENTER>
+</TD>
+
+<TD WIDTH="76">
+<CENTER><FONT FACE="Courier New,Courier">27</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66">
+<CENTER><FONT FACE="Courier New,Courier">19</FONT></CENTER>
+</TD>
+
+<TD WIDTH="76">
+<CENTER><FONT FACE="Courier New,Courier">15</FONT></CENTER>
+</TD>
+
+<TD WIDTH="66">
+<CENTER><FONT FACE="Courier New,Courier">41</FONT></CENTER>
+</TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Onde 0- P&eacute;ssimo, 1- Fraco, 3- Razo&aacute;vel,
+5- Bom e 7- &Oacute;timo</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Resposta: Linguagens Adequadas C ou
+Assembler. Caso se d&ecirc; prioridade a portabilidade C &eacute; ainda
+mais adequada. O n&uacute;mero talvez surpreendentemente alto para Pascal
+e BASIC serve para demonstrar o porqu&ecirc; da exist&ecirc;ncia de Editores
+feitos total ou parcialmente em Pascal. O fraco desempenho do Clipper e
+do COBOL era esperado pois s&atilde;o linguagens mais apropriadas para
+manipula&ccedil;&atilde;o de dados. Na pr&aacute;tica devemos observar
+a exist&ecirc;ncia de dois crit&eacute;rios tamb&eacute;m importantes,
+que s&atilde;o a exist&ecirc;ncia de programadores especialistas na linguagem
+adequada e a possibilidade de jun&ccedil;&atilde;o de mais de uma linguagem
+numa implanta&ccedil;&atilde;o qualquer.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Exerc&iacute;cios</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">1- Desejo criar um v&iacute;rus de computador,
+qual a linguagem ideal?</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Desejo criar um utilit&aacute;rio
+de Banco de Dados, semelhante a dBase. Qual a linguagem ideal?</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- Supondo ter uma empresa conclu&iacute;do
+ser ideal desenvolver internamente sua folha de pagamento. O Gerente de
+Inform&aacute;tica, atento ao movimento do Mercado definiu a escrita dos
+programas em C, visando poder migrar a aplica&ccedil;&atilde;o entre ambientes.
+Supondo ainda que a equipe desconhece totalmente a Linguagem C, mas que
+&eacute; bastante gabaritada em COBOL, em sua opini&atilde;o nosso Gerente
+foi feliz em sua decis&atilde;o? Justifique.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Exerc&iacute;cios (Aula
+02L)</FONT></FONT></H2>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Leia seu nome e o imprima.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Leia dois n&uacute;meros e apresente
+seu produto.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Leia tr&ecirc;s n&uacute;meros e apresente
+sua m&eacute;dia.</FONT></LI>
+</MENU>
+<A NAME="3"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">C- Uma vis&atilde;o
+Geral-Intru&ccedil;&otilde;es de entrada e de sa&iacute;da.</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Toda linguagem de programa&ccedil;&atilde;o
+de alto n&iacute;vel suporta o conceito de "Tipo de Dado", que define um
+conjunto de valores que a vari&aacute;vel pode armazenar, e os tipos mais
+comuns encontrados nas linguagens de programa&ccedil;&atilde;o, ou seja,
+inteiro, real e caractere. Diferentemente do Pascal que &eacute; fortemente
+tipada onde a mistura entre um n&uacute;mero inteiro e um real podem causar
+erros, C suporta livremente tipos caracteres e inteiros na maioria das
+express&otilde;es!</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Em geral os compiladores C realizam
+pouca verifica&ccedil;&atilde;o de erros em tempo de execu&ccedil;&atilde;o,
+verifica&ccedil;&atilde;o de limites de matrizes ou compatibilidade entre
+tipos de argumentos, cabendo esta responsabilidade ao programador. Assim
+voc&ecirc; decide onde uma verifica&ccedil;&atilde;o de erro &eacute; ou
+n&atilde;o mais necess&aacute;rio.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Por ser capaz de manipular bits, bytes
+e endere&ccedil;os, C se adapta bem a programa&ccedil;&atilde;o a n&iacute;vel
+de sistema. E tudo isto &eacute; realizado por apenas 43 palavras reservadas
+no Turbo C, 32 nos compiladores padr&atilde;o ANSI e 28 no C Padr&atilde;o.
+Como curiosidade, o IBM BASIC que &eacute; um interpretador BASIC com fins
+puramente educativos tem 159 comandos.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Como curiosidade apresentamos a seguir
+quadro com as palavras reservadas do C Padr&atilde;o.</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">Auto</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">double&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">if</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">static&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">break&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">else&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">int</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">struct&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">case</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">entry&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">long</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">switch&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">char</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">extern&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">register</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">typedef&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">continue</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">float&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">return</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">union&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">default</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">for&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">sizeof&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">unsigned&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">do</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">goto&nbsp;</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">short</FONT></TD>
+
+<TD WIDTH="146"><FONT FACE="Courier New,Courier">while&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Fundamentos de C</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Em se tratando de programa&ccedil;&atilde;o
+a express&atilde;o "Se voc&ecirc; n&atilde;o souber, jamais ir&aacute;
+aprender." &eacute; uma verdade absoluta. &Eacute; muito comum ouvirmos
+queixas do tipo "nunca conseguirei escrever um programa", ou "s&oacute;
+sendo louco ou g&ecirc;nio para descobrir a solu&ccedil;&atilde;o". Estas
+express&otilde;es geralmente s&atilde;o ditas por estudantes que desconhecem
+o fato de que cada elemento da linguagem (comandos, fun&ccedil;&otilde;es)
+n&atilde;o existe sozinho, mas somente combinados a outros elementos.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Desta forma a orienta&ccedil;&atilde;o
+que adotaremos neste in&iacute;cio do curso se deter&aacute; mais na compreens&atilde;o
+geral do programa, do que a an&aacute;lise detalhada de cada comando ou
+fun&ccedil;&atilde;o utilizada. De fato apresentaremos alguns comandos
+fundamentais para a escrita de programas b&aacute;sicos e apenas nos utilizaremos
+de sua sintaxe mais elementar (posteriormente estudaremos cada um deles
+mais detidamente), construiremos os primeiros programas do curso.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Programa mostra a idade.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">/* Exemplo Idade */
+main()
+{
+int idade;
+idade = 40;
+printf("Sua idade e' %d anos. \n", idade);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Este programa simplesmente imprime "Sua
+idade e' 40 anos." saltando uma linha (/n) em seu t&eacute;rmino.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Comandos B&aacute;sicos
+- 1<SUP>a</SUP>. Parte</FONT></FONT></H2>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Instru&ccedil;&otilde;es
+de Entrada e Sa&iacute;da</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">O objetivo de escrevermos programas &eacute;
+em &uacute;ltima an&aacute;lise, a obten&ccedil;&atilde;o de resultados
+(Sa&iacute;das) depois da elabora&ccedil;&atilde;o de c&aacute;lculos ou
+pesquisas (Processamento) atrav&eacute;s do fornecimento de um conjunto
+de dados ou informa&ccedil;&otilde;es conhecidas (Entradas).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Para que nosso programa possa receber
+dados e aloc&aacute;-los em vari&aacute;veis, que ser&atilde;o respons&aacute;veis
+por armazenar as informa&ccedil;&otilde;es iniciais, nossa linguagem dever&aacute;
+conter um conjunto de instru&ccedil;&otilde;es que permitam ao operador
+interagir com o programa fornecendo os dados quando estes forem necess&aacute;rios.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>scanf()</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Uma das mais importantes e poderosas
+instru&ccedil;&otilde;es, servir&aacute; basicamente para promover leitura
+de dados (tipados) via teclado.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Sua forma geral ser&aacute;: scanf("string
+de controle", lista de argumentos);</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Posteriormente ao vermos sua sintaxe
+completa, abordaremos os recursos mais poderosos da &lt;string de controle>,
+no momento bastar&aacute; saber que:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">%c - leitura de caracter</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">%d - leitura de n&uacute;meros inteiros</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">%f - leitura de n&uacute;meros reais</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">%s - leitura de caracteres</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier">A lista de argumentos deve conter exatamente
+o mesmo n&uacute;mero de argumentos quantos forem os c&oacute;digos de
+formata&ccedil;&atilde;o na &lt;string de controle>. Se este n&atilde;o
+for o caso, diversos problemas poder&atilde;o ocorrer - incluindo at&eacute;
+mesmo a queda do sistema - quando estivermos utilizando programas compilados
+escritos em C. Felizmente ao utilizarmos o Classic C, apenas uma mensagem
+de erro ser&aacute; apresentada, para que possamos corrigir o programa
+sem outros inconvenientes.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Cada vari&aacute;vel a ser lida, dever&aacute;
+ser precedida pelo caracter &amp;, por raz&otilde;es que no momento n&atilde;o
+conv&eacute;m explicarmos, mas que ser&atilde;o esclarecidas no decorrer
+do curso. Para seq&uuml;&ecirc;ncia de caracteres (%s), o caracter &amp;
+n&atilde;o dever&aacute; ser usado.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Programa para ler e mostrar uma
+idade</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">/* Exemplo Le e Mostra Idade */
+main()
+{
+int idade;
+char nome[30];
+printf("Digite sua Idade: ");
+scanf("%d",&amp;idade);
+printf("Seu Nome: ");
+scanf("%s",nome);&nbsp;&nbsp;&nbsp; /* Strings n&atilde;o utilizar '&amp;' na leitura */
+printf("%s Sua idade e' %d anos. \n", nome, idade);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+03L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Leia o n&uacute;mero e o nome dos elementos
+do grupo e os apresente.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Leia o nome e as notas de um aluno.
+Apresente seu nome e sua m&eacute;dia.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Leia uma letra, um n&uacute;mero inteiro,
+um n&uacute;mero com casas decimais e uma string, depois os apresente.</FONT></LI>
+</MENU>
+<A NAME="4"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Instru&ccedil;&otilde;es
+de entrada e de sa&iacute;da (continua&ccedil;&atilde;o)</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">O Comando printf, usado anteriormente,
+segue o mesmo padr&atilde;o de scanf(), por&eacute;m &eacute; destinado
+a apresenta&ccedil;&atilde;o dos dados, enquanto aquele destina-se a leitura
+dos dados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>printf()</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">&Eacute; outro dos mais poderosos recursos
+da linguagem C, printf() servir&aacute; basicamente para a apresenta&ccedil;&atilde;o
+de dados no monitor.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Sua forma geral ser&aacute;: printf("string
+de controle", lista de argumentos);</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Necessariamente voc&ecirc; precisar&aacute;
+ter tantos argumentos quantos forem os comandos de formata&ccedil;&atilde;o
+na "string de controle". Se isto n&atilde;o ocorrer, a tela exibir&aacute;
+sujeira ou n&atilde;o exibir&aacute; qualquer dado.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Os caracteres a serem utilizados pelo
+printf() em sua &lt;string de controle>, no momento ser&atilde;o os mesmos
+de scanf().</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Dado um n&uacute;mero, calcule
+seu quadrado.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int numero;
+printf("Digite um Numero: ");
+scanf("%d",&amp;numero);
+printf("O %d elevado ao quadrado resulta em %d. \n",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; numero,numero*numero);
+}</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Fun&ccedil;&otilde;es em
+C</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Conceitualmente, C &eacute; baseada em
+blocos de constru&ccedil;&atilde;o. Assim sendo, um programa em C nada
+mais &eacute; que um conjunto de fun&ccedil;&otilde;es b&aacute;sicas ordenadas
+pelo programador. As instru&ccedil;&otilde;es printf() e scanf(), vistas
+anteriormente, n&atilde;o fazem parte do conjunto de palavras padr&otilde;es
+da linguagem (instru&ccedil;&otilde;es), pois n&atilde;o passam elas mesmas
+de fun&ccedil;&otilde;es escritas em C! Esta abordagem, permite a portabilidade
+da linguagem, pois seus comandos de entrada e sa&iacute;da, n&atilde;o
+s&atilde;o parte do conjunto b&aacute;sico da linguagem, livrando-a desta
+forma dos problemas de suporte aos diversos padr&otilde;es de v&iacute;deos,
+teclados e sistemas operacionais existentes.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Cada fun&ccedil;&atilde;o C &eacute;
+na verdade uma sub-rotina que cont&eacute;m um ou mais comandos em C e
+que executa uma ou mais tarefas. Em um programa bem escrito, cada fun&ccedil;&atilde;o
+deve executar uma tarefa. Esta fun&ccedil;&atilde;o dever&aacute; possuir
+um nome e a lista de argumentos que receber&aacute;. As fun&ccedil;&otilde;es
+em C s&atilde;o muito semelhantes as usadas no Pascal, com a diferen&ccedil;a
+que o pr&oacute;prio programa principal &eacute; apenas uma fun&ccedil;&atilde;o
+que se inicia com a palavra reservada main() podendo receber par&acirc;metros
+diretamente do DOS, por exemplo.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Programa principal chamando fun&ccedil;&atilde;o
+alo.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+alo();
+}
+alo()
+{
+printf("Al&ocirc;!\n\n");
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Retomemos o exemplo do c&aacute;lculo
+de um n&uacute;mero elevado ao quadrado.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Quadrado com fun&ccedil;&atilde;o</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int num;
+printf("Digite um numero: ");
+scanf("%d",&amp;num);
+sqr(num);&nbsp;&nbsp; /* sqr recebe "num" do programa principal */
+}
+sqr()
+int x;&nbsp; /* x &eacute; um "par&acirc;metro" recebido do programa principal
+no caso x "vale" o conte&uacute;do de num */
+{
+printf("%d ao quadrado e' %d ",x,x*x);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier"><B>Nota:</B> O argumento simplesmente
+&eacute; o valor (em "num") digitado no programa principal (em scanf) e
+enviado a fun&ccedil;&atilde;o sqr.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Um conceito importante e normalmente
+confundido &eacute; a diferen&ccedil;a conceitual entre "argumento" e "par&acirc;metro"
+que em resumo pode ser definido da seguinte forma: "Argumento" se refere
+ao <I>valor</I> que &eacute; usado para chamar uma fun&ccedil;&atilde;o.
+O termo "Par&acirc;metro" se refere &agrave; vari&aacute;vel em uma fun&ccedil;&atilde;o
+que recebe o valor dos argumentos usados na fun&ccedil;&atilde;o. A distin&ccedil;&atilde;o
+que deve ser compreendida &eacute; que a vari&aacute;vel usada como argumento
+na chamada de uma fun&ccedil;&atilde;o n&atilde;o tem nenhuma rela&ccedil;&atilde;o
+com o par&acirc;metro formal que recebe o valor dessa vari&aacute;vel.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exerc&iacute;cio: Passagem de vari&aacute;veis
+entre rotinas.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">int x;
+main()
+{
+int a;
+printf("Digite um valor: ");
+scanf("%d",&amp;a);
+x = 2 * a + 3;
+printf("%d e %d",x,soma(a));
+}
+
+soma(z)
+int z;
+{
+x = 2 * x + z;
+return(x);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+04L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Retome os exerc&iacute;cios das Aulas
+1L, 2L e 3L refazendo-os usando fun&ccedil;&otilde;es.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Utilize os caracteres abaixo para apresenta&ccedil;&atilde;o
+de forma mais sofisticada dos resultados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Utilize a fun&ccedil;&atilde;o cls(),
+dispon&iacute;vel no Classic C para apagar a tela.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Observemos o Quadro de Operadores Especiais
+suportados por printf()</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>C&oacute;digo Significado</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\b Retrocesso (BackSpace)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\f Salto de P&aacute;gina (Form Feed)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\n Linha Nova (Line Feed)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\r Retorno do Carro (cr)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\t Tabula&ccedil;&atilde;o Horizontal
+(TAB)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\' Caracter com ap&oacute;strofo</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\0 Caracter Nulo ou Fim de String (Seq&uuml;&ecirc;ncia)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\x Representa&ccedil;&atilde;o de byte
+na base hexadecimal</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo: printf("\x41"); causa a impress&atilde;o
+da letra A na tela.</FONT>
+<BR><A NAME="5"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Tomada de decis&atilde;o</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Comandos B&aacute;sicos - 2<SUP>a</SUP>.
+Parte</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">An&aacute;logo a outras linguagens, sua
+forma geral ser&aacute;</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<I><FONT FACE="Courier New,Courier">if &lt;condi&ccedil;&atilde;o></FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">&lt;comando>;</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">else</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">&lt;comando>;</FONT></I></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Programa Adulto, Jovem ou Velho.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i;
+printf("Digite sua idade: ");
+scanf("%d",&amp;i);
+if (i > 70)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Esta Velho!");
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i > 21)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Adulto");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Jovem");
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Observa&ccedil;&atilde;o: A express&atilde;o
+avaliada, dever&aacute; obrigatoriamente estar entre par&ecirc;nteses.</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier">Exemplo 2: Maior entre tr&ecirc;s n&uacute;meros</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,b,c;
+cls();
+printf("Digite o 1&ordm; N&uacute;mero: ");
+scanf("%d",&amp;a);
+printf("\nDigite o 2&ordm; N&uacute;mero: ");
+scanf("%d",&amp;b);
+printf("\nDigite o 3&ordm; N&uacute;mero: ");
+scanf("%d",&amp;c);
+if (a > b)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (a > c)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nO Maior &eacute; %d",a);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nO Maior &eacute; %d",c);
+else&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (b > c)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nO Maior &eacute; %d",b);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nO Maior &eacute; %d",c);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo 3: Maior entre tr&ecirc;s n&uacute;meros
+(Segunda Solu&ccedil;&atilde;o)</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,b,c,d;
+cls();
+printf("Digite o 1&ordm; N&uacute;mero: ");
+scanf("%d",&amp;a);
+printf("\nDigite o 2&ordm; N&uacute;mero: ");
+scanf("%d",&amp;b);
+printf("\nDigite o 3&ordm; N&uacute;mero: ");
+scanf("%d",&amp;c);
+if (a > b)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d = a;
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d = b;
+if (c > d)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nO Maior &eacute; %d",c);
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nO Maior &eacute; %d",d);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 4: Dados 2 n&uacute;meros apresente-os
+ordenados.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,b,t;
+cls();
+printf("Digite o 1&ordm; N&uacute;mero: ");
+scanf("%d",&amp;a);
+printf("\nDigite o 2&ordm; N&uacute;mero: ");
+scanf("%d",&amp;b);
+if (a &lt; b) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t = a;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a = b;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b = t;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+printf("\nOrdenados: %d e %d ",b,a);
+}</FONT></PRE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Contagem</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Um dos grandes benef&iacute;cios dos sistemas
+de processamento de dados est&aacute; em sua confiabilidade (precis&atilde;o
+nos c&aacute;lculos) e rapidez (infinitamente superior ao ser humano),
+desta forma &eacute; ideal para processamento de elevado n&uacute;mero
+de opera&ccedil;&otilde;es <B>repetitivas</B>. O processamento de uma Folha
+de Pagamentos, a Emiss&atilde;o de Notas Fiscais, a Gera&ccedil;&atilde;o
+de Estat&iacute;sticas de Faturamento, s&atilde;o t&iacute;picas tarefas
+a serem realizadas por processamento eletr&ocirc;nico de dados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Todas as linguagens importantes disp&otilde;e
+de recursos destinados a for&ccedil;ar a repeti&ccedil;&atilde;o de execu&ccedil;&atilde;o
+de um determinado n&uacute;mero de instru&ccedil;&otilde;es. Diferentemente
+do BASIC e do Pascal, o "loop" <I>for</I> &eacute; a instru&ccedil;&atilde;o
+mais poderosa na cria&ccedil;&atilde;o de estruturas de repeti&ccedil;&atilde;o.
+Neste momento, abordaremos apenas sua sintaxe simplificada, que lembra
+bastante a sintaxe do FORTRAN (comando DO) e semelhante &agrave;quelas
+linguagens citadas anteriormente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Sua forma mais simples &eacute;:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><I>for (&lt;in&iacute;cio>;&lt;condi&ccedil;&atilde;o>;&lt;incremento>)
+comando;</I></FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Contagem de 1 a 100 ficaria</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int cont;
+for (cont = 1; cont &lt;= 100; cont++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",cont);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 2: Elaborar programa que imprima
+a tabuada de um n&uacute;mero dado.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int cont,num;
+printf("Digite um Numero: "); scanf("%d",&amp;num);
+for (cont = 0; cont &lt;= 10; cont++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%2d * %2d = %2d \n",num,cont,num * cont);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier"><B>Nota:</B> O n&uacute;mero '2' antes
+do 'd' causa a representa&ccedil;&atilde;o em v&iacute;deo de 2 casas,
+permitindo o alinhamento da tabuada!</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Strings (Seq&uuml;&ecirc;ncias)</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Em C uma string &eacute; simplesmente
+uma matriz de caracteres finalizada por um c&oacute;digo ASCII zero. Sua
+declara&ccedil;&atilde;o ser&aacute;:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><I>char str[&lt;inteiro>];</I></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">onde a vari&aacute;vel str poder&aacute;
+conter no m&aacute;ximo o n&uacute;mero de letras igual ao especificado.
+Por exemplo se declararmos</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">char a[80];</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">A vari&aacute;vel "a" poder&aacute;
+conter 80 elementos onde a primeira letra estar&aacute; em a[0] e a octog&eacute;sima
+em a[79].</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Algo muito importante a ser lembrado
+&eacute; que C n&atilde;o verifica comprimento de strings como o BASIC
+ou Pascal. A forma mais simples de evitar-se erros &eacute; que a string
+seja suficientemente grande para conter o que voc&ecirc; quiser colocar
+nela. Um caractere zero bin&aacute;rio &eacute; colocado no final de sua
+string, portanto se voc&ecirc; digitar a palavra al&ocirc; para uma vari&aacute;vel
+chamada "saudar", esta dever&aacute; ter sido declarada no m&iacute;nimo
+como:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">"char saudar[03];".</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">A l &ocirc; \0</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">1 2 3 4</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 3: Apresente um nome digitado
+pelo usu&aacute;rio.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int cont;
+char nome[10];
+printf("Digite um Nome: "); scanf("%s",nome);
+for (cont = 0; cont &lt;= 10; cont++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%c",nome[cont]);
+printf("\n\n%s",nome);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+05L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Dados 3 n&uacute;meros, imprima o maior
+deles e o menor deles.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Dados 3 n&uacute;meros, imprima a m&eacute;dia
+destes n&uacute;meros. Verifique se todos s&atilde;o positivos. Caso algum
+n&uacute;mero seja negativo, indique ao usu&aacute;rio que a m&eacute;dia
+n&atilde;o ser&aacute; calculada.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Elabore programa que leia "n" n&uacute;meros
+digitados e apresente sua m&eacute;dia.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">4- Elabore programa que imprima a m&eacute;dia
+de "n" n&uacute;meros, excluindo o menor deles.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">5- Dados "n" n&uacute;meros apresente
+a m&eacute;dia entre o maior e o menor n&uacute;mero da seq&uuml;&ecirc;ncia
+fornecida.</FONT></LI>
+</MENU>
+<A NAME="6"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Tipos de dados</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">No momento dispomos de conhecimento para
+elabora&ccedil;&atilde;o de programas b&aacute;sicos para constru&ccedil;&atilde;o
+de pequenos programas, pois conhecemos instru&ccedil;&otilde;es de entrada
+de dados (scanf), de sa&iacute;da (printf), tomada de decis&atilde;o (if)
+e de contagem (for).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Veremos a seguir Tipos de Dados da
+linguagem C, vari&aacute;veis, operadores, e demais instru&ccedil;&otilde;es
+b&aacute;sicas. Devemos procurar compreender a utilidade das declara&ccedil;&otilde;es
+que ser&atilde;o exibidas a seguir, relacionando estes recursos com os
+exemplos e exerc&iacute;cios vistos anteriormente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Semelhante ao BASIC, Pascal e COBOL,
+a linguagem C necessita que todas as vari&aacute;veis tenham seus tipos
+definitos. C aceita tipos b&aacute;sicos (caractere, inteiro, ponto flutuante,
+dupla precis&atilde;o e sem valor) e modificadores (sinal,sem sinal, longo
+e curto) que podem alterar os tipos b&aacute;sicos. Observemos as tabelas
+abaixo para melhor entendimento:</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Tabela de Tamanhos e Escala
+de Tipos B&aacute;sicos</FONT></FONT></H2>
+
+<TABLE BORDER >
+<TR>
+<TD WIDTH="121"><FONT FACE="Courier New,Courier">Tipo</FONT></TD>
+
+<TD WIDTH="151">
+<CENTER><FONT FACE="Courier New,Courier">Extens&atilde;o</FONT></CENTER>
+</TD>
+
+<TD WIDTH="284">
+<CENTER><FONT FACE="Courier New,Courier">Escala Num&eacute;rica em bits</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="121"><FONT FACE="Courier New,Courier">char</FONT></TD>
+
+<TD WIDTH="151">
+<CENTER><FONT FACE="Courier New,Courier">8</FONT></CENTER>
+</TD>
+
+<TD WIDTH="284">
+<CENTER><FONT FACE="Courier New,Courier">0 a 255</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="121"><FONT FACE="Courier New,Courier">int</FONT></TD>
+
+<TD WIDTH="151">
+<CENTER><FONT FACE="Courier New,Courier">16</FONT></CENTER>
+</TD>
+
+<TD WIDTH="284">
+<CENTER><FONT FACE="Courier New,Courier">-32768 a 32767</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="121"><FONT FACE="Courier New,Courier">float</FONT></TD>
+
+<TD WIDTH="151">
+<CENTER><FONT FACE="Courier New,Courier">32</FONT></CENTER>
+</TD>
+
+<TD WIDTH="284">
+<CENTER><FONT FACE="Courier New,Courier">3.4E-38 a 3.4E+38</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="121"><FONT FACE="Courier New,Courier">double</FONT></TD>
+
+<TD WIDTH="151">
+<CENTER><FONT FACE="Courier New,Courier">64</FONT></CENTER>
+</TD>
+
+<TD WIDTH="284">
+<CENTER><FONT FACE="Courier New,Courier">1.7E-308 a 1.7E+308</FONT></CENTER>
+</TD>
+</TR>
+
+<TR>
+<TD WIDTH="121"><FONT FACE="Courier New,Courier">void</FONT></TD>
+
+<TD WIDTH="151">
+<CENTER><FONT FACE="Courier New,Courier">0</FONT></CENTER>
+</TD>
+
+<TD WIDTH="284">
+<CENTER><FONT FACE="Courier New,Courier">sem valor</FONT></CENTER>
+</TD>
+</TR>
+</TABLE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Tabela com Combina&ccedil;&otilde;es
+poss&iacute;veis de Tipos B&aacute;sicos e seus Modificadores</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier"><B>Tipo Extens&atilde;o Escala Obs.</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">char 8 -128 a 127</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">unsigned char 8 0 a 255</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">signed char 8 -128 a 127 ver char</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">int 16 -32768 a 32767</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">unsigned int 16 0 a 65535</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">signed int 16 -32768 a 32767 ver int</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">short int 16 -32768 a 32767 ver int</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">unsigned short int 16 0 a 65535 ver
+unsigned int</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">signed short int 16 -32768 a 32767
+ver int</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">long int 32 -2147483648 a 2147483647</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">signed short int 32 -2147483648 a 2147483647
+ver long int</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">unsigned short int 32 0 a 4294967295</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">float 32 3.4E-38 a 3.4E+38</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">double 64 1.7E-308 a 1.7E+308</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">long double 64 1.7E-308 a 1.7E+308
+ver double</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Nota: Alguns modificadores resultam
+em combina&ccedil;&otilde;es exatamente iguais a de outras declara&ccedil;&otilde;es.
+Algumas declara&ccedil;&otilde;es apresentadas acima n&atilde;o s&atilde;o
+suportadas pelo Classic C, notadamente aquelas com 64 bits, s&oacute; dispon&iacute;veis
+nas mais potentes implementa&ccedil;&otilde;es de compiladores C.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Mesmo n&uacute;mero com 2 representa&ccedil;&otilde;es
+diferentes e Erro.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a;
+printf("Digite um numero: ");
+scanf("%d",&amp;a);
+printf("%d %5d %f",a,a,a);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Para a = 67, teremos:" 67 67 0.000000"!
+Observe que a representa&ccedil;&atilde;o em ponto flutuante foi truncada!</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 2: Mesmo n&uacute;mero com 2 representa&ccedil;&otilde;es
+diferentes Corretas.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+float a;
+printf("Digite um numero: ");
+scanf("%f",&amp;a);
+printf("%f %e",a,a);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Simulando obtemos:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Digite um numero: 65</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">65.000000 6.500000E+01</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo 3: Caracter sendo tratado como
+n&uacute;mero, sem qualquer ERRO de execu&ccedil;&atilde;o ou de compila&ccedil;&atilde;o.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a;
+printf("Digite um numero: ");
+scanf("%d",&amp;a);
+printf("%d %u %c",a,a,a);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Para a = 67, teremos 67 67 C</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Para a = -191, teremos -191 65345 A</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier">Exerc&iacute;cio4: Elabore tabela de Convers&atilde;o
+de Temperaturas entre as Escalas Celsius e Fahreint.</FONT>
+<PRE><FONT FACE="Courier New,Courier">Algoritmo:
+<I>inteiro fahr
+flutuante celsius
+para fahr de 0 at&eacute; 300 passo 20 fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima fahr
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; celsius = 5.0/9.0*(fahr-32)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima celsius</I></FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Programa:</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int fahr;
+float celsius;
+for (fahr = 0; fahr &lt;= 300; fahr = fahr + 20) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%4d", fahr);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; celsius = (5.0/9.0)*(fahr-32);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\t%6.1f\n",celsius);
+&nbsp; }
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Note que quando dois ou mais comandos
+devam ser executados, devemos <B>obrigatoriamente </B>utilizar chaves para
+delimitar a seq&uuml;&ecirc;ncia de instru&ccedil;&otilde;es a ser observada.
+Analisando o programa a seguir, percebemos que:</FONT>
+<PRE><FONT FACE="Courier New,Courier">if (x == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("A");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("B");
+&nbsp; }
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("C");</FONT></PRE>
+
+<H4>
+<FONT FACE="Courier New,Courier">Se x = 0 ent&atilde;o ser&atilde;o impressos
+AB sen&atilde;o impresso C</FONT></H4>
+
+<PRE><FONT FACE="Courier New,Courier">if (x == 0)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("A");
+printf("B");</FONT></PRE>
+
+<H4>
+<FONT FACE="Courier New,Courier">Se x = 0 ent&atilde;o ser&atilde;o impressos
+AB sen&atilde;o impresso B</FONT></H4>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier"><B>Exerc&iacute;cio:</B> Programa Fatorial.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Algoritmo:</FONT></LI>
+
+<MENU>
+<LI>
+<I><FONT FACE="Courier New,Courier">inteiro p,r,s</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">s = 1</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">leia r</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">para p de r at&eacute; 1 fa&ccedil;a</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">s = s * r</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">imprima s</FONT></I></LI>
+</MENU>
+</MENU>
+<FONT FACE="Courier New,Courier">Linguagem C:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i,j;
+float f=1;
+printf("Digite um numero: ");
+scanf("%d",&amp;j);
+for(i=1;i&lt;=j;i++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f=f*i;
+printf("O fatorial de %d e' %7.0f.",j,f);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Alternativamente poder&iacute;amos resolver
+este mesmo problema utilizando fun&ccedil;&otilde;es.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int j;
+printf("Digite um numero: ");
+scanf("%d",&amp;j);
+printf("O fatorial de %d e' %d",j,fat(j));
+}
+int fat(n)
+int n;
+{
+int i,f=1,z=3;
+for(i=1;i&lt;=n;i++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f = f*i;
+return f;
+}</FONT></PRE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Recursividade</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">A Recursividade &eacute; o ato da fun&ccedil;&atilde;o
+chamar a si mesma com a finalidade de resolver determinado problema. O
+problema do fatorial tamb&eacute;m pode ser utilizado para demonstrar a
+recursividade como segue:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int j;
+printf("Digite um numero: ");
+scanf("%d",&amp;j);
+printf("O fatorial de %d e' %d",j,fat(j));
+}
+
+int fat(n)
+int n;
+{
+int i,f=1,z=3;
+if (n == 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 1;
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return fat(n-1) * n;
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+06L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Dado um n&uacute;mero inteiro e uma
+raz&atilde;o, calcule a somat&oacute;ria dos primeiros 5 termos da Progress&atilde;o
+Aritm&eacute;tica, determinada por estes n&uacute;meros.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Processe os 3 exemplos do fatorial
+vistos na aula de teoria.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- Exiba os primeiros "n" termos da
+PA de raz&atilde;o 2 e termo inicial 4.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">4- Exiba os primeiros "n" termos da
+PA de raz&atilde;o 3 e termo inicial 3.</FONT>
+<BR><A NAME="7"></A>
+</BODY>
+</HTML>

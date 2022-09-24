@@ -1,0 +1,794 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu40fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu41fi.htm">
+
+<LINK REL="Previous" HREF="vcu39fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu39fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu41fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">40 &#151; Building Custom AppWizards</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">How Does AppWizard Work?</A></LI>
+
+<LI>
+
+<A HREF="#I4">A Working Example: The HelloWizard</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I5">HelloWizard Overview</A></LI>
+
+<LI>
+
+<A HREF="#I6">Using AppWizard to Create a Custom AppWizard</A></LI>
+
+<LI>
+
+<A HREF="#I7">Custom AppWizard Templates</A></LI>
+
+<LI>
+
+<A HREF="#I8">Custom AppWizard Resources</A></LI>
+
+<LI>
+
+<A HREF="#I9">Custom AppWizard Dialogs</A></LI>
+
+<LI>
+
+<A HREF="#I10">The Macro Dictionary</A></LI>
+
+<LI>
+
+<A HREF="#I11">Testing the New Custom AppWizard</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">Other Custom AppWizard Features</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">AppWizard Classes</A></LI>
+
+<LI>
+
+<A HREF="#I14">MFCAPWZ.DLL Functions</A></LI>
+
+<LI>
+
+<A HREF="#I15">Context-Sensitive Help</A></LI>
+
+<LI>
+
+<A HREF="#I16">Debugging a Custom AppWizard</A></LI>
+
+<LI>
+
+<A HREF="#I17">Custom AppWizard Directives and Macros</A></LI>
+
+<LI>
+
+<A HREF="#I18">Limitations</A></LI></UL>
+
+<LI>
+
+<A HREF="#I19">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>40 &#151; Building Custom AppWizards</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>One of the best features of the Visual C++ development system has always been its capability to build heavily customized skeleton applications. The tool that accomplishes this task is the Visual C++ AppWizard. Through a series of dialogs, AppWizard guides the user through the process of setting up the initial project parameters. It then uses these user-supplied values to customize a set of templates that form the basis of the new project's source.
+
+<BR></P>
+
+<P>In Version 4<S>.0</S> of Visual C++, application developers are given the power to create customized versions of AppWizard. This customization applies to both the dialogs AppWizard presents to the AppWizard user and the template files from which an application skeleton is created.
+
+<BR></P>
+
+<P>If AppWizard is a code generator, then the ability to create custom AppWizards must be called a code generator generator capability, right? To avoid the potential for confusion that is demonstrated by this admittedly uninspired play with words, we should agree on a few terms in advance.
+
+<BR></P>
+
+<P>For the purposes of this chapter, the term <I>developer</I> means you, the author of a custom AppWizard. The <I>AppWizard user</I> is the programmer who uses this custom AppWizard to create a skeleton application. The term <I>end user</I> refers to users of the application created by the AppWizard user.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>How Does AppWizard Work?</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Before we can go about building a custom AppWizard, it is necessary to develop a thorough understanding of the operation of AppWizard.
+
+<BR></P>
+
+<P>What exactly happens when you invoke AppWizard? The first thing you see is a series of dialogs that AppWizard presents. Through these dialogs, you can specify many project parameters.
+
+<BR></P>
+
+<P>These parameters are stored internally by AppWizard as a series of substitution macros. To this set, another set of internally defined macros is also added.
+
+<BR></P>
+
+<P>When AppWizard begins generating a new project, it builds project files from a set of templates. The templates are processed and any macro references in them are expanded with the internally defined or user-supplied values.
+
+<BR></P>
+
+<P>Figure 40.1 provides a schematic overview of the AppWizard project creation process.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="40vcu01.gif">Figure 40.1. How AppWizard creates a new project.</A></B>
+
+<BR></P>
+
+<P>From here, the method of generalizing AppWizard is obvious. If you could only supply your own wizard dialogs, templates, and macros in place of (or in addition to) those in AppWizard, you could build an application generation customized to your needs. This is exactly how custom AppWizards are constructed.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B>A Working Example: The HelloWizard</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>I know I am a bore. Could I not find something more entertaining than yet another Hello, World project? Then again, you didn't buy this book for its entertainment value, did you. So perhaps I can be excused for using examples that are admittedly uninspired but help focus on the subject that they are meant to demonstrate. The simpler an example (as long as it is not oversimplified) the better it helps to drive home the point without getting you swamped by unnecessary and irrelevant details.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>HelloWizard Overview</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>On this note, our AppWizard project is a very simple one indeed. Its basis is the program shown in Listing 40.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 40.1. A simple Hello, World program in Windows.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// HELLO.CPP
+
+#include &lt;afxwin.h&gt;
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+        MessageBox(NULL, &quot;Hello, World!&quot;, &quot;HELLO&quot;, MB_OK);
+
+        return 0;
+
+}</PRE>
+
+<P>The new AppWizard, HelloWizard, will help the AppWizard user create an application that can display any text, not just this boring &quot;Hello, World!&quot; string. We also would like this revolutionary application to have the proper source comments&#151;that is, we would like to have the name of the actual file appear at the top, which may be different from HELLO.CPP.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Using AppWizard to Create a Custom AppWizard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Custom AppWizard projects are created by, what else? AppWizard, of course. As the first step of creating the new project, select New from the File menu, and specify a new project workspace in the New dialog.
+
+<BR></P>
+
+<P>In the New Project dialog, type the name of the new project (for example, HELLO) and select Custom AppWizard<S>Appwizard</S> as the project type. (Make sure you also specify the correct directory where you want the new project to be located.) Next, click the Create button.
+
+<BR></P>
+
+<P>At this time the first of two wizard dialogs (and the only one we use for HelloWizard) appears, shown in Figure 40.2. The first decision you must make is with regard to the starting point from which your new custom AppWizard will be built.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="40vcu02.gif">Figure 40.2. Creating a Custom AppWizard project with </B><B>AppWizard.</A></B>
+
+<BR></P>
+
+<P>You can base the new custom AppWizard on an existing project. With the help of the new AppWizard, the custom AppWizard user will be able to create projects that are identical copies of the original, except for the project name that will be substituted throughout the project with a name of his choosing.
+
+<BR></P>
+
+<P>You can create a custom AppWizard that mimics the standard AppWizard behavior. This is most useful if your goal is to build customized extensions to the standard AppWizard.
+
+<BR></P>
+
+<P>Finally, you can create a new custom AppWizard by supplying your own custom steps, bypassing any default AppWizard behavior.
+
+<BR></P>
+
+<P>The first two steps are most suitable for applications that are written on the basis of the MFC framework. As our<I> </I>Hello, World program is not such an application, we are restricted to the third choice, the &quot;Your own custom steps&quot; option.
+
+<BR></P>
+
+<P>When you click on this option, the editable field towards the lower part of the dialog becomes enabled. In this field, you can specify the number of custom steps (number of wizard dialogs) your custom AppWizard will require. HelloWizard requires only one such step, so you can leave this field at its default setting.
+
+<BR></P>
+
+<P>Another change that occurred when you clicked on the &quot;Your own custom steps&quot; option is that the dialog's title changed to &quot;Step 1 of 1&quot; and the Next button became disabled. The second AppWizard step for custom AppWizards is not relevant for custom AppWizards that are based on steps you specify.
+
+<BR></P>
+
+<P>Still in this dialog is another field where you can specify the name under which this custom AppWizard will appear. The default is &quot;&lt;projectname&gt; AppWizard&quot; (for example, &quot;HELLO AppWizard&quot;). Change this name to the more elegant HelloWizard. This is purely a cosmetic change; this name is not used for any purpose other than identifying this custom AppWizard when the AppWizard user is about to create a new project workspace.
+
+<BR></P>
+
+<P>When you dismiss the wizard dialog by clicking on the Finish button, AppWizard displays a summary of the new custom AppWizard project in the New Project Information dialog. Click on the OK button and the new project is created.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Custom AppWizard Templates</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>New projects created by a custom AppWizard are defined with the help of templates. When AppWizard created the new custom AppWizard project, it supplied two special template files in the Template subdirectory inside the new custom AppWizard project directory: confirm.inf and newproj.inf. The first of these files, confirm.inf, contains the customizable text that is displayed in the New Project Information dialog when the AppWizard user completes the custom AppWizard steps. Its contents are not used for any other purpose.
+
+<BR></P>
+
+<P>In contrast, the other template file, newproj.inf, is perhaps the most important template file in your custom AppWizard project. This is the file that tells AppWizard what other files comprise a skeleton project.
+
+<BR></P>
+
+<P>Indeed, what other files are out there? Since we selected a custom AppWizard consisting entirely of steps we build, both confirm.inf and newproj.inf were created empty. We must supply their content. But before we do that, we turn our attention to our project's single source file, HELLO.CPP.
+
+<BR></P>
+
+<P>This file, of course, does not exist yet; but you can create it easily by keying in those few lines of code shown in Listing 40.1. But how do you turn this specific program into a generic template that can serve as the starting point for many projects?
+
+<BR></P>
+
+<P>The answer is, of course, that you have to use macros at various places throughout this file. We use two such macros, in fact. The first macro is supplied automatically by AppWizard and specifies the name of the application that the AppWizard user is about to create. The second macro is one we create later, and this contains the text that the AppWizard user wishes to include in the new application.
+
+<BR></P>
+
+<P>AppWizard macro names are distinguished by prepending and appending two dollar signs to their names. For example, the macro that defines the project name, ROOT, should be referred to as $$ROOT$$ in template files. The same applies to macros we define; in our case, the macro $$HELLOTEXT$$ that references the value the AppWizard user wishes to output with the new program.
+
+<BR></P>
+
+<P>Listing 40.2 shows HELLO.CPP in its template version. You can create this file using the integrated editor and save it in the Template subdirectory.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 40.2. The Hello, World program as a custom AppWizard template.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// $$ROOT$$.CPP
+
+#include &lt;afxwin.h&gt;
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+        MessageBox(NULL, &quot;$$HELLOTEXT$$&quot;, &quot;$$ROOT$$&quot;, MB_OK);
+
+        return 0;
+
+}</PRE>
+
+<P>Notice that the macro substitution takes place regardless where a macro is used (inside a comment, within a pair of quotes).
+
+<BR></P>
+
+<P>A custom AppWizard can have <I>text templates</I> like our HELLO.CPP template, or <I>binary templates</I> (for example, a bitmap file). Unlike text templates, binary templates are copied verbatim, with no macro substitution taking place.
+
+<BR></P>
+
+<P>As I mentioned, the purpose of the newproj.inf template is to list all the templates that a new project consists of. Accordingly, we have to modify the newproj.inf template of HelloWizard and include HELLO.CPP. This new version of newproj.inf is shown in Listing 40.3. To edit newproj.inf, open this file through the File Open dialog. It is located in the Template subdirectory.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 40.3. The </B><B>newproj.inf</B><B> template for HelloWizard.</B></LH></UL>
+
+<PRE>$$// newproj.inf = template for list of template files
+
+$$//  format is 'sourceResName' \t 'destFileName'
+
+$$//    The source res name may be preceded by any combination of
+
+$$//    '=', '+', and/or '*'
+
+$$//       '=' =&gt; the resource is binary
+
+$$//       '+' =&gt; the file should be added to the project
+
+$$//       '*' =&gt; bypass custom AppWizard's resources when loading
+
+$$//    if name starts with / =&gt; create new subdir
+
++HELLO.CPP      $$ROOT$$.CPP</PRE>
+
+<P>As the somehow cryptic (AppWizard-generated) header of newproj.inf suggests, the name of every file listed in this template may be preceded by a combination of three flags. The flag = indicates a binary resource that is copied verbatim (with no macro processing). The flag specifies that the file should be added to the new project (so for example, you would use this flag with .CPP source files, but not with .H header files). The meaning of the third flag (*) is somewhat more obscure; it specifies that the custom AppWizard's resources should not be searched for a resource with that name, but instead, the default resource should be used. This is useful if your custom AppWizard contains a template that overrides a default template with the same name, and depending on certain conditions, you may wish to use one or the other.
+
+<BR></P>
+
+<P>In our case, we used the + flag because we want the file that is created from the HELLO.CPP template to be automatically added to the AppWizard user's project. The name of the template is followed by a tab character (yes, it must be a single tab character, other whitespace characters are not acceptable), and that is followed by the name this file will have in the AppWizard user's project directory. It goes without saying that macros can be used here as well; we used the $$ROOT$$ macro to specify a filename that is the same as the project name specified by the AppWizard user.
+
+<BR></P>
+
+<P>Modification of confirm.inf serves purely cosmetic purposes. However, it does give me an opportunity to show some AppWizard template directives (namely the $$IF and $$ENDIF directives) that would not otherwise be required for our simple HelloWizard. Listing 40.4 shows this new version of confirm.inf.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 40.4. The </B><B>confirm.inf</B><B> template for HelloWizard.</B></LH></UL>
+
+<PRE>AppWizard is about to create a new project with the following
+
+settings:
+
+Project name:  $$ROOT$$.MAK
+
+Greeting text: $$HELLOTEXT$$
+
+$$IF(TARGET_INTEL)
+
+The resulting console application can be run inside a DOS box under
+
+both the Windows 95 and the Windows NT operating systems.
+
+$$ENDIF</PRE>
+
+<P>On a minor note, when a macro is referenced in an AppWizard template directive such as $$IF, it is no longer necessary to prepend and append the dollar signs to its name.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Custom AppWizard Resources</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>We have modified newproj.inf and confirm.inf and we have added a new template, HELLO.CPP. But how do these files find their way into the final custom AppWizard? Indeed, what form does a custom AppWizard take?
+
+<BR></P>
+
+<P>The target of the custom AppWizard project is a single file with the .awx extension (in our case, HELLO.awx). Despite the odd extension, this file really is a DLL file that will be called from the Visual C++ Developer Studio when a new project of this type is created. How does the Developer Studio know that this new library is out there? The custom AppWizard, when completed, must be deposited in a special directory location (usually MSDEV\TEMPLATE) where the Developer Studio can locate it.
+
+<BR></P>
+
+<P>As I said, the custom AppWizard project is really a DLL project. As such, it also has a resource file. If you open the custom AppWizard project in Resource View, you will notice a section named &quot;TEMPLATE&quot;. In this section, two files that we are already familiar with are specified: confirm.inf, and newproj.inf.
+
+<BR></P>
+
+<P>Why did we not simply use Resource View when editing these files? The problem is, because these files are custom resource files, the Developer Studio makes no assumptions about their content; if you attempt to open them through Resource View, they will be opened with the binary editor. To open them as text files, you must use the File Open command of the Developer Studio.
+
+<BR></P>
+
+<P>The one file that is conspicuously missing from the &quot;TEMPLATE&quot; section is our newly created file, HELLO.CPP. To add this, use the right mouse button over the &quot;TEMPLATE&quot; folder and select the Import command from the popup menu. Select HELLO.CPP in the Template directory and click Import. In the Resource Type dialog that pops up, select &quot;TEMPLATE&quot; as the resource type and click OK.
+
+<BR></P>
+
+<P>The Developer Studio opens the file HELLO.CPP for binary editing; you can safely close this window. However, it is necessary to change the identifier of this newly added resource. It was added with the symbolic identifier IDR_TEMPLATE1; we want to change this to the text identifier &quot;HELLO.CPP&quot;. For this, simply right-click on the item IDR_TEMPLATE1 in Resource View, and in the Custom Resource Properties, type &quot;HELLO.CPP&quot; (including the double quotes) over the former ID, IDR_TEMPLATE1.
+
+<BR></P>
+
+<P>Doing this should also reveal something about the NEWPROJ.INF file; when we added a reference to HELLO.CPP, what we were referring to was the symbolic name of this resource in our project's resource file, not the actual filename. Of course, it only makes common sense to keep the two identical when possible.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Custom AppWizard Dialogs</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Now that we have finished assembling our templates, the nagging question in your mind, no doubt, is just where exactly do user-defined macros acquire their values? It is easy to see how AppWizard, through some internal magic, may set up the values of default macros such as $$ROOT$$ or $$TARGET_INTEL$$; but where does our little macro, $$HELLOTEXT$$, get its value from?
+
+<BR></P>
+
+<P>To answer this question, we turn our attention to the dialogs of our custom AppWizard. If you open the Dialog section in Resource View, you will find exactly one dialog in there: IDD_CUSTOM1. This is because during the initial creation of our custom AppWizard project, we specified that our custom AppWizard should consist of only one step.
+
+<BR></P>
+
+<P>Open this dialog by double-clicking. In it, a single static field contains a &quot;TODO&quot; reminder. This must be replaced. HelloWizard requires the user to enter only one text parameter; accordingly, the new version of this dialog should contain a static label and an edit field identified symbolically as IDC_HELLOTEXT. This new, admittedly spartan-looking, dialog is shown in Figure 40.3.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="40vcu03.gif">Figure 40.3. HelloWizard's single dialog.</A></B>
+
+<BR></P>
+
+<P>The values from a custom AppWizard's dialog are transferred to member variables through the same dialog data exchange process that is used in other MFC dialogs. To associate a member variable with the new field IDC_HELLOTEXT, invoke the ClassWizard. (This can be done by right-clicking on the edit field and selecting the ClassWizard item in the popup menu.) Select the Member Variables tab, and double-click the IDC_HELLOTEXT item.
+
+<BR></P>
+
+<P>The name of the new variable should be m_sHelloText. It is of the Value category and it is of type CString. You do not need to specify a maximum length. Once you have added this variable, you can dismiss the ClassWizard dialog and close all open resources. (It might be a good idea at this time to select the Save All command from the Developer Studio's File menu to ensure that the modified resources are all saved to disk.)
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The Macro Dictionary</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The new member variable, m_sHelloText, was added to the dialog class corresponding to the dialog IDD_CUSTOM1, the CCustom1Dlg class. It is also through this class that the value assigned to m_sHelloText gets propagated to the custom AppWizard's <I>macro dictionary</I>.
+
+<BR></P>
+
+<P>Take a look at the class CHELLOAppWiz. This class is derived from the class CCustomAppWiz. CCustomAppWiz has a member variable, m_Dictionary, which is of type CMapStringToString and contains mappings of macro names to macro values. It is this collection of macro name and macro value pairs that we must add our new macro to.
+
+<BR></P>
+
+<P>At the end of the file HELLOAw.cpp, a single object of type HELLOAppWiz is declared. It is this global object through which we can access the macro dictionary anywhere in our custom AppWizard.
+
+<BR></P>
+
+<P>The place to do it is the OnDismiss member function of the class CCustom1Dlg. This function is called whenever a particular AppWizard dialog is dismissed by the user. We need only add a single line of code that updates the macro dictionary with the new macro value. The modified OnDismiss function is shown in Listing 40.5.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 40.5. Modified version of </B><B>CCustom1Dlg::OnDismiss</B><B>.</B></LH></UL>
+
+<PRE>// This is called whenever the user presses Next, Back, or Finish
+
+// with this step present.  Do all validation &amp; data exchange from
+
+// the dialog in this function.
+
+BOOL CCustom1Dlg::OnDismiss()
+
+{
+
+    if (!UpdateData(TRUE))
+
+        return FALSE;
+
+    // TODO: Set template variables based on the dialog's data.
+
+    HELLOaw.m_Dictionary[&quot;HELLOTEXT&quot;] = m_sHelloText;
+
+    return TRUE;
+
+}</PRE>
+
+<P>Believe it or not, this is it. The new HelloWizard is ready for use as soon as it is recompiled and installed in the MSDEV/TEMPLATE directory. You do not have to worry about installing it there yourself; it is done automatically as the last step of building the project.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Testing the New Custom AppWizard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Does our new HelloWizard work as intended? Nothing is simpler than testing this through creating a new project with its help.
+
+<BR></P>
+
+<P>To do so, select New from the File menu and specify a new project workspace. Surprise! If you examine the Type drop-down list, you will find HelloWizard as one of the options there. Select it and give the project a name as well (such as GOODBYE). Make sure the project will be created in a directory that is acceptable to you.
+
+<BR></P>
+
+<P>As soon as you click OK in the New Project Workspace dialog, the first (and in the case of HelloWizard, only) page of the new AppWizard appears. Enter the text that the new application should display (see Figure 40.4).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="40vcu04.gif">Figure 40.4. Creating an application through </B><B>HelloWizard.</A></B>
+
+<BR></P>
+
+<P>When you dismiss HelloWizard with the Finish button, the New Project Information dialog pops up; in it appears the processed content of confirm.inf (see Figure 40.5). When you click the OK button, the new project is created.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="40vcu05.gif">Figure 40.5. HelloWizard confirmation dialog.</A></B>
+
+<BR></P>
+
+<P>Take a look at the newly created source file, GOODBYE.CPP (shown in Listing 40.6). As you can see, all macro references have been correctly replaced.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 40.6. </B><B>GOODBYE.CPP</B><B>, generated by HelloWizard.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// GOODBYE.CPP
+
+#include &lt;afxwin.h&gt;
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+    MessageBox(NULL, &quot;Goodbye, cruel world!&quot;, &quot;GOODBYE&quot;, MB_OK);
+
+    return 0;
+
+}</PRE>
+
+<P>The new application is ready to be compiled.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>Other Custom AppWizard Features</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Although HelloWizard demonstrates all the major steps of creating a new custom AppWizard, there are a few areas of custom AppWizard development that we have not touched.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>AppWizard Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Most of the custom AppWizard functionality is implemented through the CCustomAppWiz class. While developing HelloWizard, we have modified the m_Dictionary data member of this class. In more sophisticated custom AppWizards we can have greater control over how templates are processed by overriding the member functions of this class. For example, by overriding the member function ProcessTemplate, we can modify or completely replace the default AppWizard macro-expansion behavior in a custom AppWizard.
+
+<BR></P>
+
+<P>CAppWizStepDlg is a CDialog-derived class that implements the behavior of the AppWizard dialogs. Every AppWizard dialog step has a corresponding CAppWizStepDlg-derived object. Applications usually override the OnDismiss member function of this class (like HelloWizard did) to implement custom behavior, such as updating the contents of the CCustomAppWiz object's dictionary.
+
+<BR></P>
+
+<P>When a custom AppWizard project is created, it usually also has another class defined, the CDialogChooser class. This class is not derived from any MFC base class; instead, it serves as a convenient means to access the array of CAppWizStepDlg objects that comprise the custom AppWizard's user interface.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B><I>MFCAPWZ.DLL</I></B><B> Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The AppWizard DLL, MFCAPWZ.DLL, exports a series of functions that custom AppWizards can call. Normally, you do not need to call these functions directly; instead, code that calls them is generated when you first create your custom AppWizard project.
+
+<BR></P>
+
+<P>These MFCAPWZ.DLL functions include GetDialog (obtains a pointer to a standard AppWizard step), SetCustomAppWizClass (to provide a pointer to your custom AppWizard class), SetNumberOfSteps, ScanForAvailableLanguages, and SetSupportedLanguages.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Context-Sensitive Help</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>We neglected to build a help file for HelloWizard despite the fact that our custom AppWizard project already came equipped with a skeleton help file.
+
+<BR></P>
+
+<P>The help file must contain a topic for each of the custom AppWizard steps. It must take the form of a WinHelp file; currently, there is no way to integrate a custom AppWizard help file with the Visual C++ help system. The base name of the help file (that is, its filename without the extension) must be identical to the base name of your custom AppWizard (the AWX file). Furthermore, the help file must reside in the same directory as the custom AppWizard (\MSDEV\TEMPLATE).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Debugging a Custom AppWizard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Our HelloWizard was developed in a single edit-compile-run iteration. Not very difficult considering that only a single line of code was added to the AppWizard-generated custom AppWizard project. Unfortunately, real-world projects tend to get complex and messy; otherwise, we wouldn't need symbolic debuggers!
+
+<BR></P>
+
+<P>How do you debug a custom AppWizard project when it is a DLL called by the very environment that you would normally use for debugging (that is, the Developer Studio itself)? The answer is obvious: by running a second copy of the Developer Studio. In the Debug tab of the Settings dialog (Build menu), specify the path to the Developer Studio executable (\MSDEV\BIN\MSDEV.EXE). Exercise features of your custom AppWizard from this second copy, while using the first copy of Developer Studio as your debugging environment for setting breakpoints, examining the values of variables, or tracing execution.
+
+<BR></P>
+
+<P>There is one important difference between the debug version of a custom AppWizard and the debug version of a typical MFC project. As you probably noticed, the custom AppWizard Debug version is labeled Pseudo-Debug. Why this distinction from normal Debug versions?
+
+<BR></P>
+
+<P>The reason is that normal Debug targets use a memory allocation that is different from (and incompatible with) the Release target memory allocation mechanism. As you do not have access to the Visual C++ debug binaries, it is necessary to use these Pseudo-Debug targets, which are really Release targets with optimizations disabled and debug information added.
+
+<BR></P>
+
+<P>What are the drawbacks of using these types of targets over normal Debug targets? I can think of two such drawbacks. First, not using the Debug memory allocation mechanism makes it less likely that you will catch memory leaks, errors in your custom AppWizard's memory allocation. Second, the ASSERT, VERIFY, and other debugging macros in the release versions of the MFC libraries do nothing; if a condition is encountered that would normally trigger them, you will not see the result. This is not a problem within the custom AppWizard code itself, as the AppWizard-generated custom AppWizard skeleton defines the Pseudo-Debug versions of the appropriate debugging functions.
+
+<BR></P>
+
+<P>Of course, if you are really stuck, you can always compile your own version of MFC with similarly defined debugging functions to enable these capabilities in a Pseudo-Debug target.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Custom AppWizard Directives and Macros</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are many custom AppWizard directives and macros that we have not discussed.
+
+<BR></P>
+
+<P>In HelloWizard's confirm.inf file, we made use of the $$IF and $$ENDIF directives to add a comment specific to the Intel platform. Other custom AppWizard directives include $$ELIF, $$ELSE, $$INCLUDE, $$BEGINLOOP, $$ENDLOOP, $$SET_DEFAULT_LANG, and $$//.
+
+<BR></P>
+
+<P>Standard AppWizard macros exist that correspond to each of the standard AppWizard steps. Other standard macros describe the new project, assist in localization (international support), and provide miscellaneous functionality.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Limitations</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>While the ability to create custom AppWizard is a powerful capability, it is not without some limitations.
+
+<BR></P>
+
+<P>The AppWizard technology was initially developed in response to a need to create customized MFC application skeletons. As such, this technology is inherently geared towards constructing MFC applications.
+
+<BR></P>
+
+<P>There is no easy way (in other words, I could not find a way that I would not consider a kludge) to directly influence compilation flags in the newly created project file. Thus, whether you like it or not, you are stuck with a project file that assumes your project is an MFC application or DLL. While there is no reason why AppWizard technology could not be used, say, to create console application skeletons, doing so necessitates manual changes to the generated project file after AppWizard has finished its task.
+
+<BR></P>
+
+<P>The lack of the capability to directly influence project file settings also imposes other limitations, applicable even for MFC projects. For example, if your project skeleton relies on a nonstandard library, its name must be added to the generated project by the AppWizard user manually; otherwise, compiling the new project will fail.
+
+<BR></P>
+
+<P>While these limitations are a matter of fact, they do not diminish the value of custom AppWizards, especially in large organizations. Uses for this capability range from the mundane (such as dropping a company logo on AppWizard-generated dialogs or changing the appearance of the default About dialog) to the sophisticated (such as creating skeletons for components of large, complex project).
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Custom AppWizards extend the capability of creating project skeletons to skeletons of user-defined project types. The major steps of creating a new custom AppWizard can be summarized as follows:
+
+<BR></P>
+
+<OL>
+
+<LI>Create a custom AppWizard project using AppWizard. Specify whether you want to base the new AppWizard on standard AppWizard steps, an existing project, or your own custom steps.
+
+<BR>
+
+<BR></LI>
+
+<LI>Modify and add any template files as necessary in your custom AppWizard project's Template directory. Add references to any new templates in the &quot;TEMPLATE&quot; section of your custom AppWizard's resource file.
+
+<BR>
+
+<BR></LI>
+
+<LI>Create the AppWizard dialogs for your custom AppWizard project. Assign member variables to dialog fields like you would for any dialog based on the CDialog class.
+
+<BR>
+
+<BR></LI>
+
+<LI>Modify the OnDismiss member function for each of your custom AppWizard dialogs to update the macro dictionary of your custom AppWizard.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add any other code changes as necessary. Recompile your project. The new custom AppWizard will automatically be copied to where it belongs, your \MSDEV\TEMPLATE directory, for the Developer Studio to find it there.
+
+<BR>
+
+<BR></LI>
+
+<LI>If necessary, debug your custom AppWizard by launching a second copy of Developer Studio.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>Write the help file for your custom AppWizard using the help file skeleton that was created for your custom AppWizard project.
+
+<BR></P>
+
+<P><A HREF="vcu39fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu41fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

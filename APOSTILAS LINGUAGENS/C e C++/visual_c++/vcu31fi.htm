@@ -1,0 +1,1222 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu31fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu32fi.htm">
+
+<LINK REL="Previous" HREF="vcu30fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu30fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu32fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">31 &#151; OLE Drag and Drop</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Drag and Drop Basics</A></LI>
+
+<LI>
+
+<A HREF="#I4">Creating a Container Application</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I5">Creating the Application</A></LI>
+
+<LI>
+
+<A HREF="#I6">Adding Positioning Support</A></LI>
+
+<LI>
+
+<A HREF="#I7">Adding Selection Support</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">Adding Drag and Drop Support</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Implementing a Drag Source</A></LI>
+
+<LI>
+
+<A HREF="#I10">Implementing a Drop Target</A></LI></UL>
+
+<LI>
+
+<A HREF="#I11">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>31 &#151; OLE Drag and Drop</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>OLE provides an elegant, simple, standardized way to implement drag and drop capability in applications.
+
+<BR></P>
+
+<P>To explore drag and drop support in this chapter, we build an OLE container application. This simple application is able to hold a series of container objects. Via the OLE drag and drop mechanism, this application supports dragging items between its view and another application, between its own view windows, and within a single view window.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Drag and Drop Basics</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Drag and drop represents a technique of sharing data between applications that act as <I>drag sources</I> and applications that act as <I>drop </I><I>targets</I>. Drag sources are applications that enable their items to be dragged from their windows to the windows of other applications. Drop targets are applications that accept items dragged from drag sources and released within their window (Figure 31.1).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="31vcu01.gif">Figure 31.1. Drag and Drop.</A></B>
+
+<BR></P>
+
+<P>Implementing a drag source using MFC is very simple. Implementing a drop target is somewhat more difficult, but it is still not an overwhelmingly complex task.
+
+<BR></P>
+
+<P>The simple implementations presented in this chapter are based on the drag and drop support in the class COleClientItem. In applications that support drag and drop of native data or drag and drop of multiple items, you may decide to utilize the drag and drop support in COleServerItem instead.
+
+<BR></P>
+
+<P>Drag and drop functionality and clipboard functionality have many things in common. If you wish to implement clipboard cut, copy, and paste functions using OLE, you can share most of the clipboard support code and drag and drop code.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B>Creating a Container Application</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The container application required for our purposes is based on the AppWizard-generated container application default, with a few modifications that make it possible to select items using the mouse and that support persistent storage of item positions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Creating the Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To create the application, use AppWizard's defaults, except for specifying container application support in AppWizard Step 3. I named the application OCON for the simple reason that it is based on the example I presented in Chapter 30. Let me now briefly review the changes that need to be made to the AppWizard-generated skeleton to support persistent storage of embedded object positions and to support item selection using the mouse.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Adding Positioning Support</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The default AppWizard-supplied implementation of a container application positions inserted objects using a fixed rectangle. To make it possible for inserted items to be positioned anywhere in the drawing surface, a member variable of type CRect must be added to the class COCONCntrItem. This variable must also be serialized. The Draw member function of the view class must utilize this variable when drawing objects.
+
+<BR></P>
+
+<P>This variable should also be utilized in the COCONCntrItem member functions OnChangeItemPosition and OnGetItemPosition. Another change to COCONCntrItem is the addition of a new helper function, Invalidate; this function, taking a CWnd pointer as its parameter, invalidates the item's rectangle in the specified window.
+
+<BR></P>
+
+<P>To add the new member variable to the COCONCntrItem class and to declare the new helper function, Invalidate, use the following code:
+
+<BR></P>
+
+<PRE>class COCONCntrItem : public COleClientItem
+
+{
+
+    ...
+
+// Attributes
+
+public:
+
+    ...
+
+CRect m_rect;
+
+...
+
+// Operations
+
+public:
+
+    void Invalidate(CWnd *pWnd);
+
+// Implementation
+
+    ...</PRE>
+
+<P>This member variable must be initialized in the COCONCntrItem constructor (Listing 31.1).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.1. Initialization of </B><B>m_rect</B><B> in the constructor of </B><B>COCONCntrItem</B><B>.</B></LH></UL>
+
+<PRE>COCONCntrItem::COCONCntrItem(COCONDoc* pContainer)
+
+    : COleClientItem(pContainer)
+
+{
+
+    // TODO: add one-time construction code here
+
+    m_rect = CRect(0, 0, 0, 0);
+
+}</PRE>
+
+<P>The modified versions of COCONCntrItem::OnChangeItemPosition and COCONCntrItem::OnGetItemPosition (Listing 31.2) are used to reflect any changes in the item's size or position that were made during an in-place session. It also makes use of the GetCachedExtent member function to update the item's size and position if it has not yet been initialized.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.2. </B><B>COCONCntrItem::OnChangeItemPosition</B><B> and </B><B>COCONCntrItem::OnGetItemPosition</B><B>.</B></LH></UL>
+
+<PRE>BOOL COCONCntrItem::OnChangeItemPosition(const CRect&amp; rectPos)
+
+{
+
+    ASSERT_VALID(this);
+
+    if (!COleClientItem::OnChangeItemPosition(rectPos))
+
+        return FALSE;
+
+    // TODO: update any cache you may have of the item's
+
+    //  rectangle/extent
+
+    m_rect = rectPos;
+
+    GetDocument()-&gt;UpdateAllViews(NULL);
+
+    return TRUE;
+
+}
+
+void COCONCntrItem::OnGetItemPosition(CRect&amp; rPosition)
+
+{
+
+    ASSERT_VALID(this);
+
+//  rPosition.SetRect(10, 10, 210, 210);
+
+    if (m_rect.IsRectNull())
+
+    {
+
+        CSize size;
+
+        CClientDC dc(NULL);
+
+        GetCachedExtent(&amp;size, GetDrawAspect());
+
+        dc.HIMETRICtoDP(&amp;size);
+
+        m_rect = CRect(CPoint(10, 10), size);
+
+    }
+
+    rPosition = m_rect;
+
+}</PRE>
+
+<P>Listing 31.3 shows how COCONCntrItem::Serialize must be modified to support serialization of the new member variable.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.3. Modified version of </B><B>COCONCntrItem::Serialize</B><B>.</B></LH></UL>
+
+<PRE>void COCONCntrItem::Serialize(CArchive&amp; ar)
+
+{
+
+    ASSERT_VALID(this);
+
+    COleClientItem::Serialize(ar);
+
+    if (ar.IsStoring())
+
+    {
+
+        // TODO: add storing code here
+
+ar &lt;&lt; m_rect;
+
+}
+
+    else
+
+    {
+
+        // TODO: add loading code here
+
+ar &gt;&gt; m_rect;
+
+}
+
+}</PRE>
+
+<P>Finally, the addition of the new Invalidate helper function (Listing 31.4) concludes changes to the implementation of COCONCntrItem.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.4. The helper function </B><B>COCONCntrItem::Invalidate</B><B>.</B></LH></UL>
+
+<PRE>void COCONCntrItem::Invalidate(CWnd *pWnd)
+
+{
+
+    CRect rect = m_rect;
+
+    rect.InflateRect(1, 1);
+
+    pWnd-&gt;InvalidateRect(rect);
+
+}</PRE>
+
+<P>Listing 31.5 shows the changes to COCONView::OnDraw; the new version takes into account the items' stored positions and draws them accordingly. It also draws all items (as opposed to just the current selection). Furthermore, this version of the function uses a CRectTracker object to highlight the currently selected item.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.5. Modified version of </B><B>COCONCntrItem::OnDraw</B><B>.</B></LH></UL>
+
+<PRE>void COCONView::OnDraw(CDC* pDC)
+
+{
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        COCONCntrItem *pItem =
+
+            (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        pItem-&gt;Draw(pDC, pItem-&gt;m_rect);
+
+        if (pItem == m_pSelection)
+
+        {
+
+            CRectTracker tracker;
+
+            tracker.m_rect = pItem-&gt;m_rect;
+
+            tracker.m_nStyle = CRectTracker::resizeInside |
+
+                               CRectTracker::solidLine;
+
+            if (pItem-&gt;GetItemState() == COleClientItem::openState
+
+         || pItem-&gt;GetItemState() == COleClientItem::activeUIState)
+
+                    tracker.m_nStyle |= CRectTracker::hatchInside;
+
+            tracker.Draw(pDC);
+
+        }
+
+    }
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Adding Selection Support</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the previous section, we already implemented highlighting the current selection. Adding support for selection of items using the mouse requires adding a handler for WM_LBUTTONDOWN events to the view class. This handler, shown in Listing 31.6, can be added using the ClassWizard.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.6. Handler function for </B><B>WM_LBUTTONDOWN</B><B> messages.</B></LH></UL>
+
+<PRE>void COCONView::OnLButtonDown(UINT nFlags, CPoint point)
+
+{
+
+    // TODO: Add your message handler code here and/or call default
+
+//  CView::OnLButtonDown(nFlags, point);
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    COCONCntrItem *pSelection = NULL;
+
+    COCONCntrItem *pItem =
+
+        (COCONCntrItem *)pDoc-&gt;GetInPlaceActiveItem(this);
+
+    if (pItem != NULL) pItem-&gt;Close();
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        pItem = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        if (pItem-&gt;m_rect.PtInRect(point))
+
+            pSelection = pItem;
+
+    }
+
+    if (pSelection != m_pSelection)
+
+    {
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+        m_pSelection = pSelection;
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+    }
+
+}</PRE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>Adding Drag and Drop Support</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Although the two areas of functionality are usually mentioned together, the requirements for a drag source application and for a drop target application are quite distinct. Of the two, implementation of a drag source is the easier task. However, both tasks are supported extensively in part by the OLE architecture, in part by the MFC.
+
+<BR></P>
+
+<P>The support for implementing a drag source comes in the form of the DoDragDrop member function of several classes, namely COleClientItem, COleServerItem, and COleDataSource.
+
+<BR></P>
+
+<P>Drop target functionality is supported through a series of member functions of the CView class; namely, its member functions OnDrop, OnDragEnter, OnDragOver, and OnDragLeave. However, unlike the DoDragDrop function, which can be called as is, these functions require customized implementations in your application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Implementing a Drag Source</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>With the help of the COleClientItem::DoDragDrop member function, adding drag source capability to an OLE container is almost embarrassingly simple. All we need to do is modify the handler function for WM_LBUTTONDOWN events, COCONView::OnLButtonDown. If and when a valid object is selected by the user using the mouse, we must call the object's DoDragDrop member function to perform the drag and drop operation. We must also perform a minor housekeeping chore: If the object was moved from our application to another, we must delete it from the list of objects maintained by our document class. However, with CDocItem-derived objects, this is also a very simple task; it is sufficient to simply delete the object using the delete operator. The CDocItem destructor function ensures that the object is properly removed from the document's list of objects.
+
+<BR></P>
+
+<P>The modified version of COCONView::OnLButtonDown is shown in Listing 31.7.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.7. </B><B>COCONView::OnLButtonDown</B><B> with drag source support.</B></LH></UL>
+
+<PRE>void COCONView::OnLButtonDown(UINT nFlags, CPoint point)
+
+{
+
+    // TODO: Add your message handler code here and/or call default
+
+//  CView::OnLButtonDown(nFlags, point);
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    COCONCntrItem *pSelection = NULL;
+
+    COCONCntrItem *pItem =
+
+        (COCONCntrItem *)pDoc-&gt;GetInPlaceActiveItem(this);
+
+    if (pItem != NULL) pItem-&gt;Close();
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        pItem = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        if (pItem-&gt;m_rect.PtInRect(point))
+
+            pSelection = pItem;
+
+    }
+
+    if (pSelection != m_pSelection)
+
+    {
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+        m_pSelection = pSelection;
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+    }
+
+if (m_pSelection != NULL)
+
+    {
+
+        m_dragRect = m_pSelection-&gt;m_rect;
+
+        if (m_pSelection-&gt;DoDragDrop(m_pSelection-&gt;m_rect,
+
+            (CPoint)(point - m_pSelection-&gt;m_rect.TopLeft())) ==
+
+                DROPEFFECT_MOVE)
+
+        {
+
+            m_pSelection-&gt;Invalidate(this);
+
+            delete m_pSelection;
+
+            m_pSelection = NULL;
+
+        }
+
+    }
+
+}</PRE>
+
+<P>Before we move onto the implementation of drop target functionality, I want to add a few notes concerning this drag source implementation.
+
+<BR></P>
+
+<P>Obviously, most applications have functionality above and beyond being an OLE container (if they implement container functionality at all). How would you implement drag source capabilities for those applications?
+
+<BR></P>
+
+<P>One possibility is to utilize the DoDragDrop member function of COleServerItem. If your application is an OLE server, it already has a COleServerItem-derived class defined to represent your application's document in an embedded item. Modify this class to support representation of only the current selection (as opposed to the entire document). This modification is easy; you need only to change the Serialize and OnDraw member functions and create a constructor that takes a parameter representing the current selection. The utility of this class goes beyond drag source functionality; it can also be used to represent linked items and to facilitate the transfer of the current selection to the clipboard.
+
+<BR></P>
+
+<P>Once your COleServerItem-derived class is complete, you can create an item of this type in your WM_LBUTTONDOWN handler (or wherever you wish to implement drag source functionality). Subsequently, you can utilize the member function COleServerItem::DoDragDrop to implement drag source capability just as simply as we did for OLE client items.
+
+<BR></P>
+
+<P>If you do not wish to use a COleServerItem-derived class for this purpose (for example, if your application is not an OLE server), you can also utilize the COleDataSource class. This class can be used to represent a selection for drag and drop and clipboard transfers. COleDataSource also has a DoDragDrop member function, so implementing drag source functionality using this class is equally simple.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Implementing a Drop Target</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Implementing an OLE drop target requires a lot more work than implementing a drag source. Several member functions of your view class require override versions. The view class must be registered as a drop target. Special considerations must be made to ensure that objects originating from within the application itself are handled properly and efficiently; for example, if the drag and drop operation effectively reduces to a move within the same window, it should be treated that way.
+
+<BR></P>
+
+<P>The set of CView member functions that require overrides is listed in Table 31.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 31.1. Drag and drop related overridables in </B><B>CView</B><B>.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Member Function</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>OnDragEnter</P>
+
+<TD>
+
+<P>Called when an item is dragged into the window</P>
+
+<TR>
+
+<TD>
+
+<P>OnDragLeave</P>
+
+<TD>
+
+<P>Called when a dragged item leaves the window</P>
+
+<TR>
+
+<TD>
+
+<P>OnDragOver</P>
+
+<TD>
+
+<P>Called while an item is dragged within the window</P>
+
+<TR>
+
+<TD>
+
+<P>OnDrop</P>
+
+<TD>
+
+<P>Called when an item is released in the window</P></TABLE>
+
+<P>Before we start writing code madly, here's a summary of exactly what we would like to see in our drop target application.
+
+<BR></P>
+
+<P>First, the obvious: If an object is released over our application's view window, we would like the object to appear at that location, preferably preserving its original size.
+
+<BR></P>
+
+<P>We would also like to see a tracking rectangle while the mouse is inside the view window. The rectangle will reflect the size of the object that is about to be dropped in the window.
+
+<BR></P>
+
+<P>Lastly, we would like to ensure that a drag and drop operation that reduces to merely moving an object within the same window is treated accordingly.
+
+<BR></P>
+
+<P>The implementation of the OnDragEnter, OnDragLeave, and OnDragOver function overrides requires a few additional member variables. These variables will be used to remember the drag rectangle's size and position and other drag characteristics during a drag operation. In addition, a member variable of type COleDropTarget is also required in order to register the view window as a drop target. The declaration of these variables should be added to the declaration of the view class as follows:
+
+<BR></P>
+
+<PRE>class COCONView : public CView
+
+{
+
+    ...
+
+// Attributes
+
+public:
+
+    ...
+
+    COCONCntrItem* m_pSelection;
+
+COleDropTarget m_dropTarget;
+
+    BOOL m_bInDrag;
+
+    DROPEFFECT m_prevDropEffect;
+
+    CRect m_dragRect;
+
+    CPoint m_dragPoint;
+
+    CSize m_dragSize;
+
+    CSize m_dragOffset;
+
+...</PRE>
+
+<P>The declarations for the overrides of OnDragEnter, OnDragLeave, OnDragOver, and OnDrop should be added using the ClassWizard.
+
+<BR></P>
+
+<P>Our first task in making the application work as a drop target is to register it as one. This is accomplished by adding a member variable of type COleDropTarget and calling its Register member function at the appropriate moment of time. The most appropriate place for this is in the view class's OnCreate member function. To implement this registration, create a handler for WM_CREATE messages using the ClassWizard, and add the code shown in Listing 31.8.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.8. The </B><B>COCONView::OnCreate</B><B> member function.</B></LH></UL>
+
+<PRE>int COCONView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+
+{
+
+    if (CView::OnCreate(lpCreateStruct) == -1)
+
+        return -1;
+
+    // TODO: Add your specialized creation code here
+
+    m_dropTarget.Register(this);
+
+    return 0;
+
+}</PRE>
+
+<P>The OnDragEnter, OnDragLeave, and OnDragOver member functions are used to manage visual feedback during a drag operation. OnDragEnter (Listing 31.9) attempts to retrieve the item's size by querying the item for the Object Descriptor clipboard type. This data type, when supplied, contains information about the transfer item including its size and the offset of the mouse pointer relative to the item's upper-left corner.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.9. The </B><B>COCONView::OnDragEnter</B><B> member function.</B></LH></UL>
+
+<PRE>DROPEFFECT COCONView::OnDragEnter(COleDataObject* pDataObject,
+
+                                  DWORD dwKeyState, CPoint point)
+
+{
+
+ // TODO: Add your specialized code here and/or call the base class
+
+//  return CView::OnDragEnter(pDataObject, dwKeyState, point);
+
+    ASSERT(m_prevDropEffect == DROPEFFECT_NONE);
+
+    m_dragSize = CSize(0, 0);
+
+    m_dragOffset = CSize(0, 0);
+
+    HGLOBAL hObjDesc =
+
+        pDataObject-&gt;GetGlobalData(cfObjectDescriptor);
+
+    if (hObjDesc != NULL)
+
+    {
+
+        LPOBJECTDESCRIPTOR pObjDesc =
+
+            (LPOBJECTDESCRIPTOR)GlobalLock(hObjDesc);
+
+        ASSERT(pObjDesc != NULL);
+
+        m_dragSize.cx = (int)pObjDesc-&gt;sizel.cx;
+
+        m_dragSize.cy = (int)pObjDesc-&gt;sizel.cy;
+
+        m_dragOffset.cx = (int)pObjDesc-&gt;pointl.x;
+
+        m_dragOffset.cy = (int)pObjDesc-&gt;pointl.y;
+
+        GlobalUnlock(hObjDesc);
+
+        GlobalFree(hObjDesc);
+
+    }
+
+    CClientDC dc(NULL);
+
+    dc.HIMETRICtoDP(&amp;m_dragSize);
+
+    dc.HIMETRICtoDP(&amp;m_dragOffset);
+
+    m_dragPoint = point - CSize(1, 1);
+
+    return OnDragOver(pDataObject, dwKeyState, point);
+
+}</PRE>
+
+<P>This function makes use of the global variable cfObjectDescriptor. Declare this variable at the top of your view class's implementation file as follows:
+
+<BR></P>
+
+<PRE>static cfObjectDescriptor =
+
+    (CLIPFORMAT)::RegisterClipboardFormat(_T(&quot;Object Descriptor&quot;));</PRE>
+
+<P>The next member function is OnDragOver (Listing 31.10). This function is called every time the mouse moves while within the view window's client area. This function plays a dual role. First, it determines the currently applicable <I>drop effect</I>; based on the state of the Control, Shift, and Alt keys it determines whether the item, were it dropped in the window at this moment, should be copied, linked, or moved to this window.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.10. The </B><B>COCONView::OnDragOver</B><B> member function.</B></LH></UL>
+
+<PRE>DROPEFFECT COCONView::OnDragOver(COleDataObject* pDataObject,
+
+                                 DWORD dwKeyState, CPoint point)
+
+{
+
+ // TODO: Add your specialized code here and/or call the base class
+
+//  return CView::OnDragOver(pDataObject, dwKeyState, point);
+
+    DROPEFFECT de = DROPEFFECT_NONE;
+
+    point -= m_dragOffset;
+
+    if ((dwKeyState &amp; (MK_CONTROL|MK_SHIFT)) ==
+
+       (MK_CONTROL|MK_SHIFT))
+
+        de = DROPEFFECT_LINK;
+
+    else if ((dwKeyState &amp; MK_CONTROL) == MK_CONTROL)
+
+        de = DROPEFFECT_COPY;
+
+    else if ((dwKeyState &amp; MK_ALT) == MK_ALT)
+
+        de = DROPEFFECT_MOVE;
+
+    else
+
+        de = DROPEFFECT_MOVE;
+
+    if (point == m_dragPoint)
+
+        return de;
+
+    CClientDC dc(this);
+
+    if (m_prevDropEffect != DROPEFFECT_NONE)
+
+        dc.DrawFocusRect(CRect(m_dragPoint, m_dragSize));
+
+    m_prevDropEffect = de;
+
+    if (m_prevDropEffect != DROPEFFECT_NONE)
+
+    {
+
+        m_dragPoint = point;
+
+        dc.DrawFocusRect(CRect(point, m_dragSize));
+
+    }
+
+    return de;
+
+}</PRE>
+
+<P>The other role of this function is to actually draw visual feedback. This is accomplished by drawing a rectangle using the CDC::DrawFocusRect function.
+
+<BR></P>
+
+<P>The third function in this group is OnDragLeave (Listing 31.11). This function, the simplest of the three, is called to mark the end of a dragging operation.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.11. The </B><B>COCONView::OnDragLeave</B><B> member function.</B></LH></UL>
+
+<PRE>void COCONView::OnDragLeave()
+
+{
+
+ // TODO: Add your specialized code here and/or call the base class
+
+//  CView::OnDragLeave();
+
+    CClientDC dc(this);
+
+    if (m_prevDropEffect != DROPEFFECT_NONE)
+
+    {
+
+        dc.DrawFocusRect(CRect(m_dragPoint, m_dragSize));
+
+        m_prevDropEffect = DROPEFFECT_NONE;
+
+    }
+
+}</PRE>
+
+<P>Now it's time to turn our attention to the OnDrop member function (Listing 31.12). This function is by far the most important one in our implementation of drop target functionality. As its name implies, it is this function where the actual insertion of a dropped item takes place.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.12. The </B><B>COCONView::OnDrop</B><B> member function.</B></LH></UL>
+
+<PRE>BOOL COCONView::OnDrop(COleDataObject* pDataObject,
+
+                       DROPEFFECT dropEffect, CPoint point)
+
+{
+
+ // TODO: Add your specialized code here and/or call the base class
+
+//  return CView::OnDrop(pDataObject, dropEffect, point);
+
+    ASSERT_VALID(this);
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    CSize size;
+
+    OnDragLeave();
+
+    CClientDC dc(NULL);
+
+    point -= m_dragOffset;
+
+    pDoc-&gt;SetModifiedFlag(TRUE);
+
+    if ((dropEffect &amp; DROPEFFECT_MOVE) &amp;&amp; m_bInDrag)
+
+    {
+
+        ASSERT(m_pSelection != NULL);
+
+        m_pSelection-&gt;Invalidate(this);
+
+        m_pSelection-&gt;m_rect =
+
+            m_dragRect + point - m_dragRect.TopLeft();
+
+        m_bInDrag = FALSE;
+
+        return TRUE;
+
+    }
+
+    COCONCntrItem* pItem = NULL;
+
+    TRY
+
+    {
+
+        pItem = new COCONCntrItem(pDoc);
+
+        ASSERT_VALID(pItem);
+
+        if (dropEffect &amp; DROPEFFECT_LINK)
+
+        {
+
+            if (!pItem-&gt;CreateLinkFromData(pDataObject))
+
+                AfxThrowMemoryException();
+
+        }
+
+        else
+
+        {
+
+            if (!pItem-&gt;CreateFromData(pDataObject))
+
+                AfxThrowMemoryException();
+
+        }
+
+        ASSERT_VALID(pItem);
+
+        pItem-&gt;GetExtent(&amp;size, pItem-&gt;GetDrawAspect());
+
+        dc.HIMETRICtoDP(&amp;size);
+
+        pItem-&gt;m_rect = CRect(point, size);
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+        m_pSelection = pItem;
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+    }
+
+    CATCH(CException, e)
+
+    {
+
+        if( pItem != NULL ) delete pItem;
+
+        AfxMessageBox(IDP_FAILED_TO_CREATE);
+
+    }
+
+    END_CATCH
+
+    return pItem != NULL;
+
+}</PRE>
+
+<P>This function first terminates the drag operation by calling OnDragLeave and notifies the document that the contents are changing by calling CDocument::SetModifiedFlag.
+
+<BR></P>
+
+<P>Next, it makes an attempt to determine if the drag and drop operation actually represents moving an object within the same window. For this, we make use of the m_bInDrag member variable; this variable is set in COCONView::OnLButtonDown when a drag operation begins, as we see momentarily. If the operation is a move, the function simply updates the affected item's rectangle and returns.
+
+<BR></P>
+
+<P>In the case of a genuine drop operation, an attempt is made to create a new item of type COCONCntrItem using the drop data. If the attempt is successful, the item's size is determined and the item's rectangle is updated.
+
+<BR></P>
+
+<P>As I mentioned, the key to determining whether a drag and drop operation reduces to a mere move is the m_bInDrag member variable. To set this variable, we have to implement yet another modification to COCONView::OnLButtonDown. This final version of this function is shown in Listing 31.13.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.13. Final version of </B><B>COCONView::OnLButtonDown</B><B>.</B></LH></UL>
+
+<PRE>void COCONView::OnLButtonDown(UINT nFlags, CPoint point)
+
+{
+
+    // TODO: Add your message handler code here and/or call default
+
+//  CView::OnLButtonDown(nFlags, point);
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    COCONCntrItem *pSelection = NULL;
+
+    COCONCntrItem *pItem =
+
+        (COCONCntrItem *)pDoc-&gt;GetInPlaceActiveItem(this);
+
+    if (pItem != NULL) pItem-&gt;Close();
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        pItem = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        if (pItem-&gt;m_rect.PtInRect(point))
+
+            pSelection = pItem;
+
+    }
+
+    if (pSelection != m_pSelection)
+
+    {
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+        m_pSelection = pSelection;
+
+        if (m_pSelection != NULL)
+
+            m_pSelection-&gt;Invalidate(this);
+
+    }
+
+    if (m_pSelection != NULL)
+
+    {
+
+        m_bInDrag = TRUE;
+
+        m_dragRect = m_pSelection-&gt;m_rect;
+
+        DROPEFFECT dropEffect =
+
+            m_pSelection-&gt;DoDragDrop(m_pSelection-&gt;m_rect,
+
+                (CPoint)(point - m_pSelection-&gt;m_rect.TopLeft()));
+
+        m_pSelection-&gt;Invalidate(this);
+
+        if (m_bInDrag == TRUE &amp;&amp; dropEffect == DROPEFFECT_MOVE)
+
+        {
+
+            delete m_pSelection;
+
+            m_pSelection = NULL;
+
+        }
+
+        m_bInDrag = FALSE;
+
+    }
+
+}</PRE>
+
+<P>As you can see, the m_bInDrag member variable is set to TRUE just before calling COCONCntrItem::DoDragDrop. If during the drag a callback is made to the same view object, by looking at m_bInDrag we can determine that the source of the drag operation is the same view window.
+
+<BR></P>
+
+<P>The OnDrop member function resets m_bInDrag to FALSE if a drag operation is successfully reduced to a move. In this case, OnLButtonDown will not delete the selected item. That deletion is necessary otherwise, if the item was moved to a different window.
+
+<BR></P>
+
+<P>Finally, we need to initialize two of the member variables to ensure proper functioning of the view class. Listing 31.14 shows the initialization of m_bInDrag and m_prevDropEffect in the view class's constructor.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 31.14. Member variable initialization in the constructor of </B><B>COCONView</B><B>.</B></LH></UL>
+
+<PRE>COCONView::COCONView()
+
+{
+
+    // TODO: add construction code here
+
+    m_pSelection = NULL;
+
+    m_bInDrag = FALSE;
+
+    m_prevDropEffect = DROPEFFECT_NONE;
+
+}</PRE>
+
+<P>This concludes our construction of an OLE container supporting drag and drop. The completed application, shown in Figure 31.2, can serve as a drop target (or drag source) for word processor objects, spreadsheet cells, drawings, and many other types of OLE objects.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="31vcu02.gif">Figure 31.2. The OCON drag and drop application.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Drag and drop represents the capability to select items in one application (the drag source) and, using the mouse, drag the items and drop them in the window of another application (the drop target). Drag and drop, from the user's perspective, is a simpler mechanism for sharing data between applications than using the clipboard.
+
+<BR></P>
+
+<P>OLE provides extensive drag and drop support. This support is encapsulated in the MFC Library in the form of a series of drag and drop related classes and functions.
+
+<BR></P>
+
+<P>The implementation of a drag source is relatively easy. For this purpose, you can utilize the member functions of COleClientItem, COleServerItem, and COleDataSource.
+
+<BR></P>
+
+<P>Use of COleClientItem::DoDragDrop is recommended if the drag item is an embedded or linked OLE item represented by a COleClientItem-derived class. In this case, simply call the DoDragDrop function for the object that the user selected for dragging, and the framework does the rest. Remember to delete the object if the return value of DoDragDrop indicates that the selection has been moved (as opposed to copied or linked) to another application.
+
+<BR></P>
+
+<P>Use of COleServerItem::DoDragDrop is recommended for applications that are OLE servers. This function is most useful if your COleServerItem-derived class is already capable of representing a selection (as opposed to the entire contents of a document). Just create a COleServerItem-derived object representing the drag selection and use its DoDragDrop member function to perform the drag operation.
+
+<BR></P>
+
+<P>In applications that are not OLE servers, you can also consider using COleDataSource for implementing a drag source.
+
+<BR></P>
+
+<P>Implementing a drop target is a more involved operation. In addition to providing an override version of the OnDrop member function of your view class, you must also override the OnDragEnter, OnDragLeave, and OnDragOver member functions. The purpose of these functions, called by the framework while the mouse is over the view window during a drag and drop operation, is twofold: first, they are used to provide visual feedback during the drag; and second, they are used to inform the framework regarding the allowable drop operations.
+
+<BR></P>
+
+<P>In the simplest implementation of OnDrop, you can create a COleClientItem-derived object representing the drop item. In more involved implementations, you may consider inspecting the item and identify native data originating from within your own application, or data available in formats that your application can recognize.
+
+<BR></P>
+
+<P>In an application that acts both as a drag source and drop target, you should improve the application's efficiency by recognizing operations that reduce to a simple move. In this case, instead of removing the dragged item or items and creating new items, you can implement the operation as a simple position change.</P>
+
+<P><A HREF="vcu30fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu32fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

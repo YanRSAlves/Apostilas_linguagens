@@ -1,0 +1,1148 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu39fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu40fi.htm">
+
+<LINK REL="Previous" HREF="vcu38fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu38fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu40fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">39 &#151; TCP/IP Programming with WinSock</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">TCP/IP Networks and OSI</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">The Internet Protocol Suite</A></LI>
+
+<LI>
+
+<A HREF="#I5">IP Datagrams</A></LI>
+
+<LI>
+
+<A HREF="#I6">IP Headers</A></LI>
+
+<LI>
+
+<A HREF="#I7">IP Host Addresses and Routing</A></LI>
+
+<LI>
+
+<A HREF="#I8">Host Names</A></LI>
+
+<LI>
+
+<A HREF="#I9">TCP and UDP Packets, Port Numbers, and Sockets</A></LI>
+
+<LI>
+
+<A HREF="#I10">Internet Services</A></LI></UL>
+
+<LI>
+
+<A HREF="#I11">The WinSock API</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I12">WinSock Initialization</A></LI>
+
+<LI>
+
+<A HREF="#I13">Creating and Using Sockets</A></LI>
+
+<LI>
+
+<A HREF="#I14">Name Service</A></LI>
+
+<LI>
+
+<A HREF="#I15">Byte Ordering</A></LI>
+
+<LI>
+
+<A HREF="#I16">Communication Through Sockets</A></LI>
+
+<LI>
+
+<A HREF="#I17">The Blocking Problem and the select Call</A></LI>
+
+<LI>
+
+<A HREF="#I18">Asynchronous Socket Calls</A></LI></UL>
+
+<LI>
+
+<A HREF="#I19">A Simple WinSock Example</A></LI>
+
+<LI>
+
+<A HREF="#I20">Socket Programming and the Microsoft Foundation Classes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I21">CAsyncSocket Example</A></LI>
+
+<LI>
+
+<A HREF="#I22">Synchronous Operations and Serialization</A></LI></UL>
+
+<LI>
+
+<A HREF="#I23">Further Information</A></LI>
+
+<LI>
+
+<A HREF="#I24">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>39 &#151; TCP/IP Programming with WinSock</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Until the recent information explosion that began a few years ago, not too many programmers had heard of TCP/IP, the protocol suite that is used throughout the Internet for internetwork communication (that is, communication between subnetworks).
+
+<BR></P>
+
+<P>An obscure protocol a few years back, no new operating system can claim to be complete without it nowadays; Windows is no exception.
+
+<BR></P>
+
+<P>The most widely used application programming interface for TCP/IP programming is the Berkeley sockets library. Berkeley sockets have been used throughout the Internet for implementing TCP/IP applications. It was only natural that when the time came, Microsoft picked this API for TCP/IP under Windows.
+
+<BR></P>
+
+<P>The use Berkeley sockets is not limited to TCP/IP programming. Berkeley sockets represent an intertask communication mechanism that may use TCP/IP or other network protocols for the actual transmission of data. However, current WinSock implementations limit the use of the Berkeley socket interface to TCP/IP.
+
+<BR></P>
+
+<P>First, here's a review of the fundamentals of TCP/IP networking.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>TCP/IP Networks and OSI</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>I will spare you yet another brief account of the history of TCP/IP. The tale of how it evolved as the protocol suite of ARPANET and later the NSFNET has been told and retold many times.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>The Internet Protocol Suite</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>TCP/IP is somewhat of a misnomer; the internet protocol suite that it usually refers to consists of several components other than TCP and IP. Figure 39.1 provides a brief overview of these in the context of the seven layers of OSI, the Open Systems Interconnect standard.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> In the phrase &quot;internet protocol,&quot; the term internet is used as a generic term and is written in lower case. There can be many internets (for example, the internetwork at a large organization) of which &quot;the&quot; Internet is but one, albeit the biggest by far.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>
+
+<BR><B><A HREF="39vcu01.gif">Figure 39.1. The internet protocol suite and the OSI </B><B>layers.</A></B>
+
+<BR></P>
+
+<P>What is behind these strange acronyms?
+
+<BR></P>
+
+<P>TCP is the <I>Transmission Control Protocol</I>. TCP provides a reliable byte stream between two processes. Reliability in this context means that applications are not required to monitor for lost or corrupted packets. TCP is also a <I>connection-oriented</I> protocol. Applications that communicate via TCP establish a logical connection before any exchange of data can take place and terminate the connection when the data exchange has been completed. The term <I>virtual circuit</I> is sometimes used for this kind of a logical connection.
+
+<BR></P>
+
+<P>UDP is the <I>User Datagram Protocol</I>. UDP is a <I>connectionless</I> protocol. Data packets are addressed and delivered individually. UDP is not a reliable protocol; applications must be prepared to handle the loss of packets.
+
+<BR></P>
+
+<P>ICMP is the <I>Internet Control Message Protocol</I>. This protocol is often used to deliver error and control information on TCP/IP networks. ICMP packets are rarely used by user processes. A notable exception is the ping utility that is used to verify the accessibility of a foreign host by sending an ICMP &quot;echo&quot; packet and monitoring its return.
+
+<BR></P>
+
+<P>IP stands for (what else?) <I>Internet Protocol</I>. IP provides the packet delivery service on which TCP, UDP, and ICMP rely.
+
+<BR></P>
+
+<P>ARP is the <I>Address Resolution Protocol</I>. ARP is used to translate a network address to a hardware address.
+
+<BR></P>
+
+<P>RARP is the <I>Reverse Address Resolution Protocol</I>. RARP is used to translate a hardware address into a network address.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>IP Datagrams</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>At the heart of TCP/IP data transmissions is the <I>IP datagram</I>. An IP datagram is a packet that encapsulates source and destination addresses, type of service information, user data, and error correction information.
+
+<BR></P>
+
+<P>An IP datagram consists of a header and a block of data. The data can be anything depending on the type of service and the user requirements. The header, on the other hand, contains a set of well-defined fields; this is where we now focus our attention.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>IP Headers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The header of an IP datagram, or IP header, usually consists of 20 bytes. Figure 39.2 shows the fields comprising this IP header.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="39vcu02.gif">Figure 39.2. The IP Header</A></B>
+
+<BR></P>
+
+<P>Of the fields shown in Figure 39.2, the ones that are of considerable interest to us include the Protocol, Source Address, and Destination Address fields.
+
+<BR></P>
+
+<P>The Protocol field determines how the rest of the IP packet is interpreted. Several dozen values have been defined for this field. For example, a value of 6 implies a TCP packet; a value of 17 implies a UDP packet.
+
+<BR></P>
+
+<P>The addresses in a packet represent <I>host addresses</I>. Host addresses uniquely identify hosts on an internet.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>IP Host Addresses and Routing</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>An IP host address is a 32-bit number uniquely identifying an internet host. Or, to be more precise, an IP address uniquely identifies a particular interface on an internet host; gateway machines (those which have interfaces on more than one network) routinely have several host addresses.
+
+<BR></P>
+
+<P>According to convention, the 4-byte internet host address is usually written down as a set of four decimal numbers: for example, 127.0.0.1.
+
+<BR></P>
+
+<P>The internet host address is usually divided into two parts: the <I>network </I><I>address</I> and the actual <I>host address</I>. The respective lengths of these two portions of the address vary depending on the most significant byte in the address.
+
+<BR></P>
+
+<P>Class A network addresses are those with the most significant byte between 0 and 127. A class A address consists of an 8-bit network address and a 24-bit host address. Because addresses beginning with 0 and 127 are reserved, there can be a maximum of 126 class A subnets on an internet. A class A subnet can contain up to 16,777,214 hosts. (Addresses in the form of <I>nnn</I>.0.0.0 and <I>nnn</I>.255.255.255 are reserved.)
+
+<BR></P>
+
+<P>Class B network addresses are those with the most significant byte between 128 and 191. Class B addresses consist of a 16-bit network address and a 16-bit host address. There can be a maximum of 16,383 class B subnets. A class B subnet may contain up to 65,534 hosts. (Again, addresses in the form of <I>nnn</I>.<I>mmm</I>.0.0 and <I>nnn</I>.<I>mmm</I>.255.255 are reserved.)
+
+<BR></P>
+
+<P>A class C network address is one with the most significant byte betweeen 192 and 223. This allows a total of 2,097,152 class C subnets. A class C subnet may contain up to 254 hosts. (Addresses in the form of <I>nnn</I>.<I>mmm</I>.<I>kkk</I>.0 and <I>nnn</I>.<I>mmm</I>.<I>kkk</I>.255 are reserved.)
+
+<BR></P>
+
+<P>Class D addresses (most significant byte between 224 and 255) are reserved for <I>IP multicasting</I>. This limited form of IP broadcasting is of no concern for most WinSock programmers.
+
+<BR></P>
+
+<P>Once the destination address of a packet is known, hosts on an internet can <I>route</I> the packet as appropriate. For most hosts, routing involves either forwarding a packet to destination that is known to the host or passing it along a <I>default route</I>. For example, if you have a class C subnet that is connected to an Internet service provider via a SLIP or PPP connection, this connection is your default route; any packets that are not addressed to a host on your subnet will be automatically forwarded to your provider.
+
+<BR></P>
+
+<P>Larger hosts maintain dynamically updated <I>routing tables</I>. Through these tables, the correct route of packets can be identified and in the case of a network error, alternate routes can be found.
+
+<BR></P>
+
+<P>Inasmuch as the WinSock programmer is concerned, routing is a transparent activity. You need not be concerned how the Internet accomplishes its magic when delivering a packet to a World Wide Web hosts in New Zealand or an FTP site in Alaska.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Host Names</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>It was recognized early during the evolution of the Internet that numeric host addresses may not always be adequate. For one thing, they are difficult to remember; also, if a host's address changes for any reason, the likely result would be endless confusion. Therefore, a naming system was introduced that mapped numeric IP addresses to memorizable host names and vice versa.
+
+<BR></P>
+
+<P>In those early days of few hosts on the Internet, every host maintained a file (the hosts file) with a list of all Internet hosts and their addresses. However, as the Internet began its phenomenal growth, this solution quickly proved to be inadequate. First, the naming of Internet hosts had to be standardized; second, a mechanism needed to be found that would eliminate the need to maintain a copy of the hosts file on every Internet-connected computer.
+
+<BR></P>
+
+<P>The answer to these problems is the Domain Name System (DNS), development of which began in the early 1980s. DNS is a hierarchical naming system. The format of DNS host names is familiar to everyone who has ever used the Internet: a typical Internet host name is in the form of <I>host.subdomain.domain</I>.
+
+<BR></P>
+
+<P>On top of the hierarchy is the <I>root domain</I>, denoted by a single period. Next are the <I>top-level domains</I>. Top-level domain names have been assigned either by organization (mostly in the US) or by country name. Organizational top-level domains include the following:
+
+<BR></P>
+
+<P>GOV: Government bodies
+
+<BR>
+
+<BR></P>
+
+<P>EDU: Educational institutions
+
+<BR>
+
+<BR></P>
+
+<P>COM: Commercial enterprises
+
+<BR>
+
+<BR></P>
+
+<P>MIL: Military organizations
+
+<BR>
+
+<BR></P>
+
+<P>ORG: Other organizations
+
+<BR>
+
+<BR></P>
+
+<P>Top-level domains by country usually follow the ISO 3166 standard for two-letter country name abbreviations. Examples include US (USA), CA (Canada), DE (Germany).
+
+<BR></P>
+
+<P>How is a domain name translated into a numeric IP address and vice versa? DNS defines a distributed name service mechanism whereby hosts can act as <I>name servers</I> for various domains. Name servers constantly communicate with each other, supplying each other with information on specific hosts. Without going into too much detail, suffice it to say that when your application requests the IP address for a host name, this request is sent to your default name server, which, in turn, may query other name servers on the Internet to get the requested information. Again, the mechanism is completely transparent to the application programmer.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>TCP and UDP Packets, Port Numbers, and Sockets</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Clearly, knowing the destination host address of an IP packet is not sufficient for most applications. After all, a host can maintain several open connections, be engaged in several TCP/IP conversations at once. When an IP packet is received, how does the host determine which particular conversation would this packet be part of?
+
+<BR></P>
+
+<P>In the case of both TCP and UDP packets, in addition to the IP header, the packets also contain additional header information. The first 4 bytes of both TCP and UDP headers contain a 2-byte source and a 2-byte destination <I>port number</I>.
+
+<BR></P>
+
+<P>The port number, together with the IP number, identifies a <I>socket</I> that is unique throughout an internet. A pair of sockets uniquely identifies a connection (at least in the case of TCP, a connection-oriented protocol).
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> TCP and UDP ports are not equivalent. For example, TCP port 25 and UDP port 25 refer to two different entities.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Internet Services</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are many types of services on IP networks that are in widespread use. Examples include FTP, telnet, gopher, the WWW, archie, DNS name service, whois, finger, and many others.
+
+<BR></P>
+
+<P>The protocols used for these services are defined in the Internet Requests For Comment documents, or RFCs (some of the most relevant RFCs are listed later in this chapter). The services themselves are usually available on <I>well-known</I> port numbers. For example, to connect to a telnet server on any host on the Internet, you would make a connection attempt to TCP port 23 on that machine. Well-known ports that a host recognizes are typically identified in the system's services file. This file is used in UNIX as well as Windows TCP/IP implementations.
+
+<BR></P>
+
+<P>On most systems, TCP and UDP port numbers 0-1023 are reserved for privileged processes.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>The WinSock API</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Berkeley sockets interface can be used for communicating using both connection-oriented protocols (TCP) and connectionless protocols (UDP). The programming model is the <I>client-server</I> model; servers wait for incoming requests, while clients initiate sessions.
+
+<BR></P>
+
+<P>There are some implementation differences between WinSock and the UNIX version of Berkeley sockets. Of these, perhaps the most significant is the fact that socket descriptors and file descriptors cannot be used interchangeably. This has a notable effect when porting applications that make an assumption of this equivalence.
+
+<BR></P>
+
+<P>Another difference is that the WinSock library requires to be initialized. Applications that intend to use WinSock functions must first call the WSAStartup function; when their work with the WinSock library is finished, they should call WSACleanup for proper termination.
+
+<BR></P>
+
+<P>The WinSock API also introduces several WinSock-specific functions for performing asynchronous I/O on sockets. This assists in the development of responsive GUI WinSock applications.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>WinSock Initialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The WinSock library is initialized by a call to WSAStartup. The application calling this function provides the address to a WSADATA structure, which will hold initialization information.
+
+<BR></P>
+
+<P>During the call to WSAStartup, applications and the WinSock library negotiate a version number. The initialization request fails if there is no overlap between the version number supported by the application and the version number supported by the WinSock library.
+
+<BR></P>
+
+<P>If an error occurs, WSAStartup returns a nonzero value. Applications may retrieve extended error information through the function WSAGetLastError.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Creating and Using Sockets</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A socket is created by a call to the socket function. Parameters to this function indicate the type of the socket, the type of the network address, and the protocol being used. For example, the call
+
+<BR></P>
+
+<PRE>socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)</PRE>
+
+<P>creates a TCP socket.
+
+<BR></P>
+
+<P>To associate a socket with an actual host address and port number, applications typically call the bind function. In addition to the socket identifier, or <I>socket descriptor</I> (which is returned by the socket call), bind takes a parameter that is a pointer to a structure describing the socket address. This structure is defined as follows:
+
+<BR></P>
+
+<PRE>struct sockaddr
+
+{
+
+    u_short sa_family;
+
+    char sa_data[14];
+
+};</PRE>
+
+<P>The sa_family member of this structure specifies the type of the address. For internet addresses, this value is set to AF_INET. The sa_data contains the actual address.
+
+<BR></P>
+
+<P>Applications can easily access the various components of the address by referring to it through an sockaddr_in structure (instead of using sockaddr). Here is the definition of this structure:
+
+<BR></P>
+
+<PRE>struct sockaddr_in
+
+{
+
+    short sin_family;
+
+    u_short sin_port;
+
+   struct in_addr sin_addr;
+
+    char sin_zero[8];
+
+};</PRE>
+
+<P>Of these members, sin_port is the 16-bit port number, while sin_addr is the 32-bit host address.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Name Service</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order to assign meaningful values to the host address field in the sockaddr_in structure, we must first obtain a 32-bit host address. To obtain an address when the symbolic name of a host is known, use the gethostbyname function.
+
+<BR></P>
+
+<P>When calling gethostbyname, applications pass the symbolic name of the host and receive a pointer to a hostent structure in return. The hostent structure is defined as follows:
+
+<BR></P>
+
+<PRE>struct hostent
+
+{
+
+    char FAR * h_name;
+
+    char FAR * FAR * h_aliases;
+
+    short h_addrtype;
+
+    short h_length;
+
+    char FAR * FAR * h_addr_list;
+
+};</PRE>
+
+<P>This structure is necessary because a host name may be associated with several host addresses (the reverse is also true). In most cases, applications just take the first (often only) address in h_addr_list; to make this easier, the symbol h_addr is defined as h_addr_list[0].
+
+<BR></P>
+
+<P>If an application wishes to use a numeric address instead, it can use the inet_addr function to convert a string containing a numeric address into a 32-bit address value. Once that value has been obtained, gethostbyaddr can be used to return a hostent structure for the specified host.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Byte Ordering</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A problem with particular importance when it comes to designing applications that are expected to work on hybrid networks is the issue of <I>byte ordering</I>. Some system architectures as <I>big-endian</I> (most significant byte comes first), others are <I>little-endian</I> (most significant byte comes last). Examples of the latter include the Intel family of processors and DEC CPUs; examples of the former include the Motorola 68000 processor family.
+
+<BR></P>
+
+<P>Internet numbers (for example, host addresses) are always big-endian. To ensure correct conversion between machine-independent internet numbers and their machine-dependent representation, you can use the following set of functions: htonl, htons, ntohl, and ntohs. These functions connect short or long integers from network to host format or vice versa. Note that these functions may be implemented as macros.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Communication Through Sockets</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the case of the connection-oriented TCP protocol, the server application binds to a specific TCP port and then uses the listen function to indicate its willingness to accept incoming connection requests. Immediately after the call to listen, the server calls accept to wait for incoming connections. When accept returns, it provides the address of the peer process.
+
+<BR></P>
+
+<P>The client, after creating a socket using the socket call, can immediately initiate a connection using the connect call. It is not necessary to bind the socket to a specific port using bind prior to calling connect.
+
+<BR></P>
+
+<P>Once the connection has been successfully initiated, both the client and the server can use the send call to transmit data and the recv call to receive data. The semantics of send and recv are similar to the semantics of the read and write calls for low-level file I/O. Indeed, on UNIX systems it is possible to use the latter pair of functions to perform I/O on sockets. Unfortunately, as I mentioned earlier, this is not possible with WinSock, due to the differences between a file descriptor and a socket descriptor. For the same reason, it is not possible to use the close system call to close a socket; applications must use closesocket when a socket connection is about to be terminated. Either the client or the server can terminate the connection using closesocket.
+
+<BR></P>
+
+<P>Figure 39.3 provides an overview of setting up and using a TCP connection.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="39vcu03.gif">Figure 39.3. Socket communications for </B><B>connection-oriented protocols.</A></B>
+
+<BR></P>
+
+<P>In the case of the connectionless UDP protocol, the sequence of events is somewhat different; the activities of the client and server application are more symmetrical. In this case, both the client and the server create their respective sockets and bind those to specific port numbers. The server then makes a call to the recvfrom function, which waits for any incoming data. The client, in turn, uses the sendto call to send data to a specific address. When this data is received by the server, the recvfrom call returns, and the server also obtains the address where the data has been received from. It can then use this address in a subsequent call to sendto, as it replies to the client. Figure 39.4 presents an overview of this process.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="39vcu04.gif">Figure 39.4. Socket communications for connectionless </B><B>protocols.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>The Blocking Problem and the </B><B><I>select</I></B><B> Call</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the simplistic models shown in Figures 39.3 and 39.4, both the client and the server use <I>blocking</I> calls when waiting for data. A blocking call does not return to the calling function until the requested data becomes available. In other words, the application that makes such a call becomes suspended until the call is completed.
+
+<BR></P>
+
+<P>While this model will suffice in many simple situations, it is clearly unacceptable for interactive applications. Such an application (for example, a telnet client) cannot simply freeze until data becomes available from the server.
+
+<BR></P>
+
+<P>The solution employed by most UNIX TCP/IP applications relies on the select system call. This call makes it possible to wait on multiple (file or socket) descriptors. This way, a UNIX process can easily wait for data on both a socket or the standard input and spring into action whenever data is received on either of them.
+
+<BR></P>
+
+<P>Unfortunately, things are not this easy with WinSock. Remember that socket and file descriptors are not interchangeable? Unfortunately, select is no exception; it can only wait on multiple socket descriptors, not on a mix of socket and file descriptors.
+
+<BR></P>
+
+<P>While it is possible to monitor a socket while polling, this is not a very efficient solution. Fortunately, Win32's multithreading capability comes to our rescue. A process can easily start additional threads and have a separate thread for each input source. This mechanism works well for both command-line and graphical TCP/IP utilities. Nevertheless, the WinSock library offers yet another family of functions that assist in writing well-behaved TCP/IP applications without having to resort to multithreaded trickery. These asynchronous socket calls can thus also be used in 16-bit programs and programs intended for Win32s.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Asynchronous Socket Calls</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Asynchronous socket calls rely on the Windows message passing mechanism to communicate socket events to Windows applications.
+
+<BR></P>
+
+<P>At the center of this mechanism is the WSAAsyncSelect function call. Through this function, an application can wait for a combination of socket events. Applications may receive notifications indicating readiness for reading, writing, incoming and completed connections, and socket closure. (This call can also be used for notifications regarding <I>out of band</I> data, something that we have not discussed in this section.) The notification takes place in the form of a user-defined message that is posted to a window, also defined in the call to WSAAsyncSelect.
+
+<BR></P>
+
+<P>WSAAsyncSelect posts a single message for every event the application expressed an interest in. Once the message has been posted, no further messages will be posted for the same event until the application implicitly resets the event by calling the appropriate socket library function. For example, if a notification for incoming data was posted, no further such notifications will be posted for the given socket until the application retrieves that data with a call to recv or recvfrom.
+
+<BR></P>
+
+<P>Other asynchronous socket functions include, for example, asynchronous versions of the standard Berkeley gethostbyname and gethostbyaddr calls: WSAAsyncGetHostByName and WSAAsyncGetHostByAddr. WinSock applications can also influence the blocking mechanism used in the standard Berkeley-style calls by using the WSASetBlockingHook function.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=4><B>A Simple WinSock Example</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>It is time to put all this theory into practice. I decided to include a simple WinSock-based command-line utility. This program connects to a well-known service (the <I>time</I> service on TCP port 37) on the specified host and retrieves the current time in machine readable form, which it then formats and displays. With little modification, this application could be used to set the system time from a server that is known to keep reliable time.
+
+<BR></P>
+
+<P>The program shown in Listing 39.1 can be compiled from the command line by typing cl gettime.cpp wsock32.lib.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 39.1: The gettime command-line utility.</B></LH></UL>
+
+<PRE>#include &lt;iostream.h&gt;
+
+#include &lt;time.h&gt;
+
+#include &lt;winsock.h&gt;
+
+void main(int argc, char *argv[])
+
+{
+
+    time_t t;
+
+    int s;
+
+    struct sockaddr_in a;
+
+    struct hostent *h;
+
+    WSADATA wsaData;
+
+    if (argc != 2)
+
+    {
+
+        cout &lt;&lt; &quot;Usage: &quot; &lt;&lt; argv[0] &lt;&lt; &quot; host\n&quot;;
+
+        exit(1);
+
+    }
+
+    if(WSAStartup(0x101, &amp;wsaData))
+
+    {
+
+        cout &lt;&lt; &quot;Unable to initialize WinSock library.\n&quot;;
+
+        exit(1);
+
+    }
+
+    h = gethostbyname(argv[1]);
+
+    if (h == NULL)
+
+    {
+
+        cout &lt;&lt; &quot;Cannot resolve hostname\n&quot;;
+
+        WSACleanup();
+
+        exit(1);
+
+    }
+
+    a.sin_family = AF_INET;
+
+    a.sin_port = htons(37);
+
+    memcpy(&amp;(a.sin_addr.s_addr), h-&gt;h_addr, sizeof(int));
+
+    s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (s == 0)
+
+    {
+
+        cout &lt;&lt; &quot;Cannot establish connection: &quot;
+
+             &lt;&lt; WSAGetLastError() &lt;&lt; '\n';
+
+        WSACleanup();
+
+        exit(1);
+
+    }
+
+    if (connect(s, (struct sockaddr *)&amp;a, sizeof(a)))
+
+    {
+
+        cout &lt;&lt; &quot;Cannot establish connection: &quot;
+
+             &lt;&lt; WSAGetLastError() &lt;&lt; '\n';
+
+        WSACleanup();
+
+        exit(1);
+
+    }
+
+    if (recv(s, (char *)&amp;t, 4, 0) != 4)
+
+        cout &lt;&lt; &quot;Unable to obtain time.\n&quot;;
+
+    else
+
+    {
+
+        t = ntohl(t) - 2208988800;
+
+        cout &lt;&lt; asctime(localtime(&amp;t));
+
+    }
+
+    closesocket(s);
+
+    WSACleanup();
+
+}</PRE>
+
+<P>The <I>time service</I> is described in RFC868. An Internet time server listens to TCP port 37; when it receives a connection request, it sends the current time (GMT) as a 4-byte number representing the number of seconds elapsed since January 1, 1900.
+
+<BR></P>
+
+<P>The gettime application in Listing 39.1 requires a single command-line parameter, the name of the host to which it should make a connection attempt. After verifying that this parameter has been supplied, it makes an attempt to initialize the WinSock library.
+
+<BR></P>
+
+<P>Next, the host name supplied by the user is converted to a host address. (No attempt is made to resolve numeric addresses that the user might supply.) Next, a socket is created, and a connection attempt is made to the designated host on TCP port 37.
+
+<BR></P>
+
+<P>If the connection is successful, the program tries to receive exactly four bytes of data. When the receive operation is complete, the data is converted (ntohl); the time base is corrected (Win32 time functions use January 1, 1970 as the base date for time variables&#151;the number of seconds from January 1, 1900 and January 1, 1970 is 2,208,988,800); and finally, the time is displayed as a human-readable local time on standard output.
+
+<BR></P>
+
+<P>Before exiting, the program closes the socket and terminates the session with the WinSock library.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=4><B>Socket Programming and the Microsoft Foundation Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Microsoft Foundation Classes library encapsulates socket functionality in the CAsyncSocket class. Member functions of CAsyncSocket correspond to many of the standard and asynchronous functions in the WinSock library.
+
+<BR></P>
+
+<P>An application wishing to use CAsyncSocket must first initialize the socket library via a call to AfxSocketInit; there is no need to call a corresponding cleanup function.
+
+<BR></P>
+
+<P>Typically, applications would derive a class from CAsyncSocket and override several callback functions that facilitate asynchronous operations.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B><I>CAsyncSocket</I></B><B> Example</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To see how CAsyncSocket works, we can rewrite our gettime application using MFC. This simple program communicates with users using a dialog, shown in Figure 39.5.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="39vcu05.gif">Figure 39.5. MFC implementation of the gettime </B><B>program.</A></B>
+
+<BR></P>
+
+<P>The skeleton for this application can be created through the MFC AppWizard. Create a new project with the name GT. Specify that its user interface be dialog-based, and make sure that in Step two, you check Windows Sockets support. Set the dialog's title to a meaningful text string, such as &quot;TCP/IP GetTime&quot;.
+
+<BR></P>
+
+<P>After AppWizard has finished creating the skeleton, the first step is to update the application's dialog. Add the fields shown in Figure 39.5. The name of the text field holding the host name should be IDC_HOST; the name of the text field holding the time should be IDC_TIME. The read-only attribute for IDC_TIME should be set. The Connect button's identifier should be IDC_CONNECT; the Close button can keep the IDCANCEL identifier.
+
+<BR></P>
+
+<P>Next, add three member variables using the ClassWizard. Two string variables (m_sHost and m_sTime) will correspond to the two text fields; the third variable, m_cConnect, will be of type CButton and correspond to the Connect button.
+
+<BR></P>
+
+<P>While using the ClassWizard, add also a message handler for the IDC_CONNECT button. This handler, CGTDlg::OnConnect, should process BN_CLICKED messages. It is in this handler function where we add most socket-related code.
+
+<BR></P>
+
+<P>To implement our time retrieval functionality, we need to derive a class from CAsyncSocket and create an object of this new type when the user clicks on the Connect button. The code that needs to be added to the dialog implementation file GTDlg.cpp is shown in Listing 39.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 39.2. MFC gettime: the </B><B>CGTSocket</B><B> class and the </B><B>CGTDlg::OnConnect</B><B> </B><B>function.</B></LH></UL>
+
+<PRE>class CGTSocket : public CAsyncSocket
+
+{
+
+public:
+
+    CGTSocket(CGTDlg *pDlg) {m_pDlg = pDlg;};
+
+    virtual void OnReceive(int nErrorCode);
+
+    virtual void OnClose(int nErrorCode);
+
+    CGTDlg *m_pDlg;
+
+    time_t t;
+
+};
+
+void CGTSocket::OnReceive(int nErrorCode)
+
+{
+
+    Receive(&amp;t, 4);
+
+    t = ntohl(t) - 2208988800;
+
+    m_pDlg-&gt;m_sTime = asctime(localtime(&amp;t));
+
+    m_pDlg-&gt;UpdateData(FALSE);
+
+}
+
+void CGTSocket::OnClose(int nErrorCode)
+
+{
+
+    m_pDlg-&gt;m_cConnect.EnableWindow(TRUE);
+
+    delete this;
+
+}
+
+void CGTDlg::OnConnect()
+
+{
+
+    CGTSocket *pSocket;
+
+    pSocket = new CGTSocket(this);
+
+    UpdateData(TRUE);
+
+    m_cConnect.EnableWindow(FALSE);
+
+    pSocket-&gt;Create();
+
+    pSocket-&gt;AsyncSelect(FD_READ | FD_CLOSE);
+
+    pSocket-&gt;Connect(m_sHost, 37);
+
+}</PRE>
+
+<P>In the function CGTDlg::OnConnect, a new object of type CGTSocket is created. This type is derived from CAsyncSocket. The actual socket is created through a call to the Create member function, which is followed by a call to AsyncSelect. This call enables the callback functions OnReceive and OnClose. At this time, the Connect button is also disabled. Finally, the Connect member function is called to initiate a connection to the destination.
+
+<BR></P>
+
+<P>When the connection attempt succeeds, the time server immediately sends the time in the form of four data bytes. This triggers execution of the OnReceive function, which reads this data using Receive and uses the result to update the time field in the dialog. After sending the data, the server closes the connection; this results in a call to OnClose, which re-enables the Connect button in the dialog and destroys the CGTSocket object.
+
+<BR></P>
+
+<P>Note that in its present form, this program does not perform any error checking and is likely to fail if a network error occurs.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Synchronous Operations and Serialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The purpose of the CAsyncSocket class is to provide a low-level interface to the WinSock library. In contrast, the CSocket class, which is derived from CAsyncSocket, provides somewhat higher level functionality.
+
+<BR></P>
+
+<P>Unlike CAsyncSocket, CSocket provides blocking. Its member functions do not return until a requested operation has been completed.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> The callback functions OnConnect and OnSend are never called for CSocket objects.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>One particular use of CSocket objects is in conjunction with CFileSocket objects to enable the MFC serialization functions to work on sockets. A CFileSocket object can be attached to a CArchive and a CSocket; afterwards, data can be sent and received by simply using MFC serialization.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=4><B>Further Information</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>TCP/IP programming is a very broad subject with a tremendous amount of literature. This chapter is certainly not sufficient to do this complex topic full justice. Because of this, I decided to include some references that I hope assist you in finding the information you need.
+
+<BR></P>
+
+<P>For WinSock, the authoritative reference is Microsoft's WinSock specification, which is published on the Microsoft Developer Network CD-ROM.
+
+<BR></P>
+
+<P>There are several good books on the subject. One particularly useful book is Black's <I>TCP/IP &amp; Related Protocols</I> (McGraw Hill, 1994). For more information on TCP/IP programming (and, in particular, programming with Berkeley sockets), see <I>UNIX Network Programming</I> by W. Richard Stevens (Prentice Hall, 1990). Although the book (as its title implies) is aimed at the UNIX programmer, much of the discussion is not UNIX-specific, simply because the respective APIs are vendor-independent.
+
+<BR></P>
+
+<P>The official definitions of most Internet-related standards and protocols are found in the form of RFCs (Requests For Comment). These RFCs are available online. On the World Wide Web, use the following URL: http://www.cis.ohio-state.edu/htbin/rfc/rfc-index.html. RFCs can also be requested by Internet e-mail from the InterNIC Directory and Database Services mail server. Send a message to mailserv@ds.internic.net with the following command in the message body:
+
+<BR></P>
+
+<PRE>document-by-name rfc<I>NNNN</I></PRE>
+
+<P>To obtain the RFC index, use the command
+
+<BR></P>
+
+<PRE>document-by-name rfc-index</PRE>
+
+<P>Several documents can be requested in a single mail if you separate their names with commas or include several document-by-name commands in the message body in separate lines.
+
+<BR></P>
+
+<P>The RFCs have also been published in CD-ROM format by a number of CD-ROM publishers (the one I use often is the Standards CD-ROM from InfoMagic). If you intend to do serious TCP/IP programming, I strongly recommend that you acquire a low-cost CD-ROM like this one.
+
+<BR></P>
+
+<P>Internet RFCs go back a <I>long</I> time. The earliest RFC on my CD-ROM, RFC0003, dates back to April 1969! Of course, many of the RFCs have long become obsolete.
+
+<BR></P>
+
+<P>RFCs that define the standards most commonly encountered by the WinSock programmer are as follows:
+
+<BR></P>
+
+<P>RFC0768, &quot;User Datagram Protocol&quot; (J. Postel, 1980)
+
+<BR>
+
+<BR></P>
+
+<P>RFC0791, &quot;Internet Protocol&quot; (J. Postel, 1981)
+
+<BR>
+
+<BR></P>
+
+<P>RFC0792, &quot;Internet Control Message Protocol&quot; (J. Postel, 1981)
+
+<BR>
+
+<BR></P>
+
+<P>RFC0793, &quot;Transmission Control Protocol&quot; (J. Postel, 1981)
+
+<BR>
+
+<BR></P>
+
+<P>RFC0826, &quot;Ethernet Address Resolution Protocol: Or Converting Network Protocol Addresses to 48.bit Ethernet Address for Transmission on Ethernet Hardware&quot; (D. Plummer, 1982)
+
+<BR>
+
+<BR></P>
+
+<P>RFC0903, &quot;Reverse Address Resolution Protocol&quot; (R. Finlayson, T. Mann, J. Mogul, M. Theimer, 1984)
+
+<BR>
+
+<BR></P>
+
+<P>RFC1034, &quot;Domain names&#151;Concepts and Facilities&quot; (P. Mockapetris, 1987)
+
+<BR>
+
+<BR></P>
+
+<P>RFC1035, &quot;Domain names&#151;Implementation and Specification&quot; (P. Mockapetris, 1987)
+
+<BR>
+
+<BR></P>
+
+<P>Two additional RFCs deserve mentioning. RFC1700 (&quot;Assigned Numbers&quot;, J. Reynolds, J. Postel, 1994) contains all &quot;well-known&quot; numbers including protocol identifiers, port numbers, and the like. RFC1800 (&quot;Internet Official Protocol Standards,&quot; J. Postel, 1995) is an invaluable reference to all the other RFC standards.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> A popular misconception is that any material published in the form of an Internet RFC represents a standard. This is not so. In addition to standards, Internet RFCs may contain Informational, Experimental, Standards Track (Proposed Standard, Draft Standard, Internet Standard), or Historic material. The nature of an RFC is usually noted on the front page.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>TCP/IP is the name most often used to refer to the internet protocol suite. This protocol suite, which consists of protocols such as TCP, UDP, ICMP, IP, ARP, and RARP, provides the fundamentals for internetwork communication on the global Internet.
+
+<BR></P>
+
+<P>Under Windows, TCP/IP programming is accomplished using the WinSock library. WinSock is an API that closely mimics the Berkeley sockets API used on many UNIX systems. However, there are some differences arising from the fact that Windows and UNIX are very dissimilar architecturally. In particular, the Berkeley sockets library uses socket descriptors that are interchangeable with file descriptors used in low-level I/O operations. For this reason, standard C low-level I/O functions can be used on Berkeley sockets, something that is not true under Windows.
+
+<BR></P>
+
+<P>Berkeley sockets can be used to communicate using both connection-oriented protocols, such as TCP, and connectionless protocols, such as TCP/IP. In both cases, fundamental operations include the creation of a socket, binding a socket to a host address and port number, and sending and receiving data.
+
+<BR></P>
+
+<P>Host addresses can be obtained using the gethostbyname function that resolves symbolic system names into 4-byte TCP/IP addresses. To ensure machine-independent representation of host addresses and other numeric quantities, a set of functions is provided for the translation to and from host byte ordering and internet byte ordering.
+
+<BR></P>
+
+<P>Writing responsive applications requires that an application does not remain suspended indefinitely while waiting for socket input. The most generally used Berkeley sockets mechanism, namely the use of the select function, has limited utility under Windows as socket and file descriptors are not interchangeable, hence select cannot be used to wait for input on stdin, for example. However, Win32 applications can use multiple threads to furnish data exchange on multiple I/O channels simultaneously.
+
+<BR></P>
+
+<P>To facilitate the development of responsive applications without relying on the multithreaded capabilities of Windows 95 or Windows NT, applications can use asynchronous socket calls. These calls rely on Windows messaging to deliver information about incoming data or other socket events to the application.
+
+<BR></P>
+
+<P>Socket functionality is encapsulated in the CAsyncSocket class in the Microsoft Foundation Classes library. With the help of the CSocket class, which is derived from CAsyncSocket and provides synchronous socket I/O, and the CSocketFile class, applications can use MFC serialization functions on a socket interface.</P>
+
+<P><A HREF="vcu38fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu40fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

@@ -1,0 +1,1315 @@
+<HTML>
+<HEAD>
+<TITLE>CS350 - Labs</TITLE>
+</HEAD>
+<BODY>
+<H1>CS350 - Labs</H1>
+<H1>CS350 - PROGRAMMING SEMINAR I LAB MANUAL<A NAME="toc"></A></H1>
+<A HREF="#Lab1">Lab 1: Way RAD! </A><P>
+<A HREF="#Lab2">Lab 2: Components and Properties</A><P>
+<A HREF="#Lab3">Lab 3: Visual and Non-Visual Components</A><P>
+<A HREF="#Lab4">Lab 4: Visual and Non-Visual Components (part 2)</A><P>
+<A HREF="#Lab5">Lab 5: Forms and Units</A><P>
+<A HREF="#Lab6">Lab 6: C++ Builder and Dialogs</A><P>
+<A HREF="#Lab7">Lab 7: C++ Builder and Dialogs (part 2)</A><P>
+<A HREF="#Lab8">Lab 8: Files and File Types</A><P>
+<A HREF="#Lab9">Lab 9: Graphics</A><P>
+<A HREF="#Lab10">Lab 10: Creating Simple Database Applications</A><P>
+<A HREF="#Lab11">Lab 11: SQL The C++ Builder Way</A><P>
+<A HREF="#Project">Individual Programming Project Assignment</A><P>
+<HR>
+<P>
+ <P>Click here to return to Wayne's World's homepage: <A HREF="index.htm"><IMG
+ALIGN=TOP SRC="../../images/button_h.gif" ALT="arrowUp"></A> <P>
+
+<ADDRESS><A HREF="index.htm">Wayne Summers</A>
+&lt;wsummers@nmhu.edu&gt;</ADDRESS>
+
+<TT></TT><A NAME="Lab1"></A>Lab 1: - <B>Way RAD!</B><P>
+
+<B>Objectives:</B> 1) Explore C++ Builder's Environment<P>
+	2) Use Forms and Units<P>
+	3) Use simple Components: ListBox, EditBox, Buttons<P>
+	4) Build a simple C++ Builder program<P>
+
+<B>Methods</B>:	1) From the C++ Builder Group, double-click the C++ Builder program icon.<P>
+	2) Explore C++ Builder's menu, speedbar, and component palette.<P>
+	3) If Form1 or Unit1 is not present on the screen, open a new Form.<P>
+	4) Explore the Form Window, the Unit Window and the Object Inspector Window.<P>
+
+<B>Project 1:</B> Build a simple program in which you type names into an edit control and add the
+names to a list box.  You also have the option of sorting or clearing the list box.<P>
+
+a) Start with a new form.<P>
+b) Find the edit component from the component palette and drop it onto the form.<P>
+c) Find the listbox component and drop it onto the form.<P>
+d) Find the button component and drop three buttons on the form.<P>
+e) Align and size the edit and listbox components.<P>
+f) Align the three buttons (lasso the 3 buttons, then press the right mouse button, select align and
+check "Left sides" under Horizontal).<P>
+g) Save your unit (and project) as listform.cpp (and listdemo.mak)<P>
+h) Run the project (press the Green button).  [When finished, press Alt-F4].<P>
+i) Change the form's caption from "Form1" to "List box demo" in the <B>Caption</B> property for the
+form object.<P>
+j) Delete "Edit1" from the <B>Text</B> property for the Edit control object.<P>
+k) Change the <B>Caption</B> properties for button1, button2 and button3 to &amp;Add, &amp;Sort and &amp;Clear
+respectively. Change the <B>Default</B> property for the &amp;Add button to <B>True</B>.<P>
+l) Click on the Add button and select the Events list from the Object Inspector. Double-click the
+<B>On-Click</B> event.  Enter the following code between the <B>open and close braces</B>:<P>
+ListBox1->Items->Add(Edit1->Text);<P>
+ Edit1->Text = "";<P>
+m) Return to the Form and click on the Sort button.  Double-click on the OnClick event and add
+the code:<P>
+	ListBox1->Sorted = true;<P>
+n) Return to the Form and click on the Clear button.  Double-click on the OnClick event and add
+the code:<P>
+	ListBox1->Clear();<P>
+	ListBox1->Sorted = false;<P>
+o) Save your project and run it.<P>
+
+<B>Project 2 (Due beginning of class Wed. 9/3/97):</B> Expand on project 1 by writing a C++ Builder
+program that allows the user to enter a list of names, sort the list and then save the list to a file.<P>
+<P>
+
+You will need to add a button Save which will perform the following when clicked:<P>
+	ListBox1->Items->SaveToFile("temp.dat");<P>
+
+Also add a button to close your program.  When clicked, it will execute the following:<P>
+	Close();<P>
+<P>
+Test your program by entering a list of names, sorting it and then saving it.<P>
+<P>
+Documenting your unit by inserting comments with your name, the date and a brief description at
+the top of the unit.<P>
+<P>
+Turn in to me a disk with your complete project.<P>
+<P>
+QUESTIONS:	1) What is RAD?<P>
+		2) What is the name of your program?<P>
+		3) What is the name of your unit?<P>
+		4) What procedures have you directly modified?<P>
+<A HREF="#top"><IMG ALIGN=BOTTOM SRC="../../images/top.gif"></A>
+<HR>
+<P>
+<A NAME="Lab2"></A>Lab 2: <B> - Components and Properties </B><P>
+
+<B>Objectives:</B>
+<OL>
+	<LI>Further Explore C++ Builder's Environment
+	<LI>Use Forms and Units
+	<LI>Use and install additional Components
+	<LI>Build a simple C++ Builder program
+</OL>
+
+<B>Methods</B>:
+<OL>
+	<LI>Start up C++ Builder
+	<LI>Explore the Form Component (Size, Position, BorderStyle, and Color)
+</OL>
+<P>
+
+<B>Project 1:</B> Build a simple program in which you can toggle the background of a form by pressing
+a button.<P>
+
+<OL TYPE=a>
+	<LI>Start with a new project.
+	<LI>Find the button component from the component palette and drop it onto the form.
+	<LI>Double-Click on the button and enter the following code between the <B>{</B> and <B>}</B>:
+<BLOCKQUOTE>	if Color != clPurple
+<BLOCKQUOTE>		Color = clPurple;</BLOCKQUOTE>
+	else
+<BLOCKQUOTE>		Color = clSilver;</BLOCKQUOTE>
+		</BLOCKQUOTE>
+	<LI>Save your project (and unit) as clrxmpl and colorfrm
+	<LI>Run the project.  [When finished, press Alt-F4].
+</OL>
+		3) Further explore the Form Component(BorderIcons, Font, ParentColor,
+ParentFint, ParentCtl3D)<P>
+
+<P>
+
+<B>Project 2:</B> Write a C++ Builder program that allows the user to change a form's background and font colors.<P>
+<H2>PART I: - Installing a component on the Component palette</H2>
+We will be using the ColorGrid component which has been inadventently left off the component palette during installation, so we need to install it. Other components may be install in the same way if you have either the source or binary file for the component.<P>
+<OL>
+	<LI>Choose Component | Install
+	<LI>Choose Add to open the Add Module dialog box
+	<LI>Choose browse and find the ColorGrid component in C:\PROGRAMFILES\BORLAND\CBuilder\Examples\CONTROLS\Source
+	<LI>Choose OK to close the Add Module dialog box
+	<LI>Choose OK to close the Install Components dialog box [The component library will be rebuilt and the newly installed component will appear in the Samples palette.
+</OL>
+<H2>PART II: Using the newly installed component</H2>
+<OL TYPE =a>
+<LI>Start with a new project and change the form's <B>Caption</B> to "Parent Properties Example".
+<LI>Find the label component from the component palette and place it in the top left corner of the
+form. Change the label's <B>Caption</B> to something like "This label inherits  the form's color".
+<LI>Place a CheckBox component on the form and change it's <B>Caption</B> to "ParentColor" and
+change it's <B>Checked</B> property to True.
+<LI>Place a ColorGrid component on the form and change the ColorGrid's <B>BackgroundIndex</B> to 5
+and the <B>ForegroundIndex</B> to 0. (black on purple)
+<LI>Move to the Form and select it's Events from the ObjectInspector. Double-Click on the
+<B>OnCreate</B> Event and enter the following code between the <B>{</B> and <B>}</B>:
+
+<BLOCKQUOTE>	Color = ColorGrid1->BackgroundColor;<BR>
+	Font->Color = ColorGrid1->ForegroundColor;</BLOCKQUOTE>
+
+<LI>Select the ColorGrid component on your form and double-click on the OnChange event.  Enter
+the following code:
+
+<BLOCKQUOTE>	Color = ColorGrid1->BackgroundColor;<BR>
+	Font->Color = ColorGrid1->ForegroundColor;</BLOCKQUOTE>
+
+<LI>Select the CheckBox component on your form and double-click on the OnClick event. Enter
+the following code:
+
+<BLOCKQUOTE>	CheckBox1->ParentColor = CheckBox1->Checked;<BR>
+	CheckBox1->ParentFont = CheckBox1->Checked;</BLOCKQUOTE>
+
+<LI>Save your project (and unit) as PARENT and PARNTFRM.
+
+<LI>Run the project.  [When finished, press Alt-F4].
+</OL>
+<P>
+
+<B>Project 3 (Due beginning of class Wed. 9/10/97):</B> Expand on project 2 by adding an Exit button
+and its event handler.  Test your program to ensure that it exits properly.
+<P>
+Many Windows programs interrupt your attempt to shut them down by asking if you're sure you
+want to quit.  You can use your form's OnCloseQuery event handler to include this kind of
+confirmation by including the following code:<BR>
+	CanClose = (MessageBox(Handle, "Are you sure?", "Confirmation", MB_YESNOCANCEL)
+ == IDYES);
+<P>
+[MessageBox is a function that returns which button has been pressed.  It's four parameters are 1) the window handle, 2) the message, 3) the type of message box {Confirmation, Warning, Error, and
+Information} [this appears in the title of the window], 4) the kinds of buttons to include {Yes, No, Ok, Cancel, and Help}.
+<P>
+Test your program by pressing the Exit button.  You can also close the form by clicking
+the system menu box.  Experiment with other MessageBox's .
+<P>
+Documenting your unit by inserting comments with your name, the date and a brief description at
+the top of the unit.<P>
+
+Turn in to me all your files for this project.<P>
+
+<P>
+
+QUESTIONS:	1) What are dialogs?<BR>
+			2) What are the BorderIcons used for?<BR>
+			3) What happens if you replace Confirmation with Warning?<BR>
+			4) What happens if you replace Yes and No with Ok and Cancel?<BR>
+<HR>
+<P>
+<A NAME="Lab3"></A>Lab 3: - Visual and Non-Visual Components <BR>
+
+<B>Objectives:</B> 1) Further Explore C++ Builder's Environment<BR>
+	2) Use Visual Components: <BR>
+	3) Build a simple C++ Builder program using a Timer<BR>
+<B>Methods</B>:	1) Start up C++ Builder.<BR>
+		2) Explore the Timer Component.<BR>
+<B>Project 1:</B> Build a simple stopwatch program with two displays (TotalTime &amp; LapTime) and
+three buttons (Start/Stop, Lap, &amp; Reset).<BR>
+a) Start with a new project and change the Form's <B>Caption</B> to "Stopwatch".<BR>change the form's <B>BorderIcons.Maximize</B> property to <B>false</B>, and set <B>BorderStyle</B> to <B>bsSingle</B>
+b) Drop two labels onto the form and change the <B>Captions</B> to "Total Time" and "Lap Time".<BR>
+c)  Drop and size a Memo component.  Set the Memo properties as shown in Table 5.1.<BR>
+d) Copy the Memo component.<BR>
+e) Drop a Timer component from the System page onto the form.<BR>
+f) Set the Timer's <B>Enabled </B>property to <B>True</B> and <B>Interval</B> to 100.<BR>
+g) Click on the OnTimer Event handler and add the following code:<BR>
+	void __fastcall TForm1::Timer1Timer(TObject *Sender)<BR>
+		{<BR>
+		&nbsp;&nbsp;	char s[20];<BR>
+		&nbsp;&nbsp;	float Seconds;<BR>
+	
+		&nbsp;&nbsp;	TickCounter++;<BR>
+		&nbsp;&nbsp;	Seconds = TickCounter / 10.0;<BR>
+     	&nbsp;&nbsp;	sprintf(s, "%.1f", Seconds);<BR>
+     	&nbsp;&nbsp;	TotalTime->Text = s;<BR>
+		}<P>
+
+h) Add the following lines to the <B>private</B> section of TimerForm.h:<BR>
+
+	long TickCounter;<BR>
+	long LapCounter;<P>
+
+and the following to TForm1.FormCreate<BR>
+  	TickCounter = 0;<BR>
+  	LapCounter = 0;<BR>
+	TotalTime->Text = "0.0";<BR>
+	LapTime->Text = "0.0";
+<P>
+i) Save your project (and unit) as TIMERFRM.CPP and STOPWTCH.MAK.<BR>
+j) Run the project.  [When finished, press Alt-F4].<P>
+
+k) Set the Timer <B>Enabled</B> property to <B>False</B>.<BR>
+l) Drop three buttons named <B>StartBtn</B>, <B>LapBtn</B>, and <B>ResetBtn</B> onto the form with <B>Captions</B> "&amp;Start", "&amp;Lap" and "&amp;Reset" respectively.<P>
+m) Edit the OnClick event handler for Start:<BR>
+	if (Timer1->Enabled)<BR>
+	{<BR>
+&nbsp;&nbsp;		Timer1->Enabled = False;<BR>
+&nbsp;&nbsp;		StartBtn->Caption = "&amp;Start";<BR>
+	}<BR>
+	else<BR>
+	{<BR>
+&nbsp;&nbsp;		Timer1->Enabled = true;<BR>
+&nbsp;&nbsp;		StartBtn->Caption = "&amp;Stop";<BR>
+	}<P>
+n) Edit the OnClick event handler for Lap:<BR>
+void __fastcall TForm1::LapBtnClick(TObject *Sender)<BR>
+{<BR>
+&nbsp;&nbsp;	char s[20];<BR>
+&nbsp;&nbsp;	long Temp;<BR>
+<BR>
+&nbsp;&nbsp;	Temp = TickCounter - LapCounter;<BR>
+&nbsp;&nbsp;	LapCounter = TickCounter;<BR>
+&nbsp;&nbsp;	sprintf (s, "%.1f", ((float)Temp) / 10.0);<BR>
+&nbsp;&nbsp;	LapTime->Text = s;<BR>
+}<BR>
+<BR>
+o) Edit the OnClick event handler for Reset:<BR>
+	TickCounter = 0;<BR>
+	LapCounter = 0;<BR>
+	LapTime->Text = "0.0";<BR>
+	TotalTime->Text = "0.0";<BR>
+
+<BR>
+
+<B>Project 2 (Due beginning of class Wed. 9/17/97):</B> Using what you have learned in Lab 2 last
+week and Project 1 above, design a form that changes foreground colors every 10 seconds and
+background colors every 20 seconds.  Include a Start button and an Exit button.<BR>
+
+<BR>
+
+Documenting your unit by inserting comments with your name, the date and a brief description at
+the top of the unit.<BR>
+
+<BR>
+
+Store your results on your share drive.
+<HR>
+<BR>
+
+<A NAME="Lab4"></A>Lab 4  - Visual and Non-Visual Components <BR>
+
+<B>Objectives:</B> 1) Further Explore C++ Builder's Environment<BR>
+	2) Build Windows Menus using Menu Designer<BR>
+	3) Explore Common Dialog Boxes<BR>
+	3) Build a simple C++ Builder program using menus and dialogs<BR>
+<B>Methods</B>:	1) Start up C++ Builder.<BR>
+
+		2) Explore the MainMenu and PopupMenu Components and the Menu Designer
+by double-clicking a MainMenu component.<BR>
+
+<B><BR>
+
+Project 1:</B> Build a form with a simple menu on it.<BR>
+
+a) Start with a new project and drop a MainMenu component on it.<BR>
+
+b) Double-click on the MainMenu component to open the Menu Designer.<BR>
+
+c) Create the file menu by typing &amp;File in the far-left corner.<BR>
+
+d) Type &amp;Open below that followed by &amp;Close, &amp;Print, P&amp;rinter Setup, and E&amp;xit.<BR>
+
+e) Insert a separator line (-) below Close and one above Exit.<BR>
+
+f) Move to the right and add the &amp;Help menu with &amp;About as its only option.<BR>
+
+g) Select F2 from the <B>ShortCut</B> Property for Open. <BR>
+
+h) Type Alt+F3 for Close and Alt+F4 for Exit.<BR>
+
+i) Edit the OnClick event handler for Open, Close, Print, PrinterSetup and About to include code
+like that shown below:<BR>
+
+	ShowMessage("File|Open not implemented");<P>
+    Edit the OnClick event handler for Exit:<BR>
+	Close<P>
+j) Save your project (and unit) as MENUFORM.CPP and MENUTEST.MAK.<BR>
+j) Run the project.  [When finished, press Alt-F4].<BR>
+<HR>
+<P>
+<B>Project 2:</B> Write a small C++ Builder program with a popup menu that uses Font and Color dialog
+boxes.<BR>
+
+a) Start with a new project and drop a PopupMenu component on it.<BR>
+b) Double-click on the PopupMenu component to open the Menu Designer.<BR>
+c) Add menu items &amp;Font and &amp;Color and then close the PopupMenu.<BR>
+d) Add a label component to the Form and change its <B>Caption</B> property to "Click the right mouse
+button to activate the popup menu". Center the label below the PopupMenu component. Add a Memo<BR>
+e) Change the Form's <B>PopupMenu</B> property to "PopupMenu1".<BR>
+f) Save your project (and unit) as DLGFORM.CPP and DLGXMPL.MAK.<BR>
+g) Run the project.  [When finished, press Alt-F4].<BR>
+h) Drop FontDialog and ColorDialog components on the Form next to the PopupMenu
+component.<BR>
+i) Double-click the PopupMenu component and then Double-click the Font menu item and enter
+the following for its event handler:<BR>
+	FontDialog1->Font = Memo1.Font;<BR>
+
+	if (FontDialog1->Execute)<BR>
+&nbsp;&nbsp;		Memo1->Font = FontDialog1->Font<BR>
+j) Save your work and run it.<BR>
+k) Edit the OnApply event handler for the FontDialog:<BR>
+	Memo1->Font = FontDialog1->Font;<BR>
+l) Double-click the PopupMenu component and then Double-click the Color menu item and enter
+the following for its event handler:<BR>
+	ColorDialog1->Color = Memo1->Color;<BR>
+	if (ColorDialog1->Execute())<BR>
+&nbsp;&nbsp;Memo1->Color = colorDialog1->Color;<BR>
+m) Save your work and run your program.<BR>
+<HR>
+<P>
+<B>
+(Due beginning of class Wed. 9/24/97):</B> Using what you have learned in Lab 3 last week and the
+Projects above, design a digital clock that displays the time in hours, minutes and seconds.  The
+user should be able to change the color and font using a popup menu.  [HINTS: 1) You will need
+an OnTimer event handler: <B>Label1->Caption = TimeToStr()</B><BR>
+You will need to use the help facility to look up TimeToStr [BTW, you may have to add some C++ code]<BR>
+2) You will need an OnCreate event handler: <B>Timer1Timer(Timer1)</B>]<BR>
+<BR>
+Documenting your unit by inserting comments with your name, the date and a brief description at
+the top of the unit.<BR>
+<BR>
+<HR>
+<BR>
+
+<A NAME="Lab5"></A>Lab 5  - Forms and Units<BR>
+
+<B>Objectives:</B> 1) Create a MDI (Multiple Document Interface) application with C++ Builder<BR>
+<BR>
+<B>Project 1:</B> Create FileView - a program that allows the user to view text and picture files.<BR>
+a) Select File|New from the main menu, click on the Projects tab, and select the MDI Application icon<BR>
+<OL TYPE=i>
+	<LI>Save the project as FILEVIEW, the MDI form as VIEWMAIN and the child window's form as TEXTVIEW
+	<LI>delete all files that start with MDIAPP, MAIN, and CHILDWIN
+	<LI>rename "ChildWin.h" to "Textview.h" in VIEWMAIN.H
+</OL>
+d)Save and run your project.
+<P><HR><P>
+<B>Part 2: Modifying the Main Form</B> 
+e)Add PrinterDialog and PrinterSetupDialog Components onto the form<BR>
+f)Add FilePrintItem (&Print) and FilePrinterSetupItem (P&rinter Setup) to the MainMenu and add Hints: "print the current document" and "Choose a printer"<BR>
+g) Delete the New, Save and Save As menu items and the Save button<BR>
+h) Add a SpeedButton named "PrintBtn", with <B>Hint</B> property "Print" and picture PRINT.BMP for the <B>Glyph</B> property <BR>
+i) Delete <B>FileNewItemClick</B> from VIEWMAIN.H and VIEWMAIN.CPP; repeat for Save and Save As<BR>
+j) Locate the <B>UpdateMenuItems</B> function in VIEWMAIN.CPP and add the following:<BR>
+<PRE>
+	// New items added for FileView
+	FilePrintItem->Enabled = MdiChildCount > 0;
+	FilePrinterSetupItem->Enabled = MdiChildCount > 0;
+	PrintBtn->Enabled = MdiChildCount > 0;
+</PRE>
+k) Save the project and test it.<BR>
+l) Change the <B>Options.ofFileMustExist</B> property of the OpenDialog to <B>true</B><BR>
+m) Double-click on the <B>Filter</B> property of the OpenDialog and enter<BR>
+All Flies&nbsp;&nbsp;&nbsp;*.*<BR>
+Picture Files&nbsp;&nbsp;&nbsp;*.bmp;*.ico;*.wmf;<BR>
+Text Files&nbsp;&nbsp;&nbsp;*.txt
+<P><HR><P>
+<B>Part 3: Viewing Text Files</B><BR>
+n)Switch to the MDIChild form and change its <B>Caption</B> and <B>Name</B> properties to "Text Viewer"<BR>
+o) Drop a RichEdit component onto the form and change its properties as shown in Table 7.1<BR>
+p) Add the following line to the <B>public</B> section of the TTextViewer class in TEXTVIEW.H<BR>
+&nbsp;&nbsp;virtual void __fastcall Open(const String Filename);<BR>
+and add the following to the <B>private</B> section<BR>
+&nbsp;&nbsp;String PathName;<BR>
+and add the following code to the <B>Open</B> function in TEXTVIEW.CPP<BR>
+<PRE>
+void __fastcall TTextViewer::Open(const String Filename)
+{
+	RichEdit1->Lines->LoadFromFile (Filename);
+	PathName = Filename;
+}
+</PRE>
+q) In VIEWMAIN.H, replace the declaration of <B>CreateMDIChild</B> with:<BR>
+&nbsp;&nbsp;void __fastcall CreateTextViewer(const String Name);<BR>
+and in VIEWMAIN.CPP replace <B>CreateMDIChild</B>and <B>FileOpenItemClick</B> with:<BR>
+<PRE>
+void __fastcall TMainForm::CreateTextViewer (const String Name)
+{
+	TTextViewer *Child;
+	
+	Child = new TTextViewer (Application);
+	Child->Caption = OpenDialog->FileName;
+	Child->Open (OpenDialog->FileName);
+}
+//----------------------------------------------------------------
+void __fastcall TMainForm::FileOpenItemClick(TObject *Sender)
+{
+	if (OpenDialog->Execute() )
+		CreateTextViewer (OpenDialog->FileName);
+}
+</PRE>
+delete the declaration of MDIChildCreate from VIEWMAIN.H<BR>
+<P><HR><P>
+<B>Part 4: Printing Text</B><BR>
+r) Add the following events for File|Print and File|Printer Setup<BR>
+<PRE>
+void __fastcall TMainForm::FilePrintItemClick(TObject *Sender)
+{
+  if (PrintDialog1->Execute ())
+  {
+    TTextViewer * tv;
+    TPictureViewer * pv;
+    if ((tv = dynamic_cast&lt;TTextViewer *>(Screen->ActiveForm)) != 0)
+    {
+      tv->Print ();
+    }
+    else if ((pv = dynamic_cast&lt;TPictureViewer *>(Screen->ActiveForm)) != 0)
+    {
+      pv->Print ();
+    }
+  }
+}
+//---------------------------------------------------------------------
+void __fastcall TMainForm::FilePrinterSetupItemClick(TObject *Sender)
+{
+  PrinterSetupDialog1->Execute ();
+}
+</PRE>
+s) Add #include &lt;typeinfo.h> to the top of VIEWMAIN.CPP<BR>
+t) select FilePrintItemClick for the <B>OnClick</B> event for the Print speed button<BR>
+u) Add virtual void __fastcall Print(void); to <B>public</B> section of the <B>TTextViewer</B>'s class definition in TEXTVIEW.H and add the following to the corresponding .CPP file:<BR>
+<PRE>
+void __fastcall TTextViewer::Print(void)
+{
+     RichEdit1->Print (PathName);
+}
+</PRE>
+<P><HR><P>
+<B>Part 5: Viewing Pictures</B><BR>
+v) Create a new form with the properties in Table 7.2 (pg 141)[Include your name in the caption] and drop the Image component on the form and change its <B>Align</B> property to <B>alClient</B> and save the unit as PicView.cpp<BR>
+w) Add the following methods for <B>Open</B>, <B>Print</B>, and <B>FormClose</B> (Don't forget to add the declarations to the <B>public</B> section in the .H file:<BR>
+<PRE>
+void __fastcall TPictureViewer::FormClose(TObject *Sender, TCloseAction &Action)
+{
+  Action = caFree;
+}
+//---------------------------------------------------------------------------
+void __fastcall TPictureViewer::Open (const String Filename)
+{
+  Image1->Picture->LoadFromFile (Filename);
+}
+//---------------------------------------------------------------------
+void __fastcall TPictureViewer::Print (void)
+{
+  TPrinter * Printer;
+
+  Printer = Printers::Printer();
+
+ 
+  try
+  {
+    Printer->BeginDoc ();
+    Printer->Canvas->Draw (0, 0, Image1->Picture->Graphic);
+  }
+  catch (...)
+  {
+    Printer->EndDoc ();
+    throw;
+  }
+}
+</PRE>
+Add #include &lt;printers.hpp> to the PicView.cpp<BR>
+x) Add the line #include "PicView.h" to VIEWMAIN.H, add the function <B>CreatePictureViewer</B> and change the functions <B>FileOpenItemClick</B> and <B>FilePrintItemClick</B> as shown below:<BR>
+<PRE>
+void __fastcall TMainForm::CreatePictureViewer (const String Name)
+{
+  TPictureViewer *Child;
+
+  Child = new TPictureViewer (Application);
+  Child->Caption = OpenDialog->FileName;
+  Child->Open (OpenDialog->FileName);
+}
+//---------------------------------------------------------------------
+void __fastcall TMainForm::FileOpenItemClick(TObject *Sender)
+{
+  String FileExt;
+
+  if (OpenDialog->Execute ())
+  {
+    FileExt = UpperCase (ExtractFileExt (OpenDialog->FileName));
+    if ((FileExt == ".BMP") || (FileExt == ".ICO") || (FileExt == ".WMF"))
+    {
+      CreatePictureViewer (OpenDialog->FileName);
+    }
+    else
+    {
+      CreateTextViewer (OpenDialog->FileName);
+    }
+  }
+}
+//---------------------------------------------------------------------
+void __fastcall TMainForm::FilePrintItemClick(TObject *Sender)
+{
+  if (PrintDialog1->Execute ())
+  {
+    TTextViewer * tv;
+    TPictureViewer * pv;
+    if ((tv = dynamic_cast&lt;TTextViewer *>(Screen->ActiveForm)) != 0)
+    {
+      tv->Print ();
+    }
+    else if ((pv = dynamic_cast&lt;TPictureViewer *>(Screen->ActiveForm)) != 0)
+    {
+      pv->Print ();
+    }
+  }
+}
+</PRE>
+y) To avoid displaying a blak Picture Viewer, remove the line<BR>
+Application->CreateForm(__classid(TPictureViewer), &PictureViewer); from the Project's Source file.<BR>
+z) To size the picture better, replace the Print method with:<BR>
+
+<PRE>void __fastcall TPictureViewer::Print (void)
+{
+  TRect StretchRect;
+  int TempHeight;
+  int TempWidth;
+  TPrinter * Printer;
+
+  Printer = Printers::Printer();
+
+  /*
+    Stretch the picture so that it takes up about half
+    of the printed page.
+  */
+  TempHeight = Image1->Picture->Height;
+  TempWidth = Image1->Picture->Width;
+  while ((TempHeight &lt; Printer->PageHeight/2) &&
+         (TempWidth &lt; Printer->PageWidth/2))
+  {
+    TempHeight *= 2;
+    TempWidth *= 2;
+  }
+
+  // Position the picture so that it prints centered
+  StretchRect.Left = (Printer->PageWidth - TempWidth)/2;
+  StretchRect.Top = (Printer->PageHeight - TempHeight)/2;
+  StretchRect.Right = StretchRect.Left + TempWidth;
+  StretchRect.Bottom = StretchRect.Top + TempHeight;
+
+  try
+  {
+    Printer->BeginDoc ();
+    Printer->Canvas->StretchDraw (StretchRect, Image1->Picture->Graphic);
+  }
+  catch (...)
+  {
+    Printer->EndDoc ();
+    throw;
+  }
+}
+</PRE>
+<P><HR><P>
+Assignment 5: (Due beginning of class Wed. 10/1/97):<BR>
+<OL>
+	<LI>What changes did you need to make to UpdateMenuItems to make your program work?
+	<LI>What is the difference between the caption and the name properties?
+	<LI>In Viewmain.cpp, we get the error Undefined symbol TTextViewer. How can we fix this?
+</OL>
+
+<HR>
+<BR>
+
+<A NAME="Lab6"></A>Lab 6  - C++ Builder and Dialogs <BR>
+
+<B>Objectives:</B> 1) Design a user-interface for the mortgage calculator<BR>
+		2) Learn about panel components, speed buttons, dialog boxes<BR>
+<B><BR>
+Project 1:</B> Create mortgage calculator that allows changes to the parameters.<BR>
+
+a) Start with a new project using the SDI Application template and change the Form's properties to match Table 9.1.<BR>
+b)  Save your project and unit as MORTCALC.MAK and MORTFORM.CPP.<BR>
+c)  Change the new Menu Item's (NewItem and ExtraPrincipalItem) properties to match Table 9.2.<BR>
+d) Change the new speed button's (NewBtn and ExtraBtn) properties to match Table 9.3. [The glyphs are in the C++ Builder's Images subdirectory]<BR>
+e) Save your work and run your project.<BR>
+f) Drop four <B>label</B> components on the Form with <B>Caption</B> properties "Mortgage Amount",
+"Interest Rate", "Payment Amount", and "Number of Payments".<BR>
+g) Drop four more <B>label</B> components on the form with <B>Name</B> and <B>Caption</B> properties shown in Table 9.4.<BR>
+h) Drop a <B>StringGrid</B> component onto the form and change its properties to those shown in Table
+9.5.<BR>
+i) Save and run your project.
+<P>
+j) Add the variable <B>TMortgage *Mortgage;</B>   to the <B>private</B> Section of the form's <B>class</B> definition, add<B>MortLib</B> [on book's disk; path to this library file must be identified in Projects|Options|Directories] to the #include files of MORTFORM.H statement and add<BR>
+Mortgage = NULL;<BR>
+to the FormCreate event handler in MORTFORM.CPP<BR>
+k) Add the following event handler:<BR>
+void __fastcall TMortgageForm::FormClose(TObject *Sender, TCloseAction &Action)<BR>
+{<BR>
+&nbsp;&nbsp;if (mortgage != NULL)<BR>
+&nbsp;&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;delete Mortgage;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mortgage = NULL;<BR>
+&nbsp;&nbsp;}<BR>
+}<BR>
+<BR>
+
+<H2>Adding a Program Icon</H2>
+
+l) select Options|Project from the main menu; select the "Applications" page and press Load Icon
+and select MORTGAGE.ICO[on book's disk] from the Application Icon dialog box.<BR>
+
+m) Save your project.<BR>
+
+n) Look at ABOUTBOX.H and ABOUTBOX.CPP. Note that TAboutBox is a descendent of TForm and inherits all of its functionality. MORTFORM.CPP includes a line of code AboutBox->ShowModal(); which causes the AboutBox to be available for display as a modal dialog. To make the dialog modeless, change the line in <B>TMortgageForm::About1Click</B> to AboutBox->Show();<BR>
+
+o) Save and run your project.<BR>
+
+p) Change the <B>Caption</B> property and fill in the blanks with your program's information and icon.<BR>
+
+q) Save your work and run the program.<BR>
+
+<B><BR>
+
+(Due beginning of class Wed. 10/8/97):</B>
+
+Documenting your unit by inserting comments with your name, the date and a brief description at
+the top of the unit.<BR><BR><BR>
+
+Answer the following questions:<BR>
+<OL>
+	<LI>Why isn't the StringGrid displayed when I run my program?
+	<LI>Explain the difference between modal and modeless dialog boxes. When is it best to use modal dialog boxes?
+	<LI>Explain the difference between SDI and MDI.
+</OL>
+
+<P><HR><P>
+<BR>
+
+<A NAME="Lab7"></A>Lab 7 - C++ Builder and Dialogs (part 2)<BR>
+<B>Objectives:</B> 1) Extend the user-interface for the mortgage calculator<BR>
+		2) reconfigure dialog boxes<BR>
+<BR>
+<B>Project 1:</B>  Add the "New Mortgage" dialog box.<BR>
+a) Select File|New and select the Standard Dialog template and change its property to match those in Table 9.6<BR>
+b) Add three label components with captions Mortgage Amount, Interest Rate, and Number of Payments.<BR>
+c) Add three Edit components to the right of the labels with no text and named editMortAmt, editIRate, and editNumPmts. Change the Form's <B>ActiveControl</B> property to "editMortAmt" and make sure the OK button's <B>Default</B> property is <B>true</B>. Save the form as NEWMORT.CPP<BR>
+d) Add the following code to the public section of <B>TNewMortDlg</B>'s class definition.<BR>
+<PRE>
+        float MortgageAmount;
+        float InterestRate;
+        int NumberOfPayments;
+        bool __fastcall Execute (void);
+</PRE>
+e) Add the following code to the <B>OnCreate</B> event for the NewMort form.<BR>
+<PRE>
+  MortgageAmount = 100000.00;
+  InterestRate = 0.0875;
+  NumberOfPayments = 360;
+</PRE>
+f) Add the following <B>Execute</B> function to NEWMORT.CPP<BR>
+<PRE>
+bool __fastcall TNewMortDlg::Execute (void)
+{
+  int i;
+  // set the edit fields' Text properties
+  editMortAmt->Text = FloatToStrF  (MortgageAmount, ffFixed, 7, 2);
+  editIRate->Text = FloatToStrF ((InterestRate * 100), ffFixed, 7, 2);
+  editNumPmts->Text = IntToStr (NumberOfPayments);
+
+  ActiveControl = editMortAmt;
+
+  // show the dialog box and check the return value
+  if (ShowModal () == mrOk)
+  {
+    // if OK was pressed, get the new values
+    MortgageAmount = StrToFloat (editMortAmt->Text);
+    InterestRate = (StrToFloat (editIRate->Text)) / 100;
+    NumberOfPayments = StrToInt (editNumPmts->Text);
+    return true;
+  }
+  else
+    return false;
+}</PRE>
+g) Enter the following code for the <B>OnClick</B> event for the File|New menu item<BR>
+<PRE>
+void __fastcall TMortgageForm::NewItemClick(TObject *Sender)
+{
+  // Execute the New Mortgage dialog box
+  if (NewMortDlg->Execute ())
+  {
+    if (Mortgage != NULL)
+    {
+      delete Mortgage;
+    }
+    Mortgage = new TMortgage (NewMortDlg->MortgageAmount,
+                              NewMortDlg->InterestRate,
+                              NewMortDlg->NumberOfPayments,
+                              12);
+    // and display the results
+    InitMortgageDisplay ();
+  }
+}
+//---------------------------------------------------------------------
+void __fastcall TMortgageForm::InitMortgageDisplay (void)
+{
+  int i;
+
+  // initialize labels
+  lblMortgageAmt->Caption =
+    FloatToStrF (Mortgage->Principal, ffCurrency, 18, 2);
+  lblIRate->Caption =
+    Format ("%.2f%%", OPENARRAY (TVarRec, (Mortgage->Interest * 100)));
+  lblPaymentAmt->Caption =
+    FloatToStrF (Mortgage->MonthlyPI, ffCurrency, 18, 2);
+  lblNumPmts->Caption = IntToStr (Mortgage->Periods);
+
+  // Now initialize the mortgage grid
+  MortgageGrid->RowCount = Mortgage->Payments->Count + 1;
+  MortgageGrid->Cells[0][0] = "Payment #";
+  MortgageGrid->Cells[1][0] = "Principal";
+  MortgageGrid->Cells[2][0] = "Interest";
+  MortgageGrid->Cells[3][0] = "Prin. So Far";
+  MortgageGrid->Cells[4][0] = "Int. So Far";
+  MortgageGrid->Cells[5][0] = "Extra Prin.";
+  MortgageGrid->Cells[6][0] = "Balance";
+
+  // next we transfer the data from the mortgage structure
+  // to the string grid on the form
+  for (i = 1; i &lt;= Mortgage->Periods; i++)
+  {
+    TPayment * pmt;
+    String TempStrings[psBalance+1];
+    int j;
+
+    pmt = reinterpret_cast&lt;TPayment *>(Mortgage->Payments->Items[i]);
+    pmt->GetStringForm (TempStrings);
+
+    for (j = psPayNum; j &lt;= psBalance; j++)
+    {
+      MortgageGrid->Cells[j][i] = TempStrings[j];
+    }
+  }
+
+  // and make the mortgage grid visible
+  MortgageGrid->Visible = true;
+}
+</PRE>
+h) Don't forget to add the <B>#include</B> for NEWMORT.H in MORTFORM.CPP and add<BR>
+void __fastcall InitMortgageDisplay (void);<BR>
+to the class definition in MORTFORM.H<BR>
+i) Change the <B>OnClick</B> event for the New Mortgage button to <B>NewItemClick</B><BR>
+j) Add the following line of code for the <B>FormResize</B> event for the Form:<BR>
+  MortgageGrid->Height =
+    ClientHeight - MortgageGrid->Top - StatusBar->Height;<P>
+<B>Project 2:</B> Create an Extra Principal Dialog Box<BR>
+k) Create a new form using the Standard dialog box template and set the
+form's properties as shown in Table 9.7.<BR>
+l) Drop three <B>RadioButton</B> components onto your form. Set their <B>Caption</B> properties as shown in Fig. 9.8 and change their <B>Name</B> properties to "rbOnePmt", "rbRangePmts", and "rbAllPmts". Set the <B>Checked</B> property on "rbRangePmts" to <B>True</B> and the others to <B>False</B>.<BR>
+m) Drop three <B>label</B> components on the Form with <B>Caption</B> properties as shown in Fig. 9.9 and <B>Name</B> properties "lblFromPmt", "lblToPmt", and "lblExtraAmt".<BR>
+n) Drop three <B>edit control</B> components, blank their <B>Text</B> properties, and change their <B>Name</B> properties to "edFromPmt", "edToPmt", and "edExtraAmt".<BR>
+o) Save your unit as EXTRA.CPP and run your project.<BR>
+p) Create <B>OnClick</B> event handlers for the radio buttons and enter the code below:<BR>
+<PRE>
+void __fastcall TExtraPrinDlg::rbOnePmtClick(TObject *Sender)
+{
+   lblFromPmt->Caption = "Payment #";
+    // set the label and edit components' Visible properties
+  lblFromPmt->Visible = true;
+  lblToPmt->Visible = false;
+
+  // if the label's not visible, neither is the edit box
+  edFromPmt->Visible = true;
+  edToPmt->Visible = false;
+}
+//---------------------------------------------------------------------
+void __fastcall TExtraPrinDlg::rbRangePmtsClick(TObject *Sender)
+{
+  lblFromPmt->Caption = "From Payment #";
+     // set the label and edit components' Visible properties
+  lblFromPmt->Visible = true;
+  lblToPmt->Visible = true;
+
+  // if the label's not visible, neither is the edit box
+  edFromPmt->Visible = true;
+  edToPmt->Visible = true;
+}
+//---------------------------------------------------------------------
+void __fastcall TExtraPrinDlg::rbAllPmtsClick(TObject *Sender)
+{
+	lblFromPmt->Visible = false;
+  	lblToPmt->Visible = false;
+	edFromPmt->Visible = false;
+  	edToPmt->Visible = false;  
+}</PRE>
+q) Add the following to the <B>public</B> section of <B>TExtraPrinDlg</B>'s <B>Class</B>:<BR>
+<PRE>
+        bool __fastcall Execute (void);
+        int FromPayment;
+        int ToPayment;
+        float ExtraAmount;
+        TExtraPaymentType WhichButton;
+</PRE>
+<BR>
+ Add the statement:<BR>
+	enum TExtraPaymentType {eptOne, eptRange, eptAll};<BR>
+to the <B>TExtraPrinDlg class</B> definition in EXTRA.H
+<BR>
+r) Enter the code for the function <B>Execute</B> shown below<BR>
+<PRE>
+bool __fastcall TExtraPrinDlg::Execute (void)
+{
+  int i;
+  // set the radio buttons according to the value of WhichButton
+  rbOnePmt->Checked = (WhichButton == eptOne);
+  rbRangePmts->Checked = (WhichButton == eptRange);
+  rbAllPmts->Checked = (WhichButton == eptAll);
+
+  if (rbOnePmt->Checked)
+  	lblFromPmt->Caption = "Payment #";
+  else if (rbRangePmts->Checked)
+  	lblFromPmt->Caption = "From payment #";
+
+  lblFromPmt->Visible = !(rbAllPmts->Checked);
+  lblToPmt->Visible = rbRangePmts->Checked;
+  edFromPmt->Visible = lblFromPmt->Visible;
+  edToPmt->Visible = lblToPmt->Visible;
+  
+  // Initialize field values
+  edFromPmt->Text = IntToStr (FromPayment);
+  edToPmt->Text = IntToStr (ToPayment);
+  edExtraAmt->Text =
+    FloatToStrF (ExtraAmount, ffFixed, 7, 2);
+
+  // show the dialog box
+  if (ShowModal () == mrOk)
+  {
+    // set variables as required
+    if (rbOnePmt->Checked)
+    {
+      WhichButton = eptOne;
+      FromPayment = StrToInt (edFromPmt->Text);
+    }
+    else if (rbRangePmts->Checked)
+    {
+      WhichButton = eptRange;
+      FromPayment = StrToInt (edFromPmt->Text);
+      ToPayment = StrToInt (edToPmt->Text);
+    }
+    else   // rbAllPmts.Checked
+    {
+      WhichButton = eptAll;
+    }
+    ExtraAmount = StrToFloat (edExtraAmt->Text);
+    return true;
+  }
+  else
+    return false;
+}
+</PRE>
+s) Add SysUtils to the <B>interface</B> section's <B>uses</B> statement.<BR>
+t) Add the following <B>OnClick</B> event handler for File|Extra Principal and attach it to the button<BR>
+<PRE>
+void __fastcall TMortgageForm::ExtraPrincipalItemClick(TObject *Sender)
+{
+  // don't display dialog box if no mortgage is displayed }
+  if (!MortgageGrid->Visible)
+    return;
+  if (ExtraPrinDlg->Execute ())
+  {
+    switch (ExtraPrinDlg->WhichButton)
+    {
+      case eptOne :
+        Mortgage->ApplyExtraPrincipal
+          (ExtraPrinDlg->FromPayment, ExtraPrinDlg->ExtraAmount);
+        break;
+      case eptRange :
+        Mortgage->RangeExtraPrincipal
+          (
+            ExtraPrinDlg->FromPayment,
+            ExtraPrinDlg->ToPayment,
+            ExtraPrinDlg->ExtraAmount
+          );
+        break;
+      case eptAll :
+        Mortgage->MultipleExtraPrincipal
+          (1, ExtraPrinDlg->ExtraAmount);
+        break;
+    }
+    // and display the results
+    InitMortgageDisplay ();
+  }
+}
+</PRE>
+<BR>
+u)Save and run your project.<BR>
+<BR>
+<B>(Due beginning of class Wed. 10/15/97):</B> <BR>
+a) Remove the duplicate code as described on pages 232-234.<BR>
+b) Add an extra column for the Total Paid So Far.<BR>
+<P><HR><P>
+
+
+<A NAME="Lab8"></A>Lab 8 - Files and File Types; Graphics <BR>
+
+<B>Objectives:</B>
+<OL>
+	<LI>Learn how to manipulate files of records in C++ Builder
+	<LI>Learn how to use ComboBox components
+	<LI>Explore the use of Graphics in C++ Builder
+</OL>
+
+<B>Project 1:</B> Creating and Modifying a File of Records: Create an application STATS that reads a
+text file of alarm statistics and creates a file of records.<BR>
+
+a) Start with a new project STATS.MAK with new Unit STATFORM.CPP. Set the properties to
+those shown in Table 11.1.<BR>
+
+b) Drop two <B>ComboBox</B> components onto your form and position them as shown in Fig. 11.1.
+Set their <B>Style</B> property to <B>csDropDownList</B> and change their <B>Name</B> properties to "DayList" and "HourList".  Double-click on the <B>Items</B> property and enter the Days of the Week and Hours of the Day as shown in Fig. 11.1.<BR>
+c)Drop four <B>label</B> components on the Form with <B>Caption</B> properties as shown in Fig. 11.1.<BR>
+d) Drop four <B>edit control</B> components, blank their <B>Text</B> properties, and change their <B>Name</B> properties to "TotalSigs", "AlarmSigs", "TroubleSigs", and "OperatorSigs".<BR>
+e) Drop six <B>Button</B> components onto the form and change their <B>Caption</B> properties as shown in fig. 11.1. Change their <B>Name</B> properties to "btnImport", "btnLookup", "btnUpdate", "btnPrint",
+"btnExport", and "btnQuit".  Add the <B>OnClick</B> event handlers shown in Listing 11.2.<BR>
+f) Add the following <B>private</B> declarations:<BR>
+<BLOCKQUOTE>	AlarmFileType   AlarmFile;<BR>
+	bool FileIsOpen;<BR>
+	void OpenTheFile (void);<BR>
+	void CloseTheFile (void);<BR></BLOCKQUOTE>
+
+g) Add the following <B>constants</B> above the form's <B>class</B> definition:<BR>
+&nbsp;&nbsp;		static const char * TextFilename = 'ALMSTATS.TXT';<BR>
+&nbsp;&nbsp;		static const char * OutputFilename = 'ALMSTATS.CSV';<BR>
+&nbsp;&nbsp;		static const char * StatsFilename = 'ALMSTATS.DAT';<BR>
+h) Create OnCreate and OnClose event handlers in Listing 11.3 for the form and add the ALMSTATS.H to the included headers in STATFORM.H<BR>
+i) Add Printers and Almstats to the list of units in the form's <B>uses</B> clause.<BR>
+j) Save the project.<BR>
+k) Select File|New Unit and enter the code in Listing 11.5.  Save the unit as ALMSTATS.CPP. Add the<BR>
+l) Save and run your project.<BR>
+
+<BR>
+
+<B>(Due beginning of class Wed. 10/29/97):</B> <BR>
+
+Answer the following questions<BR>
+
+<OL TYPE='a'>
+	<LI>What is the purpose of static in front of the functions ClearRecord, UpdateTotals, etc.?
+	<LI>Explain the function almstatsImport.
+	<LI>Explain the function almstatsUpdate.
+</OL>
+
+<P><HR><P>
+<A NAME="Lab9"></A>Lab 9 - Graphics<BR>
+<B>Objectives:</B>
+<OL>
+	<LI>Explore the use of Graphics in C++ Builder
+</OL>
+
+<B>Project 1:</B>Enhance the Spiromania Program from Chapter 12: (see page 320)
+<OL>
+	<LI>Modify the Spiromania program to redraw the diagram when it is exposed again
+	<LI>Add a control for the line weight
+	<LI>Slow down the Spiromania program so that the line can be seen drawing.
+</OL>
+<P><HR><P>
+
+<A NAME="Lab10"></A><H2>Lab 10 - Creating Simple Database Applications</H2>
+<B>Objectives:</B>
+<OL>
+	<LI>Learn how to create simple database applications in C++ Builder
+	<LI>Learn how to use DBGrid and DBNavigator components
+</OL>
+<P>
+<B>Project 1: </B><H3>Viewing a Table: Create a simple database application that displays the contents of a flat file.</H3>
+a) Start with a new project and change the Form's <B>Caption</B> proptery to "Authors" and <B>Name</B>
+property to "AuthorsForm".<BR>
+b) Drop a <B>DataSource</B> component, a <B>Table</B> component and a <B>DBGrid</B> component onto your
+form and position them as shown in Fig. 13.2. Set their properties as shown in Table 13.1.<BR>
+c) Save the project as AUTHORS.MAK and the unit as AUTHFORM.CPP and run your program.
+<P>
+<B>Project 2: </B><H3>Building an Access Program with a DBNavigator. Refine Authors program to display
+information one record at a time using a DBNavigator component</H3>
+d) Start with a new project and change the Form's <B>Caption</B> proptery to "Authors" and <B>Name</B>
+property to "AuthorForm2".<BR>
+e) Drop a <B>DataSource</B> component, a <B>Table</B> component and a <B>DBNavigator</B> component onto
+your form and position them as shown in Fig. 13.4. Set their properties as shown in Table 13.2.<BR>
+f) Drop seven <B>Label</B> components, six <B>DBEdit Control</B> components and a <B>DBMemo</B> component onto your form as shown in Fig. 13.4.  Name the <B>DBEdit</B> components "EditAUTHORID",
+"EditAUTHORFIRSTNAME", "EditAUTHORLASTNAME", "EditAUTHORCALL", "EditBIRTHYEAR", "EditDEATHYEAR", and the <B>DBMemo</B> component "MemoAUTHORNOTES".<BR>
+g) Change the <B>DataSource</B> property on the DBNavigator, DBEdits and DBMemo to
+"DataSource1".  Link the DBEdit and DBMemo components to the fields in the table by changing
+the <B>DataField</B> property for each.  Select the appropriate field name for each using the drop-down list in the Object Inspector.<BR>
+h)  Save  the project as AUTHORS2.MAK and the unit as AUTHFRM2.CPP and run your project.<BR>
+<P>
+<B>(Due beginning of class Wed. 11/12/97):</B>
+<P>
+<B>Project 3 (Part A): </B>Extend Project 2 so that it will display all of an author's article entries in a DBGrid whenver the author is displayed as shown in Fig. 13.7.
+<P>
+<B>(Part B)</B> Replace the DBGrid component with separate data-entry fields fo each of the fields in
+the record and add a DBNavigator component for the article citations.<BR>
+<BR>
+Documenting your units by inserting comments with your name, the date and a brief description at
+the top of each unit.
+<P><HR><P>
+<A NAME="Lab11"></A><H3>Lab 11 - SQL The C++ Builder Way</H3>
+<B>Objectives:</B>
+<OL>
+	<LI>Learn how to use the TQuery component in C++ Builder
+	<LI>Learn how to create a user interface for the SQL
+</OL>
+<P>
+<B>Project 1: Build a simple query form</B>
+<OL TYPE="a">
+	<LI>Start with a new project. Place a DBGrid, a Label, an Edit control, a Button, a DataSource, and a Query onto the form and change their properties to match those in Table 15.1.
+	<LI>Add a FormCreate event handler and a Button1Click event handler as well as a function DoQuery:<BR>
+<PRE>
+//---------------------------------------------------------------------------
+void __fastcall TQueryTestForm::FormCreate(TObject *Sender)
+{
+  DoQuery ();
+}
+//---------------------------------------------------------------------
+void __fastcall TQueryTestForm::SearchBtnClick(TObject *Sender)
+{
+  if (DoQuery ())
+    DBGrid1->SetFocus ();
+  else
+    Edit1->SetFocus ();
+}
+//---------------------------------------------------------------------
+bool __fastcall TQueryTestForm::DoQuery (void)
+{
+  bool Result;
+
+  Query1->Close ();
+  Query1->SQL->Clear ();
+  Query1->SQL->Add (Edit1->Text);
+  Result = true;
+
+  try
+  {
+    Query1->Open ();
+  }
+  catch (...)
+  {
+    Application->MessageBox ("Error in SQL statement",
+      "Database Error", IDOK);
+    Result = false;
+  }
+
+  return Result;
+}
+</PRE>
+<LI>Don't forget to add the DoQuery declaraction to the .H file.
+<LI>Save and run your form.
+<LI>Test your program with different SELECT statements.
+<LI>Use the WHERE clause in your SELECT statements.
+</OL>
+<P>
+<B>Project 2: Program-Generated SQL Statements</B>
+<OL TYPE="a" START="h">
+	<LI>Start with a new project. Place a DBGrid, a DataSource, and a Query on the top of the form and a Button component on the bottom. Change their properties to match those in Table 15.2.
+	<LI>Add six ComboBox Components and arrange them as shown in Fig. 15.3 Change their names to cbLastName, cbFirstName, cbCallSign, cbBirthYear, cbDeathYear, and cbNotes and make sure tat their <B>Checked</B> properties are <B>false</B>.
+	<LI>Add a Button1Click event handler as well as functions DoQuery and AddField:<BR>
+<PRE>
+void __fastcall TAuthorQueryForm::SearchBtnClick(TObject *Sender)
+{
+  if (DoQuery ())
+    DBGrid1->SetFocus ();
+}
+//---------------------------------------------------------------------
+
+void __fastcall TAuthorQueryForm::AddField (TCheckBox * cb, String FieldName)
+{
+  String s;
+
+  if (cb->Checked)
+    Query1->SQL->Add (",authors.\""+FieldName+"\"");
+}
+
+bool __fastcall TAuthorQueryForm::DoQuery (void)
+{
+  bool Result;
+
+  Query1->Close ();
+  Query1->SQL->Clear ();
+
+  // Build the query
+  Query1->SQL->Add ("Select");
+  Query1->SQL->Add ("authors.\"AUTHOR ID\" as AUTHOR_ID");
+  AddField (cbLastName, "AUTHOR LAST NAME");
+  AddField (cbFirstName, "AUTHOR FIRST NAME");
+  AddField (cbCallSign, "AUTHOR CALL");
+  AddField (cbBirthYear, "BIRTH YEAR");
+  AddField (cbDeathYear, "DEATH YEAR");
+  AddField (cbNotes, "AUTHOR NOTES");
+  Query1->SQL->Add ("from authors");
+
+  Result = true;
+  try
+  {
+    Query1->Open ();
+  }
+  catch (...)
+  {
+    Application->MessageBox ("Error in SQL statement", "Database Error", IDOK);
+    Result = false;
+  }
+  Query2->Active = true;
+  return Result;
+}
+</PRE>
+<LI>Don't forget to add the DoQuery and AddField declaractions to the .H file.
+<LI>Save and run your form.
+<LI>Test your program 
+</OL>
+<P>
+<B>Project 3: Linked Queries</B>
+<OL TYPE="a" START="m">
+	<LI>Drop another DBGrid, DataSource, and Query component below the Search button and change their properties to match those in Table 15.3.
+	<LI>Add the line <I>Query2->Active = true;</I> to the end of the DoQuery function
+	<LI>save and run your program
+</OL>
+<P>
+<B>Project 4: Dynamic Queries</B>
+<OL TYPE="a" START="p">
+	<LI>Open the project created in Project 1.
+	<LI>Change the Form's caption property to "Dynamic SQL Example" and the Label component's property to "Enter Author's Name".
+	<LI>Change FoirmCreate and DoQuery as follows:
+<PRE>
+void __fastcall TQueryTestForm::FormCreate(TObject *Sender)
+{
+  Query1->SQL->Clear ();
+  Query1->SQL->Add ("Select * from Authors");
+  Query1->SQL->Add (" where authors.\"AUTHOR LAST NAME\" = :LastName");
+  Query1->Prepare ();
+}
+//---------------------------------------------------------------------
+bool __fastcall TQueryTestForm::DoQuery (void)
+{
+  bool Result;
+
+  Query1->Close ();
+  Query1->ParamByName("LastName")->AsString = Edit1->Text;
+  Result = true;
+
+  try
+  {
+    Query1->Open ();
+  }
+  catch (...)
+  {
+    Application->MessageBox ("Error in SQL statement",
+      "Database Error", IDOK);
+    Result = false;
+  }
+
+  return Result;
+}
+</PRE>
+<LI>Save, compile and run your program.
+</OL>
+<P>
+<B>(Due beginning of class Wed. 11/26/97):</B>
+<P>
+<H3>Project 5: Combine the features of Projects 3 and 4 so that the user can search by Author's Name and select which fields to display in the top table and displaying the articles and titles for the selected author in the bottom table</H3>
+<P><HR><P>
+<A NAME="Project"></A><U><I><B>INDIVIDUAL PROGRAMMING PROJECT </B></I></U><BR>
+
+The following assignment uses object-oriented programming  and visual programming
+to write a software tool.  You will need to work on this assignment as an <B><I>individual</I></B>.
+Turn in the assignment before class on  Nov. 29, 1995.  Your project will be evaluated
+by everyone in the class.  You will be expected to turn in the completed program along
+with complete external documentation at that time.  You will also be asked to explain
+and demonstrate your program.  An important part of your grade will to be creative and
+make full use of the visual aspects of windows and graphics.<BR>
+
+BE SURE TO FOLLOW THE PROGRAMMING STANDARDS DISCUSSED IN CLASS
+<B>***MODULARIZE***</B><BR>
+
+<BR>
+
+<B>OPTION A:</B> Write a program which plays the <I>Xchange</I> game.   It may be played by one
+or two players at a time.  Before the game begins, the computer will ask whether one or
+two players wish to play.  The program will then manage one or two Xchange playing
+grids, depending on the answer to the mode question.<BR>
+
+<B>THE GAME</B><BR>
+
+	A playing grid consists of the first eight letters of the alphabet (A through H) and
+an asterisk, arranged in a three by three matrix like this:<BR>
+
+	D	H	C<BR>
+
+	B	F	*<BR>
+
+	A	E	G<BR>
+
+<BR>
+
+	For two players there are two of these grids side by side, and in the beginning
+they are identically scrambled.  The method of play is to exchange the letters with the
+asterisk, one at a time, until the letters are put in their proper order with the asterisk
+trailing (lower right corner).  There is one more rule: in a turn only a letter that is
+immediately to the left or the right of, or immediately above or below the asterisk may
+be exchanged.<BR>
+
+	A move is the entry of just the letter; the program will then exchange the print
+positions of your choice and the asterisk. (In the example above, valid moves would be
+F, C, or G.   If you are in the dual-player mode, your opponent is permitted to make an
+entry also before the two new grids are printed.  When playing solitaire, there is only
+one board; so the updated output is nearly instantaneous after each entry.<BR>
+
+	The program should display different grids each time it is played.  There should
+also be a way for a player to gracefully exit the game if he/she can not solve the puzzle.<B><BR>
+
+OPTION B: </B>Write a program which plays the  Wampus  game.   "The wampus is a big
+hairy creature that will gobble you if he gets you."  <BR>
+
+<B>THE GAME</B><BR>
+
+	The wampus lives in a cave.  You are lost in his cave trying to find the only exist
+so that you can go home.  There are <U>twenty</U> chambers in the cave and each has three
+passageways leading to other chambers.  One of the tunnels does go to the cave's
+mouth, and when you find it you are free.<BR>
+
+	There are hazards.  In one chamber there is a deep pit.  If you stumble into there
+you have had it.  In three other chambers there are bats.  You are afraid of bats, and
+when you encounter them, you take the nearest exit automatically.  Normally you have
+time to ponder over which of the three tunnels to take next.<BR>
+
+	When you wander into the wampus you have another choice.  He is afraid of
+loud noises.  You have six firecrackers.  If you crawl into the chamber where he is you
+can make a hasty exit; or if you light the firecracker, he will take off to another chamber. 
+You are safe for the moment.  You don't know which tunnel he took, but neither does he
+know where you will go next.  If you ever run out of firecrackers and happen to run into
+the wampus, he will eat you.<BR>
+
+	You may give clues to the player, like "YOU CAN FEEL A DRAFT" when one of
+the tunnels lead to the cave mouth from the chamber you're in or "YOU SMELL A
+WAMPUS" if one of the tunnels leads to the chamber with the wampus.<BR>
+
+	The program should place the wampus, pit, bats and exit in different chambers
+each time it is played.  There should also be a way for a player to gracefully exit the
+game if he/she can not solve the puzzle.<BR>
+
+<BR>
+
+<B>OPTION C: </B>Write a program which plays the Tic-Tac-Toe game.  It may be played by
+one or two players at a time.  Before the game begins, the computer will ask whether
+one or two players wish to play.   <BR>
+
+<B>THE GAME</B><BR>
+
+The 3 x 3 grid will be displayed before and after each move.  In a one player game, the
+player will compete against the computer and will move first.  The standard rules of Tic-Tac-Toe will be followed, i.e. a player wins when he/she places three X's or 3 O's in a
+row, column or diagonal.<BR>
+
+<BR>
+
+<B>OPTION D: </B> Write a program that manages a geneology database.<BR>
+
+<BR>
+
+<B>OPTION E: </B>Write a program that includes a calendar, scheduler and alarm.<BR>
+
+<BR>
+
+<B>OPTION F: </B>Write a program to play the MasterMind game.<BR>
+
+<BR>
+
+<B>OPTION G: </B>Suggest a project of your own subject to the approval of the class.
+</BODY>
+</HTML>

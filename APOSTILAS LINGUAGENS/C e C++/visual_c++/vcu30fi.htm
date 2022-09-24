@@ -1,0 +1,1286 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu30fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu31fi.htm">
+
+<LINK REL="Previous" HREF="vcu29fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu29fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu31fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">30</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">OLE Containers</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4"> Creating a Container Application Through AppWizard</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I5"> Creating the Skeleton Application</A></LI>
+
+<LI>
+
+<A HREF="#I6">The OLE Container Skeleton Application</A></LI>
+
+<LI>
+
+<A HREF="#I7">Running the Skeleton Container</A></LI>
+
+<LI>
+
+<A HREF="#I8">The Skeleton Container Code</A></LI>
+
+<LI>
+
+<A HREF="#I9">Container Menus</A></LI></UL>
+
+<LI>
+
+<A HREF="#I10">Customizing the Application</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I11">Object Positions</A></LI>
+
+<LI>
+
+<A HREF="#I12">Drawing All Objects</A></LI>
+
+<LI>
+
+<A HREF="#I13">Object Selection</A></LI>
+
+<LI>
+
+<A HREF="#I14">Other Features</A></LI></UL>
+
+<LI>
+
+<A HREF="#I15">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>30</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<H2 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=5><B>OLE Containers</B>
+
+<BR></FONT></A></CENTER></H2>
+
+<P>OLE containers are applications that manage, in addition to native data, a set of OLE server items.
+
+<BR></P>
+
+<P>The MFC Library provides a high level of support for creating OLE containers. Using an AppWizard-generated container application skeleton, it is possible to build, with a minimal amount of added code, a decently working container application.
+
+<BR></P>
+
+<P>In this chapter, we first review the AppWizard-generated skeleton for a container application. Subsequently, we add the necessary code for this application to handle the selection and editing of multiple-embedded objects.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B> Creating a Container Application Through AppWizard</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Visual C++ AppWizard supports the creation of skeleton applications for two types of containers: simple containers and container-servers. The latter term refers to applications that offer both OLE container and OLE component server functionality. However, since the two areas of functionality are quite distinct, we focus on simple containers in the rest of this chapter.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B> Creating the Skeleton Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To create a container application through AppWizard, first of all you must specify a single-document-based or multiple-document-based application. Container capabilities are not supported for dialog-based applications. While it is possible to create a container application based on the view class CFormView, I do not see how the dialog template-based view class and the visual embedding and in-place editing associated with OLE components can coexist.
+
+<BR></P>
+
+<P>OLE container support in the new application skeleton must be specified in AppWizard Step 3 (Figure 30.1). You can either specify a container application or a container-server.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu01.gif">Figure 30.1. Creating an OLE container through </B><B>AppWizard.</A></B>
+
+<BR></P>
+
+<P>Other than setting the container application option, I used the default settings when I created the OCON application skeleton through AppWizard. Throughout the rest of this chapter, it is this OCON application that we review and modify.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>The OLE Container Skeleton Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>By looking at the set of classes created by AppWizard (Figure 30.2), we can see that AppWizard created one extra class when compared to a skeleton application with no OLE container support. This extra class is named COCONCntrItem and represents OLE components that are contained within the container application's documents.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu02.gif">Figure 30.2. AppWizard-generated classes for an OLE </B><B>container.</A></B>
+
+<BR></P>
+
+<P>Of course, the appearance of a new class is not the only difference between an OLE container and other applications. There are also noticeable differences between the implementations of other classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Running the Skeleton Container</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before we proceed analyzing how the skeleton container works, running it may be a good idea. It will give us a picture as to how the container works and what functionality we need to add to enhance its usefulness.
+
+<BR></P>
+
+<P>To explore the container capabilities of the OCON application, compile and run this application, and then select the Insert New Object command from its Edit menu. This command displays the dialog shown in Figure 30.3, where you can select the type of object you wish to insert into the document.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu03.gif">Figure 30.3. The Insert Object dialog.</A></B>
+
+<BR></P>
+
+<P>Now to insert a Bitmap Image object. This object type is available on all Windows 95 systems that have the Windows 95 Paint application installed. Figure 30.4 shows a session while the bitmap object is being edited inside the OCON container.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu04.gif">Figure 30.4. In-place editing of a bitmap object.</A></B>
+
+<BR></P>
+
+<P>You may notice a few peculiarities right here, pointing out areas of code that must be improved.
+
+<BR></P>
+
+<P>First of all, there does not seem to be a way to terminate the in-place session. Normally you would expect that clicking outside the in-place editing area would terminate the session; however, this does not seem to happen. The reason is simple: As we see shortly, the OCON skeleton application does not provide a handler function for mouse clicks, so it is no wonder that nothing happens.
+
+<BR></P>
+
+<P>Another peculiarity can be noticed if you attempt to move or resize the in-place area. This area can be resized by dragging any of the eight resize handles (small black squares) around its border; it can also be moved by dragging the shaded border area. But look what happens (Figure 30.5): After moving the in-place area, another image of our drawing appears at the original location!
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu05.gif">Figure 30.5. Discrepancy between in-place frame and </B><B>embedded item positions.</A></B>
+
+<BR></P>
+
+<P>As it turns out, that image is at the position where the container application thinks the image should be drawn. Code that would properly update this location to reflect any changes made during an in-place editing session does not yet exist.
+
+<BR></P>
+
+<P>Although there is no trivial way to end an in-place editing session, you can actually save the container file even while an in-place session is active. After saving the file using the File Save command, you can terminate the in-place session by simply closing the document window altogether. Upon reopening the file, you can see that the embedded object was saved correctly and is redisplayed at its original location. At this stage it is possible to either edit this object again, or insert a new object, both through commands in the Edit menu.
+
+<BR></P>
+
+<P>If you insert a new object, it will be positioned on top of the first object in the container. For this reason, it is not possible to see at this stage the third oddity concerning AppWizard-generated container skeletons; namely, that the skeleton application only displays one object at a time. As we shall see, this is a cosmetic problem only; the application is actually capable of saving container files with more than one object, it is the OnDraw member function of its view class that requires modification.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>The Skeleton Container Code</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>It is time to stop playing with our new container application and start looking at how its functions are implemented.
+
+<BR></P>
+
+<P>How are new objects inserted into the document? How are the new objects represented and saved with a container file? How are they drawn? How are in-place editing sessions managed? These are the questions that we seek answers for in this section.
+
+<BR></P>
+
+<P>First, take a look at how items in a container are represented. The AppWizard generated a new class, COCONCntrItem for this purpose. This class is derived from COleClientItem and comes with a default implementation of several member functions (Figure 30.6).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu06.gif">Figure 30.6. Container item class member </B><B>functions.</A></B>
+
+<BR></P>
+
+<P>On the one hand, this class implements the necessary OLE interfaces for in-place editing. On the other hand, it provides a series of member functions (such as Serialize) that enable it to exist within the MFC application framework.
+
+<BR></P>
+
+<P>Looking at the implementation of this class, we can notice a few shortcomings. In particular, look at the implementations of the OnChangeItemPosition and OnGetItemPosition member functions (Listing 30.1). As you can see, OnGetItemPosition always returns an arbitrary, fixed position; on the other hand, OnChangeItemPosition, although it calls the base class implementation, does not make note of the new position in any way. (No wonder that OnGetItemPosition cannot return a meaningful value!)
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.1. The default implementations of </B><B>COCONCntrItem</B><B> member </B><B>functions </B><B>OnChangeItemPosition</B><B> and </B><B>OnGetItemPosition</B><B>.</B></LH></UL>
+
+<PRE>BOOL COCONCntrItem::OnChangeItemPosition(const CRect&amp; rectPos)
+
+{
+
+    ASSERT_VALID(this);
+
+ // During in-place activation COCONCntrItem::OnChangeItemPosition
+
+ //  is called by the server to change the position of the in-place
+
+ //  window.  Usually, this is a result of the data in the server
+
+ //  document changing such that the extent has changed or as a
+
+ //  result of in-place resizing.
+
+ //
+
+ // The default here is to call the base class, which will call
+
+ //  COleClientItem::SetItemRects to move the item
+
+ //  to the new position.
+
+    if (!COleClientItem::OnChangeItemPosition(rectPos))
+
+        return FALSE;
+
+    // TODO: update any cache you may have of the item's
+
+    //  rectangle/extent
+
+    return TRUE;
+
+}
+
+void COCONCntrItem::OnGetItemPosition(CRect&amp; rPosition)
+
+{
+
+    ASSERT_VALID(this);
+
+ // During in-place activation, COCONCntrItem::OnGetItemPosition
+
+ //  will be called to determine the location of this item.  The
+
+ //  default implementation created from AppWizard simply returns a
+
+ //  hard-coded rectangle.  Usually, this rectangle would reflect
+
+ //  the current position of the item relative to the view used for
+
+ //  activation.
+
+ //  You can obtain the view by calling
+
+ //  COCONCntrItem::GetActiveView.
+
+    // TODO: return correct rectangle (in pixels) in rPosition
+
+    rPosition.SetRect(10, 10, 210, 210);
+
+}</PRE>
+
+<P>As the AppWizard-generated comments also imply, we will have to revisit this class shortly to manage these position changes.
+
+<BR></P>
+
+<P>How are COCONCntrItem objects represented in our document class? Strangely enough, there is no additional code in our skeleton application for this purpose. The only change relative to a noncontainer application is that our application's document class, COCONDoc, is now derived from COleDocument as opposed to CDocument. COleDocument has the wonderful capability of managing and storing a list of CDocItem-derived items. When a new item of class COCONCntrItem (derived from COleClientItem which, in turn, is derived from CDocItem) is created, it is automatically added to the container document's list of items. The container document, in turn, can serialize itself, including this list of CDocItem-derived objects without any additional code.
+
+<BR></P>
+
+<P>If you add items of your own design to an OLE container application, you can rely on this capability. You can add your own CDocItem-derived items to the container, and the container will handle them correctly. The only catch is that in your application code, you will have to be careful in your handling of application-specific items, container items, and (if the application also acts as an OLE server) server items. One possible solution is to create a series of wrapper functions that determine a particular object's type using MFC run-time type information.
+
+<BR></P>
+
+<P>The differences between the implementations of the document classes in a container and a noncontainer application were relatively minor (although the effects of the difference in the base class from which the document classes are derived are rather significant). In contrast, the difference between the implementations of view classes in the two cases is very significant. The implementation file of the container application's view class is nearly twice as long, with several additional member functions (Figure 30.7).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu07.gif">Figure 30.7. Container view class member </B><B>functions.</A></B>
+
+<BR></P>
+
+<P>The implementation of these member functions will, in fact, answer our questions concerning the peculiar behavior of the skeleton container.
+
+<BR></P>
+
+<P>The first thing to notice in the declaration of COCONView is the presence of a new member variable, m_pSelection:
+
+<BR></P>
+
+<PRE>class COCONView : public CView
+
+{
+
+protected: // create from serialization only
+
+    COCONView();
+
+    DECLARE_DYNCREATE(COCONView)
+
+// Attributes
+
+public:
+
+    COCONDoc* GetDocument();
+
+    COCONCntrItem* m_pSelection;</PRE>
+
+<P>This member variable represents a very simple item selection mechanism; the mechanism only allows a single document item to be selected at any given time. While in many sophisticated applications, such a selection mechanism would be completely inadequate, in our effort to build a simple container application, it is going to be sufficient.
+
+<BR></P>
+
+<P>The m_pSelection member variable plays a role in the implementation of the OnDraw member function, answering our question with respect to why only a single item is drawn when a document with more than one embedded item is loaded. The implementation of this function (Listing 30.2) simply does not draw any other items.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.2. The default implementation of </B><B>COCONView::OnDraw</B><B>.</B></LH></UL>
+
+<PRE>void COCONView::OnDraw(CDC* pDC)
+
+{
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: add draw code for native data here
+
+    // TODO: also draw all OLE items in the document
+
+    // Draw the selection at an arbitrary position.  This code
+
+    //  should be removed once your real drawing code is
+
+    //  implemented.  This position corresponds exactly to the
+
+    //  rectangle returned by COCONCntrItem, to give the effect of
+
+    //  in-place editing.
+
+    // TODO: remove this code when final draw code is complete.
+
+    if (m_pSelection == NULL)
+
+    {
+
+       POSITION pos = pDoc-&gt;GetStartPosition();
+
+      m_pSelection = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+    }
+
+    if (m_pSelection != NULL)
+
+        m_pSelection-&gt;Draw(pDC, CRect(10, 10, 210, 210));
+
+}</PRE>
+
+<P>The other shortcoming of this default implementation is made obvious by the comment embedded in this AppWizard-generated code. The selection item is drawn at an arbitrary, fixed position; it does not reflect in any way any positional changes that may happen during an in-place editing session. Clearly, a modified implementation must be made in conjunction with changes to COCONCntrItem::OnChangeItemPosition and COCONCntrItem::OnGetItemPosition.
+
+<BR></P>
+
+<P>The AppWizard-generated view class implementation contains five additional member functions that are completely new (Listing 30.3). These member functions implement the insertion of new objects and also manage the in-place session. We are going to look at these functions one by one.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.3. New view class member functions.</B></LH></UL>
+
+<PRE>BOOL COCONView::IsSelected(const CObject* pDocItem) const
+
+{
+
+ // The implementation below is adequate if your selection consists
+
+ //  of only COCONCntrItem objects.  To handle different selection
+
+ //  mechanisms, the implementation here should be replaced.
+
+    // TODO: implement this function that tests for a selected OLE
+
+    //  client item
+
+    return pDocItem == m_pSelection;
+
+}
+
+void COCONView::OnInsertObject()
+
+{
+
+    // Invoke the standard Insert Object dialog box to obtain
+
+    //  information for new COCONCntrItem object.
+
+    COleInsertDialog dlg;
+
+    if (dlg.DoModal() != IDOK)
+
+        return;
+
+    BeginWaitCursor();
+
+    COCONCntrItem* pItem = NULL;
+
+    TRY
+
+    {
+
+        // Create new item connected to this document.
+
+        COCONDoc* pDoc = GetDocument();
+
+        ASSERT_VALID(pDoc);
+
+        pItem = new COCONCntrItem(pDoc);
+
+        ASSERT_VALID(pItem);
+
+        // Initialize the item from the dialog data.
+
+        if (!dlg.CreateItem(pItem))
+
+            AfxThrowMemoryException();  // any exception will do
+
+        ASSERT_VALID(pItem);
+
+        // If item created from class list (not from file) then
+
+        //  launch the server to edit the item.
+
+        if (dlg.GetSelectionType() ==
+
+            COleInsertDialog::createNewItem)
+
+                pItem-&gt;DoVerb(OLEIVERB_SHOW, this);
+
+        ASSERT_VALID(pItem);
+
+        // As an arbitrary user interface design, this sets the
+
+        //  selection to the last item inserted.
+
+        // TODO: reimplement selection as appropriate for your
+
+        //  application
+
+        m_pSelection = pItem; //set selection to last inserted item
+
+        pDoc-&gt;UpdateAllViews(NULL);
+
+    }
+
+    CATCH(CException, e)
+
+    {
+
+        if (pItem != NULL)
+
+        {
+
+            ASSERT_VALID(pItem);
+
+            pItem-&gt;Delete();
+
+        }
+
+        AfxMessageBox(IDP_FAILED_TO_CREATE);
+
+    }
+
+    END_CATCH
+
+    EndWaitCursor();
+
+}
+
+// The following command handler provides the standard keyboard
+
+//  user interface to cancel an in-place editing session.  Here,
+
+//  the container (not the server) causes the deactivation.
+
+void COCONView::OnCancelEditCntr()
+
+{
+
+    // Close any in-place active item on this view.
+
+    COleClientItem* pActiveItem =
+
+        GetDocument()-&gt;GetInPlaceActiveItem(this);
+
+    if (pActiveItem != NULL)
+
+    {
+
+        pActiveItem-&gt;Close();
+
+    }
+
+    ASSERT(GetDocument()-&gt;GetInPlaceActiveItem(this) == NULL);
+
+}
+
+// Special handling of OnSetFocus and OnSize are required for a
+
+//  container when an object is being edited in-place.
+
+void COCONView::OnSetFocus(CWnd* pOldWnd)
+
+{
+
+    COleClientItem* pActiveItem =
+
+        GetDocument()-&gt;GetInPlaceActiveItem(this);
+
+    if (pActiveItem != NULL &amp;&amp;
+
+      pActiveItem-&gt;GetItemState() == COleClientItem::activeUIState)
+
+    {
+
+        // need to set focus to this item if it is in the same view
+
+        CWnd* pWnd = pActiveItem-&gt;GetInPlaceWindow();
+
+        if (pWnd != NULL)
+
+        {
+
+            pWnd-&gt;SetFocus();   // don't call the base class
+
+            return;
+
+        }
+
+    }
+
+    CView::OnSetFocus(pOldWnd);
+
+}
+
+void COCONView::OnSize(UINT nType, int cx, int cy)
+
+{
+
+    CView::OnSize(nType, cx, cy);
+
+    COleClientItem* pActiveItem =
+
+        GetDocument()-&gt;GetInPlaceActiveItem(this);
+
+    if (pActiveItem != NULL)
+
+        pActiveItem-&gt;SetItemRects();
+
+}</PRE>
+
+<P>The IsSelected member function is called by the framework to determine whether a particular item is selected within the view. Its implementation is straightforward and obvious.
+
+<BR></P>
+
+<P>The OnInsertObject member function implements the Insert New Object command in the Edit menu. This function relies on the capabilities of one of the OLE common dialog classes, COleInsertDialog. This common dialog can be used not only to display the list of insertable OLE items that are available on your system, but its member function CreateItem can actually be used to create a new item of the type selected by the user. If the item is freshly created, OnInsertObject launches the server application; items created from a file are simply inserted into the container document. The implementation of this function utilizes MFC exception-handling macros to catch any errors that may occur during the creation of the new item.
+
+<BR></P>
+
+<P>The member function OnCancelEditCntr terminates an in-place editing session. This function is called by the framework when the user hits the Escape key.
+
+<BR></P>
+
+<P>The OnSetFocus member function is used to ensure that when a view with an active in-place session receives the focus, the focus is actually set to the in-place item's frame window.
+
+<BR></P>
+
+<P>The implementation of the OnSize member function ensures that if the view window changes, the in-place session has a chance to reflect such a change.
+
+<BR></P>
+
+<P>While there are additional, minor differences between an OLE container and a non-OLE application, this concludes our review of the significant changes. The one thing that we have not looked at yet is the container application's resource file.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Container Menus</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Looking at the AppWizard-generated resource file created for our OCON application (Figure 30.8), we can notice two obvious differences: a new accelerator table and a new menu.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu08.gif">Figure 30.8. Container resources.</A></B>
+
+<BR></P>
+
+<P>The new menu, IDR_OCONTYPE_CNTR_IP (Figure 30.9), is very obviously incomplete. The reason? This menu, during an in-place editing session, is combined with a similarly incomplete menu provided by the OLE component server application.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu09.gif">Figure 30.9. Container menu for in-place editing </B><B>session.</A></B>
+
+<BR></P>
+
+<P>This &quot;combing&quot; of container and server menus, shown in Figure 30.10, ensures that commands that are the responsibility of the container are executed by the container application, and server-related commands are executed by the server.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu10.gif">Figure 30.10. How server and container menus are </B><B>combined during in-place editing.</A></B>
+
+<BR></P>
+
+<P>Understanding the need for a separate acceleration table during in-place editing is easy in view of the mechanism used to construct the menu for such a session.
+
+<BR></P>
+
+<P>This concludes our review of the differences between container and noncontainer applications. The next section shows how to modify this skeleton application to implement some useful container functionality.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=4><B>Customizing the Application</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Before we start writing code blindly, we should look at the changes we wish to add to the OLE container skeleton. In addition to the skeleton application's capabilities, our OCON application should
+
+<BR></P>
+
+<OL>
+
+<LI>Reflect any changes in size and position made during an in-place session to an item
+
+<BR>
+
+<BR></LI>
+
+<LI>Save size and position information in document files
+
+<BR>
+
+<BR></LI>
+
+<LI>Display all container items in a document
+
+<BR>
+
+<BR></LI>
+
+<LI>Implement a simple selection mechanism using the mouse
+
+<BR>
+
+<BR></LI>
+
+<LI>Indicate the current selection visually
+
+<BR>
+
+<BR></LI></OL>
+
+<P>There are additional capabilities that one may reasonably expect from a container application, but which we do not implement at this time. These are
+
+<BR></P>
+
+<OL>
+
+<LI>Selection of multiple items
+
+<BR>
+
+<BR></LI>
+
+<LI>Sizing and positioning of nonactive items using the mouse
+
+<BR>
+
+<BR></LI>
+
+<LI>Application-specific custom objects
+
+<BR>
+
+<BR></LI></OL>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Object Positions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>When you look at the skeleton implementation of COCONCntrItem::OnChangeItemPosition, the need for a member variable holding the object's position becomes obvious. For this purpose, we can add a member variable of type CRect to the COCONCntrItem class:
+
+<BR></P>
+
+<PRE>class COCONCntrItem : public COleClientItem
+
+{
+
+    ...
+
+// Attributes
+
+public:
+
+    ...
+
+CRect m_rect;</PRE>
+
+<P>This member variable obviously needs to be initialized. In the constructor of COCONCntrItem (Listing 30.4), we can set this item to represent a fixed rectangle.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.4. Initialization of </B><B>m_rect</B><B> in the constructor of </B><B>COCONCntrItem</B><B>.</B></LH></UL>
+
+<PRE>COCONCntrItem::COCONCntrItem(COCONDoc* pContainer)
+
+    : COleClientItem(pContainer)
+
+{
+
+    // TODO: add one-time construction code here
+
+m_rect = CRect(10, 10, 210, 210);
+
+}</PRE>
+
+<P>A more sophisticated application may make an attempt to initialize m_rect to reflect a server-supplied size. To do this, one could set m_rect to a null rectangle to indicate an uninitialized state and make an attempt to update it from the server when the first call is made to COCONCntrItem::OnGetItemPosition. For now, we are going to stick with this simple implementation of a fixed default size.
+
+<BR></P>
+
+<P>Where is the rectangle m_rect updated? Obviously, we need to change the implementation of COCONCntrItem::OnChangeItemPosition. In order to reflect the updated position, the function COCONCntrItem::OnGetItemPosition must also be altered.
+
+<BR></P>
+
+<P>The change in the member function OnChangeItemPosition requires only two lines of new code (Listing 30.5). First, the rectangle must be updated; second, because the item's position has changed, views must be updated to reflect the change.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.5. Modified version of </B><B>COCONCntrItem::OnChangeItemPosition</B><B>.</B></LH></UL>
+
+<PRE>BOOL COCONCntrItem::OnChangeItemPosition(const CRect&amp; rectPos)
+
+{
+
+    ASSERT_VALID(this);
+
+    if (!COleClientItem::OnChangeItemPosition(rectPos))
+
+        return FALSE;
+
+    // TODO: update any cache you may have of the item's
+
+    //  rectangle/extent
+
+m_rect = rectPos;
+
+    GetDocument()-&gt;UpdateAllViews(NULL);
+
+return TRUE;
+
+}</PRE>
+
+<P>The change to COCONCntrItem::OnGetItemPosition is equally simple. All we need to do is replace the default action that sets the rPosition parameter to a constant rectangle to a line, which sets it to the value of m_rect. This modified function is shown in Listing 30.6.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.6. Modified version of </B><B>COCONCntrItem::OnGetItemPosition</B><B>.</B></LH></UL>
+
+<PRE>void COCONCntrItem::OnGetItemPosition(CRect&amp; rPosition)
+
+{
+
+    ASSERT_VALID(this);
+
+    // TODO: return correct rectangle (in pixels) in rPosition
+
+//  rPosition.SetRect(10, 10, 210, 210);
+
+    rPosition = m_rect;
+
+}</PRE>
+
+<P>All that is left to be done to COCONCntrItem is a change to its Serialize member function. In order for the item positions to be persistent, they must be serialized. This is implemented by adding two lines to the COCONCntrItem::Serialize, as shown in Listing 30.7.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.7. Modified version of </B><B>COCONCntrItem::Serialize</B><B>.</B></LH></UL>
+
+<PRE>void COCONCntrItem::Serialize(CArchive&amp; ar)
+
+{
+
+    ASSERT_VALID(this);
+
+    COleClientItem::Serialize(ar);
+
+    // now store/retrieve data specific to COCONCntrItem
+
+    if (ar.IsStoring())
+
+    {
+
+        // TODO: add storing code here
+
+ar &lt;&lt; m_rect;
+
+}
+
+    else
+
+    {
+
+        // TODO: add loading code here
+
+ar &gt;&gt; m_rect;
+
+}
+
+}</PRE>
+
+<P>Now that we have implemented position and size information for objects in the container, it is time to turn our attention to the view class and reflect the new positions when the objects are drawn.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Drawing All Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>We have identified two shortcomings of default skeleton implementation of the view class COCONView. First, only the item representing the current selection was drawn; second, the item was drawn at a fixed position, not reflecting any changes in size and position that might have occurred during an in-place editing session.
+
+<BR></P>
+
+<P>The solution to these problems is shown in Listing 30.8. Instead of drawing a single item, this version of the COCONView::OnDraw function iterates through the list of all items in the document. As individual items are drawn, they are placed at the position indicated by their m_rect member variable, which reflects their current size and position.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.8. Modified version of </B><B>COCONView::OnDraw</B><B>.</B></LH></UL>
+
+<PRE>void COCONView::OnDraw(CDC* pDC)
+
+{
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: remove this code when final draw code is complete.
+
+//  if (m_pSelection == NULL)
+
+//  {
+
+//     POSITION pos = pDoc-&gt;GetStartPosition();
+
+//     m_pSelection = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+//  }
+
+//  if (m_pSelection != NULL)
+
+//      m_pSelection-&gt;Draw(pDC, CRect(10, 10, 210, 210));
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        COCONCntrItem *pItem =
+
+            (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        pItem-&gt;Draw(pDC, pItem-&gt;m_rect);
+
+    }
+
+}</PRE>
+
+<P>Note that this code must be changed if your application also has application-specific objects (that is, objects other than those representing embedded items). Instead of using COleDocument::GetNextClientItem, you may wish to use COleDocument::GetNextItem for iteration and use run-time type information to determine the drawing action appropriate for the type of object retrieved.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Object Selection</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To implement a simple object selection mechanism, we must do two things. First, a handler for the mouse event WM_LBUTTONDOWN must be added; second, the current selection must be reflected when the object is drawn in COCONView::OnDraw.
+
+<BR></P>
+
+<P>To add a handler for the mouse event, use ClassWizard. The handler function should be added to the COCONView class; after all, selection of items is specific to the current view (and indeed, separate views may have different selections).
+
+<BR></P>
+
+<P>The handler function is shown in Listing 30.9. This function begins by closing any active in-place item. Next, it calls InvalidateRect to invalidate the rectangle of the current selection; the significance of this becomes evident shortly, when we look at the code that implements the drawing of a selection rectangle indicating the selection.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.9. Handler function for </B><B>WM_LBUTTONDOWN</B><B> messages.</B></LH></UL>
+
+<PRE>void COCONView::OnLButtonDown(UINT nFlags, CPoint point)
+
+{
+
+    // TODO: Add your message handler code here and/or call default
+
+//  CView::OnLButtonDown(nFlags, point);
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    COCONCntrItem *pItem =
+
+        (COCONCntrItem *)pDoc-&gt;GetInPlaceActiveItem(this);
+
+    if (pItem != NULL) pItem-&gt;Close();
+
+    if (m_pSelection != NULL)
+
+    {
+
+        CRect rect = m_pSelection-&gt;m_rect;
+
+        rect.InflateRect(1, 1);
+
+        InvalidateRect(rect);
+
+        m_pSelection = NULL;
+
+    }
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        pItem = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        if (pItem-&gt;m_rect.PtInRect(point))
+
+            m_pSelection = pItem;
+
+    }
+
+    if (m_pSelection != NULL)
+
+    {
+
+        CRect rect = m_pSelection-&gt;m_rect;
+
+        rect.InflateRect(1, 1);
+
+        InvalidateRect(rect);
+
+    }
+
+}</PRE>
+
+<P>In the second half of this function, an iteration is made to identify the item on which the user clicked with the mouse. If such an item is found, it is set to become the current selection. However, the iteration continues, to ensure that eventually, the item we pick as the current selection is actually the topmost item. This is important in case the mouse is clicked at a position that is covered by multiple items. Once a new selection is found, its rectangle is also invalidated.
+
+<BR></P>
+
+<P>While this code implements selecting individual items with the mouse, we must also modify COCONView::OnDraw to provide a visual feedback of the new selection. Listing 30.10 shows this final version of COCONView::OnDraw.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 30.10. Final version of </B><B>COCONView::OnDraw</B><B>.</B></LH></UL>
+
+<PRE>void COCONView::OnDraw(CDC* pDC)
+
+{
+
+    COCONDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: remove this code when final draw code is complete.
+
+//  if (m_pSelection == NULL)
+
+//  {
+
+//     POSITION pos = pDoc-&gt;GetStartPosition();
+
+//     m_pSelection = (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+//  }
+
+//  if (m_pSelection != NULL)
+
+//      m_pSelection-&gt;Draw(pDC, CRect(10, 10, 210, 210));
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos)
+
+    {
+
+        COCONCntrItem *pItem =
+
+            (COCONCntrItem*)pDoc-&gt;GetNextClientItem(pos);
+
+        pItem-&gt;Draw(pDC, pItem-&gt;m_rect);
+
+        if (pItem == m_pSelection)
+
+        {
+
+            CRectTracker tracker;
+
+            tracker.m_rect = pItem-&gt;m_rect;
+
+            tracker.m_nStyle = CRectTracker::resizeInside |
+
+                               CRectTracker::solidLine;
+
+            if (pItem-&gt;GetItemState() == COleClientItem::openState
+
+         || pItem-&gt;GetItemState() == COleClientItem::activeUIState)
+
+                    tracker.m_nStyle |= CRectTracker::hatchInside;
+
+            tracker.Draw(pDC);
+
+        }
+
+    }
+
+}</PRE>
+
+<P>In this version of the OnDraw member function, we use the CRectTracker class to create a <I>tracking rectangle</I> around the selection. While we do not make use of all its features, this class could also be used to facilitate moving and resizing the object. In our implementation, we simply utilize this class to provide visual feedback.
+
+<BR></P>
+
+<P>A notable shortcoming of this implementation is that the tracker will be drawn by the OnDraw member function every time. This includes, unfortunately, the cases when the framework uses OnDraw for printing or print preview. In a more realistic implementation, we would surround the code drawing the tracker with conditionals that determine whether this is a &quot;normal&quot; drawing situation and if not, would prevent the drawing of the tracking rectangle.
+
+<BR></P>
+
+<P>This concludes our changes to the OCON application. After recompiling and running the application, you can explore its ability to manage multiple embedded objects, and save and load documents while retaining object positions (Figure 30.11).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="30vcu11.gif">Figure 30.11. Final version of the OCON </B><B>application.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Other Features</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are several other container application features that can be added easily to the OCON application.
+
+<BR></P>
+
+<P>In the current version of the application, in order to edit an embedded object, you must first select it with the mouse and then invoke the Edit menu, select the object's submenu (for example, &quot;Bitmap Image Object&quot;), and use the Edit command. To provide an easier way to activate an embedded object, implement a handler for the WM_LBUTTONDBLCLK function. In it, you can utilize the DoVerb member function of the COCONCntrItem class to activate an item for in-place editing.
+
+<BR></P>
+
+<P>In the handler for WM_LBUTTONDOWN, you can utilize the capabilities of the CRectTracker class to implement moving and sizing.
+
+<BR></P>
+
+<P>The selection does not need to be restricted to a single item. Instead of a single pointer, you can implement the selection as a list of COCONCntrItem objects using a collection class such as CObList. Multiple selection can be implemented by either monitoring the Shift and Control keys in the handler for WM_LBUTTONDOWN or by adding a rubberbanding capability.
+
+<BR></P>
+
+<P>While these capabilities are doubtless important in real-life applications, I believe that the OCON application serves the purpose of demonstrating basic container functions.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>OLE containers are applications that handle embedded or linked items. Container applications can be created through the AppWizard. All you need to do is specify container support in AppWizard Step 3. OLE containers must be single document based or multiple document based applications; container capability for dialog-based applications is not supported.
+
+<BR></P>
+
+<P>An AppWizard-generated container application skeleton supports the insertion of a single component object at a fixed position. The item is inserted through the Insert Object command in the Edit menu. The application does not reflect changes in the item's size or position during an in-place editing session.
+
+<BR></P>
+
+<P>The container application represents component objects with a class derived from COleClientItem. Other differences between a container and a noncontainer application include new code in the container application's view class that implements object insertion and a simple selection mechanism, and a new, partially complete menu that represents container-provided portions of the menu that is visible during an in-place editing session.
+
+<BR></P>
+
+<P>Customizing a skeleton application may involve the following steps:
+
+<BR></P>
+
+<OL>
+
+<LI>To add support for the proper positioning of container objects, modify the OnChangeItemPosition and OnGetItemPosition member functions of the container item class. Add a member variable reflecting the current size and position of the item. Make sure that this member variable is serialized.
+
+<BR>
+
+<BR></LI>
+
+<LI>To draw items at their correct position, modify the OnDraw member function of the view class.
+
+<BR>
+
+<BR></LI>
+
+<LI>To draw items other than the current selection, modify the OnDraw member function of the view class.
+
+<BR>
+
+<BR></LI>
+
+<LI>To provide visual feedback reflecting the current selection, modify the OnDraw member function of the view class. Utilize the CRectTracker class for drawing a rectangle around your selection.
+
+<BR>
+
+<BR></LI>
+
+<LI>To implement a mouse-driven selection mechanism, add a handler function to your view class for WM_LBUTTONDOWN events.
+
+<BR>
+
+<BR></LI>
+
+<LI>To invoke an object for in-place editing by double-clicking it, add a handler function to your view class for WM_LBUTTONDBLCLK events.
+
+<BR>
+
+<BR></LI>
+
+<LI>To implement the selection of multiple items, replace the m_pSelection member variable in your view class. Modify the WM_LBUTTONDOWN handler to implement a multiple selection mechanism.
+
+<BR>
+
+<BR></LI>
+
+<LI>In your WM_LBUTTONDOWN handler, you can utilize the capabilities of the CRectTracker class to implement sizing and positioning.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>To add application specific items to the document, consider deriving the class that represents these items from CDocItem. Utilize the capabilities of COleDocument for handling and serializing CDocItem objects. Revise the OnDraw member function in your view class to draw objects that are not container items. Revise your mouse event handlers as appropriate.
+
+<BR></P>
+
+<P><A HREF="vcu29fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu31fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

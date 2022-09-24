@@ -1,0 +1,1478 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed fmvcufi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="p01vcufi.htm">
+
+<LINK REL="Previous" HREF="vcuifc.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcuifc.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p01vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">Visual C++&#153; 4 Unleashed</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Copyright &#169; 1996 by Sams Publishing</A></LI></UL>
+
+<LI>
+
+<A HREF="#I4">Overview</A></LI></UL>
+
+<LI>
+
+<A HREF="#I5">Preface</A></LI>
+
+<LI>
+
+<A HREF="#I6">About the Author</A></LI>
+
+<LI>
+
+<A HREF="#I7">What Is New in Visual C++ Version 4?</A></LI>
+
+<LI>
+
+<A HREF="#I8">What Is New in the Developer Studio?</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">The Project Workspace</A></LI>
+
+<LI>
+
+<A HREF="#I10">Improved Editor</A></LI>
+
+<LI>
+
+<A HREF="#I11">The ClassWizard and the WizardBar</A></LI>
+
+<LI>
+
+<A HREF="#I12">Component Gallery</A></LI>
+
+<LI>
+
+<A HREF="#I13">Custom AppWizards</A></LI>
+
+<LI>
+
+<A HREF="#I14">Resource Editing</A></LI>
+
+<LI>
+
+<A HREF="#I15">Debugging</A></LI>
+
+<LI>
+
+<A HREF="#I16">Integration with Other Tools</A></LI>
+
+<LI>
+
+<A HREF="#I17">Source Control</A></LI>
+
+<LI>
+
+<A HREF="#I18">The InfoViewer</A></LI>
+
+<LI>
+
+<A HREF="#I19">What Is New in the MFC Library?</A></LI>
+
+<LI>
+
+<A HREF="#I20">Data Access Objects</A></LI>
+
+<LI>
+
+<A HREF="#I21">OLE Controls</A></LI>
+
+<LI>
+
+<A HREF="#I22">Synchronization Classes</A></LI>
+
+<LI>
+
+<A HREF="#I23">Windows 95 Common Controls</A></LI>
+
+<LI>
+
+<A HREF="#I24">What is New in the C/C++ Compiler?</A></LI>
+
+<LI>
+
+<A HREF="#I25">Namespaces</A></LI>
+
+<LI>
+
+<A HREF="#I26">Run-Time Type Information</A></LI>
+
+<LI>
+
+<A HREF="#I27">The Standard Template Library</A></LI>
+
+<LI>
+
+<A HREF="#I28">Run-Time Library Source</A></LI>
+
+<LI>
+
+<A HREF="#I29">Performance Improvements</A></LI>
+
+<LI>
+
+<A HREF="#I30">Notational Conventions Used in This Book</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>Visual C++&#153; 4 Unleashed</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Viktor Toth
+
+<BR></P>
+
+<P>201 West 103rd Street, Indianapolis, Indiana 46290
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Copyright &#169; 1996 by Sams Publishing</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>FIRST EDITION
+
+<BR></P>
+
+<P>All rights reserved. No part of this book shall be reproduced, stored in a retrieval system, or transmitted by any means, electronic, mechanical, photocopying, recording, or otherwise, without written permission from the publisher. No patent liability is assumed with respect to the use of the information contained herein. Although every precaution has been taken in the preparation of this book, the publisher and author assume no responsibility for errors or omissions. Neither is any liability assumed for damages resulting from the use of the information contained herein. For information, address Sams Publishing, 201 W. 103rd St., Indianapolis, IN 46290.
+
+<BR></P>
+
+<P>International Standard Book Number: 0-672-30874-6
+
+<BR></P>
+
+<P>Library of Congress Catalog Card Number: 95-72334
+
+<BR></P>
+
+<P>99&#151;&#151;98&#151;&#151;97&#151;&#151;96&#151;&#151;&#151;&#151;&#151;&#151;&#151;&#151;4&#151;&#151;3&#151;&#151;2&#151;&#151;1
+
+<BR></P>
+
+<P>Interpretation of the printing code: the rightmost double-digit number is the year of the book's printing; the rightmost single-digit, the number of the book's printing. For example, a printing code of 96-1 shows that the first printing of the book occurred in 1996.
+
+<BR></P>
+
+<P><I>Printed in the United States of America</I>
+
+<BR></P>
+
+<P>All terms mentioned in this book that are known to be trademarks or service marks have been appropriately capitalized. Sams Publishing cannot attest to the accuracy of this information. Use of a term in this book should not be regarded as affecting the validity of any trademark or service mark. Visual C++ is a trademark of Microsoft Corporation.
+
+<BR></P>
+
+<P><B>Publisher and President:</B>
+
+<BR></P>
+
+<P>Richard K. Swadley
+
+<BR></P>
+
+<P><B>Acquisitions Manager:</B>
+
+<BR></P>
+
+<P>Greg Wiegand
+
+<BR></P>
+
+<P><B>Development Manager:</B>
+
+<BR></P>
+
+<P>Dean Miller
+
+<BR></P>
+
+<P><B>Managing Editor:</B>
+
+<BR></P>
+
+<P>Cindy Morrow
+
+<BR></P>
+
+<P><B>Marketing Manager:</B>
+
+<BR></P>
+
+<P>Gregg Bushyeager
+
+<BR></P>
+
+<P><B>Acquisitions Editor</B>
+
+<BR></P>
+
+<P><I>Grace Buechlein</I>
+
+<BR></P>
+
+<P><B>Development Editor</B>
+
+<BR></P>
+
+<P><I>Anthony Amico</I>
+
+<BR></P>
+
+<P><B>Software Development Specialist</B>
+
+<BR></P>
+
+<P><I>Cari Skaggs</I>
+
+<BR></P>
+
+<P><B>Production Editor</B>
+
+<BR></P>
+
+<P><I>Carolyn Linn</I>
+
+<BR></P>
+
+<P><B>Technical Reviewer</B>
+
+<BR></P>
+
+<P><I>Daniel Boyle</I>
+
+<BR></P>
+
+<P><B>Editorial Coordinator</B>
+
+<BR></P>
+
+<P><I>Bill Whitmer</I>
+
+<BR></P>
+
+<P><B>Technical Edit Coordinator</B>
+
+<BR></P>
+
+<P><I>Lynette Quinn</I>
+
+<BR></P>
+
+<P><B>Formatter</B>
+
+<BR></P>
+
+<P><I>Frank Sinclair</I>
+
+<BR></P>
+
+<P><B>Editorial Assistants</B>
+
+<BR></P>
+
+<P><I>Sharon Cox</I></P>
+
+<P><I>Andi Richter</I></P>
+
+<P><I>Rhonda Tinch-Mize</I>
+
+<BR></P>
+
+<P><B>Cover Designer</B>
+
+<BR></P>
+
+<P><I>Jason Grisham</I>
+
+<BR></P>
+
+<P><B>Book Designer</B>
+
+<BR></P>
+
+<P><I>Alyssa Yesh</I>
+
+<BR></P>
+
+<P><B>Production Team Supervisor</B>
+
+<BR></P>
+
+<P><I>Brad Chinn</I>
+
+<BR></P>
+
+<H2 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=5><B>Overview</B>
+
+<BR></FONT></A></CENTER></H2>
+
+<P>Preface
+
+<BR></P>
+
+<P>Introduction
+
+<BR></P>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<P><B>Part I</B></P>
+
+<TD>
+
+<P><B>The Visual C++ Development System</B></P>
+
+<TR>
+
+<TD>
+
+<P>1</P>
+
+<TD>
+
+<P>Visual C++ and the Developer Studio</P>
+
+<TR>
+
+<TD>
+
+<P>2</P>
+
+<TD>
+
+<P>Project Creation and the AppWizard</P>
+
+<TR>
+
+<TD>
+
+<P>3</P>
+
+<TD>
+
+<P>The ClassWizard and the WizardBar</P>
+
+<TR>
+
+<TD>
+
+<P>4</P>
+
+<TD>
+
+<P>Source Browsing</P>
+
+<TR>
+
+<TD>
+
+<P>5</P>
+
+<TD>
+
+<P>Debugging and Profiling</P>
+
+<TR>
+
+<TD>
+
+<P>6</P>
+
+<TD>
+
+<P>Code Reuse with the Component Gallery</P>
+
+<TR>
+
+<TD>
+
+<P><B>Part II</B></P>
+
+<TD>
+
+<P><B>The Windows Architecture and the Win32 API</B></P>
+
+<TR>
+
+<TD>
+
+<P>7</P>
+
+<TD>
+
+<P>Operating System Overview</P>
+
+<TR>
+
+<TD>
+
+<P>8</P>
+
+<TD>
+
+<P>The Message Loop</P>
+
+<TR>
+
+<TD>
+
+<P>9</P>
+
+<TD>
+
+<P>Windows, Dialog Boxes, and Controls</P>
+
+<TR>
+
+<TD>
+
+<P>10</P>
+
+<TD>
+
+<P>Resource Files</P>
+
+<TR>
+
+<TD>
+
+<P>11</P>
+
+<TD>
+
+<P>Drawing and Device Contexts</P>
+
+<TR>
+
+<TD>
+
+<P>12</P>
+
+<TD>
+
+<P>Threads and Processes</P>
+
+<TR>
+
+<TD>
+
+<P>13</P>
+
+<TD>
+
+<P>Memory Management</P>
+
+<TR>
+
+<TD>
+
+<P>14</P>
+
+<TD>
+
+<P>File Management</P>
+
+<TR>
+
+<TD>
+
+<P>15</P>
+
+<TD>
+
+<P>The Windows Clipboard</P>
+
+<TR>
+
+<TD>
+
+<P>16</P>
+
+<TD>
+
+<P>The Registry</P>
+
+<TR>
+
+<TD>
+
+<P>17</P>
+
+<TD>
+
+<P>Exception Handling</P>
+
+<TR>
+
+<TD>
+
+<P><B>Part III</B></P>
+
+<TD>
+
+<P><B>Microsoft Foundation Classes</B></P>
+
+<TR>
+
+<TD>
+
+<P>18</P>
+
+<TD>
+
+<P>Microsoft Foundation Classes: An Overview</P>
+
+<TR>
+
+<TD>
+
+<P>19</P>
+
+<TD>
+
+<P>Exploring an MFC Skeleton Application</P>
+
+<TR>
+
+<TD>
+
+<P>20</P>
+
+<TD>
+
+<P>Working with Documents and Views</P>
+
+<TR>
+
+<TD>
+
+<P>21</P>
+
+<TD>
+
+<P>Dialogs and Property Sheets</P>
+
+<TR>
+
+<TD>
+
+<P>22</P>
+
+<TD>
+
+<P>MFC Support for Common Dialogs and Common Controls</P>
+
+<TR>
+
+<TD>
+
+<P>23</P>
+
+<TD>
+
+<P>Using OLE Controls</P>
+
+<TR>
+
+<TD>
+
+<P>24</P>
+
+<TD>
+
+<P>Device Context and GDI Objects</P>
+
+<TR>
+
+<TD>
+
+<P>25</P>
+
+<TD>
+
+<P>Serialization: File and Archive Objects</P>
+
+<TR>
+
+<TD>
+
+<P>26</P>
+
+<TD>
+
+<P>Collection Classes</P>
+
+<TR>
+
+<TD>
+
+<P>27</P>
+
+<TD>
+
+<P>Exceptions, Multithreading, and Other MFC Classes</P>
+
+<TR>
+
+<TD>
+
+<P><B>Part IV</B></P>
+
+<TD>
+
+<P><B>OLE in MFC Applications</B></P>
+
+<TR>
+
+<TD>
+
+<P>28</P>
+
+<TD>
+
+<P>Object Linking and Embedding: An Overview</P>
+
+<TR>
+
+<TD>
+
+<P>29</P>
+
+<TD>
+
+<P>OLE Servers</P>
+
+<TR>
+
+<TD>
+
+<P>30</P>
+
+<TD>
+
+<P>OLE Containers</P>
+
+<TR>
+
+<TD>
+
+<P>31</P>
+
+<TD>
+
+<P>OLE Drag and Drop</P>
+
+<TR>
+
+<TD>
+
+<P>32</P>
+
+<TD>
+
+<P>OLE Automation</P>
+
+<TR>
+
+<TD>
+
+<P><B>Part V</B></P>
+
+<TD>
+
+<P><B>Advanced Programming Topics</B></P>
+
+<TR>
+
+<TD>
+
+<P>33</P>
+
+<TD>
+
+<P>Database Programming Through ODBC</P>
+
+<TR>
+
+<TD>
+
+<P>34</P>
+
+<TD>
+
+<P>Data Access Objects</P>
+
+<TR>
+
+<TD>
+
+<P>35</P>
+
+<TD>
+
+<P>Writing Messaging Applications with MAPI</P>
+
+<TR>
+
+<TD>
+
+<P>36</P>
+
+<TD>
+
+<P>OLE Control Development</P>
+
+<TR>
+
+<TD>
+
+<P>37</P>
+
+<TD>
+
+<P>Multimedia Applications</P>
+
+<TR>
+
+<TD>
+
+<P>38</P>
+
+<TD>
+
+<P>Implementing Context-Sensitive Help</P>
+
+<TR>
+
+<TD>
+
+<P>39</P>
+
+<TD>
+
+<P>TCP/IP Programming with WinsSock</P>
+
+<TR>
+
+<TD>
+
+<P>40</P>
+
+<TD>
+
+<P>Building Custom AppWizards</P>
+
+<TR>
+
+<TD>
+
+<P>41</P>
+
+<TD>
+
+<P>The OpenGL Graphics Library</P>
+
+<TR>
+
+<TD>
+
+<P>42</P>
+
+<TD>
+
+<P>Telephony Applications with TAPI</P>
+
+<TR>
+
+<TD>
+
+<P>43</P>
+
+<TD>
+
+<P>Network Programming with Pipes and Remote Procedure Calls</P>
+
+<TR>
+
+<TD>
+
+<P>44</P>
+
+<TD>
+
+<P>High-Performance Graphics and Sound: The Game SDK</P>
+
+<TR>
+
+<TD>
+
+<P>Bibliography</P>
+
+<TD><BR></TD>
+
+<P> </P>
+
+<TR>
+
+<TD>
+
+<P>Index</P>
+
+<TD><BR></TD>
+
+<P> </P></TABLE>
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<BR>
+
+<FONT SIZE=5><B>Preface</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Writing about programming used to be very different from what it is today. In 1986, shortly before I left my native Hungary, I completed a book about the Commodore 16 home computer for a Hungarian publisher. In fewer than 400 pages, I provided a complete reference for that machine, down to the last tiny bit in the computer's ROM, the last transistor in its circuit diagram.
+
+<BR></P>
+
+<P>Assuming that it were possible to develop such a comprehensive reference for today's Windows 95-equipped desktop computers, that work would fill not only volumes, not only several bookshelves, but probably several large bookcases. The subject of &quot;system calls&quot; used to be a topic for a brief appendix in a typical programming book from the early 80s. Although these books are not yet old enough to have their pages turn yellow with age, the words in them seem to come from prehistoric times; today's programmer has to know more APIs than the number of system calls listed in many of these works!
+
+<BR></P>
+
+<P>Visual C++ is the fundamental programming tool for Windows. Writing about this programming environment requires covering most Windows programming topics in reasonable detail. One of the basic decisions an author has to make before embarking on such a task is to define the target audience.
+
+<BR></P>
+
+<P>This book is not for the novice programmer. Knowledge of the C and C++ programming languages, as well as a basic understanding of Windows programming fundamentals, is assumed.
+
+<BR></P>
+
+<P>This book is not a replacement for the excellent tutorial manuals that you find on your Visual C++ CD-ROM. What this book provides is a detailed introduction into many specific programming topics. Such introductions are often hard to find; function references and MFC class descriptions are a poor substitute for simple examples and helpful tips.
+
+<BR></P>
+
+<P>When I first started working with Visual C++ 1, I was thoroughly impressed by the power of the development environment. It took only a few short days with the Scribble tutorial application to get up to speed with MFC programming; afterwards, within less than a week, I was able to put together a Windows-based action game complete with multimedia sound effects.
+
+<BR></P>
+
+<P>With this experience behind me, it was not easy to understand why so many programmers, including people with years of C and C++ programming experience, had difficulty with Visual C++. Eventually, I think I understood the root of the problem. Many of these programmers have not had any prior exposure to Windows programming. The MFC Library does a wonderful job hiding many of the complex details of the Windows API; unfortunately, this also means that without prior exposure, you never have a chance to learn some fundamental concepts.
+
+<BR></P>
+
+<P>Let me show you an example. If you ever wrote a non-MFC Windows application, you must be familiar with the concept of the <I>message loop</I>. Essentially, all Windows applications have a WinMain function that looks something like this:
+
+<BR></P>
+
+<PRE>int WinMain(...)
+
+{
+
+    // Initialize main window
+
+    ...
+
+    while (!GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg)
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>The while loop in this function is the application's main message loop. All messages posted to the application are processed here and dispatched to the appropriate message handler functions.
+
+<BR></P>
+
+<P>As a programmer with Windows experience, you must also be familiar with the msg structure and what Windows messages generally look like. So if I tell you that the MFC Library provides its own version of WinMain, and that after initialization, it calls your CWinApp-derived object's Run member function that implements the message loop, you should have no problem understanding how MFC applications process Windows messages.
+
+<BR></P>
+
+<P>However, if you never wrote a non-MFC Windows application before, you might as well think that I wrote the above paragraphs in my native Hungarian. Message loop? Message structure? Message handlers? Dispatching? What do all these concepts mean?
+
+<BR></P>
+
+<P>This was my reasoning when I decided to devote a sizable portion of my book to Win32 programming topics. These topics form the very foundation upon which Visual C++ is built; without a thorough understanding of Win32 fundamentals, Visual C++ programming becomes a nightmare.
+
+<BR></P>
+
+<P>Not that this part is meant exclusively for those with little prior Windows programming exposure. Hopefully, even seasoned Windows programmers among you will find some of these chapters useful when you wish to understand more about such Win32 topics as structured exceptions, virtual memory, or programming with the Registry.
+
+<BR></P>
+
+<P>These topics do not require the Microsoft Foundation Classes; therefore, I liberally used simple, pedestrian examples that can be easily edited, compiled, and run from the command line. This simplicity is characteristic of all the examples I used in this book. My goal was not to demonstrate how good a programmer I am by adding all kinds of bells and whistles to these programs, but to illustrate specific programming concepts.
+
+<BR></P>
+
+<P>Take, for example, MAPI. If you have not done any MAPI programming before and wish to add some messaging features to your application, what would you prefer as your first exposure to MAPI? A comprehensive MFC-based example with a hundred kilobytes of source code? Here is what I offer instead:
+
+<BR></P>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;stdio.h&gt;
+
+#include &lt;mapi.h&gt;
+
+LPMAPILOGON lpfnMAPILogon;
+
+LPMAPISENDMAIL lpfnMAPISendMail;
+
+LPMAPILOGOFF lpfnMAPILogoff;
+
+MapiRecipDesc recipient =
+
+{
+
+    0, MAPI_TO,
+
+    &quot;Bill Clinton&quot;, &quot;SMTP:president@whitehouse.gov&quot;,
+
+    0, NULL
+
+};
+
+MapiMessage message =
+
+{
+
+    0, &quot;Greetings&quot;,
+
+    &quot;Hello, Mr. President!\n&quot;,
+
+    NULL, NULL, NULL, 0, NULL, 1, &amp;recipient, 0, NULL
+
+};
+
+void main(void)
+
+{
+
+    LHANDLE lhSession;
+
+    HANDLE hMAPILib;
+
+    hMAPILib = LoadLibrary(&quot;MAPI32.DLL&quot;);
+
+    lpfnMAPILogon =
+
+        (LPMAPILOGON)GetProcAddress(hMAPILib, &quot;MAPILogon&quot;);
+
+    lpfnMAPISendMail =
+
+        (LPMAPISENDMAIL)GetProcAddress(hMAPILib, &quot;MAPISendMail&quot;);
+
+    lpfnMAPILogoff =
+
+        (LPMAPILOGOFF)GetProcAddress(hMAPILib, &quot;MAPILogoff&quot;);
+
+    (*lpfnMAPILogon)(0, NULL, NULL, MAPI_ALLOW_OTHERS, 0,
+
+                     &amp;lhSession);
+
+    (*lpfnMAPISendMail)(lhSession, 0, &amp;message, 0, 0);
+
+    (*lpfnMAPILogoff)(lhSession, 0, 0, 0);
+
+    printf(&quot;Message to the White House sent.\n&quot;);
+
+    FreeLibrary(hMAPILib);
+
+}</PRE>
+
+<P>This program, in all its 42 lines, is a fully functional command line-based MAPI application. It demonstrates how to load the MAPI library, use MAPI data structures, and call MAPI functions. Nor does compiling this program require a 1000-line make file (I always considered such huge make files somewhat obscene in <I>examples</I>); you can compile it from the command line by simply typing cl cmdmsg.c.
+
+<BR></P>
+
+<P>I actually use simple examples like this one regularly when I try to understand a new programming topic. Even when I find a suitable sample application somewhere, I often mutilate it by removing all nonessential fluff. After all, when I wish to learn about MAPI, I am not really interested in menus, resource files, or how to construct fancy dialogs.
+
+<BR></P>
+
+<P>This simplicity is perhaps most evident with my favorite Windows program, the Windows equivalent of the infamous Hello, World! program with which Kernighan and Ritchie introduce their bible on C programming. It has often been said that Windows programming is so complex, even the simplest of applications requires hundreds of lines of code. If you ever hear this again from diehard DOS or UNIX programmers, just show them the following program:
+
+<BR></P>
+
+<PRE>#include &lt;windows.h&gt;
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+    MessageBox(NULL, &quot;Hello, World!&quot;, &quot;&quot;, MB_OK);
+
+}</PRE>
+
+<P>Although the lines themselves are longer, this program has the exact same number of lines as the command line original:
+
+<BR></P>
+
+<PRE>#include &lt;stdio.h&gt;
+
+void main(void)
+
+{
+
+    printf(&quot;Hello, World!\n&quot;);
+
+}</PRE>
+
+<P>As this example so well demonstrates, Windows programming <I>can</I> be made simple.
+
+<BR></P>
+
+<P>You will also notice that very few of the programming examples in this book are <I>code fragments</I>. I always found that a program that you can actually compile and run, no matter how simple it is, helps further your understanding of a subject a great deal more than code fragments. Such executable programs are also proof that the author actually tested the concepts presented; indeed, on the attached CD-ROM, you will find a ready-to-run executable for every example in this book. (I hope they will run on your machine; they run on mine.)
+
+<BR></P>
+
+<P>Let me say a few words about the topics and organization of this book. Part I is about the Developer Studio, which is the name for the new Visual C++ IDE (Integrated Development Environment). Some of its features are familiar to Visual C++ programmers, while other features, such as the Component Gallery or the WizardBar, are brand new. In this part, I also cover the two most important components of the Developer Studio, the AppWizard and the ClassWizard; additional topics include browsing and debugging applications, and using the Developer Studio in conjunction with other Microsoft development tools.
+
+<BR></P>
+
+<P>Part II is about programming in Windows with specific emphasis on 32-bit Windows programming. Many of the basic concepts of Windows programming are covered, and so are advanced 32-bit concepts such as thread management, virtual memory, structured exceptions, and the Registry.
+
+<BR></P>
+
+<P>Part III introduces the Microsoft Foundation Classes Library. Documents and views, dialogs, controls (including the use of OCXs), device contexts and GDI objects, serialization, collections, and miscellaneous classes are the topics of the 10 chapters that comprise this part.
+
+<BR></P>
+
+<P>Part IV is about OLE. In accordance with my philosophy of providing the fundamentals before presenting cookbook-like MFC recipes, I begin this part with a review of OLE fundamentals. A non-MFC example of a mere 300-some lines that is nevertheless a fully functional OLE automation server highlights some of the basic ideas presented in the first chapter. In the remaining four chapters, the use of MFC is explored in developing OLE containers, OLE component servers, OLE drag and drop applications, and OLE automation servers.
+
+<BR></P>
+
+<P>Part V contains an assortment of chapters about a variety of Visual C++ programming topics. ODBC, MAPI, TAPI, DAO, or OpenGL are just some of the acronyms that make up the subject of the chapters here.
+
+<BR></P>
+
+<P>At the beginning of this preface I mentioned how different programming books are today from those written a mere decade ago. Another difference is the rapidly changing nature of development environments. When I began my programming career, I used books on the FORTRAN language that were written 10 years earlier and were still perfectly useful; can you imagine trying to write a Windows 95 program using an MS-DOS programmer reference published in 1985?
+
+<BR></P>
+
+<P>Not only does this rapidly changing environment make the lives of programmers more difficult, it also takes its toll on authors. We can no longer afford the luxury of working on a book for a year or more; such a book would be rendered obsolete by new software versions even before it was published. I can only hope that despite the short time I had for developing this book, it does not contain too many glaring errors or omissions, and that it becomes a useful addition to your library.
+
+<BR></P>
+
+<P>Finally, I would like to thank my wife, Ildiko, for her unwavering support. Without her patience and understanding, the grueling routine of 14-hour work days and 7-day workweeks during the last two months would not have been possible.
+
+<BR></P>
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<BR>
+
+<FONT SIZE=5><B>About the Author</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P><B>Viktor Toth</B> is a Hungarian-born author and self-employed software developer. His professional career started in 1979, when he wrote his first Hungarian-language book on Ern&#155; Rubik's Magic Cube. Between that time and 1986, he developed many scientific and business applications for clients in Hungary, Austria, Germany, and the United Kingdom. He wrote applications in Fortran, a variety of assemblers, Simula-67, C, and Pascal, just to name a few languages. In 1986, he authored his second book, a technical reference for programmers of the Commodore 16 home computer.
+
+<BR></P>
+
+<P>Viktor Toth became a resident of Canada in 1987. There, he continued his self-employed career. He coauthored several studies as a consultant for the Canadian government and wrote numerous applications in C and C++, assembler, dBase, and other environments. After briefly experimenting with other graphical systems such as the long-forgotten GEM, he eventually wrote his first Windows application in 1990 and has not looked back since.
+
+<BR></P>
+
+<P>Viktor Toth is coauthor of Sams Publishing's Windows 95 Programming Unleashed.
+
+<BR></P>
+
+<P>Viktor lives with his wife in their ever-smaller apartment in Ottawa, surrounded by several hundred pounds of computing equipment (his), knitting yarn (hers), and books. They hope to move soon to a house where they can add some cats to the family inventory.
+
+<BR></P>
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<BR>
+
+<FONT SIZE=5><B>What Is New in Visual C++ Version 4?</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Whether Visual C++ 4 is revolutionary or merely evolutionary is subject to debate; but it certainly represents a major improvement over previous versions. If you liked the earlier versions, you must love Version 4; if you did not use Visual C++ before, it has never been easier to begin.
+
+<BR></P>
+
+<P>The improvements over earlier versions are in several areas. The new Integrated Development Environment (IDE) application, the Developer Studio, has a variety of new features. Among these are the improved ClassWizard, AppWizard, and an entirely new tool, the Component Gallery. The Microsoft Foundation Classes Library also has a new version that improves on earlier versions in many ways; it also adds support for the new Data Access Objects (DAO), another new redistributable component that ships with Visual C++. The C/C++ compiler component of Visual C++ also underwent some major revisions; in particular, the compiler supports several new elements of the emerging ANSI C++ standard, such as namespaces, run-time type information, and the Standard Template Library.
+
+<BR></P>
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<BR>
+
+<FONT SIZE=5><B>What Is New in the Developer Studio?</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The new Developer Studio offers a variety of new and improved features for managing projects and subprojects, editing code and resources, managing classes, and for code reuse and code generation.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>The Project Workspace</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Project Workspace window offers three views on projects: in Class View, project classes, member variables, and functions are shown; in File View files comprising a project are visible; and in Resource View, resource file components can be manipulated.
+
+<BR></P>
+
+<P>A workspace can now contain several projects. These can be top-level projects or subprojects.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=4><B>Improved Editor</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new source code editor offers improved compatibility with Brief and other popular editors.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>The ClassWizard and the WizardBar</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new ClassWizard offers support for OLE control development. Many ClassWizard features can easily be accessed in the WizardBar, a toolbar that is displayed in source editor windows.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>Component Gallery</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Component Gallery is a major new component in Visual C++. Classes that are created through ClassWizard or entire projects created through AppWizard can be added to the Component Gallery and later inserted from here into other applications. The Component Gallery comes with many useful tools, including OLE controls and other components that add various useful features to your project.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=4><B>Custom AppWizards</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new Visual C++ offers the capability to create custom AppWizards. Custom AppWizards can be based on existing AppWizard code or can be entirely custom made. Appropriately, creation of custom AppWizards is made easy by a custom AppWizard specifically written for this purpose.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=4><B>Resource Editing</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>An improved Resource Editor now adds toolbars to the set of resource file components it can handle. Toolbar buttons can now be easily added, removed, or manipulated without having to modify corresponding structures or arrays in your code.
+
+<BR></P>
+
+<P>The dialog editing capabilities have also been improved; more accurate placement of dialog controls is now possible with the help of guides and margins. The Resource Editor can now also import Visual Basic forms.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Debugging</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The integrated debugger has redesigned windows. It also offers a new feature, <I>DataTips</I>; positioning the mouse cursor over a symbol in an editor window during debugging causes a tooltip-style window to appear, displaying the current value of the symbol.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Integration with Other Tools</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Developer Studio offers a high level of integration with other Microsoft development tools such as the Microsoft Developer Library, Microsoft FORTRAN, Microsoft Test, and Microsoft SourceSafe.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>Source Control</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Visual C++ cooperates with source-code control systems that conform to the Microsoft Common Source Code Control Interface, such as Microsoft's own Visual SourceSafe.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=4><B>The InfoViewer</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The InfoViewer is a new, integrated tool for browsing online documentation. In addition to browsing the documentation that comes with Visual C++, it can also browse other titles, such as the Developer Network Library. It also has improved features, such as keyword browsing&#151;the ability to search for highlighted words when the F1 key is pressed. (This feature was previously available only in source code windows.)
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=4><B>What Is New in the MFC Library?</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new MFC Library, MFC Version 4, offers several new classes and improved support in a number of areas.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=4><B>Data Access Objects</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new MFC Library contains a series of new classes that encapsulate Data Access Objects (DAO). DAO is the technology used in Visual Basic, Microsoft Access, and other products to access databases through the Microsoft Jet engine.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=4><B>OLE Controls</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Support for the development of OLE controls, previously available in the form of a separate development tool (the Control Development Kit, or CDK), has now been fully integrated. The MFC supports OLE controls through a series of new classes. It also provides control container functionality through new member functions added to the CWnd class.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=4><B>Synchronization Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new MFC Library provides wrapper classes for a variety of synchronization objects, including events, mutexes, semaphores, and critical sections.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=4><B>Windows 95 Common Controls</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>MFC support, previously available in add-on classes that were released in beta form as part of the Visual C++ subscription product, is now officially part of the MFC Library. In addition to classes that wrap control functionality, a series of new view and other classes have also been defined that support views based on list, tree, and rich-text edit controls.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=4><B>What is New in the C/C++ Compiler?</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The C/C++ compiler component of Visual C++ has been improved to provide better support for new features in the ANSI draft standard.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=4><B>Namespaces</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The compiler now supports namespaces. In addition to the single global namespace provided by the language, applications can define additional namespaces that provide unique scopes for globally defined objects. A namespace can be defined using the namespace keyword:
+
+<BR></P>
+
+<PRE>namespace A
+
+{
+
+int n;
+
+}</PRE>
+
+<P>Namespaces can be used explicitly or implicitly. Explicit use involves a syntax that is similar to the syntax used when referring to class members: for example, A::n. Implicit use requires the using keyword:
+
+<BR></P>
+
+<PRE>using namespace A;
+
+printf(&quot;%d&quot;, n);</PRE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=4><B>Run-Time Type Information</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new compiler supports ANSI-style Run-Time Type Information, or RTTI. RTTI is enabled through the /GR compiler command line option. RTTI introduces several new language elements. The typeid operator can be used to identify the type of an object. This operator returns an object of type type_info. For example:
+
+<BR></P>
+
+<PRE>class A { ... };
+
+class B : public A { ... };
+
+...
+
+A *pa = new A;
+
+B *pb = new B;
+
+const type_info&amp; ta = typeid(*pa);
+
+const type_info&amp; tb = typeid(*pb);</PRE>
+
+<P>A series of new casting operators provides a replacement for old-style C casts while removing ambiguities. These operators include dynamic_cast, static_cast, const_cast, and reinterpret_cast.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I27" NAME="I27">
+
+<FONT SIZE=4><B>The Standard Template Library</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Visual C++ now provides support for the Hewlett-Packard public domain implementation of the Standard Template Library. Note that the STL is not installed by the Visual C++ setup program. Simultaneous use of STL and the MFC in the same application requires the use of namespaces due to conflicting declarations in the two libraries. ANSI recommends the use of the namespace std as the standard library namespace.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I28" NAME="I28">
+
+<FONT SIZE=4><B>Run-Time Library Source</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The source of the debug version of the C/C++ run-time library is now available. Using this source, it is now possible to step into run-time library functions during debugging.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I29" NAME="I29">
+
+<FONT SIZE=4><B>Performance Improvements</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new compiler offers several performance improvements. The <I>minimal </I><I>rebuild</I> option selects only those files for rebuild that are actually affected by changes in header files (as opposed to rebuilding all dependent source files). The incremental linker has been improved to handle more cases incrementally. The compiler's new incremental compilation feature detects portions of a source file that actually changed and limits compilation to these elements, greatly reducing compilation time.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I30" NAME="I30">
+
+<FONT SIZE=4><B>Notational Conventions Used in This Book</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Throughout Visual C++ 4 Unleashed, a simple notational style is used. All listings are typeset in a monospace font for ease of reading. In the text, the same monospace font is used for all function names, variable names, filenames, keywords, and other symbols that occur in programs. A monospace italic font is used for placeholders, such as function or method parameters, indicating that a symbol must be substituted in their place by the user. In some listings, a vertical line is used to mark code that must be added manually, to distinguish from code that was automatically generated or code that was added earlier. Throughout the book, many new terms are introduced; the first occurrence of such terms is highlighted by the use of an italic font.</P>
+
+<P><A HREF="vcuifc.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p01vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

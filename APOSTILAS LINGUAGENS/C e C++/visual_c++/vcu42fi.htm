@@ -1,0 +1,1244 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu42fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu43fi.htm">
+
+<LINK REL="Previous" HREF="vcu41fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu41fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu43fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">42 &#151; Telephony Applications with TAPI</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">TAPI Overview</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Assisted TAPI: The Simplest TAPI Application</A></LI>
+
+<LI>
+
+<A HREF="#I5">TAPI Concepts</A></LI>
+
+<LI>
+
+<A HREF="#I6">TAPI Devices</A></LI>
+
+<LI>
+
+<A HREF="#I7">TAPI Addresses</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">TAPI Software Architecture</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Synchronous and Asynchronous Operations</A></LI>
+
+<LI>
+
+<A HREF="#I10"> Variable-Length Structures</A></LI></UL>
+
+<LI>
+
+<A HREF="#I11">TAPI Services</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I12">The TAPI Programming Model</A></LI>
+
+<LI>
+
+<A HREF="#I13">TAPI Media Modes</A></LI>
+
+<LI>
+
+<A HREF="#I14">Multiple Applications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I15">A Data Communication Example</A></LI>
+
+<LI>
+
+<A HREF="#I16">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>42 &#151; Telephony Applications with TAPI</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The Microsoft Telephony API, or TAPI, provides telephony-related services for Win32 applications.
+
+<BR></P>
+
+<P>TAPI is currently supported on the Windows 3.1 and Windows 95 platforms. In this chapter, we discuss TAPI 1.4, the version that is provided with Windows 95. TAPI is used extensively by those Windows 95 applications that use a modem; for example, the FAX driver and the CompuServe driver in Microsoft Exchange, the Microsoft Network software, or the Windows 95 Phone Dialer and Hyperterminal applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>TAPI Overview</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>First, an important note. When most of us hear the term <I>telephony</I> in the context of computer communications, we think of data or FAX modems and voice grade telephone lines&#151;and very little else. TAPI goes far beyond these simple concepts and provides a consistent programming interface for a variety of devices operating on voice grade lines, ISDN lines, and private branch exchanges. The devices include modems, FAX modems, voice capable modems, computer-controlled telephone sets, and more.
+
+<BR></P>
+
+<P>TAPI provides services for placing outgoing calls, accepting incoming calls, and managing calls and devices. What TAPI does not do is handle the <I>media stream</I>; that is, the data that is exchanged during a call. For example, when TAPI is used to place a voice call, it is not TAPI but you, the human operator, who talks; similarly, when TAPI is used to place a data call, it is the communication application that takes over the device and performs I/O operations using standard Win32 file functions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Assisted TAPI: The Simplest TAPI Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before we delve deeper into the TAPI architecture, take a look at the simple program in Listing 42.1. This is about as simple as a TAPI application can get. This program takes a single command-line argument, a telephone number, and dials that number for a voice call.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 42.1. The simplest TAPI application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;stdio.h&gt;
+
+#include &lt;tapi.h&gt;
+
+void main(int argc, char *argv[])
+
+{
+
+    if (argc != 2) printf(&quot;Usage: %s telephone-number\n&quot;, argv[0]);
+
+    else
+
+    {
+
+        printf(&quot;Dialing %s...&quot;, argv[1]);
+
+        tapiRequestMakeCall(argv[1], NULL, NULL, NULL);
+
+    }
+
+}</PRE>
+
+<P>The actual dialing is performed on behalf of the application by the default <I>call control application</I>. An example for a call control application is the Phone Dialer that is provided as part of Windows 95.
+
+<BR></P>
+
+<P>The tapiRequestMakeCall function that is used in this program is ideally suited for use in scripts. For example, a call to this function can be included as an external DLL call in Visual Basic for Applications.
+
+<BR></P>
+
+<P>To compile this application from the command line, type cl dial.c tapi32.lib.
+
+<BR></P>
+
+<P>The tapiRequestMakeCall function is part of TAPI's <I>Assisted Telephony</I> features. In the current version of TAPI, there is only one other Assisted Telephony function: the tapiGetLocationInfo function can be used to obtain the country code and city code for the user's current location.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>TAPI Concepts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>TAPI provides a series of <I>personal telephony</I> services. Telephony, in this context, refers to technology in general that connects computers with the telephone network.
+
+<BR></P>
+
+<P>TAPI services provide for all aspects of usage of the telephone network. This includes connecting to the network, placing and accepting calls, call management features (such as transferring calls, setting up conference calls), use of calling number identification (Caller ID) for identifying incoming calls, and more.
+
+<BR></P>
+
+<P>TAPI services are divided into basic, supplementary, and extended services. Basic services are generally supported by all devices; supplementary services may only be available on special devices. Extended services are provider-specific.
+
+<BR></P>
+
+<P>For example, TAPI can place a call on all telephone lines; however, call management functions, such as transferring a call, may only be available on devices that specifically support such a feature, and thus is considered a supplementary service.
+
+<BR></P>
+
+<P>TAPI is not restricted to what is whimsically referred to by the acronym POTS: Plain Old Telephone Service. POTS is analog service on the <I>local </I><I>loop</I> (the wire connecting the telephone set with the nearest switching office). POTS supports voice calls with a 3.1 kHz bandwidth, or data calls at speeds up to 28.8 kbps using V.34 modems.
+
+<BR></P>
+
+<P>In contrast, ISDN (Integrated Services Digital Network) supports up to 128 kbps with its <I>Basic Rate Interface</I> (BRI-ISDN); the speed on PRI-ISDN (Primary Rate Interface) is much higher. TAPI supports ISDN as well as other connection types, such as switched 56, or T1/E1. TAPI can also utilize CENTREX features and the features of Private Branch Exchanges (PBXs).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>TAPI Devices</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>TAPI makes a distinction between <I>line devices</I> and <I>phone devices</I>. A line device is the abstract representation of a physical device that connects your computer to the telephone network. Examples of line devices include modems, FAX modems, or ISDN cards.
+
+<BR></P>
+
+<P>A phone device is the abstract representation of a device with the capabilities of a telephone set. A phone device may have a speaker, a microphone, lamps, a display, buttons, and so on. A phone device is not necessarily a physical device; a software emulation that uses the computer's speaker, microphone, sound card hardware, and a voice-capable modem and displays a telephone-like interface on the screen can also act as a phone device.
+
+<BR></P>
+
+<P>Figure 42.1 shows a basic configuration consisting of a line device (a data modem) and a phone device (a programmable telephone under TAPI control). Note that the presence of a telephone set does not imply the existence of a TAPI phone device. For example, if you have a plain telephone set that is used in conjunction with a dialer that responds to the Hayes AT command set (or a modem used as a dialer) this configuration is represented by a line device. A phone device is used when TAPI has control over some of the features of the telephone set such as its display, switchhook, ringer, or buttons.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="42vcu01.gif">Figure 42.1. TAPI devices.</A></B>
+
+<BR></P>
+
+<P>Line devices all provide a basic set of functions (Basic Telephony). In contrast, all phone device functions are part of Supplementary Telephony; this is because there is no minimum set of functions that a phone device is expected to provide.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>TAPI Addresses</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>TAPI distinguishes between the concepts of a line and that of an <I>address</I>. The line is the physical entity; the address is, for example, a telephone number assigned to the line.
+
+<BR></P>
+
+<P>Although most POTS lines are associated with a single telephone number, this is not always the case. For example, an ordinary telephone line may be configured with more than one telephone number using the telephone company's distinctive ringing service. On digital lines, the use of more than one address on a single line is more common.
+
+<BR></P>
+
+<P>A unique feature of telephone numbers is that their actual format is relative to the originating location. Take, for example, a number here in Ottawa, such as 613-555-1234. When I dial this number locally, all I need to dial is the seven digits of the local number, 555-1234. If I call this number from New York City, I need to dial 1-613-555-1234. Calling the same number from Budapest, Hungary, requires dialing 00w1-613-555-1234, where the letter <I>w</I> represents waiting for a second dial tone. Calling the same number from a telephone set attached to the PBX of a local company may require dialing the digits 8-555-1234. These differences become especially relevant on portable computers.
+
+<BR></P>
+
+<P>TAPI does an excellent job translating telephone numbers. At the heart of its capability is the <I>canonical address format</I>. The syntax of a canonical address is as follows:
+
+<BR></P>
+
+<PRE>+<I>CountryCode</I> Space [(<I>AreaCode</I>) Space] <I>SubscriberNumber</I>
+
+[| <I>SubAddress</I>] [^ <I>Name</I>] CRLF</PRE>
+
+<P>For example, the canonical format of the Ottawa number 555-1234 is as follows:
+
+<BR></P>
+
+<PRE>+1 (613) 555-1234</PRE>
+
+<P>The canonical address differs from a <I>dialable address</I>. Dialable addresses are those that do not begin with the character <I>+</I>; these numbers are presumed to be dialable on the given line without modification. A canonical address can be translated into a dialable address by the lineTranslateAddress TAPI function. The syntax for a dialable number is as follows:
+
+<BR></P>
+
+<PRE><I>DialableNumber</I> [| <I>SubAddress</I>] [^ <I>Name</I>] CRLF</PRE>
+
+<P>Dialable addresses can contain, in addition to digits, the DTMF symbols A-D, # (DTMF &quot;gate&quot;), and * (DTMF &quot;star&quot;), and any of a variety of dial modifier characters. Dial modifier characters are based on the Hayes AT command set and include the characters shown in Table 42.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 42.1. Dial modifier characters used in dialable addresses.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Dial Modifier Character</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>! (exclamation mark)</P>
+
+<TD>
+
+<P>flash switchhook</P>
+
+<TR>
+
+<TD>
+
+<P>P or p</P>
+
+<TD>
+
+<P>pulse dial for subsequent digits</P>
+
+<TR>
+
+<TD>
+
+<P>T or t</P>
+
+<TD>
+
+<P>tone dial for subsequent digits</P>
+
+<TR>
+
+<TD>
+
+<P>, (comma)</P>
+
+<TD>
+
+<P>pause</P>
+
+<TR>
+
+<TD>
+
+<P>w or W</P>
+
+<TD>
+
+<P>wait for dial tone</P>
+
+<TR>
+
+<TD>
+
+<P>@</P>
+
+<TD>
+
+<P>wait for quiet answer</P>
+
+<TR>
+
+<TD>
+
+<P>$</P>
+
+<TD>
+
+<P>wait for billing signal</P>
+
+<TR>
+
+<TD>
+
+<P>;</P>
+
+<TD>
+
+<P>indicates incomplete dialable number</P></TABLE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>TAPI Software Architecture</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>At the heart of TAPI is the TAPI DLL, the dynamic link library that offers TAPI services to applications. This DLL serves as a layer between telephony applications and TAPI service providers. One such service provider is the UNIMODEM driver; this Universal Modem driver is supplied with Windows 95 and provides TAPI services for modems compatible with the Hayes AT command set.
+
+<BR></P>
+
+<P>This basic TAPI architecture is shown in Figure 42.2. In addition to the TAPI DLL and the telephony service providers (drivers), another important, albeit invisible, component of TAPI is the executable program tapiexe.exe. This program plays an important role when TAPI sends notifications to the calling application via callback functions.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="42vcu02.gif">Figure 42.2. The TAPI software architecture.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Synchronous and Asynchronous Operations</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Many TAPI operations are synchronous; that is, when the TAPI function returns, the operation is either completed or failed, in which case an error code is returned. However, some TAPI operations are asynchronous; the TAPI function returns indicating whether the TAPI operation has been successfully initiated, but the operation is completed in another thread, and the application is notified via a callback function. The callback function is registered with TAPI when the TAPI library is initialized.
+
+<BR></P>
+
+<P>The actual callback mechanism deserves a closer examination, especially because it has some consequences as to how TAPI functions operate.
+
+<BR></P>
+
+<P>When a service provider wishes to place a notification, it calls the TAPI DLL. In effect, it requests that the DLL notify all concerned applications that a specific event has taken place. This first call to the TAPI DLL takes place in the execution context of the service provider.
+
+<BR></P>
+
+<P>The TAPI DLL in turn sends a message to tapiexe.exe. This executable program calls the TAPI DLL itself, this time in its own execution context. This call instructs the TAPI DLL to post a Windows message to the applications that need to be modified.
+
+<BR></P>
+
+<P>When the application receives and processes the message in its message loop, the message is dispatched to the TAPI DLL again, this time in the application's execution context. The TAPI DLL may in turn call the application's registered TAPI callback function to notify the application of a TAPI event.
+
+<BR></P>
+
+<P>The TAPI notification mechanism is shown in Figure 42.3.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="42vcu03.gif">Figure 42.3. Processing of TAPI events.</A></B>
+
+<BR></P>
+
+<P>This mechanism has important implications for the architecture of TAPI applications. For one thing, the scenario described here makes it clear that TAPI applications must have a message loop in order to process notifications correctly. Although the use of a callback function may imply that a message loop is unnecessary, this is not the case; the callback function is only called after the application receives a Windows message that the TAPI DLL processes.
+
+<BR></P>
+
+<P>Another consequence concerns the use of multiple threads. It is important to realize that in order for TAPI to operate as expected, threads that call asynchronous TAPI functions must have a message loop. The callback function is called in the context of the thread making the asynchronous call; this cannot happen unless the thread processes Windows messages.
+
+<BR></P>
+
+<P>While the need for a message loop does not completely rule out the use of TAPI with console applications, it places certain restrictions on them. The console application must have a message loop that processes and dispatches Windows messages. The example presented later in this chapter (Listing 42.2) demonstrates the use of this technique.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B> Variable-Length Structures</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Everywhere throughout TAPI, variable-length structures are frequently used. These structures represent data that is variable in length, such as optional fields or strings.
+
+<BR></P>
+
+<P>All TAPI variable-length structures make use of structure members dwTotalSize, dwNeededSize, and dwUsedSize. When a TAPI function is called that is expected to return data in such a structure, your first task is to allocate the structure and fill its dwTotalSize member prior to making the call.
+
+<BR></P>
+
+<P>The TAPI documentation refers to structures of this kind as <I>flattened</I>. Instead of referred to through pointers, supplementary data fields and variable-length fields are simply appended to the end of the structure. Variable-length fields are referred to in the structure by an offset and a length parameter; the offset specifies the starting position of the field, in bytes, relative to the start of the structure; the length represents the length of the field in bytes.
+
+<BR></P>
+
+<P>Suppose a TAPI function called tapiStrangeFunc returns variable-length data in a VARSTRUCT structure. This structure is declared as follows:
+
+<BR></P>
+
+<PRE>typedef struct
+
+{
+
+    DWORD dwTotalSize;
+
+    DWORD dwNeededSize;
+
+    DWORD dwUsedSize;
+
+    // other fixed-length elements here
+
+    DWORD dwVarItem1Size;
+
+    DWORD dwVarItem1Offset;
+
+    // more fixed-length elements here
+
+    DWORD dwVarItem2Size;
+
+    DWORD dwVarItem2Offset;
+
+} VARSTRUCT, FAR *LPVARSTRUCT;</PRE>
+
+<P>Before tapiStrangeFunc is called, you must allocate a VARSTRUCT structure. Although you can allocate it as an automatic variable, doing so is not recommended. Instead, use the following mechanism:
+
+<BR></P>
+
+<PRE>LPVARSTRUCT pVarStruct;
+
+pVarStruct = (LPVARSTRUCT)malloc(sizeof(pVarStruct));
+
+pVarStruct-&gt;dwTotalSize = sizeof(VARSTRUCT);
+
+tapiStrangeFunc(pVarStruct);</PRE>
+
+<P>The description of tapiStrangeFunc may tell you that this function appends an extra DWORD member to this structure. Clearly, this extra member requires additional memory&#151;and so do the two variable-length items identified by the members dwVarItem1Size/dwVarItem1Offset, and dwVarItem2Size/dwVarItem2Offset.
+
+<BR></P>
+
+<P>When tapiStrangeFunc returns, this fact is indicated by the value of the dwNeededSize structure member. This member will indicate that additional memory is needed to return all values. A possible response to this would be a reallocation of the structure, and another call to tapiStrangeFunc:
+
+<BR></P>
+
+<PRE>pVarStruct = (LPVARSTRUCT)malloc((LPVOID)pVarStruct,
+
+                                 pVarStruct-&gt;dwNeededSize);
+
+pVarStruct-&gt;dwTotalSize = pVarStruct-&gt;dwNeededSize;
+
+tapiStrangeFunc(pVarStruct);</PRE>
+
+<P>When this call to tapiStrangeFunc returns, pVarStruct points to a structure in memory as shown in Figure 42.4.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="42vcu04.gif">Figure 42.4. An example for a TAPI variable-length </B><B>structure.</A></B>
+
+<BR></P>
+
+<P>The dwUsedSize field is somewhat of a lesser significance; it comes into play when TAPI could not fill in all the structure members (dwTotalSize was less than dwNeededSize). In this case, rather than truncating a variable-length field, TAPI simply leaves that field empty.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>TAPI Services</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In addition to the Assisted TAPI services that we have seen already, TAPI provides services that fall into three categories: Basic Telephony, Supplementary Telephony, and Extended Telephony.
+
+<BR></P>
+
+<P>Basic Telephony includes all functions that a POTS line can be expected to provide. This minimal set of functions must be supported by all service providers.
+
+<BR></P>
+
+<P>Supplementary Telephony includes all standard TAPI services that are not in the Basic Telephony set of functions. These include supplementary services found on most PBXs, such as hold, call transfer, conference calls, and so on. An application can query the set of supplementary services supported by a particular line device or phone device by calling lineGetDevCaps, lineGetAddressCaps, or phoneGetDevCaps.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> Because there is no minimum set of services that phone devices are expected to support, all phone device services are in the Supplementary Telephony category.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>Extended TAPI services are provider-specific. These include all device-specific TAPI extensions. TAPI provides the necessary mechanisms for extending services through variable-length structures, and functions through which service providers can inform applications about the extended services they support.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The TAPI Programming Model</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The basic TAPI programming model for line devices is illustrated in Figure 42.5.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="42vcu05.gif">Figure 42.5. The TAPI programming model: calls in a </B><B>typical TAPI application.</A></B>
+
+<BR></P>
+
+<P>All TAPI applications that utilize line devices begin by a call to lineInitialize. This call initializes TAPI for use with line devices. Note that this call should not be made unless the application actually intends to utilize TAPI services; making this call unnecessarily may use up valuable TAPI resources and cause other applications to fail.
+
+<BR></P>
+
+<P>One parameter to lineInitialize is the address of a callback function. It is through this function that the application is informed of the completion of asynchronous function requests and other TAPI events.
+
+<BR></P>
+
+<P>Before an application can open a specific line device, it must negotiate a TAPI version number by calling lineNegotiateAPIVersion. Through this call, the application and the service provider handling the specific device can agree on a version number they can both support. Note that the current TAPI version number is 1.4; only this and an earlier 16-bit version, 1.3, are presently in existence.
+
+<BR></P>
+
+<P>The line device is opened by calling lineOpen. Afterwards, applications can call a variety of functions that use the open device. One example is the lineMakeCall function that is used to place a call on the line device. This function is also an example for an asynchronous function; it returns immediately after the call request has been successfully placed. The application is notified of the completion of the call request through its callback function.
+
+<BR></P>
+
+<P>After the call has been placed, an application can do a variety of things with the line depending on its intended function. A number of additional functions can be used to obtain information about the line and the call, configure the line, and manipulate addresses. Supplementary functions can be used to transfer the call, place it on hold, set up conference calls, and so on.
+
+<BR></P>
+
+<P>A specific feature offered by TAPI assists data communication applications in particular. Such applications may use the TAPI lineGetID function to obtain a handle to the communication device. This handle is opened by TAPI for overlapped I/O and can be used by the application for exchanging data with a remote host.
+
+<BR></P>
+
+<P>Using lineMakeCall is not the only way to establish a call. Applications may also obtain a call handle by accepting incoming calls. Applications that are set up to accept incoming calls are notified of such calls through their callback function.
+
+<BR></P>
+
+<P>When the application wishes to terminate the call, it can use the lineDrop function. A call may also be terminated by the remote end; in this case, the application is notified through its callback function.
+
+<BR></P>
+
+<P>When the application is finished using the line device, it should call the lineClose function to close the device. The lineShutdown function can be used to terminate the application's session with TAPI.
+
+<BR></P>
+
+<P>The programming model used for phone devices is similar. The key steps of initializing TAPI, negotiating a version number, and opening the device are present. There is no equivalent to placing a call on a phone device; phone device functions exist to manipulate the various components of a telephone, such as its switchhook, display, or buttons.
+
+<BR></P>
+
+<P>Applications that wish to use provider-specific Extended Telephony services must call the lineNegotiateExtVersion or phoneNegotiateExtVersion functions to negotiate the extended version number. Device-specific functions can be executed by calling the escape functions lineDevSpecific, lineDevSpecificFeature (for switch functions), and phoneDevSpecific.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>TAPI Media Modes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>TAPI provides two concepts that specify the quality of service supported by a line and the type of a call.
+
+<BR></P>
+
+<P>The <I>bearer mode</I> specifies the quality of service. For example, the voice bearer mode (LINEBEARERMODE_VOICE) indicates a POTS line with a 3.1 kHz analog bandwidth and no provisions for data integrity. Other bearer modes describe ISDN or other data lines.
+
+<BR></P>
+
+<P>The <I>media mode</I> determines the type of the call. For example, on a voice line it is possible to make voice or data calls; these correspond to the media modes LINEMEDIAMODE_INTERACTIVEVOICE or LINEMEDIAMODE_DATAMODEM.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Multiple Applications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The TAPI architecture enables multiple applications to coexist. This is a very important feature. This makes it possible, for example, for a TAPI FAX application to monitor a line for incoming FAX transmissions while at the same time enabling another TAPI application, such as a data communication application, to use the same line for outgoing calls.
+
+<BR></P>
+
+<P>At the heart of this capability is the concept of <I>call ownership</I>. Initially, ownership of a call is assigned to one application; it is either the application that originated the call or the application that receives the incoming call. An application can pass ownership of a call to another application through the lineHandoff function. The original application also continues owning the call. It can then choose to remain a co-owner of the call (although doing so is not recommended), deallocate the call handle indicating that it is no longer interested in the call, or use lineSetCallPrivilege to become a <I>call monitor</I>. A call monitor is an application cannot control the call's existence, but it can record facts about the call (logging).
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> If a call is co-owned by multiple applications, TAPI offers no mechanism to prevent these applications from interfering with each other.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>When handling incoming calls, applications may perform <I>probing</I> to determine the nature of the call. Probing can be used, for example, to determine whether an incoming call is a data, FAX, or voice call. Probing is usually done by applications, although some service providers can be configured to auto-answer a call and hand it off to the appropriate application. Note that TAPI does not launch applications to handle specific call types.
+
+<BR></P>
+
+<P>Applications can learn about in-progress calls at startup by calling lineGetNewCalls. Through this function, an application can obtain handles with monitoring privilege for all calls that are currently in progress.
+
+<BR></P>
+
+<P>Applications can communicate with each other by using the lineSetAppSpecific function. Through this function, they can set the dwAppSpecific field of the LINECALLINFO structure. Other applications that own or monitor the call are informed by receiving a LINE_CALLINFO message.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>A Data Communication Example</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>I decided to put TAPI into practice by modifying a simple console application I wrote earlier. This simple communication application opens a communication port and uses overlapped I/O operations to perform input and output.
+
+<BR></P>
+
+<P>In its original version, the application simply opened the port without making any attempt at placing a call. It was up to the user to use the appropriate AT commands to place a call. The communication port was hardcoded in the application.
+
+<BR></P>
+
+<P>In the TAPI version presented in Listing 42.2, the call is placed through the TAPI function lineMakeCall. Before that happens, the user is given the opportunity to choose a TAPI device.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 42.2. A simple TAPI data communication program.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;tapi.h&gt;
+
+#include &lt;stdio.h&gt;
+
+volatile BOOL bConnected = FALSE;
+
+VOID FAR PASCAL lineCallback(DWORD hDevice, DWORD dwMsg,
+
+                          DWORD dwCallbackInstance, DWORD dwParam1,
+
+                          DWORD dwParam2, DWORD dwParam3)
+
+{
+
+    if (dwMsg == LINE_CALLSTATE &amp;&amp;
+
+        dwParam1 == LINECALLSTATE_CONNECTED)
+
+            bConnected = TRUE;
+
+}
+
+LINEDEVCAPS *GetDevCaps(HLINEAPP hLineApp, DWORD dwDeviceID,
+
+                        LPDWORD lpdwAPIVersion)
+
+{
+
+    LINEDEVCAPS *pLineDevCaps;
+
+    LINEEXTENSIONID extensionID;
+
+    lineNegotiateAPIVersion(hLineApp, dwDeviceID, 0x10004, 0x10004,
+
+                            lpdwAPIVersion, &amp;extensionID);
+
+    pLineDevCaps = malloc(sizeof(LINEDEVCAPS));
+
+    pLineDevCaps-&gt;dwTotalSize = sizeof(LINEDEVCAPS);
+
+    lineGetDevCaps(hLineApp, dwDeviceID, *lpdwAPIVersion, 0,
+
+                   pLineDevCaps);
+
+    if (pLineDevCaps-&gt;dwNeededSize &gt; pLineDevCaps-&gt;dwTotalSize)
+
+    {
+
+        pLineDevCaps =
+
+            realloc(pLineDevCaps, pLineDevCaps-&gt;dwNeededSize);
+
+        pLineDevCaps-&gt;dwTotalSize = pLineDevCaps-&gt;dwNeededSize;
+
+        lineGetDevCaps(hLineApp, dwDeviceID, *lpdwAPIVersion, 0,
+
+                       pLineDevCaps);
+
+    }
+
+    return pLineDevCaps;
+
+}
+
+HANDLE SelectTAPIDevice(HLINEAPP hLineApp, DWORD dwNumDevs,
+
+                        LPHLINE lphLine, LPHCALL lphCall)
+
+{
+
+    LINEDEVCAPS *pLineDevCaps;
+
+    DWORD dwDeviceID;
+
+    DWORD dwAPIVersion;
+
+    DWORD i;
+
+    LINECALLPARAMS lineCallParams;
+
+    LPVARSTRING lpDeviceID;
+
+    MSG msg;
+
+    char szNumber[81];
+
+    for (i = 0; i &lt; dwNumDevs; i++)
+
+    {
+
+        pLineDevCaps = GetDevCaps(hLineApp, i, &amp;dwAPIVersion);
+
+        if (pLineDevCaps-&gt;dwMediaModes &amp; LINEMEDIAMODE_DATAMODEM)
+
+            printf(&quot;%d: %s\n&quot;, i,
+
+             (char*)pLineDevCaps + pLineDevCaps-&gt;dwLineNameOffset);
+
+        free(pLineDevCaps);
+
+    }
+
+    dwDeviceID = -1;
+
+    while (dwDeviceID &lt; 0 || dwDeviceID &gt;= dwNumDevs)
+
+    {
+
+        printf(&quot;Select device: &quot;);
+
+        scanf(&quot;%d&quot;, &amp;dwDeviceID);
+
+        if (dwDeviceID &lt; 0 || dwDeviceID &gt;= dwNumDevs) continue;
+
+        pLineDevCaps =
+
+            GetDevCaps(hLineApp, dwDeviceID, &amp;dwAPIVersion);
+
+        if(!(pLineDevCaps-&gt;dwMediaModes &amp; LINEMEDIAMODE_DATAMODEM))
+
+        {
+
+            dwDeviceID = -1;
+
+            free(pLineDevCaps);
+
+        }
+
+    }
+
+    printf(&quot;Enter telephone number: &quot;);
+
+    scanf(&quot;%s&quot;, szNumber);
+
+    printf(&quot;Dialing %s on %s...&quot;, szNumber,
+
+           (char *)pLineDevCaps + pLineDevCaps-&gt;dwLineNameOffset);
+
+    free(pLineDevCaps);
+
+    lineOpen(hLineApp, dwDeviceID, lphLine, dwAPIVersion, 0, 0,
+
+            LINECALLPRIVILEGE_NONE, LINEMEDIAMODE_DATAMODEM, NULL);
+
+    memset(&amp;lineCallParams, 0, sizeof(LINECALLPARAMS));
+
+    lineCallParams.dwTotalSize = sizeof(LINECALLPARAMS);
+
+    lineCallParams.dwMinRate = 2400;
+
+    lineCallParams.dwMaxRate = 57600;
+
+    lineCallParams.dwMediaMode = LINEMEDIAMODE_DATAMODEM;
+
+    lineMakeCall(*lphLine, lphCall, szNumber, 0, &amp;lineCallParams);
+
+    while (!bConnected)
+
+        if (GetMessage(&amp;msg, NULL, 0, 0)) DispatchMessage(&amp;msg);
+
+    putchar('\n');
+
+    lpDeviceID = malloc(sizeof(VARSTRING));
+
+    lpDeviceID-&gt;dwTotalSize = sizeof(VARSTRING);
+
+    lineGetID(0, 0, *lphCall, LINECALLSELECT_CALL, lpDeviceID,
+
+              &quot;comm/datamodem&quot;);
+
+    if (lpDeviceID-&gt;dwNeededSize &gt; lpDeviceID-&gt;dwTotalSize)
+
+    {
+
+        lpDeviceID = realloc(lpDeviceID, lpDeviceID-&gt;dwNeededSize);
+
+        lpDeviceID-&gt;dwTotalSize = lpDeviceID-&gt;dwNeededSize;
+
+        lineGetID(0, 0, *lphCall, LINECALLSELECT_CALL, lpDeviceID,
+
+                  &quot;comm/datamodem&quot;);
+
+    }
+
+    return *((LPHANDLE)((char *)lpDeviceID + sizeof(VARSTRING)));
+
+}
+
+void main(void)
+
+{
+
+    HLINEAPP hLineApp;
+
+    HLINE hLine;
+
+    HCALL hCall;
+
+    DWORD dwNumDevs;
+
+    HANDLE hConIn, hConOut, hCommPort;
+
+    HANDLE hEvents[2];
+
+    DWORD dwCount;
+
+    DWORD dwWait;
+
+    COMMTIMEOUTS ctmoCommPort;
+
+    DCB dcbCommPort;
+
+    OVERLAPPED ov;
+
+    INPUT_RECORD irBuffer;
+
+    BOOL fInRead;
+
+    char c;
+
+    int i;
+
+    lineInitialize(&amp;hLineApp, GetModuleHandle(NULL), lineCallback,
+
+                   &quot;Test TAPI Application&quot;, &amp;dwNumDevs);
+
+    hCommPort =
+
+        SelectTAPIDevice(hLineApp, dwNumDevs, &amp;hLine, &amp;hCall);
+
+    hConIn = CreateFile(&quot;CONIN$&quot;, GENERIC_READ | GENERIC_WRITE,
+
+                         FILE_SHARE_READ, NULL, OPEN_EXISTING,
+
+                         FILE_ATTRIBUTE_NORMAL, 0);
+
+    SetConsoleMode(hConIn, 0);
+
+    hConOut = CreateFile(&quot;CONOUT$&quot;, GENERIC_WRITE,
+
+                         FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+
+                         FILE_ATTRIBUTE_NORMAL, 0);
+
+    ctmoCommPort.ReadIntervalTimeout = MAXDWORD;
+
+    ctmoCommPort.ReadTotalTimeoutMultiplier = MAXDWORD;
+
+    ctmoCommPort.ReadTotalTimeoutConstant = MAXDWORD;
+
+    ctmoCommPort.WriteTotalTimeoutMultiplier = 0;
+
+    ctmoCommPort.WriteTotalTimeoutConstant = 0;
+
+    SetCommTimeouts(hCommPort, &amp;ctmoCommPort);
+
+    dcbCommPort.DCBlength = sizeof(DCB);
+
+    GetCommState(hCommPort, &amp;dcbCommPort);
+
+    SetCommState(hCommPort, &amp;dcbCommPort);
+
+    SetCommMask(hCommPort, EV_RXCHAR);
+
+    ov.Offset = 0;
+
+    ov.OffsetHigh = 0;
+
+    ov.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+    hEvents[0] = ov.hEvent;
+
+    hEvents[1] = hConIn;
+
+    fInRead = FALSE;
+
+    while (1)
+
+    {
+
+        if (!fInRead)
+
+            while (ReadFile(hCommPort, &amp;c, 1, &amp;dwCount, &amp;ov))
+
+                if (dwCount == 1)
+
+                    WriteFile(hConOut, &amp;c, 1, &amp;dwCount, NULL);
+
+        fInRead = TRUE;
+
+        dwWait =
+
+            WaitForMultipleObjects(2, hEvents, FALSE, INFINITE);
+
+        switch (dwWait)
+
+        {
+
+            case WAIT_OBJECT_0:
+
+                if (GetOverlappedResult(hCommPort, &amp;ov, &amp;dwCount,
+
+                                        FALSE))
+
+                    if (dwCount == 1)
+
+                        WriteFile(hConOut, &amp;c, 1, &amp;dwCount, NULL);
+
+                fInRead = FALSE;
+
+                break;
+
+            case WAIT_OBJECT_0 + 1:
+
+                ReadConsoleInput(hConIn, &amp;irBuffer, 1, &amp;dwCount);
+
+                if (dwCount == 1 &amp;&amp;
+
+                    irBuffer.EventType == KEY_EVENT &amp;&amp;
+
+                    irBuffer.Event.KeyEvent.bKeyDown)
+
+                  for (i = 0;
+
+                     i &lt; irBuffer.Event.KeyEvent.wRepeatCount; i++)
+
+                {
+
+                    if (irBuffer.Event.KeyEvent.uChar.AsciiChar)
+
+                    {
+
+                        WriteFile(hCommPort,
+
+                          &amp;irBuffer.Event.KeyEvent.uChar.AsciiChar,
+
+                          1, &amp;dwCount, NULL);
+
+                        if (irBuffer.Event.KeyEvent.uChar.AsciiChar
+
+                            == 24) goto EndLoop;
+
+                    }
+
+                }
+
+        }
+
+    }
+
+EndLoop:
+
+    CloseHandle(ov.hEvent);
+
+    CloseHandle(hConIn);
+
+    CloseHandle(hConOut);
+
+    CloseHandle(hCommPort);
+
+    lineDrop(hCall, NULL, 0);
+
+    lineClose(hLine);
+
+    lineShutdown(hLineApp);
+
+}</PRE>
+
+<P>The fact that this is a console application represented special challenges. In particular, it was necessary to use a message loop at one point to enable the TAPI callback mechanism to work. Although this approach may be somewhat unorthodox, it demonstrates the TAPI programming model and its traps and pitfalls surprisingly well.
+
+<BR></P>
+
+<P>The first call in the applications main function is to the TAPI function lineInitialize. Next, main calls the function SelectTAPIDevice; this high-level function queries the user for a TAPI device and a telephone number, opens the device, places the call, and returns a Win32 handle that the application can use in subsequent I/O calls.
+
+<BR></P>
+
+<P>The SelectTAPIDevice function first queries all TAPI line devices for the line name. These line names are presented to the user in the form of a numbered list, and the user is requested to choose one of them. When determining the line name, SelectTAPIDevice utilizes another function, GetDevCaps. Note the duplicate calls to the TAPI function lineGetDevCaps in GetDevCaps; the first call is used to determine the size of the structure lineGetDevCaps would return. The second call is made after a sufficiently large block of memory has been allocated.
+
+<BR></P>
+
+<P>After a line device has been selected in SelectTAPIDevice, the user is requested to enter a telephone number. This number is then used, after the line has been opened and the appropriate structure initialized, in a call to lineMakeCall. Since lineMakeCall is an asynchronously executing TAPI function, the return of this function does not indicate completion of the request. In particular, the call handle pointed to by lphCall is not yet valid. The application must wait until its callback function is called indicating that the call has been set up; furthermore, it must ensure that the callback mechanism operates as expected by executing a message loop.
+
+<BR></P>
+
+<P>The callback function, lineCallback, is extremely simplistic; it simply waits for a LINE_CALLSTATE message that indicates that the call has been connected. The rest of the application is notified of call completion when the global variable bConnected is set to TRUE by the callback function. In particular, this change causes the message loop in SelectTAPIDevice to terminate.
+
+<BR></P>
+
+<P>When SelectTAPIDevice is notified of successful call completion through this mechanism, it uses the lineGetID function to retrieve a handle to the communication port. Note how lineGetID is called twice, first to determine the size of the data structure it is about to return. Note also how an extra structure member of type HANDLE is retrieved.
+
+<BR></P>
+
+<P>When SelectTAPIDevice returns, it passes the communication device handle to main. In main, this handle is used to configure the communication device and the console for I/O and handle bidirectional data transfer. The application is terminated when the user hits the Control+ X key combination. At this time, the application closes all handles, terminates the TAPI session, and exits.
+
+<BR></P>
+
+<P>To compile this application from the command line, type cl tty.c tapi32.lib user32.lib. The USER library is required because of the references to the Windows functions GetMessage and DispatchMessage.
+
+<BR></P>
+
+<P>I ran this application on my main desktop computer that has two modems attached to it. An internal FAX modem connects my desktop computer to my data line; an old external pocket modem connects it to my voice line. I mostly use this modem simply as a dialer; however, it comes in handy when I need to test communication applications like this one. Also connected to my data line through its own FAX modem is another computer running Linux (this is my server for Internet mail and TCP/IP connections). This server also accepts incoming data calls, so I can utilize the modem on my voice line to make calls to it.
+
+<BR></P>
+
+<P>A sample session using this configuration looked like the following:
+
+<BR></P>
+
+<PRE>C:\TTY&gt;tty
+
+0: SupraFAXModem 144i
+
+1: Practical Peripherals 2400
+
+Select device: 1
+
+Enter telephone number: 555-1234
+
+Dialing 555-1234 on Practical Peripherals 2400...
+
+You have reached a private computer system. Calls to this system
+
+are logged using calling party identification (caller ID).
+
+Unauthorized calls violate my privacy, not to mention the law! If
+
+you have not been specifically authorized by me to access this
+
+system, now would be a great time to terminate your connection.
+
+Viktor
+
+Welcome to Linux 1.1.37.
+
+vtt1!login: vttoth
+
+Password:
+
+Last login: Tue Oct 17 01:57:20 on ttyS0
+
+Linux 1.1.37. (Posix).
+
+vtt1:~$ ^X
+
+C:\TTY&gt;</PRE>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> This simple application provides absolutely no error handling. In particular, it is written with the assumption that the call always succeeds; no provisions are made for unsuccessful call attempts, and the application will likely malfunction in such a case. Furthermore, the application does not handle the loss of carrier; because it does not operate a message loop while it is connected, its TAPI callback function is never notified when the call is terminated by the remote end.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>TAPI, the Microsoft Telephony API, provides personal telephony services for Windows applications. TAPI provides abstractions for line devices that connect a computer to a telephone line, and phone devices, which are telephone sets with a variety of components such as a switchhook, display, buttons, or ring, that can be manipulated programmatically. (Note that most commonly used telephone sets cannot be manipulated this way.) A TAPI line device always represents a physical device; in contrast, a phone device can be a software representation of a telephone that uses the computer's display, keyboard, and sound hardware to provide the services of a telephone set.
+
+<BR></P>
+
+<P>TAPI line devices are not restricted to represent only devices attached to plain old telephone service (POTS) lines. Line devices can represent hardware connected to ISDN lines, T1/E1 data lines, switched 56 data lines, and other lines.
+
+<BR></P>
+
+<P>TAPI provides services to place outgoing calls and accept incoming calls. It is the responsibility of applications to manage the media stream, the actual flow of data during a call. The media stream is a generic term that represents voice, data, FAX images, or other information that flows through a telephone line.
+
+<BR></P>
+
+<P>The TAPI DLL represents a layer between applications and device-specific service providers (drivers). Another TAPI component is the tapiexe.exe system application that is used in TAPI messaging.
+
+<BR></P>
+
+<P>TAPI functions can execute synchronously and asynchronously. Synchronous functions return immediately with a success or failure result. Asynchronous functions, on the other hand, return only to indicate whether a request has been placed successfully; applications are notified of request completion through a callback function. In order for the callback function mechanism to operate, applications must maintain a Windows message loop.
+
+<BR></P>
+
+<P>The TAPI interface is broken down into Assisted Telephony, Basic Telephony, Supplementary Telephony, and Extended Telephony.
+
+<BR></P>
+
+<P>Assisted Telephony provides a set of simple functions for placing calls. These functions are ideally suited for use in script languages that can call external DLLs.
+
+<BR></P>
+
+<P>Basic Telephony consists of those line device functions that all service providers must implement. These include functions to place and accept calls and monitor calls in progress.
+
+<BR></P>
+
+<P>Supplementary Telephony consists of functions that require special hardware. For example, special hardware is required for call transfer, conference call, and other call management functions to work. Applications cannot expect that a supplementary function is available; they must query the service provider about the availability of a supplementary function.
+
+<BR></P>
+
+<P>Extended Telephony represents device- and provider-specific functionality. Extended functions are accessed through special escape functions that TAPI provides. Before using extended functions, applications must determine their availability by querying the service provider.</P>
+
+<P><A HREF="vcu41fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu43fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

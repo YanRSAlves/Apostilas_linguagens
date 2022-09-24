@@ -1,0 +1,1072 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu18fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu19fi.htm">
+
+<LINK REL="Previous" HREF="p03vcufi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="p03vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu19fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">18 &#151; Microsoft Foundation Classes: An Overview</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">MFC and Applications</A></LI>
+
+<LI>
+
+<A HREF="#I4">Foundation Class Fundamentals</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I5">The CObject Class and Serialization</A></LI>
+
+<LI>
+
+<A HREF="#I6">Run-Time Type Information</A></LI>
+
+<LI>
+
+<A HREF="#I7">MFC and Multiple Inheritance</A></LI>
+
+<LI>
+
+<A HREF="#I8">MFC and Windows Objects</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">Window Support Classes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I10">Frame Windows</A></LI>
+
+<LI>
+
+<A HREF="#I11">View Windows</A></LI>
+
+<LI>
+
+<A HREF="#I12">Dialogs</A></LI>
+
+<LI>
+
+<A HREF="#I13">Controls</A></LI></UL>
+
+<LI>
+
+<A HREF="#I14">Application Architecture Classes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I15">Document classes</A></LI>
+
+<LI>
+
+<A HREF="#I16">Document Templates</A></LI>
+
+<LI>
+
+<A HREF="#I17">Application Objects</A></LI>
+
+<LI>
+
+<A HREF="#I18">Document Items</A></LI>
+
+<LI>
+
+<A HREF="#I19">Other Application Architecture Classes</A></LI></UL>
+
+<LI>
+
+<A HREF="#I20">Miscellaneous Classes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I21">Graphic Support Classes</A></LI>
+
+<LI>
+
+<A HREF="#I22">System Support Classes</A></LI>
+
+<LI>
+
+<A HREF="#I23">Collection Classes</A></LI>
+
+<LI>
+
+<A HREF="#I24">Non-CObject-derived Classes</A></LI></UL>
+
+<LI>
+
+<A HREF="#I25">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>18 &#151; Microsoft Foundation Classes: An Overview</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The Microsoft Foundation Classes Library is arguably the most distinguishing component of the Visual C++ development system. This vast collection of C++ classes encapsulates most of the Win32 API and provides a powerful framework for typical (and not so typical) applications.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>MFC and Applications</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>A typical MFC application is one that is created using the Visual C++ AppWizard. However, it is not necessary to use the AppWizard to create an MFC application, nor is the use of MFC restricted to such AppWizard-generated programs. Many simple MFC classes can be used in simple programs including, to the surprise of many programmers, command-line (console) applications.
+
+<BR></P>
+
+<P>In fact, consider the simple program shown in Listing 18.1. This MFC program can be compiled from the command line (cl /MT hellomfc.cpp).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 18.1: A simple MFC console application.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+CFile&amp; operator&lt;&lt;(CFile&amp; file, const CString&amp; string)
+
+{
+
+    file.Write(string, string.GetLength());
+
+    return file;
+
+}
+
+void main(void)
+
+{
+
+        CFile file((int)GetStdHandle(STD_OUTPUT_HANDLE));
+
+        CString string = &quot;Hello, MFC!&quot;;
+
+        file &lt;&lt; string;
+
+}</PRE>
+
+<P>That said, the primary goal of the MFC is to provide an encapsulation for the Windows API. Its major classes, such as CWnd, CDialog, or CGdiObject, represent the results of this design philosophy. Ideally, an MFC application never has to call Windows API functions directly; instead, it constructs an object of the appropriate type and utilizes the object's member functions. The object's constructor and destructor take care of any initialization and cleanup that is necessary.
+
+<BR></P>
+
+<P>For example, an application that needs to draw into a window can do so by constructing a CClientDC object and calling the object's member functions (which closely map GDI drawing functions). The CClientDC constructor makes the appropriate calls to create a device context, set up the mapping mode, and perform other initializations. When the object goes out of scope or is destroyed using the delete operator, the destructor automatically releases the device context. This kind of encapsulation would make writing application programs easier even without the benefit of the Developer Studio, its AppWizard, and other powerful features.
+
+<BR></P>
+
+<P>The problem many programmers new to MFC must face is the steep learning curve. I remember well that when I first got my hands on MFC 1.0 (which was, needless to say, significantly less complex than MFC 4 is today), I felt at first completely overwhelmed. It seemed that to accomplish even the simplest task took days of browsing through the thick paper manuals. True, it is simple to write a few lines of code like this:
+
+<BR></P>
+
+<PRE>CClientDC *pDC;
+
+pDC = new CClientDC(this);
+
+pDC-&gt;Rectangle(0, 0, 100, 100);
+
+delete pDC;</PRE>
+
+<P>but only if you know exactly what you are doing! Otherwise, you have to first find out that there is indeed a class that encapsulates the functionality of a device context associated with a window's client area. Next, you must explore the member functions of the CClientDC class and its parent classes, to find out that there is indeed a CDC::Rectangle member function. (After all, a different design approach might have placed such a member function into the CWnd class.) Third, you may wish to double-check to ensure that no other initialization work is needed. With paper manuals and no other guidance, these steps may consume many valuable hours.
+
+<BR></P>
+
+<P>That said, the programmer today is not without guidance anymore. Apart from this splendid book you are holding in your hands, there are online references, help files, excellent tutorials, valuable example programs, and most importantly, the AppWizard.
+
+<BR></P>
+
+<P>I always found that a high-level overview, &quot;getting the big picture,&quot; helps tremendously when trying to understand a complex subject. So before we get bogged down in the details, allow me to devote the rest of this chapter to presenting just such an overview of MFC.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B>Foundation Class Fundamentals</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The classes in MFC are loosely organized into several major categories. Of these, the two major categories are <I>Application Architecture</I> classes and <I>Window Support</I> classes. Other categories contain classes that encapsulate a variety of system, GDI, or miscellaneous services.
+
+<BR></P>
+
+<P>Most classes in MFC are derived from a common root, the CObject class. The CObject class implements two important features: <I>serialization</I> and <I>run-time type information</I>. (Note that the CObject class predates RTTI, the new C++ run-time type information mechanism; the CObject class does not use RTTI.) However, there are several simple support classes that are not derived from CObject.
+
+<BR></P>
+
+<P>The major MFC categories are illustrated in Figure 18.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu01.gif">Figure 18.1. Overview of MFC.</A></B>
+
+<BR></P>
+
+<P>Because of the importance of CObject, we'll take a look at that class first.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>The </B><B><I>CObject</I></B><B> Class and Serialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As I mentioned, the CObject class, the &quot;mother of all classes&quot; (well, almost) implements serialization and run-time type information. But what do these concepts mean?
+
+<BR></P>
+
+<P><I>Serialization</I> is the conversion of an object to and from a persistent form. Or, in simpler terms, it means writing an object to disk or reading it from the disk or any other forms of persistent storage.
+
+<BR></P>
+
+<P>Why is serialization necessary? Why not just write
+
+<BR></P>
+
+<PRE>cout &lt;&lt; myObject;</PRE>
+
+<P>and get it over with? For one thing, everybody knows that writing anything to disk that involves pointers can be tricky. When you later read that disk file, chances are that whatever your pointer pointed to has either been moved or is no longer present in memory at all. But this is not the end of the story.
+
+<BR></P>
+
+<P>MFC objects are not only written to disk files. Serialization is also used to place an object on the clipboard or to prepare the object for OLE embedding.
+
+<BR></P>
+
+<P>The MFC Library uses CArchive objects for serialization. A CArchive object represents persistent storage of some kind. When an object is about to be serialized, CArchive calls the object's Serialize member function, one of the overridable functions in CObject. Thus, the underlying philosophy is that it is the object that knows best how to prepare itself for persistent storage, while it is the CArchive object that knows how to transfer the resulting data stream to persistent media.
+
+<BR></P>
+
+<P>But let an example do the talking. This example implements something simple, a string class CMyString. (Note that this has nothing to do with the sophisticated MFC CString class; the sole purpose of this exercise is to demonstrate CObject serialization.)
+
+<BR></P>
+
+<P>CMyString has two data members; one represents the length of the string, the other is a pointer to the string data. Unlike C strings, a CMyString can contain embedded null characters and does not require a terminating null character. The declaration of the CMyString class would thus look like this (only the data members and the Serialize member function are shown):
+
+<BR></P>
+
+<PRE>class CMyString
+
+{
+
+private:
+
+    WORD m_nLength;
+
+    LPSTR m_pString;
+
+public:
+
+    virtual void Serialize(CArchive &amp;ar);
+
+};</PRE>
+
+<P>Why am I using the Windows type WORD instead of declaring m_nLength an integer? There is a very important reason. Windows guarantees that the WORD type will represent a 16-bit integer on all present and future versions of Windows. This is important when it comes to storing data on persistent storage; it ensures that data files written under one operating system specific version of our application remain readable under another. Had we used int instead, we would be facing the problem that an int is a 16-bit type under Windows 3.1, a 32-bit type under Windows 95 and Windows NT, and who knows what under future versions of Windows. Thus, data files created under these different operating systems would be incompatible.
+
+<BR></P>
+
+<P>The Serialize member function is responsible for actually writing data to, and reading data from, a CArchive object. However, we cannot simply just write m_nLength and m_pString to the archive. Instead, we have to write the data m_pString points to, that is, the string itself. When it comes to reading the data, we must first determine the length of the string, allocate memory for it, and then read the string itself:
+
+<BR></P>
+
+<PRE>CMyString::Serialize(CArchive &amp;ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        ar &lt;&lt; m_nLength;
+
+        ar.Write(m_pString, m_nLength);
+
+    }
+
+    else
+
+    {
+
+        ar &gt;&gt; m_nLength;
+
+        m_pString = new char[m_nLength];
+
+        ar.Read(m_pString, m_nLength);
+
+    }
+
+}</PRE>
+
+<P>In order for this code to compile and run correctly, it is also necessary to use a few helper macros. For a class to be serializable, one must use the DECLARE_SERIAL macro in the class declaration and the IMPLEMENT_SERIAL macro somewhere in the class's implementation file. One specific feature that these macros add to a class is MFC run-time type information.
+
+<BR></P>
+
+<P>Why is type information necessary for successful serialization? Well, consider what happens when data is read from persistent storage. Before reading an object, we know nothing about it other than the fact that it is CObject derived. Run-time type information that has been serialized together with the object helps to determine the actual type of the object. Once type information has been obtained, the CArchive object can create an object of the new type and call its Serialize member function to read in object-specific data. Without run-time type information this would not be possible.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Run-Time Type Information</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>MFC maintains run-time type information with the help of the CRuntimeClass class and several helper macros.
+
+<BR></P>
+
+<P>The CRuntimeClass class has member variables holding the name of the class and the size of an object belonging to that class. This information not only identifies the class but also assists in serialization.
+
+<BR></P>
+
+<P>Applications rarely use CRuntimeClass directly. Instead, they rely on a series of macros that embed a CRuntimeClass object in the declaration of a CObject-derived class, and provide an implementation.
+
+<BR></P>
+
+<P>There are three pairs of macros, summarized in Table 18.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 18.1. Helper macros.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Symbolic constant</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>DECLARE_DYNAMIC and IMPLEMENT_DYNAMIC</P>
+
+<TD>
+
+<P>Adds run-time information to the class. Enables the use of the IsKindOf member function.</P>
+
+<TR>
+
+<TD>
+
+<P>DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE</P>
+
+<TD>
+
+<P>Renders the class dynamically creatable through CRuntimeClass::CreateObject.</P>
+
+<TR>
+
+<TD>
+
+<P>DECLARE_SERIAL and IMPLEMENT_SERIAL</P>
+
+<TD>
+
+<P>Adds serialization capability to the class; enables the use of &lt;&lt; and &gt;&gt; operators with a Carchive.</P></TABLE>
+
+<P>You only need to use one set of these macros at any time. The functionality of DECLARE_DYNCREATE/IMPLEMENT_DYNCREATE is a superset of the functionality of DECLARE_DYNAMIC/IMPLEMENT_DYNAMIC; and the functionality of DECLARE_SERIAL/IMPLEMENT_SERIAL is a superset of the functionality of DECLARE_DYNAMIC/IMPLEMENT_DYNAMIC.
+
+<BR></P>
+
+<P>To use these macros, you embed the DECLARE_ macro in the declaration of your class and you add the IMPLEMENT_ macro to your implementation file. To create a CMyString class that is CObject-derived and supports serialization, you would therefore declare the class as follows:
+
+<BR></P>
+
+<PRE>class CMyString : public CObject
+
+{
+
+    DECLARE_SERIAL(CMyString)
+
+    ...
+
+};</PRE>
+
+<P>In the implementation file, you would add the following macro (outside any member functions):
+
+<BR></P>
+
+<PRE>IMPLEMENT_SERIAL(CMyString, CObject, 0)</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>MFC and Multiple Inheritance</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A frequently asked question with respect to MFC concerns the use of the classes of MFC with multiple inheritance. Generally, the answer is that although using multiple inheritance with MFC is possible, doing so is not recommended.
+
+<BR></P>
+
+<P>In particular, the CRuntimeClass class does not support multiple inheritance. As CRuntimeClass is used by CObject for run-time class information, dynamic object creation, and serialization, this limitation has a serious effect on any attempt to use multiple inheritance in an MFC program.
+
+<BR></P>
+
+<P>If your project requires the use of multiple inheritance with MFC, I recommend MFC Technical Note 16 (<I>Using C++ Multiple Inheritance with </I><I>MFC</I>), supplied as part of the Visual C++ on-line documentation. This technical note provides an excellent in-depth review of the issues concerning MFC and multiple inheritance.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>MFC and Windows Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Many MFC classes represent objects in Windows, such as a window, a device context, or a GDI object. It is important to realize that an object of such an MFC class (for example, a CWnd object) is not the same as the Windows object. The CWnd object only <I>represents</I> a window; the same goes for other MFC classes. The existence of a Windows object does not automatically imply the existence of a corresponding MFC object, nor does the existence of an MFC object automatically imply that a corresponding Windows object also exists. In many situations, an unattached MFC object is created, only to be attached later to an existing or newly created Windows object. In other situations, temporary MFC objects are created to briefly represent long-lived Windows objects (for example, a temporary CWnd object may be used to represent the desktop window).
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>Window Support Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Window Support classes provide encapsulation for common types of windows. These include frame and view windows, dialog windows, and controls. All window support classes are derived from the class CWnd, which itself is derived from CObject. The CWnd class encapsulates the functionality common to all windows. Its large number of member functions can be organized into several categories, which are summarized in Table 18.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 18.2. </B><B>CWnd</B><B> Member function categories.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Category</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>Initialization</P>
+
+<TD>
+
+<P>Window initialization and creation</P>
+
+<TR>
+
+<TD>
+
+<P>Window state functions</P>
+
+<TD>
+
+<P>Set or retrieve window settings</P>
+
+<TR>
+
+<TD>
+
+<P>Size and position</P>
+
+<TD>
+
+<P>Retrieve or change size and position</P>
+
+<TR>
+
+<TD>
+
+<P>Window access</P>
+
+<TD>
+
+<P>Window identification</P>
+
+<TR>
+
+<TD>
+
+<P>Update and painting</P>
+
+<TD>
+
+<P>Drawing functions</P>
+
+<TR>
+
+<TD>
+
+<P>Coordinate mapping</P>
+
+<TD>
+
+<P>Mapping between logical and physical coordinates</P>
+
+<TR>
+
+<TD>
+
+<P>Window text</P>
+
+<TD>
+
+<P>Manipulate window text or alter its appearance</P>
+
+<TR>
+
+<TD>
+
+<P>Scrolling</P>
+
+<TD>
+
+<P>Manipulate scrollbars</P>
+
+<TR>
+
+<TD>
+
+<P>Drag and drop</P>
+
+<TD>
+
+<P>Accept drag and drop files</P>
+
+<TR>
+
+<TD>
+
+<P>Caret</P>
+
+<TD>
+
+<P>Manipulate the caret</P>
+
+<TR>
+
+<TD>
+
+<P>Dialog box</P>
+
+<TD>
+
+<P>Manipulate dialog box items</P>
+
+<TR>
+
+<TD>
+
+<P>Menu</P>
+
+<TD>
+
+<P>Manipulate menus</P>
+
+<TR>
+
+<TD>
+
+<P>Tooltips</P>
+
+<TD>
+
+<P>Manipulate tooltips</P>
+
+<TR>
+
+<TD>
+
+<P>Timer</P>
+
+<TD>
+
+<P>Set and kill timers</P>
+
+<TR>
+
+<TD>
+
+<P>Alert</P>
+
+<TD>
+
+<P>Window flashing and message boxes</P>
+
+<TR>
+
+<TD>
+
+<P>Window message</P>
+
+<TD>
+
+<P>Manage messages</P>
+
+<TR>
+
+<TD>
+
+<P>Clipboard</P>
+
+<TD>
+
+<P>Manipulate clipboard contents</P>
+
+<TR>
+
+<TD>
+
+<P>OLE controls</P>
+
+<TD>
+
+<P>Handle OLE controls</P>
+
+<TR>
+
+<TD>
+
+<P>Overridables</P>
+
+<TD>
+
+<P>Handle messages and other conditions</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Frame Windows</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Frame windows are typically used in the context of MFC framework applications. They encapsulate the functionality of the application's main window, and manage the application's menu bar, toolbar buttons, and status bar.
+
+<BR></P>
+
+<P>The different types of frame windows are shown in Figure 18.2. They are used in the context of SDI and MDI applications and OLE in-place editing as appropriate. All frame windows are derived from the CFrameWnd class, itself a descendant of CWnd.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu02.gif">Figure 18.2. Frame window classes.</A></B>
+
+<BR></P>
+
+<P>These frame window classes are typically used as the base classes for user-defined frame window classes.
+
+<BR></P>
+
+<P>Closely related to frame windows are control bars such as toolbars and status bars. Control bar classes are derived from CControlBar, which in turn is derived from CWnd. These classes are shown in Figure 18.3.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu03.gif">Figure 18.3. Control bar classes.</A></B>
+
+<BR></P>
+
+<P>One additional class, CSplitterWnd, is used to create <I>splitter windows</I>, windows that have multiple panes. Typical use of CSplitterWnd involves embedding a CSplitterWnd object inside a frame window object.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>View Windows</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>View windows are also specific to the MFC framework. An MFC application uses view windows to present the contents of its document to the user for interaction.
+
+<BR></P>
+
+<P>There are several view window types representing the different forms in which a document's view can be presented. View window classes exist that support scrolling, text editing, list and tree controls, and dialog-like forms.
+
+<BR></P>
+
+<P>All view window classes are derived from the CView class, which is a descendant of CWnd. The hierarchy of view window classes is shown in Figure 18.4.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu04.gif">Figure 18.4. View window classes.</A></B>
+
+<BR></P>
+
+<P>Like frame window classes, view window classes also typically serve as base classes for user-defined classes that implement application-specific view functionality.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Dialogs</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Dialog classes encapsulate the functionality of both user-defined and common dialogs. The hierarchy of dialog classes is shown in Figure 18.5.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu05.gif">Figure 18.5. Dialog classes.</A></B>
+
+<BR></P>
+
+<P>Dialog classes can be used outside MFC framework applications. For example, the program in Listing 18.2 displays a color selection common dialog using the CColorDialog class. You can compile this program from the command line by typing cl /MT colors.cpp.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 18.2. Using an MFC dialog class in a non-MFC application.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+#include &lt;afxdlgs.h&gt;
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+    CColorDialog dlg;
+
+    dlg.DoModal();
+
+    return 0;
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Controls</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Control classes encapsulate the functionality of standard Windows controls, Windows 95 common controls, and OLE controls (OCXs). The hierarchy of control classes is shown in Figure 18.6.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu06.gif">Figure 18.6. Control classes.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=4><B>Application Architecture Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Application architecture classes are all derived from the base class CCmdTarget. A CCmdTarget object is an object that has a <I>message map</I> and can process messages. As windows are obvious recipients of messages, the CWnd class is also derived from CCmdTarget.
+
+<BR></P>
+
+<P>Application architecture classes include document classes, document template classes, document item classes, application object classes, and several OLE related classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Document classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Documents are entities that represent a unit of data that the user opens and manipulates. Document objects usually cooperate closely with corresponding view objects that handle presentation of the data and user interaction. The hierarchy of document classes is shown in Figure 18.7.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu07.gif">Figure 18.7. Document classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Document Templates</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Document templates describe the basic behavior of user-defined document and view classes. The family of document template classes is illustrated in Figure 18.8.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu08.gif">Figure 18.8. Document template classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Application Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Application object classes represent threads and processes (Figure 18.9).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu09.gif">Figure 18.9. Application object classes.</A></B>
+
+<BR></P>
+
+<P>Every MFC framework application has a CWinApp-derived object, which supplies your application's main message loop.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Document Items</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Document items are objects that comprise a document. For example, the document of a drawing application may consist of objects that represent drawing shapes. MFC uses its document item classes for OLE server and client items. The hierarchy of document item classes is shown in Figure 18.10.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu10.gif">Figure 18.10. Document item classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Other Application Architecture Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Several other Application Architecture classes exist that contribute to the implementation of OLE within the MFC framework. These classes are shown in Figure 18.11.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu11.gif">Figure 18.11. OLE-related Application Architecture </B><B>classes.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=4><B>Miscellaneous Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>For lack of a better term, I called class families that support system and graphic services, collections, and other CObject-derived classes miscellaneous classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>Graphic Support Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>GDI functionality is supported by device-context classes and GDI object classes, which are illustrated in Figure 18.12. Both class families are derived from CObject.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu12.gif">Figure 18.12. Graphic support classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>System Support Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>System support classes encapsulate the functionality of system objects such as exceptions, synchronization objects, and files. Other system support classes provide support for ODBC, DAO, and WinSock. The hierarchy of these classes is shown in Figure 18.13.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu13.gif">Figure 18.13. System support classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>Collection Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Collection classes include arrays, lists, and maps. Arrays are dynamically allocated collections of objects organized by an integer index. Lists are ordered collections. Maps are collections organized by a key.
+
+<BR></P>
+
+<P>The hierarchy of collection classes is shown in Figure 18.14.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu14.gif">Figure 18.14. Collection classes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>Non-</B><B><I>CObject</I></B><B>-derived Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC also contains several support classes that are not derived from the CObject class. These include simple value types (for example, CRect or CString), typed template collections, and many other support classes. Non CObject-derived classes are shown in Figure 18.15.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="18vcu15.gif">Figure 18.15. Non-</B><B>CObject</B><B>-derived classes.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The MFC Library represents a powerful framework for constructing Windows applications. Classes in MFC encapsulate most Windows functionality, including functionality related to applications, threads, windows, dialogs, controls, graphic objects, device contexts, and much, much more. However, the use of MFC is not restricted to so-called MFC framework applications; other Windows programs and even some console applications can benefit from this library.
+
+<BR></P>
+
+<P>The root of most MFC classes is the CObject class. This class implements run-time-type checking (distinct from the new C++ RTTI feature) and serialization. Serialization is a powerful, platform-independent mechanism for creating an image of an object on persistent storage and loading object data from such storage to memory. Serialization is not limited to disk files; it is also used in clipboard transfers and OLE.
+
+<BR></P>
+
+<P>The major MFC categories include Application Architecture classes, Window Support classes, and other classes that encapsulate system, GDI, and miscellaneous services.
+
+<BR></P>
+
+<P>Window support classes correspond to various window types used by the system or provided by the MFC Library. These include frame and view windows, dialogs, and controls. All such classes are derived from the CWnd class, which encapsulates basic functionality common to all windows.
+
+<BR></P>
+
+<P>CWnd itself is derived from the CCmdTarget class, which is the base class for all classes that have message maps and can handle and route messages. All Application Architecture classes are also derived from CCmdTarget. These include classes for documents, document templates, document items, OLE functionality, and thread and process objects. The latter type is called CWinApp; every MFC framework application contains a CWinApp-derived object, which implements the application's main message loop.</P>
+
+<P><A HREF="p03vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu19fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

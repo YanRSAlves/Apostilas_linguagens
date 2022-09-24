@@ -1,0 +1,430 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu06fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="p02vcufi.htm">
+
+<LINK REL="Previous" HREF="vcu05fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu05fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p02vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">6 &#151; Code Reuse with the Component Gallery</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I2">The Component Gallery</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Inserting a Component into a Project</A></LI>
+
+<LI>
+
+<A HREF="#I4">Creating Your Own Components</A></LI>
+
+<LI>
+
+<A HREF="#I5">Exporting a Component</A></LI>
+
+<LI>
+
+<A HREF="#I6">Importing a Component</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">Standard Components</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">Clipboard Assistant</A></LI>
+
+<LI>
+
+<A HREF="#I9">Dialog Bar</A></LI>
+
+<LI>
+
+<A HREF="#I10">Palette Support</A></LI>
+
+<LI>
+
+<A HREF="#I11">Popup Menu</A></LI>
+
+<LI>
+
+<A HREF="#I12">Splash Screen</A></LI>
+
+<LI>
+
+<A HREF="#I13">System Info for About Dialog</A></LI>
+
+<LI>
+
+<A HREF="#I14">Tip of the Day</A></LI></UL>
+
+<LI>
+
+<A HREF="#I15">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><B>6 &#151; Code Reuse with the Component Gallery</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>One of the great promises of object-oriented programming is improved code reusability. The Visual C++ development system goes a long way towards realizing this promise by providing a repository for reusable code components, the Component Gallery.
+
+<BR></P>
+
+<P>One of the nice things about the Component Gallery is that it isn't empty; like Santa's stockings, it is filled with a variety of goodies that are ready to be used with your applications. Examples include reusable components that add clipboard support, splash screen functionality, a password dialog, palette support, and many other features to your programs.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I2" NAME="I2">
+
+<FONT SIZE=4><B>The Component Gallery</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Visual C++ Component Gallery is a repository of a variety of standard and user components. What is a component? A component can be a class complete with its header file, implementation file, and resources; it can also be an OLE control. It can also be a &quot;smart&quot; component supplied by Microsoft or a third party vendor.
+
+<BR></P>
+
+<P>The Component Gallery provides a facility to store and manage these components.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Information about the contents of the Component Gallery is stored in a file named gallery.dat in your msdev\template directory. If this file becomes corrupt for any reason, you can erase it; next time you access the Component Gallery, the default version of this file will be re-created. Obviously, references to any custom components will be lost.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=3><B>Inserting a Component into a Project</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Component Gallery is invoked through the Component command in the Developer Studio's Insert menu. It appears in the form of the Component Gallery dialog box (Figure 6.1).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu01.gif">Figure 6.1. The Component Gallery.</A></B>
+
+<BR></P>
+
+<P>Installable components are shown using a series of tabbed panes. The Microsoft and the OLE Controls tabs are added when the Component Gallery is installed; other tabs are added automatically or manually when components from your own projects are added to the Component Gallery.
+
+<BR></P>
+
+<P>To add a specific component to your project, select the component, and click on the Insert button. If you wish to receive more information about the component before adding it to your project, click on the Help button (the button marked with a question mark).
+
+<BR></P>
+
+<P>Many standard components display configuration dialogs when you select them for insertion. Components may also examine your application's source code to determine whether the selected component is compatible with your application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Creating Your Own Components</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As you work with Visual C++, you develop many components that are potential candidates for reuse. For example, you may create a splash dialog, a CDocItem-derived class of document objects, or a customized About dialog with your company's animated logo; all of which are reusable components.
+
+<BR></P>
+
+<P>Adding these components to the Component Gallery is easy; in fact, often you do not have to do anything; adding these components is accomplished automatically. When you create a new project through AppWizard, all the new classes created by AppWizard are automatically added to the Component Gallery.
+
+<BR></P>
+
+<P>When you create a new class through ClassWizard, you can also specify whether the new class is to be added to the Component Gallery. To do so, make sure the Add to Component Gallery checkbox in the Create New Class dialog is set (it is set by default). When you create the new class, it is automatically added to the Component Gallery.
+
+<BR></P>
+
+<P>Unfortunately, I know of no way to add an existing class to the Component Gallery. However, there is a relatively easy workaround; you can make a copy of the class, remove it from your project, and create it again through the ClassWizard, this time with the Add to Component Gallery checkbox set. When you are done creating this new class, you can copy your old code over the newly created files.
+
+<BR></P>
+
+<P>When you are adding a class that is associated with a dialog template (for example, a class derived from CDialog), create the dialog template before you create the class through the ClassWizard. This way, you ensure that the class is properly associated with the dialog template and that the dialog template is part of the component that is added to the Component Gallery.
+
+<BR></P>
+
+<P>When a class from your project is added to the Component Gallery, what is actually added is a reference to the files comprising the class. This way, any changes to the class are reflected immediately in the Component Gallery. This also means, unfortunately, that if your project is moved, the contents of the Component Gallery may no longer be valid.
+
+<BR></P>
+
+<P>When classes from a project are added to the Component Gallery by AppWizard, a new category of components is created, represented by a new pane in the Component Gallery. You can manipulate these categories, move components between categories, add and remove categories to the Component Gallery, and rename categories and components using the Component Gallery's customization feature. To invoke the Customize Component Gallery dialog (Figure 6.2), click on the Customize button.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu02.gif">Figure 6.2. The Customize Component Gallery </B><B>dialog.</A></B>
+
+<BR></P>
+
+<P>This dialog also lets you view and possibly modify component properties. Selecting a component and clicking on the Properties button invokes that component's property sheet. Most importantly, you can use the General page of the component's property sheet (Figure 6.3) to change the description of a component or to add a description to a custom component.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu03.gif">Figure 6.3. Adding a description to a custom </B><B>component.</A></B>
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Because every time you run the AppWizard, a new category of components is created in the Component Gallery, it is useful from time to time to invoke the Component Gallery and remove unwanted categories and components.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>Custom components are limited to simple classes or classes with associated dialog templates. At present, Microsoft has announced no plans to publish the interfaces for creating &quot;smart&quot; components; that is, components that can present a user interface prior to insertion, provide customized property pages, and obtain information about the project. Hopefully, this information will become available with a future release of Visual C++.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Exporting a Component</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The ability to add components to the Component Gallery is a great reusability feature; however, the concept of reusability is not limited to a single computer. In order to facilitate sharing components between users, the Component Gallery provides an Export feature for custom components.
+
+<BR></P>
+
+<P>To invoke this feature, open the Component Gallery, click on the Customize button, select the desired custom component, and click on the Properties button. In the component's property sheet, select the Custom property page (Figure 6.4). Click on the Export button. The Component Gallery will respond by requesting a filename; by default, exporting components have the .ogx filename extension.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu04.gif">Figure 6.4. Exporting a custom component.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Importing a Component</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>An exported component can be imported using the Component Gallery's Import feature. To use this feature, invoke the Customize Component Gallery dialog and click on the Import button.
+
+<BR></P>
+
+<P>The Import feature can be used to import two types of components; components that were exported earlier (OGX files), and OLE controls (OCX files). When you are importing a component, you are given the choice of either copying the files to the msdev\template directory or not. If you do not copy the file, the component added to the Component Gallery will be a reference to the file at its original location. Needless to say, removing the file will also invalidate the component in the Component Gallery.
+
+<BR></P>
+
+<P>Note that when an OLE control is registered, it is automatically added to the Component Gallery.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Standard Components</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Visual C++ development system comes equipped with a variety of standard components. These components can be used to add specific features to your application. In the remainder of this section, I present a few notes about some of these components that I found most useful.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Clipboard Assistant</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Clipboard Assistant component adds basic clipboard functionality to your project. It does so by adding a series of message handlers to the selected class (by default, your application's view class) that implement the cut, copy, and paste commands. Clipboard support can be added for edit controls, rich-text controls, or for an application-specific custom format.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Dialog Bar</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Dialog Bar component can be used to add a dialog bar to a frame window in your project. This component adds a dialog bar object of type CDialogBar to the designated frame window. It also creates a dialog template resource for the dialog bar.
+
+<BR></P>
+
+<P>Figure 6.5 shows a dialog bar added to a child window using the Dialog Bar component.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu05.gif">Figure 6.5. Child window with a dialog bar.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Palette Support</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Palette Support component adds handlers to the selected window class for WM_QUERYNEWPALETTE and WM_PALETTECHANGED messages. It also adds a SetPalette member function to the designated window. Subsequent changes to the palette can be accomplished by simply calling SetPalette; the palette will be remembered and properly restored when the window regains focus.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Popup Menu</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Popup Menu component adds popup menu support to the selected class. The popup menu is invoked when the user clicks on the window that the class represents using the right mouse button.
+
+<BR></P>
+
+<P>The component adds two member functions, OnContextMenu and PreTranslateMessage; it also creates a new menu resource with three default commands, Cut, Copy, and Paste (note that the component does not supply the implementation for these commands).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Splash Screen</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Splash Screen component adds a splash screen to your project. The splash screen is displayed when the application starts. This component adds a new class to your application (CSplashWnd) and also a bitmap resource (IDB_SPLASH) that you can customize.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>System Info for About Dialog</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The System Info for About dialog component modifies your application's About dialog implementation to include system information. It adds an OnInitDialog member function to your application's About dialog class; you must manually add two static controls to your About dialog (Figure 6.6) and modify the code in OnInitDialog to update these controls.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu06.gif">Figure 6.6. About dialog with system information.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Tip of the Day</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Tip of the Day component adds a Tip of the Day dialog (Figure 6.7) to your project. The dialog is added in the form of a header file (TipDlg.h), implementation file (TipDlg.cpp), and dialog template IDD_TIP. The component also modifies the InitInstance function of your application class to invoke the Tip of the Day dialog when the application is started. The Help menu is also updated to provide a Tip of the Day command.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="06vcu07.gif">Figure 6.7. Tip of the Day dialog.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Component Gallery is a repository of standard and custom components. A component is a class, an OLE control, or a &quot;smart&quot; component from Microsoft or a third party vendor.
+
+<BR></P>
+
+<P>To add a component to your application, select the desired component in the Component Gallery and click the Insert button.
+
+<BR></P>
+
+<P>You can create your own components that are to be added to the Component Gallery. All classes of a new AppWizard-generated project are automatically added to the Component Gallery. You can also specify that a new class created through ClassWizard be added to the Component Gallery by checking the appropriate box in the Create New Class dialog. Although no facility exists to add an existing class to the Component Gallery, you can easily create a dummy class that is compatible with your existing class, add it <A ID="I16" NAME="I16"></A>to the Component Gallery, and then copy code from your existing class into it.
+
+<BR></P>
+
+<P>The customization feature of the Component Gallery enables you to arrange component categories and components. It also lets you export an existing component so you can give it to other users. To import an exported component or an OLE control use the Component Gallery's import feature.
+
+<BR></P>
+
+<P>The Visual C++ development system comes equipped with a series of standard components. These include components for adding clipboard support, support for dialog bars, palettes, popup menus, a splash screen component, a Tip of the Day component, About dialog enhancements, and much more. You can also add classes representing registered OLE controls through the Component Gallery.</P>
+
+<P><A HREF="vcu05fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p02vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

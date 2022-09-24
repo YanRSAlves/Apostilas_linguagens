@@ -1,0 +1,1832 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu21fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu22fi.htm">
+
+<LINK REL="Previous" HREF="vcu20fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu20fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu22fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">21 &#151; Dialogs and Property Sheets</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Constructing Dialogs</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Adding a Dialog Template</A></LI>
+
+<LI>
+
+<A HREF="#I5">Constructing the Dialog Class</A></LI>
+
+<LI>
+
+<A HREF="#I6">Adding Member Variables</A></LI>
+
+<LI>
+
+<A HREF="#I7">ClassWizard Results</A></LI>
+
+<LI>
+
+<A HREF="#I8">Invoking the Dialog</A></LI>
+
+<LI>
+
+<A HREF="#I9">Modeless Dialogs</A></LI></UL>
+
+<LI>
+
+<A HREF="#I10">More on Dialog Data Exchange</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I11">Dialog Data Exchange</A></LI>
+
+<LI>
+
+<A HREF="#I12">Dialog Data Validation</A></LI>
+
+<LI>
+
+<A HREF="#I13">Using Simple Types</A></LI>
+
+<LI>
+
+<A HREF="#I14">Using Control Data Types</A></LI>
+
+<LI>
+
+<A HREF="#I15">Implementing Custom Data Types</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Dialogs and Message Handling</A></LI>
+
+<LI>
+
+<A HREF="#I17">Property Sheets</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I18">Constructing Property Pages</A></LI>
+
+<LI>
+
+<A HREF="#I19">Adding a Property Sheet Object</A></LI>
+
+<LI>
+
+<A HREF="#I20">CPropertyPage Member Functions</A></LI>
+
+<LI>
+
+<A HREF="#I21">Modeless Property Sheets</A></LI></UL>
+
+<LI>
+
+<A HREF="#I22">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>21 &#151; Dialogs and Property Sheets</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Applications use dialogs in many situations. The MFC Library supports dialogs through the CDialog class and derived classes.
+
+<BR></P>
+
+<P>A CDialog object corresponds to a dialog window, the content of which is based on a dialog template resource. The dialog template resource can be edited using any dialog editor; typically, however, you would use the dialog editor that is part of the Developer Studio for this purpose.
+
+<BR></P>
+
+<P>Perhaps the most important feature of CDialog is its support for Dialog Data Exchange, a mechanism that facilitates the easy and efficient exchange of data between controls in a dialog and member variables in the dialog class.
+
+<BR></P>
+
+<P>The CDialog class is derived from CWnd; thus, you can use many CWnd member functions to enhance your dialog. Furthermore, your dialog classes can have message maps; indeed, except for the most simple dialogs, it is often necessary to add message map entries to handle specific control messages.
+
+<BR></P>
+
+<P>Newer applications often support tabbed dialogs, or <I>property sheets</I>. A property sheet is really several dialogs merged into one; the user uses tab controls to pick any one of the <I>property pages</I> that comprise a property sheet.
+
+<BR></P>
+
+<P>Our tour of MFC dialog support starts with a review of how simple dialogs are constructed in an MFC application.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Constructing Dialogs</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The basic steps in constructing a dialog and making it part of your application include creating the dialog template resource, creating a CDialog-derived class that corresponds to this resource, and constructing an object of this class at the appropriate location in your application.
+
+<BR></P>
+
+<P>For our experiments with dialogs, we use a simple AppWizard-created SDI application named DLG. Other than selecting the Single document application type, this application should be created with AppWizard's defaults.
+
+<BR></P>
+
+<P>The next section shows you how to create a simple dialog that has an editable text field and make it part of the DLG application by connecting it to a new menu item, View Dialog. The dialog, as displayed by DLG, is shown in Figure 21.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu01.gif">Figure 21.1. A simple dialog.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Adding a Dialog Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The first step in constructing a dialog is to create the dialog template resource. This resource can be built using the integrated dialog editor that is part of the Developer Studio. Figure 21.2 shows the dialog under construction. The OK and Cancel buttons are supplied by the dialog editor when a blank dialog is created; to that, we should add a static control and an edit control. The edit control will have the identifier IDC_EDIT; the dialog itself will be identified as IDD_DIALOG.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu02.gif">Figure 21.2. Constructing a simple dialog.</A></B>
+
+<BR></P>
+
+<P>While the dialog template is open for editing in the dialog editor, you can directly invoke the ClassWizard to construct the dialog class corresponding to this template.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Constructing the Dialog Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Although it is possible to create a dialog class by hand, in many cases it is easier to rely on the ClassWizard for this purpose. To create a dialog class corresponding to the dialog shown in Figure 21.2, use the right mouse button anywhere in the dialog editor window to bring up a popup menu; from this popup menu, select the ClassWizard command.
+
+<BR></P>
+
+<P>The ClassWizard, after detecting that it has been invoked for a newly constructed resource, presents the Adding a Class dialog that is shown in Figure 21.3. Select the Create a new class radio button and click OK.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu03.gif">Figure 21.3. The Adding a Class dialog.</A></B>
+
+<BR></P>
+
+<P>At this time, the ClassWizard displays the Create New Class dialog. Here, you can enter the dialog's name and set other options, such as the filename, the resource identifier, or OLE automation settings. You can also add this class to the Component Gallery for later reuse in other applications.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu04.gif">Figure 21.4. The Create New Class dialog.</A></B>
+
+<BR></P>
+
+<P>Add a suitable name for the new class, for example, CMyDialog. It may also be a good idea to uncheck the Add to Component Gallery check box; after all, it is not necessary to clutter the component gallery with code that is used for demonstration purposes only.
+
+<BR></P>
+
+<P>Should you change the filenames that the ClassWizard suggests for your new class's header and implementation files? Should you use a separate header and implementation file for every new dialog you create? This is an interesting question. At the surface, the answer would appear to be a yes; then again, even the AppWizard itself violates this &quot;rule&quot; when it places both the declaration and implementation of your application's About dialog into the application object's implementation file. Thus, I believe that in the end, it is best left to the judgment of the programmer. I often grouped dialog classes together if they were small, simple, and related. Leaving them in separate files tended to clutter the application workspace. However, this is less of a concern with Visual C++ 4 where you no longer have to use File View to access your source code; also, using separate files makes it easier to use the Component Gallery.
+
+<BR></P>
+
+<P>For now, leave the filenames at the ClassWizard-generated defaults: MyDialog.h and MyDialog.cpp. Clicking on the Create button actually creates the new class and leaves the ClassWizard main dialog open.
+
+<BR></P>
+
+<P>The next step is to add a member variable that corresponds to the edit field in the dialog template.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Adding Member Variables</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To add a new member variable, select the Member Variables tab in ClassWizard (Figure 21.5).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu05.gif">Figure 21.5. Member variables in ClassWizard.</A></B>
+
+<BR></P>
+
+<P>The member variable for the IDC_EDIT control can be added by double-clicking this identifier in the Control IDs column. This invokes yet another dialog, shown in Figure 21.6. Type in the new variable's name (m_sEdit) and click on the OK button. Once the member variable has been added, you can dismiss the ClassWizard altogether by clicking on the OK button in the ClassWizard dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu06.gif">Figure 21.6. The Add Member Variable dialog.</A></B>
+
+<BR></P>
+
+<P>If you still have the dialog template resource open for editing, dismiss that window as well. In a moment, we'll begin creating the code that will invoke our new dialog. Before we do that, however, take a look at the code that the ClassWizard has generated for us so far.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>ClassWizard Results</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The declaration of CMyDialog (in MyDialog.h) is shown in Listing 21.1. Part of the class declaration is the declaration of IDD, which identifies the dialog template. The class declaration also contains the member variable m_sEdit, which we created through ClassWizard.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.1. </B><B>CMyDialog</B><B> class declaration.</B></LH></UL>
+
+<PRE>class CMyDialog : public CDialog
+
+{
+
+// Construction
+
+public:
+
+    CMyDialog(CWnd* pParent = NULL);   // standard constructor
+
+// Dialog Data
+
+    //{{AFX_DATA(CMyDialog)
+
+    enum { IDD = IDD_DIALOG };
+
+    CString m_sEdit;
+
+    //}}AFX_DATA
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CMyDialog)
+
+    protected:
+
+    virtual void DoDataExchange(CDataExchange* pDX);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+protected:
+
+    // Generated message map functions
+
+    //{{AFX_MSG(CMyDialog)
+
+        // NOTE: the ClassWizard will add member functions here
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>Declarations for the constructor function and an override for the DoDataExchange member function are also provided here.
+
+<BR></P>
+
+<P>These two functions are defined in MyDialog.cpp (Listing 21.2). Notice that the ClassWizard inserted code into both of them; the member variable m_sEdit is initialized in the constructor and also referred to in DoDataExchange.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.2. </B><B>CMyDialog</B><B> member functions.</B></LH></UL>
+
+<PRE>CMyDialog::CMyDialog(CWnd* pParent /*=NULL*/)
+
+    : CDialog(CMyDialog::IDD, pParent)
+
+{
+
+    //{{AFX_DATA_INIT(CMyDialog)
+
+    m_sEdit = _T(&quot;&quot;);
+
+    //}}AFX_DATA_INIT
+
+}
+
+void CMyDialog::DoDataExchange(CDataExchange* pDX)
+
+{
+
+    CDialog::DoDataExchange(pDX);
+
+    //{{AFX_DATA_MAP(CMyDialog)
+
+    DDX_Text(pDX, IDC_EDIT, m_sEdit);
+
+    //}}AFX_DATA_MAP
+
+}
+
+BEGIN_MESSAGE_MAP(CMyDialog, CDialog)
+
+    //{{AFX_MSG_MAP(CMyDialog)
+
+        // NOTE: the ClassWizard will add message map macros here
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()</PRE>
+
+<P>DoDataExchange is the function that facilitates data exchange between member variables and dialog controls. It is invoked both when the dialog is constructed and when it is dismissed. The macros inserted by ClassWizard (such as the DDX_Text macro) facilitate data exchange in both directions; the direction is determined by the m_bSaveAndValidate member of the CDataExchange object, pointed to by the pDX parameter. We revisit this function and the various data exchange helper macros shortly.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Invoking the Dialog</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Construction of our dialog object is now complete. How are we going to invoke this dialog from our DLG application?
+
+<BR></P>
+
+<P>First, we must make a &quot;design decision,&quot; if it can be dignified with that phrase: The new dialog will be invoked when the user selects a new menu item, Dialog, from the View menu.
+
+<BR></P>
+
+<P>This menu item must first be added to the application's menu using the resource editor (see Figure 21.7).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu07.gif">Figure 21.7. Adding the View Dialog menu item.</A></B>
+
+<BR></P>
+
+<P>To add code that handles the new menu item, invoke the ClassWizard, and add a command handler function for ID_VIEW_DIALOG to the CMainFrame class. (Why CMainFrame? Displaying this dialog has nothing to do with a specific document or any of its views, so CMainFrame appears to be the most logical choice.) This is accomplished most easily by right-clicking on the new Dialog menu item to invoke the ClassWizard, selecting ClassWizard's Message tab, selecting the ID_VIEW_DIALOG identifier, and using the Add Function button.
+
+<BR></P>
+
+<P>The implementation of CMainFrame::OnViewDialog is shown in Listing 21.3. After constructing the dialog object, we assign an initial value to the member variable m_sEdit. Next, we invoke the dialog via the DoModal function. After the dialog is dismissed by the user, we examine the new value of m_sEdit by simply displaying it in a message box.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.3. The </B><B>CMainFrame::OnViewDialog</B><B> member function.</B></LH></UL>
+
+<PRE>void CMainFrame::OnViewDialog()
+
+{
+
+    // TODO: Add your command handler code here
+
+    CMyDialog myDialog;
+
+    myDialog.m_sEdit = &quot;Default string&quot;;
+
+    myDialog.DoModal();
+
+    MessageBox(myDialog.m_sEdit);
+
+}</PRE>
+
+<P>Note that in order to be able to declare an object of type CMyDialog in CMainFrame::OnViewDialog, it is necessary to include the MyDialog.h header file in MainFrm.cpp.
+
+<BR></P>
+
+<P>That's it. The application is ready to be recompiled and run.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Modeless Dialogs</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Invoking a dialog through the DoModal member function invokes the dialog as a modal dialog. However, sometimes applications require the use of modeless dialogs. The steps of creating and displaying a modeless dialog are different from the steps taken for modal dialogs.
+
+<BR></P>
+
+<P>To convert our dialog in DLG to a modeless dialog, we must first modify the dialog's constructor function. In the constructor, we must make a call to the Create member function in order to construct the dialog box object. We must also call a different version of the base class constructor, as shown in Listing 21.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.4. Modeless version of </B><B>CMyDialog::CMyDialog.</B></LH></UL>
+
+<PRE>CMyDialog::CMyDialog(CWnd* pParent /*=NULL*/)
+
+    : CDialog()
+
+{
+
+    Create(CMyDialog::IDD, pParent);
+
+    //{{AFX_DATA_INIT(CMyDialog)
+
+    m_sEdit = _T(&quot;&quot;);
+
+    //}}AFX_DATA_INIT
+
+}</PRE>
+
+<P>Invocation of the dialog from CMainFrame::OnViewDialog is also different. Instead of calling the dialog's DoModal member function, we just construct the dialog object; the call to Create within the constructor takes care of the rest.
+
+<BR></P>
+
+<P>Note that we can no longer construct the dialog box on the stack. Because a modeless dialog box is long lived and continues to exist even after CMainFrame::OnViewDialog returns, we have to allocate the CDialog object differently. This new version of CMainFrame::OnViewDialog is shown in Listing 21.5 (MainFrm.cpp).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.5. Constructing a modeless dialog in </B><B>CMainFrame::OnViewDialog.</B></LH></UL>
+
+<PRE>void CMainFrame::OnViewDialog()
+
+{
+
+    // TODO: Add your command handler code here
+
+    CMyDialog *pMyDialog;
+
+    pMyDialog = new CMyDialog;
+
+    pMyDialog-&gt;m_sEdit = &quot;Default string&quot;;
+
+    pMyDialog-&gt;UpdateData(FALSE);
+
+    pMyDialog-&gt;ShowWindow(SW_SHOW);
+
+}</PRE>
+
+<P>Why was it necessary to call UpdateData in this function? Because we set the value of m_sEdit <I>after</I> the dialog box object has been constructed and initial Dialog Data Exchange took place. By calling UpdateData, we ensure that the controls in the dialog box object are updated to reflect the settings in the member variables of the CDialog object. This is yet another example that should remind us that the C++ object and the Windows object are two different entities.
+
+<BR></P>
+
+<P>We must also call the ShowWindow member function to make the new dialog visible. Alternatively, we could have created the dialog box template resource with the WS_VISIBLE style.
+
+<BR></P>
+
+<P>How long will this dialog exist? As long as the user does not dismiss it by clicking on the OK or Cancel button. At that time, the default implementations of CDialog::OnOK and CDialog::OnCancel hide the dialog box but do not destroy it. Obviously, we must override these functions to properly destroy the dialog. In both of these functions, a call must be made to the DestroyWindow member function.
+
+<BR></P>
+
+<P>We must also override the dialog's OnOK function to ensure that we process whatever the user entered in the dialog. We can no longer rely on the function calling DoModal for this purpose, for the simple reason that DoModal is never called.
+
+<BR></P>
+
+<P>Calling the DestroyWindow member function from OnOK and OnCancel ensures that the Windows dialog box object is destroyed; but how will the C++ object be destroyed? The answer to that question is yet another override. You must override the PostNcDestroy member function and delete the CDialog-derived object from within it.
+
+<BR></P>
+
+<P>To override the default implementations of OnOK, OnCancel, and PostNCDestroy, you must first add these functions to the CMyDialog class through ClassWizard. Perhaps the simplest way to do this is to open the implementation file, MyDialog.cpp, and use the WizardBar to add the functions.
+
+<BR></P>
+
+<P>Implementations of CMyDialog::OnOK, CMyDialog::OnCancel, and CMyDialog::PostNcDestroy are shown in Listing 21.6 (MyDialog.cpp).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.6. Member functions in the modeless version of </B><B>CMyDialog.</B></LH></UL>
+
+<PRE>void CMyDialog::OnCancel()
+
+{
+
+    // TODO: Add extra cleanup here
+
+    CDialog::OnCancel();
+
+    DestroyWindow();
+
+}
+
+void CMyDialog::OnOK()
+
+{
+
+    // TODO: Add extra validation here
+
+    MessageBox(m_sEdit);
+
+    CDialog::OnOK();
+
+    DestroyWindow();
+
+}
+
+void CMyDialog::PostNcDestroy()
+
+{
+
+    // TODO: Add your specialized code here and/or call the base class
+
+    CDialog::PostNcDestroy();
+
+    delete this;
+
+}</PRE>
+
+<P>If your modeless dialog must notify the frame, document, or view, it can do so by calling a member function. The dialog class can have a member variable that stores a pointer to the frame, document, or view object from within which the dialog has been created. Other mechanisms for communication between the modeless dialog and other parts of your application are also conceivable; for example, the dialog may post a message to the application.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=4><B>More on Dialog Data Exchange</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In the preceding example, we have used Dialog Data Exchange to map the contents of an edit control to the contents of a CString member variable in the dialog class. The Dialog Data Exchange mechanism offers many other capabilities for mapping simple variables or control objects to controls in a dialog box.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Although Dialog Data Exchange and Dialog Data Validation are described in the context of dialog boxes, they are not limited in use to dialog boxes only. The member functions discussed, such as DoDataExchange and UpdateData, are actually member functions of CWnd, not CDialog. Dialog Data Exchange is also used outside the context of a dialog box; CFormView and classes derived from it are one example.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Dialog Data Exchange</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Dialog Data Exchange takes place in the dialog class's DoDataExchange member function. In this function, calls are made for all member variables that are mapped to controls. The calls that are made are to a family of MFC functions with names that begin with DDX_. These functions are responsible for performing the actual data exchange.
+
+<BR></P>
+
+<P>For example, to perform data exchange between an edit control and a member variable of type CString, the following call is made:
+
+<BR></P>
+
+<PRE>DDX_Text(pDX, IDC_EDIT, m_sEdit);</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Dialog Data Validation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In addition to the simple exchange of data between member variables and dialog controls, MFC also offers a data validation mechanism. Data validation is accomplished through calls to functions with names that begin with DDV_. These functions perform the necessary validation and if a validation error is encountered, display a standard error message box and raise an exception of type CUserException. They also call the Fail member function of the CDataExchange object that is passed to DoDataExchange; this object, in turn, sets the focus to the offending control.
+
+<BR></P>
+
+<P>An example for a data validation function is DDV_MaxChars, which is used to validate the length of a string typed into an edit control. To validate that a string in an edit control is no longer than 100 characters, you would make the following call:
+
+<BR></P>
+
+<PRE>DDV_MaxChars(pDX, m_sEdit, 100);</PRE>
+
+<P> Data validation calls for a given control must immediately follow the data exchange function call for the same control.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Using Simple Types</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Dialog Data Exchange with simple types is supported for edit controls, scrollbars, check boxes, radio buttons, list boxes, and combo boxes.
+
+<BR></P>
+
+<P>Table 21.1 summarizes the various types supported by Dialog Data Exchange for edit controls.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 21.1. Dialog Data Exchange and validation for edit controls.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Control</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Data Type</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>DDX function</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>DDV function</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>BYTE</P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxByte</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>short </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxInt</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>int </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxInt</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>UINT </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxUnsigned</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>long </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxLong</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>DWORD </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxDWord</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>float </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxFloat</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>double </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MinMaxDouble</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>CString </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<P>DDV_MaxChars</P>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>COleDateTime </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>edit control</P>
+
+<TD>
+
+<P>COleCurrency </P>
+
+<TD>
+
+<P>DDX_Text</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>check box</P>
+
+<TD>
+
+<P>BOOL</P>
+
+<TD>
+
+<P>DDX_Check</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>radio button</P>
+
+<TD>
+
+<P>int</P>
+
+<TD>
+
+<P>DDX_Radio</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>list box</P>
+
+<TD>
+
+<P>int</P>
+
+<TD>
+
+<P>DDX_LBIndex</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>list box</P>
+
+<TD>
+
+<P>CString</P>
+
+<TD>
+
+<P>DDX_LBString</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>list box</P>
+
+<TD>
+
+<P>Cstring</P>
+
+<TD>
+
+<P>DDX_LBStringExact</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>combo box</P>
+
+<TD>
+
+<P>int</P>
+
+<TD>
+
+<P>DDX_CBIndex</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>combo box</P>
+
+<TD>
+
+<P>CString</P>
+
+<TD>
+
+<P>DDX_CBString</P>
+
+<TD>
+
+<P>DDV_MaxChars</P>
+
+<TR>
+
+<TD>
+
+<P>combo box</P>
+
+<TD>
+
+<P>Cstring</P>
+
+<TD>
+
+<P>DDX_CBStringExact</P>
+
+<TD>
+
+<TR>
+
+<TD>
+
+<P>scrollbar</P>
+
+<TD>
+
+<P>int</P>
+
+<TD>
+
+<P>DDX_Scroll</P>
+
+<TD></TABLE>
+
+<P>The MFC Library provides additional versions of the DDX functions to facilitate data exchange between a dialog box and records in a database. These functions have names that begin with DDX_Field; for example, the database variant of DDX_Text would be named DDX_FieldText.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Using Control Data Types</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In addition to assigning a member variable to a control representing the control's value, it is also possible to assign member variables that represent the control object itself. For example, it is possible to assign a variable of type CEdit to an edit control.
+
+<BR></P>
+
+<P>The Dialog Data Exchange mechanism uses the DDX_Control function to exchange data between a dialog control and a CWnd-derived control object.
+
+<BR></P>
+
+<P>A control object can be used concurrently with a member variable representing the control's value. For example, it is possible to assign both a CString object representing the control's value and a CEdit object representing the control itself to an edit control in a dialog.
+
+<BR></P>
+
+<P>Why would you use a control object? Through such an object, you can implement much greater control over the appearance and behavior of dialog controls. For example, as control objects are CWnd-derived, your application can use CWnd member functions to change the control's size and position. Through the control object, it is also possible to send messages to the control.
+
+<BR></P>
+
+<P>In the case of many control types (including the new common controls) you must use a control object for Dialog Data Exchange. The use of a simple data type is meaningless and not supported.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Implementing Custom Data Types</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Versatile as the Dialog Data Exchange mechanism is, it would not be sufficient in many situations were it not for the capability to extend it for custom data types. Fortunately, the ClassWizard offers the capability to handle custom DDX and DDV routines.
+
+<BR></P>
+
+<P>The steps required to implement custom DDX/DDV support are time consuming and may only be beneficial for data types that you frequently reuse. That said, it is possible to add custom DDX/DDV support to a specific project, or to all projects, by modifying either your project's CLW file, or the ddx.clw file in your msdev\bin subdirectory.
+
+<BR></P>
+
+<P>The exact steps to be taken for custom DDX/DDV support are described in MFC Technical Note 26 that is part of your Visual C++ on-line documentation.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Dialogs and Message Handling</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>CDialog-derived objects are, as you might expect from CWnd-derived objects, capable of handling messages. In fact, in all but the simplest cases, it is necessary to add message handlers to your CDialog-derived dialog class.
+
+<BR></P>
+
+<P>Message handling in a dialog is no different from message handling in a view or frame window. Message handler functions can be easily added to the dialog class's message map using ClassWizard. In the earlier examples we have already done that when we added override versions of the OnOK and OnCancel member functions. These member functions are handlers of WM_COMMAND messages. (The third override function we implemented, PostNcDestroy, is not a message handler; however, it is called from within the handler for WM_NCDESTROY messages, OnNcDestroy.)
+
+<BR></P>
+
+<P>The most frequently used message handlers in a dialog class correspond to messages sent to the dialog window by one of its controls. These include BN_CLICKED messages sent by a button; the variety of CBN_ messages sent by a combo box; EN_ messages sent by an edit control; and so on. Another set of message that dialog classes often handle consists of WM_DRAWITEM and WM_MEASUREITEM for owner-draw controls.
+
+<BR></P>
+
+<P>Owner-draw controls bring up an interesting issue. Should you handle such a situation from within your dialog class, or should you assign an object of a class derived from a control class to the control and handle it there? For example, if you have an owner-draw button, you have the choice of adding a handler for WM_DRAWITEM messages to your dialog class, or deriving a class from CButton and overriding its DrawItem member function.
+
+<BR></P>
+
+<P>I suppose there is no definite answer to this question. Perhaps the best rule of thumb is that you should derive your own control class if you expect the control to be reused in many dialogs; otherwise, handling WM_DRAWITEM within the dialog class may be sufficient (and also simpler).
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>Property Sheets</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Property sheets are several overlapping dialogs in one. The user selects one of the dialogs, or property pages, by clicking on the corresponding tab in a tab control.
+
+<BR></P>
+
+<P>MFC supports property sheets through two classes: CPropertySheet and CPropertyPage. CPropertySheet corresponds to the property sheet; CPropertyPage-derived classes correspond to the individual property pages within the property sheet.
+
+<BR></P>
+
+<P>Using a property sheet requires several steps. First, the property pages must be constructed; next, the property sheet must be created.
+
+<BR></P>
+
+<P>The following simple example reviews this process. A new application, PRP, is used to display a property sheet, as shown in Figure 21.8. Like our earlier application, DLG, PRP is also a standard SDI application created by AppWizard.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu08.gif">Figure 21.8. A sample property sheet.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Constructing Property Pages</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Constructing a property page is very similar to constructing dialogs. The first step is to construct the dialog template resource for every property page that you wish to add to the property sheet.
+
+<BR></P>
+
+<P>There are a few special considerations when constructing a dialog template resource for a property page object:
+
+<BR></P>
+
+<OL>
+
+<LI>The dialog's caption should be set to the text that you wish to see appear in the tab corresponding to the dialog.
+
+<BR>
+
+<BR></LI>
+
+<LI>The dialog's style should be set to child.
+
+<BR>
+
+<BR></LI>
+
+<LI>The dialog's border style should be set to thin.
+
+<BR>
+
+<BR></LI>
+
+<LI>The Titlebar style should be checked.
+
+<BR>
+
+<BR></LI>
+
+<LI>The Disabled style should be checked.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>Although the property pages in a property sheet will overlap, it is not necessary to create them with the same size. The MFC Library will automatically adjust the size of property pages to match the size of the largest property page.
+
+<BR></P>
+
+<P>In this example we construct two property pages for our application&#151;nothing fancy, just a simple text field in both of them. The first property page, titled &quot;Page 1,&quot; is shown in Figure 21.9. To insert a blank property page template similar to the one shown here, use the IDR_PROPPAGE_SMALL subtype of the Dialog resource type in the Insert Resource dialog. Afterwards, you can add the controls as shown.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu09.gif">Figure 21.9. Constructing a property page.</A></B>
+
+<BR></P>
+
+<P>The identifier of the dialog template resource should be set to IDD_PAGE1; the identifier of the edit control should be set to IDC_EDIT1. Make sure that the dialog template's properties are set correctly. To set the dialog's caption, double click on the dialog to invoke the Dialog Properties property sheet (Figure 21.10).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu10.gif">Figure 21.10. Property page dialog resource caption </B><B>setting.</A></B>
+
+<BR></P>
+
+<P>To set the style, border style, and titlebar setting, select the Styles tab in the property sheet of the dialog resource (Figure 21.11).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu11.gif">Figure 21.11. Property page dialog resource </B><B>styles.</A></B>
+
+<BR></P>
+
+<P>To set the Disabled style of the dialog resource, use the More Styles tab in the dialog resource property sheet (Figure 21.12).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="21vcu12.gif">Figure 21.12. Setting the property page dialog resource </B><B>to Disabled.</A></B>
+
+<BR></P>
+
+<P>The second property page in our simple example is, for the sake of simplicity, nearly identical to the first. In fact, you can create the dialog resource for this second property page by simply making a copy of the first. Make sure that the identifier of the new dialog resource is set to IDD_PAGE2 and that the identifier of the edit control within it is IDC_EDIT2. (It would be perfectly legal to use the same identifier for controls in separate property pages; they act and behave like separate dialogs. Nevertheless, I prefer to use distinct identifiers; this helps reduce the possibility for errors.)
+
+<BR></P>
+
+<P>Once both property page dialog resources have been constructed, it is time to invoke the ClassWizard and construct classes that correspond to these property pages. To do so, invoke the ClassWizard while the focus is on the first property page dialog resource while it is open for editing. As with dialogs, the ClassWizard will recognize that the dialog template has no corresponding class and offer you the opportunity to create a new class.
+
+<BR></P>
+
+<P>In the Create New Class dialog, specify a name for the class corresponding to the dialog template (for example, CMyPage1). More importantly, make sure that this new class is based on CPropertyPage (and not the default CDialog). Once the correct settings have been entered, create the class.
+
+<BR></P>
+
+<P>While in ClassWizard, you should also add a member variable that corresponds to the edit control in the property page. Name this variable m_sEdit1.
+
+<BR></P>
+
+<P>These steps should be repeated for the second property page. The class for this property page should be named CMyPage2, and the member variable corresponding to its edit control should be named m_sEdit2.
+
+<BR></P>
+
+<P>Construction of our property pages is now complete. Take a brief look at the code generated by ClassWizard. The declaration of CMyPage1 is shown in Listing 21.7 (the declaration of CMyPage2 is virtually identical).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.7. </B><B>CMyPage1</B><B> declaration.</B></LH></UL>
+
+<PRE>class CMyPage1 : public CPropertyPage
+
+{
+
+    DECLARE_DYNCREATE(CMyPage1)
+
+// Construction
+
+public:
+
+    CMyPage1();
+
+    ~CMyPage1();
+
+// Dialog Data
+
+    //{{AFX_DATA(CMyPage1)
+
+    enum { IDD = IDD_PAGE1 };
+
+    CString m_sEdit1;
+
+    //}}AFX_DATA
+
+// Overrides
+
+    // ClassWizard generate virtual function overrides
+
+    //{{AFX_VIRTUAL(CMyPage1)
+
+    protected:
+
+    virtual void DoDataExchange(CDataExchange* pDX);
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+protected:
+
+    // Generated message map functions
+
+    //{{AFX_MSG(CMyPage1)
+
+        // NOTE: the ClassWizard will add member functions here
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>As you can see, there is very little difference between this declaration and the ClassWizard-generated declaration of a CDialog-derived dialog class. Most importantly, CPropertyPage-derived classes can use Dialog Data Exchange functions just as classes derived from CDialog.
+
+<BR></P>
+
+<P>The implementation of CMyPage1 member functions (Listing 21.8) is also no different from the implementation of similar functions in a CDialog-derived class. Perhaps the one notable difference is that this class has been declared as dynamically creatable with the help of the DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE macros.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.8. </B><B>CMyPage1</B><B> implementation.</B></LH></UL>
+
+<PRE>IMPLEMENT_DYNCREATE(CMyPage1, CPropertyPage)
+
+CMyPage1::CMyPage1() : CPropertyPage(CMyPage1::IDD)
+
+{
+
+    //{{AFX_DATA_INIT(CMyPage1)
+
+    m_sEdit1 = _T(&quot;&quot;);
+
+    //}}AFX_DATA_INIT
+
+}
+
+CMyPage1::~CMyPage1()
+
+{
+
+}
+
+void CMyPage1::DoDataExchange(CDataExchange* pDX)
+
+{
+
+    CPropertyPage::DoDataExchange(pDX);
+
+    //{{AFX_DATA_MAP(CMyPage1)
+
+    DDX_Text(pDX, IDC_EDIT1, m_sEdit1);
+
+    //}}AFX_DATA_MAP
+
+}
+
+BEGIN_MESSAGE_MAP(CMyPage1, CPropertyPage)
+
+    //{{AFX_MSG_MAP(CMyPage1)
+
+        // NOTE: the ClassWizard will add message map macros here
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()</PRE>
+
+<P>As its declaration, the implementation of CMyPage2 is virtually identical to that of CMyPage1.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Adding a Property Sheet Object</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Now that the property pages have been constructed, the one remaining task is to create the property sheet. Again, we need to invoke the new property sheet when the user selects a new menu command, Property Sheet, from the application's View menu. Add this command to the menu using the resource editor, and invoke the ClassWizard to add a corresponding member function, CMainFrame::OnViewPropertysheet, to the CMainFrame class.
+
+<BR></P>
+
+<P>In this member function, we have to perform a series of tasks. First, a property sheet object must be constructed. Next, the property pages must be added to it using the AddPage member function; and finally, the property sheet must be invoked using the DoModal member function.
+
+<BR></P>
+
+<P>Listing 21.9 contains the implementation of CMainFrame::OnViewPropertysheet that performs all these tasks.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.9. The </B><B>CMainFrame::OnViewPropertysheet</B><B> function.</B></LH></UL>
+
+<PRE>void CMainFrame::OnViewPropertysheet()
+
+{
+
+    // TODO: Add your command handler code here
+
+    CPropertySheet myPropSheet;
+
+    CMyPage1 myPage1;
+
+    CMyPage2 myPage2;
+
+    myPage1.m_sEdit1 = &quot;First&quot;;
+
+    myPage2.m_sEdit2 = &quot;Second&quot;;
+
+    myPropSheet.AddPage(&amp;myPage1);
+
+    myPropSheet.AddPage(&amp;myPage2);
+
+    myPropSheet.DoModal();
+
+}</PRE>
+
+<P>Do not forget to include the header files MyPage1.h and MyPage2.h in MainFrm.cpp; otherwise, you will not be able to declare objects of type CMyPage1 or CMyPage2 and the function in Listing 21.9 will not compile.
+
+<BR></P>
+
+<P>At this time, the application is ready to be compiled and run.
+
+<BR></P>
+
+<P>Although in this example we made no use of the property page member variables after the property sheet is dismissed, we could access them simply through the property page objects myPage1 and myPage2.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B><I>CPropertyPage </I></B><B>Member Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Our simple example did not utilize many of the advanced capabilities of the CPropertyPage class.
+
+<BR></P>
+
+<P>For example, in a more realistic application, you may wish to override the CancelToClose member function whenever a change is made to a property page. This member function changes the OK button to Close and disables the Cancel button in the property sheet. This function is best used after an irreversible change has been made in a property page.
+
+<BR></P>
+
+<P>Another frequently used property page function is the SetModified function. This function can be used to enable the Apply Now button in the property sheet.
+
+<BR></P>
+
+<P>Other property page overridables include OnOK (called when the OK, Apply Now, or Close button is clicked in the property sheet), OnCancel (called when the cancel button is clicked in the property sheet), and OnApply (called when the Apply Now button is clicked in the property sheet).
+
+<BR></P>
+
+<P>Property sheets can also be used to implement wizard-like behavior; that is, behavior similar to the behavior of the ubiquitous wizards that can be found in many Microsoft applications. Wizard mode can be enabled by calling the SetWizardMode member function of the property sheet; in the property pages, override the OnWizardBack, OnWizardNext, and OnWizardFinish member functions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>Modeless Property Sheets</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Using the DoModal member function of a property sheet implies modal behavior. As is the case with dialogs, it is also possible to implement a modeless property sheet.
+
+<BR></P>
+
+<P>To accomplish this, it is first of all necessary to derive our own property sheet class. This is important because at the very least, we must override its PostNcDestroy member function to ensure that objects of this class are destroyed when the modeless property sheet is dismissed.
+
+<BR></P>
+
+<P>The new property sheet class can be created using ClassWizard. Create a new class derived from CPropertySheet, and name it CMySheet. While in ClassWizard, add the PostNcDestroy member function.
+
+<BR></P>
+
+<P>The declaration of CMySheet (in the file MySheet.h), as generated by ClassWizard, is shown in Listing 21.10.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.10. </B><B>CMySheet</B><B> declaration.</B></LH></UL>
+
+<PRE>class CMySheet : public CPropertySheet
+
+{
+
+    DECLARE_DYNAMIC(CMySheet)
+
+// Construction
+
+public:
+
+    CMySheet(UINT nIDCaption, CWnd* pParentWnd = NULL,
+
+             UINT iSelectPage = 0);
+
+    CMySheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL,
+
+             UINT iSelectPage = 0);
+
+// Attributes
+
+public:
+
+// Operations
+
+public:
+
+// Overrides
+
+    // ClassWizard generated virtual function overrides
+
+    //{{AFX_VIRTUAL(CMySheet)
+
+    protected:
+
+    virtual void PostNcDestroy();
+
+    //}}AFX_VIRTUAL
+
+// Implementation
+
+public:
+
+    virtual ~CMySheet();
+
+    // Generated message map functions
+
+protected:
+
+    //{{AFX_MSG(CMySheet)
+
+        // NOTE - the ClassWizard will add and remove member
+
+        // functions here.
+
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
+
+};</PRE>
+
+<P>In the implementation file, MySheet.cpp, it is necessary to modify the PostNcDestroy member function to destroy not only the property sheet object, but also any property pages associated with it. The implementation of this function, together with other, ClassWizard-supplied member function implementations for the CMySheet class, is shown in Listing 21.11.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.11. </B><B>CMySheet</B><B> declaration.</B></LH></UL>
+
+<PRE>///////////////////////////////////////////////////////////////////
+
+// CMySheet
+
+IMPLEMENT_DYNAMIC(CMySheet, CPropertySheet)
+
+CMySheet::CMySheet(UINT nIDCaption, CWnd* pParentWnd,
+
+                   UINT iSelectPage)
+
+    :CPropertySheet(nIDCaption, pParentWnd, iSelectPage)
+
+{
+
+}
+
+CMySheet::CMySheet(LPCTSTR pszCaption, CWnd* pParentWnd,
+
+                   UINT iSelectPage)
+
+    :CPropertySheet(pszCaption, pParentWnd, iSelectPage)
+
+{
+
+}
+
+CMySheet::~CMySheet()
+
+{
+
+}
+
+BEGIN_MESSAGE_MAP(CMySheet, CPropertySheet)
+
+    //{{AFX_MSG_MAP(CMySheet)
+
+ // NOTE - the ClassWizard will add and remove mapping macros here.
+
+    //}}AFX_MSG_MAP
+
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////
+
+// CMySheet message handlers
+
+void CMySheet::PostNcDestroy()
+
+{
+
+    // TODO: Add your specialized code here and/or call the base class
+
+    CPropertySheet::PostNcDestroy();
+
+    for (int i = 0; i &lt; GetPageCount(); i++)
+
+        delete GetPage(i);
+
+    delete this;
+
+}</PRE>
+
+<P>A modeless property sheet does not have OK, Cancel, and Apply Now buttons by default. If any buttons are required, these must be added by hand. We are not going to worry about these now; the modeless property sheet can still be dismissed by closing it through its control menu.
+
+<BR></P>
+
+<P>How is the modeless property sheet invoked? Obviously, we have to modify the OnViewPropertysheet member function in our CMainFrame class, as using DoModal is no longer appropriate. Nor is it appropriate to create the property sheet or any of its property pages on the stack, as we do not want them destroyed when the OnViewPropertysheet function returns. The new OnViewPropertysheet function is shown in Listing 21.12.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 21.12. Invoking a modeless property sheet.</B></LH></UL>
+
+<PRE>void CMainFrame::OnViewPropertysheet()
+
+{
+
+    // TODO: Add your command handler code here
+
+    CMySheet *pMyPropSheet;
+
+    CMyPage1 *pMyPage1;
+
+    CMyPage2 *pMyPage2;
+
+    pMyPropSheet = new CMySheet(&quot;&quot;);
+
+    pMyPage1 = new CMyPage1;
+
+    pMyPage2 = new CMyPage2;
+
+    pMyPage1-&gt;m_sEdit1 = &quot;First&quot;;
+
+    pMyPage2-&gt;m_sEdit2 = &quot;Second&quot;;
+
+    pMyPropSheet-&gt;AddPage(pMyPage1);
+
+    pMyPropSheet-&gt;AddPage(pMyPage2);
+
+    pMyPropSheet-&gt;Create();
+
+}</PRE>
+
+<P>In order for CMainFrame::OnViewPropertysheet to compile in its new form, it is necessary to add the include file MySheet.h to MainFrm.cpp; otherwise, the attempt to declare an object of type CMySheet will fail.
+
+<BR></P>
+
+<P>The application is now ready to be recompiled and run.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In MFC, dialogs are represented by classes derived from CDialog.
+
+<BR></P>
+
+<P>The steps of constructing a dialog that is part of an MFC application are as follows:
+
+<BR></P>
+
+<OL>
+
+<LI>Create the dialog template resource.
+
+<BR>
+
+<BR></LI>
+
+<LI>Invoke ClassWizard and create the dialog class corresponding to the resource.
+
+<BR>
+
+<BR></LI>
+
+<LI>Through ClassWizard, add member variables corresponding to controls.
+
+<BR>
+
+<BR></LI>
+
+<LI>Still using ClassWizard, add message handlers if necessary.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add code to your application that constructs a dialog object, invokes it (through the DoModal member function), and retrieves results.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>MFC applications can also have modeless dialogs. These dialogs are constructed differently. The constructor function in your dialog class should call the Create member function; it should also call the modeless version of the constructor of the CDialog base class. The modeless dialog must also explicitly be made visible by calling the ShowWindow member function.
+
+<BR></P>
+
+<P>Classes that correspond to modeless dialogs should override the OnOK and OnCancel member functions and call the DestroyWindow member function from within them. They should also override PostNcDestroy and destroy the C++ object (using delete this, for example).
+
+<BR></P>
+
+<P>Controls in a dialog are often represented by member variables in the corresponding dialog class. To facilitate the exchange of data between controls in the dialog box object and member variables in the dialog class, the Dialog Data Exchange mechanism can be used. This mechanism provides a simple method for matching member variables to controls. Member variables can be of simple value types or can represent control objects. It is possible to simultaneously use a member variable of a simple type to obtain the value of a control while using a control object to manage other aspects of the control. The Dialog Data Exchange mechanism also offers data validation capabilities.
+
+<BR></P>
+
+<P>For frequently used nonstandard types, it is possible to extend the ClassWizard's ability to handle Dialog Data Exchange. New data exchange and validation routines can be added either on a per project basis or to your overall Visual C++ configuration.
+
+<BR></P>
+
+<P>Property sheets represent several overlapping dialogs, or property pages, which the user can choose by clicking on corresponding tabs in a tab control.
+
+<BR></P>
+
+<P>Creating a property sheet is a two-phase process. First, property pages must be created; second, a property sheet object must be constructed, the property pages must be added to it, and the property sheet must be displayed.
+
+<BR></P>
+
+<P>Construction of property pages involves the same steps as construction of a dialog:
+
+<BR></P>
+
+<OL>
+
+<LI>Create the dialog template resource for every property page; ensure that the resources have the Child style, Thin border style, Titlebar style, Disabled style, and that their caption is set to the text that is desired in the corresponding tab.
+
+<BR>
+
+<BR></LI>
+
+<LI>Invoke ClassWizard and create a class derived from CPropertyPage corresponding to every dialog template resource.
+
+<BR>
+
+<BR></LI>
+
+<LI>Through ClassWizard, add member variables corresponding to controls in each property page.
+
+<BR>
+
+<BR></LI>
+
+<LI>Still using ClassWizard, add message handlers if necessary.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>Once the property pages have been constructed, you can proceed with the second phase:
+
+<BR></P>
+
+<OL>
+
+<LI>Construct a CPropertySheet object or an object of a class derived from CPropertySheet.
+
+<BR>
+
+<BR></LI>
+
+<LI>Construct a property page object for every property page you wish to add to the property sheet.
+
+<BR>
+
+<BR></LI>
+
+<LI>Add the property pages to the property sheet by calling AddPage.
+
+<BR>
+
+<BR></LI>
+
+<LI>Invoke the property sheet by calling DoModal.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>It is also possible to create modeless property sheets. To implement modeless property sheets, it is necessary to derive a class from CPropertySheet and override its PostNcDestroy member function to delete not only the property sheet object, but also all of its property pages. The modeless property sheet should be invoked via the Create member function instead of DoModal.</P>
+
+<P><A HREF="vcu20fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu22fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

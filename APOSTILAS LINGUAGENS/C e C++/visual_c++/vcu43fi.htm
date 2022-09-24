@@ -1,0 +1,996 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu43fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu44fi.htm">
+
+<LINK REL="Previous" HREF="vcu42fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu42fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu44fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">43 &#151; Network Programming with Pipes and Remote Procedure Calls</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Communicating with Pipes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Creating Pipes</A></LI>
+
+<LI>
+
+<A HREF="#I5">Connecting to Named Pipes</A></LI>
+
+<LI>
+
+<A HREF="#I6">Transferring Data Through Pipes</A></LI>
+
+<LI>
+
+<A HREF="#I7">A Working Example</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">Microsoft RPC</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">RPC Fundamentals</A></LI>
+
+<LI>
+
+<A HREF="#I10">A Simple Example</A></LI>
+
+<LI>
+
+<A HREF="#I11">Specifying the Interface</A></LI>
+
+<LI>
+
+<A HREF="#I12">Implementing the Server</A></LI>
+
+<LI>
+
+<A HREF="#I13">Implementing the Client</A></LI>
+
+<LI>
+
+<A HREF="#I14">RPC Exception Handling</A></LI>
+
+<LI>
+
+<A HREF="#I15">Advanced RPC Features</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>43 &#151; Network Programming with Pipes and Remote Procedure Calls</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Pipes offer an efficient, easy way for two cooperating Windows applications to communicate across a network. Pipes are easy to set up and use; they are one of the favored mechanisms for implementing client-server communications with server software running on Windows NT. Unfortunately, pipe support in Windows 95 is limited to client-side support.
+
+<BR></P>
+
+<P>The most often used pipes are <I>named pipes</I>. In addition to their other uses, named pipes also represent one of several mechanisms used by Microsoft Remote Procedure Calls, or Microsoft RPC. RPC is a mechanism that enables applications to call procedures (functions) that are part of another application running (possibly) on a different computer on the network. Apart from some initialization and housekeeping functions, using RPC is almost as simple as calling a local function.
+
+<BR></P>
+
+<P>In this chapter, we examine these two communication mechanisms.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Communicating with Pipes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Pipes offer a one- or two-way conduit of communication between cooperating applications. Programming with pipes is based on the client-server model; a typical server application creates a pipe and waits for client applications to request access to the pipe.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Creating Pipes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Win32 API distinguishes between <I>named pipes</I> and <I>anonymous pipes</I>. The use of anonymous pipes is somewhat limited. When an application creates an anonymous pipe, it receives two handles; one of these handles must be passed on to another application in order for the two applications to be able to communicate. A possible mechanism for passing a handle is inheritance; therefore, anonymous pipes are often used for communication between a parent and a child process, or between child processes of the same parent process. Because anonymous pipes are identified by handles, they are inherently local (a handle has no validity on another machine on the network). In contrast, named pipes are identified by a UNC name that is valid across the entire network.
+
+<BR></P>
+
+<P>Anonymous pipes are created using the CreatePipe function. This function returns two handles: one to the read end of the pipe, and another to its write end.
+
+<BR></P>
+
+<P>Named pipes are created by calling the CreateNamedPipe function. Named pipes have names in the following form:
+
+<BR></P>
+
+<PRE>\\<I>hostname</I>\\pipe\\<I>pipename</I></PRE>
+
+<P>Servers cannot create a pipe on another computer. For this reason, the host name component in the pipe name, when<S>name,when</S> the name is used in CreateNamedPipe, must be set to a single period, indicating the local host:
+
+<BR></P>
+
+<PRE>\\.\pipe\<I>pipename</I></PRE>
+
+<P>A named pipe can be one-way or two-way. When the server creates the pipe, it specifies PIPE_ACCESS_DUPLEX, PIPE_ACCESS_INBOUND, or PIPE_ACCESS_OUTBOUND to indicate the directionality of the pipe.
+
+<BR></P>
+
+<P>Named pipes support asynchronous (overlapped) I/O operations. However, overlapped I/O is not supported by anonymous pipes.
+
+<BR></P>
+
+<P>When a named pipe is created, a server specifies the pipe's type. A pipe can be a byte mode or a message mode pipe. Byte mode pipes treat data as a stream of bytes; message mode pipes treat data as a stream of messages. The pipe's read mode can be byte read mode or message read mode; message mode pipes support both read modes, but byte mode pipes support only the byte read mode.
+
+<BR></P>
+
+<P>The pipe's read mode and its wait mode (whether the pipe operates in a blocking or nonblocking mode) can be specified when the pipe is created and later modified using the SetNamedPipeHandleState function. The current state of the pipe can be obtained by calling GetNamedPipeHandleState. Further information about a named pipe can be obtained by calling GetNamedPipeInfo.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Connecting to Named Pipes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>When an anonymous pipe is created, the process creating it receives handles for both ends of the pipe. In contrast, when a server creates a named pipe, only one end of the pipe is opened; the server must wait for a client to make an attempt to connect to the pipe before the pipe can be used. An overview of setting up, using, and shutting down named pipes is presented in Figure 43.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="43vcu01.gif">Figure 43.1. Communicating with named pipes.</A></B>
+
+<BR></P>
+
+<P>To wait for a connection, servers issue a call to the ConnectNamedPipe function. This function waits until a client connects to the pipe, identifying the pipe by its name (note that ConnectNamedPipe can also be used asynchronously, in which case the server is free to attend to other tasks while it is waiting for an incoming connection on the pipe).
+
+<BR></P>
+
+<P>Clients can determine whether a named pipe is available to be connected to using the WaitNamedPipe function. Once a pipe is available, applications can connect to it using the CreateFile function and giving the name of the pipe as the filename.
+
+<BR></P>
+
+<P>An established connection can be broken by the server by calling the DisconnectNamedPipe function. When a server calls this function, the client-side handle of the pipe becomes invalid and all data that was not yet read by the client is discarded. To ensure that the client read all data before DisconnectNamedPipe is called, servers can call the FlushFileBuffers function. After DisconnectNamedPipe returns, servers can either close the pipe handle or reuse it in another call to ConnectNamedPipe.
+
+<BR></P>
+
+<P>Clients can break the connection by simply calling CloseHandle on the pipe handle they obtained through calling CreateFile.
+
+<BR></P>
+
+<P>Servers can utilize several strategies for handling multiple connections, such as spawning separate threads and using overlapped I/O. A server can create multiple instances of the same pipe by repeatedly calling CreateNamedPipe with the same pipe name.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Transferring Data Through Pipes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Pipes can be written to or read from using WriteFile and ReadFile. Named pipes can also be used for overlapped I/O; in this case, the WriteFileEx and ReadFileEx functions may need to be used.
+
+<BR></P>
+
+<P>For message-mode pipes, an alternative mechanism exists for quick and efficient message transfer. Clients can call the TransactNamedPipe function to write a message to and read a message from the specified pipe in a single network operation. The CallNamedPipe function combines into a single operation the calls to WaitNamedPipe, CreateFile, TransactNamedPipe, and CloseHandle. In other words, CallNamedPipe waits for the specified pipe to become available, opens the pipe, exchanges messages, and closes the pipe in a single function call.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>A Working Example</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>This simple example implements a named pipe client and server pair. Listing 43.1 shows the server application.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 43.1. A simple named pipe server.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+void main(void)
+
+{
+
+    HANDLE hPipe;
+
+    DWORD dwRead;
+
+    char c = -1;
+
+    hPipe = CreateNamedPipe(&quot;\\\\.\\pipe\\hello&quot;,
+
+          PIPE_ACCESS_INBOUND, PIPE_WAIT, PIPE_UNLIMITED_INSTANCES,
+
+          256, 256, 1000, NULL);
+
+    ConnectNamedPipe(hPipe, NULL);
+
+    while (c != '\0')
+
+    {
+
+        ReadFile(hPipe, &amp;c, 1, &amp;dwRead, NULL);
+
+        if (dwRead &gt; 0 &amp;&amp; c != 0) putchar ;
+
+    }
+
+    DisconnectNamedPipe(hPipe);
+
+    CloseHandle(hPipe);
+
+}</PRE>
+
+<P>This application creates the pipe hello on the local server. The pipe is created in blocking mode (PIPE_WAIT); operations on this pipe will not return until they are completed. Once the pipe has been created, the server calls ConnectNamedPipe and waits for incoming client connections.
+
+<BR></P>
+
+<P>When a client is connected, the server attempts to read from the pipe. It reads single bytes from the pipe and writes them to standard output until a null character is encountered; at that time, it disconnects the pipe, closes the handle, and terminates.
+
+<BR></P>
+
+<P>The client, shown in Listing 43.2, takes two command-line parameters; the first identifies the host that it should connect to, the second represents the string that it sends to the server on that host.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 43.2. A simple named pipe client.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;string.h&gt;
+
+#include &lt;stdio.h&gt;
+
+void main(int argc, char *argv[])
+
+{
+
+    HANDLE hPipe;
+
+    DWORD dwWritten;
+
+    char *pszPipe;
+
+    if (argc != 3)
+
+    {
+
+        printf(&quot;Usage: %s hostname string-to-print\n&quot;, argv[0]);
+
+        exit(1);
+
+    }
+
+    pszPipe = malloc(strlen(argv[1]) + 14);
+
+    sprintf(pszPipe, &quot;\\\\%s\\pipe\\hello&quot;, argv[1]);
+
+    WaitNamedPipe(pszPipe, NMPWAIT_WAIT_FOREVER);
+
+    hPipe = CreateFile(pszPipe, GENERIC_WRITE, 0, NULL,
+
+                       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    free(pszPipe);
+
+    WriteFile(hPipe, argv[2], strlen(argv[2])+1, &amp;dwWritten, NULL);
+
+    CloseHandle(hPipe);
+
+}</PRE>
+
+<P>After processing its command-line parameters, the client begins to wait for the server to become available by calling WaitNamedPipe. When WaitNamedPipe returns, the client calls CreateFile to actually connect to the server; it then uses WriteFile to send the string to the server before shutting down the connection by calling CloseHandle.
+
+<BR></P>
+
+<P>Both the client and the server can easily be compiled from the command line. Type cl pipes.c to compile the server and cl pipec.c to compile the client.
+
+<BR></P>
+
+<P>You can test this application on a single machine running Windows NT (remember that Windows 95 does not support the server end of pipes) or on two machines across a network. If you are using a single machine, start pipes.exe in a DOS window and use a separate DOS window for running the client. When using the client, run it with a command line similar to the following:
+
+<BR></P>
+
+<PRE>pipec MYHOST &quot;Hello, World!&quot;</PRE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>Microsoft RPC</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Microsoft's RPC extends the conceptual elegance and simplicity of a function or subroutine call by providing a similar mechanism for calls across the network. RPC servers can offer a set of functions that can be called by RPC clients.
+
+<BR></P>
+
+<P>The RPC mechanism is used widely in Windows. In particular, the RPC mechanism is the basis of Object Linking and Embedding technology.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>RPC Fundamentals</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The key to the RPC mechanism is <I>stub functions</I>. When an RPC client calls an RPC function, it issues a regular function call. However, the function that receives a call is an RPC stub; this stub function converts function arguments for transmission across the network (a procedure referred to as <I>marshaling</I>) and transmits the call request and the arguments to the server.
+
+<BR></P>
+
+<P>Stub functions on the server side <I>unmarshal</I> function arguments and call the server's implementation of the function. When the function returns, its return value is passed back to the client using a reverse mechanism. This entire procedure is illustrated in Figure 43.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="43vcu02.gif">Figure 43.2. RPC overview.</A></B>
+
+<BR></P>
+
+<P>When developing RPC applications, an element of central importance is the <I>interface</I>. Clearly, the stub functions on the client and the server sides must be based on identical function definitions; otherwise, the RPC process will surely fail. The tool that ensures that the stub functions on the two sides are compatible is the Microsoft Interface Development Language (MIDL) compiler.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>A Simple Example</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The next example clarifies the basic concepts of Microsoft RPC. This example, the RPC equivalent of the Hello, World application, implements a simple server function that prints a string received from client applications.
+
+<BR></P>
+
+<P>The first step in developing this example is to specify the interface. This is done in the form of two files that represent the input files for the MIDL compiler. The MIDL compiler will produce three files: a header file that must be included in both the client and the server application, and two C source files that implement the client and server stub functions. These files must be linked with our implementation of both the client and the server application to produce the final executables. This process is illustrated in Figure 43.3.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="43vcu03.gif">Figure 43.3. RPC development.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Specifying the Interface</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The interface for an RPC implementation is specified in the form of two files: the <I>Interface Definition Language File</I> and the <I>Application </I><I>Configuration File</I>. These two files together serve as input for the MIDL compiler.
+
+<BR></P>
+
+<P>The Interface Definition Language File for our example application is shown in Listing 43.3.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 43.3. The Interface Definition Language File.</B></LH></UL>
+
+<PRE>[
+
+  uuid (6fdd2ce0-0985-11cf-87c3-00403321bfac),
+
+  version(1.0)
+
+]
+
+interface hello
+
+{
+
+  void HelloProc([in, string] const unsigned char *pszString);
+
+  void Shutdown(void);
+
+}</PRE>
+
+<P>This file consists of two parts: the interface header and the interface body. The interface header has the following syntax:
+
+<BR></P>
+
+<PRE>[ <I>interface-attributes</I> ] interface <I>interface-name</I></PRE>
+
+<P>Perhaps the most important of the interface attributes is the interface's <I>GUID</I>, or <I>globally unique identifier</I>. The GUID is a 128-bit identifier that is supposed to be world-unique; in other words, no two applications in the world are supposed to have identical identifiers.
+
+<BR></P>
+
+<P>The Visual C++ distribution provides a tool, the executable program guidgen.exe, that is supposed to create such unique identifiers using, in part, information obtained from your computer's hardware, and in part a randomization algorithm.
+
+<BR></P>
+
+<P>The GUID is expressed in the form of a string of 32 hexadecimal digits. The specific form is 8, 4, 4, 4, and 12 digits separated by hyphens. The guidgen.exe program generates GUID strings in this form.
+
+<BR></P>
+
+<P>In addition to the GUID, another interface attribute specifies the interface's version number. The function of the version number is to identify potentially incompatible versions of the interface.
+
+<BR></P>
+
+<P>In the second part of the Interface Definition Language File, function prototypes are defined. The prototype syntax is similar to the syntax of the C language but it also contains extra elements. The in keyword indicates to the MIDL compiler that the following parameter is an input-only parameter; that is, it is sent to the server by the client. The string keyword indicates that the data sent is a character array.
+
+<BR></P>
+
+<P>The Application Configuration File is similar in syntax and appearance to the Interface Definition Language File. However, this file contains information on data and attributes not related to the actual transmission of RPC data.
+
+<BR></P>
+
+<P>The Application Configuration File for our project is shown in Listing 43.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 43.4. The Application Configuration File.</B></LH></UL>
+
+<PRE>[
+
+  implicit_handle(handle_t hello_IfHandle)
+
+]
+
+interface hello
+
+{
+
+}</PRE>
+
+<P>In this file, we specify a <I>binding handle</I> for the interface. This handle is a data object that represents the connection between the client and the server. Because the handle is not transmitted over the network, it is specified in the Application Configuration File.
+
+<BR></P>
+
+<P>The use of the keyword implicit_handle prescribes a handle that is maintained as a global variable. This handle will be used by the client in calls to RPC run-time functions.
+
+<BR></P>
+
+<P>The two files, hello.idl and hello.acf, can be compiled by the MIDL compiler using a single command:
+
+<BR></P>
+
+<PRE>midl hello.idl</PRE>
+
+<P>The result of the compilation is three files produced by the MIDL compiler: hello_c.c, hello_s.c, and hello.h. The files hello_c.c and hello_s.c provide the client and server-side implementation of stub functions; the hello.h header provides necessary declarations.
+
+<BR></P>
+
+<P>By looking at these generated files, one can easily see just how much of the network programmer's work is automated by the use of the MIDL compiler. The generated stub functions perform all the required run-time library calls to marshal and unmarshal arguments and to communicate across the network. However, the real beauty and elegant simplicity of the RPC mechanism are yet to become evident when we implement our client and server.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Implementing the Server</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The server application's implementation is shown in Listing 43.5.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 43.5. A simple RPC server.</B></LH></UL>
+
+<PRE>#include &lt;stdlib.h&gt;
+
+#include &lt;stdio.h&gt;
+
+#include &quot;hello.h&quot;
+
+void HelloProc(const unsigned char *pszString)
+
+{
+
+    printf(&quot;%s\n&quot;, pszString);
+
+}
+
+void Shutdown(void)
+
+{
+
+    RpcMgmtStopServerListening(NULL);
+
+    RpcServerUnregisterIf(NULL, NULL, FALSE);
+
+}
+
+void main(int argc, char * argv[])
+
+{
+
+    RpcServerUseProtseqEp(&quot;ncacn_ip_tcp&quot;, 20, &quot;8000&quot;, NULL);
+
+    RpcServerRegisterIf(hello_v1_0_s_ifspec, NULL, NULL);
+
+    RpcServerListen(1, 20, FALSE);
+
+}
+
+void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
+
+{
+
+    return(malloc(len));
+
+}
+
+void __RPC_USER midl_user_free(void __RPC_FAR * ptr)
+
+{
+
+    free(ptr);
+
+}</PRE>
+
+<P>The RPC run-time library is initialized and the server is set up to wait for incoming connections through the three RPC run-time library calls in the program's main function. First of these calls is the RpcServerUseProtseqEp call; this call defines the network protocol and endpoint that is to be used by the application. In our example, I decided to use the TCP over IP protocol (ncacn_ip_tcp) as a protocol that is supported both under Windows 95 and Windows NT. The RPC mechanism can utilize many other protocols, as shown in Table 43.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 43.1. RPC protocols.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>protocol name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>ncacn_ip_tcp</P>
+
+<TD>
+
+<P>TCP over IP</P>
+
+<TR>
+
+<TD>
+
+<P>ncacn_nb_tcp</P>
+
+<TD>
+
+<P>TCP over NetBIOS</P>
+
+<TR>
+
+<TD>
+
+<P>ncacn_nb_ipx</P>
+
+<TD>
+
+<P>IPX over NetBEUI</P>
+
+<TR>
+
+<TD>
+
+<P>ncacn_nb_nb</P>
+
+<TD>
+
+<P>NetBIOS over NetBEUI</P>
+
+<TR>
+
+<TD>
+
+<P>ncacn_np</P>
+
+<TD>
+
+<P>Named pipes</P>
+
+<TR>
+
+<TD>
+
+<P>ncacn_spx</P>
+
+<TD>
+
+<P>SPX</P>
+
+<TR>
+
+<TD>
+
+<P>ncacn_dnet_nsp</P>
+
+<TD>
+
+<P>DECnet transport</P>
+
+<TR>
+
+<TD>
+
+<P>ncadg_ip_udp</P>
+
+<TD>
+
+<P>UDP over IP</P>
+
+<TR>
+
+<TD>
+
+<P>ncadg_ipx</P>
+
+<TD>
+
+<P>IPX</P>
+
+<TR>
+
+<TD>
+
+<P>ncalrpc</P>
+
+<TD>
+
+<P>local procedure call</P></TABLE>
+
+<P>Protocols with a name that begins with ncacn are connection-oriented protocols; those with a name that starts with ncadg are datagram (connectionless) protocols.
+
+<BR></P>
+
+<P>Because Windows 95 supports named pipes for the client side only, the ncacn_np protocol is only supported for RPC client applications. Windows 95 does not support ncacn_nb_ipx and ncacn_nb_tcp. The ncacn_dnet_nsp protocol is supported only for 16-bit Windows and MS-DOS clients.
+
+<BR></P>
+
+<P>The meaning of the endpoint parameter is dependent on the protocol. For example, when the ncacn_ip_tcp protocol is used, the endpoint parameter represents a TPC port number.
+
+<BR></P>
+
+<P>Starting up the server consists of two steps. First, the server interface is registered; second, it enters a state where it listens for incoming connections. Registering the server makes it available for incoming client connections.
+
+<BR></P>
+
+<P>The actual remote procedure, HelloProc, is implemented the same way as a local function. In fact, it is possible to place the implementation of this function in a separate file; this way, applications that locally call the function could be linked with it, while applications that call this function through RPC link with the client-side stub instead.
+
+<BR></P>
+
+<P>Another function, Shutdown, has been provided to facilitate remote shutdown of the server. Server shutdown is accomplished by exiting the listening state and unregistering the server.
+
+<BR></P>
+
+<P>In addition to these two functions, the Microsoft RPC specifications require that we implement two additional memory management functions. The midl_user_allocate and midl_user_free functions are used to allocated a block of memory and to free up allocated memory. In simple cases, these can be mapped to the C run-time functions malloc and free; however, in large, complex applications these functions enable finer control over memory use. Both of these functions are used when arguments are marshaled or unmarshaled.
+
+<BR></P>
+
+<P>To compile the server application, use the following command line:
+
+<BR></P>
+
+<PRE>cl hellos.c hello_s.c rpcrt4.lib</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Implementing the Client</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Implementing the RPC client is only slightly more complicated than implementing an application containing a local function call. The client implementation for our example is shown in Listing 43.6.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 43.6. A simple RPC client.</B></LH></UL>
+
+<PRE>#include &lt;stdlib.h&gt;
+
+#include &lt;stdio.h&gt;
+
+#include &lt;string.h&gt;
+
+#include &quot;hello.h&quot;
+
+void main(int argc, char *argv[])
+
+{
+
+    unsigned char *pszStringBinding;
+
+    if (argc != 3)
+
+    {
+
+        printf(&quot;Usage: %s hostname string-to-print\n&quot;, argv[0]);
+
+        exit(1);
+
+    }
+
+    RpcStringBindingCompose(NULL, &quot;ncacn_ip_tcp&quot;, argv[1], &quot;8000&quot;, NULL, &amp;pszStringBinding);
+
+    RpcBindingFromStringBinding(pszStringBinding, &amp;hello_IfHandle);
+
+    if (strcmp(argv[2], &quot;SHUTDOWN&quot;)) HelloProc(argv[2]);
+
+    else Shutdown();
+
+    RpcStringFree(&amp;pszStringBinding);
+
+    RpcBindingFree(&amp;hello_IfHandle);
+
+    exit(0);
+
+}
+
+void  __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
+
+{
+
+    return(malloc(len));
+
+}
+
+void __RPC_USER midl_user_free(void __RPC_FAR * ptr)
+
+{
+
+    free(ptr);
+
+}</PRE>
+
+<P>This client implementation takes two command-line parameters: the name of the server to connect to and the string to be sent to the server. Because of the protocol being used (TCP over IP), the server name must be the host's internet name or IP address. If you are testing the client and the server on the same host, you can use the default name for the local host, localhost, or its default IP address, 127.0.0.1.
+
+<BR></P>
+
+<P>The protocol name, host name, and endpoint are combined into a <I>string </I><I>binding</I> using the RpcStringBindingCompose function. For example, the string binding representing the ncacn_ip_tcp protocol, the local host, and TCP port 8000 would appear as follows:
+
+<BR></P>
+
+<PRE>ncacn_ip_tcp:localhost[8000]</PRE>
+
+<P>The RpcStringBindingCompose function is merely a convenience function that frees the programmer from the task of having to assemble the string binding from its components by hand. This string binding is used to obtain the binding handle for the interface in the call to RpcBindingFromStringBinding. The receipt of the binding handle indicates that the connection is ready to be used.
+
+<BR></P>
+
+<P>Once the connection is established, using it is simplicity itself. Calling a remote procedure becomes identical to calling a local function. In our client implementation, we call the function HelloProc with the second command-line argument; that is, unless that argument is the string SHUTDOWN, in which case the Shutdown function is called instead to shut down the remote server.
+
+<BR></P>
+
+<P>Like the client, the server must also provide its implementations for midl_user_allocate and midl_user_free.
+
+<BR></P>
+
+<P>The client application can be compiled using the following command line:
+
+<BR></P>
+
+<PRE>cl helloc.c hello_c.c rpcrt4.lib</PRE>
+
+<P>Once you have compiled both the server and the client executables, you can test the two programs from two DOS windows. After you started the server in one of the windows, run the client in the other window as follows:
+
+<BR></P>
+
+<PRE>helloc localhost &quot;Hello, World!&quot;</PRE>
+
+<P>To shut down the server from the client side, type:
+
+<BR></P>
+
+<PRE>helloc localhost SHUTDOWN</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>RPC Exception Handling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>If you attempt to run the client application developed in the previous section alone, without starting up a server, a serious deficiency of our implementation becomes evident. Neither the client nor the server in this example performs any error handling; in particular, this means that the client does not respond well to situations when no server is available.
+
+<BR></P>
+
+<P>Unlike other errors, the unavailability of a server should be considered a likely occurrence that must be handled. (Not that I am suggesting that handling of other errors can or should be neglected in production applications!) The Microsoft RPC implementation provides a special mechanism for this purpose that is very similar in its appearance to Win32 structured exceptions or C++ exception handling.
+
+<BR></P>
+
+<P>By protecting the remote procedure calls using the RPC exception handling macros, one can ensure graceful handling of network error conditions by a client application. For example, in our Hello, World application, the calls to HelloProc and Shutdown on the client side could be protected as follows:
+
+<BR></P>
+
+<PRE>RpcTryExcept {
+
+    if (strcmp(argv[2], &quot;SHUTDOWN&quot;)) HelloProc(argv[2]);
+
+    else Shutdown();
+
+}
+
+RpcExcept(1) {
+
+    printf(&quot;RPC run-time exception %08.8X\n&quot;, RpcExceptionCode());
+
+}
+
+RpcEndExcept</PRE>
+
+<P>If you recompile the client application with this change, it will no longer crash when the server is not available; it will gracefully terminate, printing the exception number.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Advanced RPC Features</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Although this example application demonstrates the simplicity of using Microsoft RPC adequately, it only hints at the power and rich features of the RPC mechanism. This section mentions a few of the most notable features of Microsoft RPC.
+
+<BR></P>
+
+<P>The MIDL compiler can be used for specifying remote procedures that accept all kinds of arguments. This includes pointers and arrays; however, pointers and arrays require special consideration. Because the RPC stub functions must not only marshal the pointer arguments themselves but also the data they point to, it is necessary to define the size of the memory block a pointer points to in the interface specification. A series of attributes is available for specifying an array's size. For example, consider a remote procedure that takes the size of an array and a pointer to it as its parameters:
+
+<BR></P>
+
+<PRE>void myproc(short s, double *d);</PRE>
+
+<P>You can identify the interface for such a procedure in your IDL file as follows:
+
+<BR></P>
+
+<PRE>void myproc([in] short s, [in, out, size_is ] double d[]);</PRE>
+
+<P>This informs the MIDL to generate stub code that marshals s number of array elements.
+
+<BR></P>
+
+<P>The size_is attribute is not the only attribute that assists in specifying array arguments. Others include length_is, first_is, last_is, and max_is.
+
+<BR></P>
+
+<P>The RPC mechanism can utilize the Microsoft RPC Name Service Provider on Windows NT. Through this mechanism, it is possible for clients to locate an RPC server by name. In particular, the use of RPC Name Service enables you to develop clients that do not use an explicit binding handle (like our Hello,<I> </I>World example did). Such clients would contain no RPC run-time library calls whatsoever and apart from being linked with the client-side stub, they look no different from programs that use local functions.
+
+<BR></P>
+
+<P>The MIDL syntax enables you to define interfaces that are derived from other interfaces. The syntax is similar to that used for deriving classes in C++:
+
+<BR></P>
+
+<PRE>[<I>attributes</I>] interface <I>interface-name</I> : <I>base-interface</I></PRE>
+
+<P>The derived interface inherits member functions, status codes, and interface attributes from the base interface.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Pipes represent a simple, efficient interapplication communication mechanism supported by Windows 95 (client side only) and Windows NT.
+
+<BR></P>
+
+<P>Pipes can be named and unnamed. Anonymous pipes are typically used between a parent and a child process or two sibling processes. The use of anonymous pipes requires communicating a pipe handle from one process to another (for example, by inheriting the handle). Because anonymous pipes are identified by handle alone, they cannot be used for communication across a network.
+
+<BR></P>
+
+<P>Unlike anonymous pipes, named pipes support overlapped I/O operations. A server can use a combination of techniques including overlapped I/O and using separate threads to serve several clients simultaneously.
+
+<BR></P>
+
+<P>Both servers and clients communicate on a named pipe using the pipe's handle and standard Win32 input and output functions.
+
+<BR></P>
+
+<P>Microsoft RPC is a mechanism for applications to call functions remotely. It provides a transparent interface where client applications can call remote functions in a fashion that is very similar to the calling of local functions.
+
+<BR></P>
+
+<P>The key to Microsoft RPC, in addition to the RPC run-time library, is the Microsoft Interface Definition Language (MIDL) compiler. The interface between a client and a server can be specified using a simple C-like syntax, from which the MIDL compiler generates server and client-side stub functions, freeing the programmer from the burden of complex network programming tasks and from having to maintain compatible versions of these functions on the server and client sides.
+
+<BR></P>
+
+<P>The actual implementation is through these stub functions. When a client calls a remote procedure, the call is handled by the corresponding client-side stub function. The stub function, in turn, calls the RPC run-time library that uses the underlying network transport to invoke stub functions on the server side. The client-side stub function also marshals function arguments for transmission over the network. The server-side stub function unmarshals these arguments and calls the actual function implementation. When the function returns, this process is played out in reverse, as return values are transported back to the client application.
+
+<BR></P>
+
+<P>Advanced RPC features include RPC Name Service, pointer and array function arguments, derived interfaces, and much more.</P>
+
+<P><A HREF="vcu42fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu44fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

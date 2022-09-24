@@ -1,0 +1,2126 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu37fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu38fi.htm">
+
+<LINK REL="Previous" HREF="vcu36fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu36fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu38fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">37 &#150; Multimedia Applications</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Video Playback with One Function Call</A></LI>
+
+<LI>
+
+<A HREF="#I4">Fundamentals of Multimedia Programming</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I5">Multimedia Data Formats</A></LI>
+
+<LI>
+
+<A HREF="#I6">Multimedia Interfaces</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">Programming with MCIWnd</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">The MCIWnd Window Class</A></LI>
+
+<LI>
+
+<A HREF="#I9">MCIWnd Functions</A></LI>
+
+<LI>
+
+<A HREF="#I10">MCIWnd Macros</A></LI>
+
+<LI>
+
+<A HREF="#I11">MCIWnd Notifications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">The Media Control Interface</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I13">MCI Command String Syntax</A></LI>
+
+<LI>
+
+<A HREF="#I14">MCI Command Sets</A></LI>
+
+<LI>
+
+<A HREF="#I15">MCI Functions and Macros</A></LI>
+
+<LI>
+
+<A HREF="#I16">MCI Notifications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I17">Advanced Interfaces</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I18">AVIFile and AVIStream Functions</A></LI>
+
+<LI>
+
+<A HREF="#I19">Custom File and Stream Handlers</A></LI>
+
+<LI>
+
+<A HREF="#I20">DrawDib Functions</A></LI>
+
+<LI>
+
+<A HREF="#I21">The Video Compression Manager</A></LI>
+
+<LI>
+
+<A HREF="#I22">Video Capture</A></LI>
+
+<LI>
+
+<A HREF="#I23">Waveform Audio Recording and Playback</A></LI>
+
+<LI>
+
+<A HREF="#I24">The Audio Compression Manager</A></LI>
+
+<LI>
+
+<A HREF="#I25">MIDI Recording and Playback</A></LI>
+
+<LI>
+
+<A HREF="#I26">Audio Mixers</A></LI>
+
+<LI>
+
+<A HREF="#I27">Miscellaneous Multimedia Services</A></LI></UL>
+
+<LI>
+
+<A HREF="#I28">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>37 &#150; Multimedia Applications</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>It has been several years since Microsoft Windows became a platform of choice for multimedia applications. Since the introduction of multimedia capabilities in Windows 3.1, hardware prices have dropped significantly. Just a few short years ago, multimedia, video, and sound required expensive workstations; now it is available on most home computers. CD-ROM drives, rapidly growing in popularity, provide the means to deliver multimedia presentations to most PCs. In short, multimedia can no longer be ignored by most programmers.
+
+<BR></P>
+
+<P>Although multimedia programming under Windows can be quite complex, applications can accomplish many things by a few simple function calls. Nothing demonstrates this better than the MCIWndCreate function, which can be used to replay videos in a single function call. Our review of Windows multimedia programming begins with a closer look at this function; for many simple applications, you may not need anything more sophisticated.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Video Playback with One Function Call</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The program shown in Listing 37.1 can perhaps be viewed as the Windows multimedia equivalent of a Hello, World application. This program takes a single command-line parameter, the name of a multimedia file such as an AVI video file, and plays it back in its window. It can also be launched without a parameter; in that case, use the button controls that appear in its window (Figure 37.1) to open a file for playback.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="37vcu01.gif">Figure 37.1. AVI playback using </B><B>MCIWndCreate</B><B>.</A></B>
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 37.1. A simple multimedia playback application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;vfw.h&gt;
+
+void SetClientRect(HWND hwnd, HWND hwndMCI)
+
+{
+
+    RECT rect;
+
+    GetWindowRect(hwndMCI, &amp;rect);
+
+    AdjustWindowRectEx(&amp;rect, GetWindowLong(hwnd, GWL_STYLE),
+
+                       FALSE, GetWindowLong(hwnd, GWL_EXSTYLE));
+
+    MoveWindow(hwnd, rect.left, rect.top, rect.right - rect.left,
+
+               rect.bottom - rect.top, TRUE);
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case MCIWNDM_NOTIFYPOS:
+
+        case MCIWNDM_NOTIFYSIZE:
+
+            SetClientRect(hwnd, (HWND)wParam);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                     LPSTR lpCmdLine, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;HELLO&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;HELLO&quot;, &quot;HELLO&quot;,
+
+                        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    SetClientRect(hwnd, MCIWndCreate(hwnd, hInstance, WS_VISIBLE |
+
+                                    WS_CHILD | MCIWNDF_SHOWALL |
+
+                                    MCIWNDF_NOTIFYSIZE |
+
+                                    MCIWNDF_NOTIFYPOS, lpCmdLine));
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>All right, I cheated. In addition to the single function call, we also have a few lines of code handling notification messages. By responding to MCIWNDM_NOTIFYPOS and MCIWNDM_NOTIFYSIZE messages, we can ensure that the application's main window is automatically resized. That way, we end up with a window that is properly sized for video playback. Nevertheless, the application demonstrates the power of MCIWndCreate well; with that one function call, we have been able to create a full-featured video playback application.
+
+<BR></P>
+
+<P>This simple program can be compiled from the command line by typing cl hello.c user32.lib vfw32.lib.
+
+<BR></P>
+
+<P>MCIWndCreate is not the only simple function that can be used for media playback. Another such function is the Playback function; this function can be used to play waveform audio files.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B>Fundamentals of Multimedia Programming</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Multimedia represents the operating system's ability to record and play video and sound. Multimedia programming is accomplished through a series of interfaces, or APIs that applications can utilize for this purpose.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Multimedia Data Formats</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows recognizes three different multimedia formats: two audio formats and a video format (Figure 37.2).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="37vcu02.gif">Figure 37.2. Multimedia in Windows.</A></B>
+
+<BR></P>
+
+<P><I>Waveform audio</I> is sampled, digitized audio data. Waveform audio is typically stored in files with the .wav extension. Windows recognizes waveform audio files with mono and stereo data, a variety of sampling rates, and sampling depths. There are also several different compression methods used for the efficient storage of waveform data.
+
+<BR></P>
+
+<P><I>MIDI</I> is the acronym for <I>Musical Instrument Digital Interface</I>. This international standard specifies a protocol for interfacing computers and electronic musical instruments. MIDI sequences are data that can be played back on MIDI-compatible instruments. MIDI data is stored under windows in files with the .mid extension. MIDI files can be played back on external devices connected to the computer, or on built-in synthesizers that support MIDI capabilities.
+
+<BR></P>
+
+<P><I>AVI</I> is the Audio Video Interleaved file format. AVI files can be used to store a motion video stream and one or more audio channels. Windows recognizes video data at varying resolutions, color depths, and refresh rates. There are also several compression formats that are in wide use.
+
+<BR></P>
+
+<P>Although presently Windows does not support recording or playback of MPEG format video files, Microsoft has announced plans to do so in the future.
+
+<BR></P>
+
+<P>Windows multimedia functions can also be used for audio-CD playback. Using third-party drivers, recording and playback of other multimedia formats is also possible.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Multimedia Interfaces</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Depending on your programming needs, you can choose one of three interface levels to interact with the multimedia subsystem in Windows.
+
+<BR></P>
+
+<P>The high-level interface is based on the MCIWnd window class. In the example program shown in Listing 37.1, it was an MCIWnd function that enabled us to do video playback with only a single function call.
+
+<BR></P>
+
+<P>The mid-level interface is the <I>Media Control Interface</I>, or MCI. MCI provides a device-independent command-message and command-string interface for the playback and recording of audio and visual data.
+
+<BR></P>
+
+<P>At the lowest level, there are several interfaces for waveform audio, AVI video, and MIDI recording and playback. Additional interfaces provide audio mixer capabilities, buffered file I/O, and joystick and timer control.
+
+<BR></P>
+
+<P>All these interfaces serve but one purpose: to provide a programming interface between end-user applications on the one hand, and drivers for multimedia hardware on the other. Through these drivers, device-independence in Windows is achieved.
+
+<BR></P>
+
+<P>Which interface should you choose for your application? That depends on the needs and requirements of your project.
+
+<BR></P>
+
+<P>Applications that require only simple playback capabilities are good candidates for using the MCIWnd services. For example, an encyclopedia application that offers video clips accompanying some articles may use an MCIWnd window for video playback.
+
+<BR></P>
+
+<P>An example for a more demanding multimedia program is an audio recording and playback application. Such a program should probably rely on the services of the Media Control Interface to implement its functionality.
+
+<BR></P>
+
+<P>A sophisticated multimedia application, such as a video capture and mixer application, would probably require using low-level video and file services.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Programming with </B><B><I>MCIWnd</I></B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The MCIWnd window class represents the simplest, highest level multimedia programming interface in Windows. Applications that require simple playback capabilities can utilize MCIWnd windows for this purpose; such a window can be created with a single function call, as demonstrated by the program in Listing 37.1.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>The </B><B><I>MCIWnd</I></B><B> Window Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows of class MCIWnd provide a user interface that consists of up to four buttons, a trackbar, and an optional playback area (Figure 37.3).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="37vcu03.gif">Figure 37.3. </B><B>MCIWnd</B><B> Window Controls.</A></B>
+
+<BR></P>
+
+<P>The Play and Stop buttons can be used to start and stop playback. Playback starts at the current position indicated by the trackbar. Special playback effects can be utilized by holding down the Shift or Control keys while clicking on the Play button; holding down the Control key results in full-screen video playback, while holding down the Shift key results in backwards play.
+
+<BR></P>
+
+<P>The Menu button can be used to invoke a popup menu. The options in this menu are specific to the type of the media file currently selected. For example, if an AVI file is loaded, the popup menu includes options to set the video playback speed, sound volume, zoom, and video configuration. Other commands enable you to copy the current data to the Windows clipboard and to open another file. Yet another menu option enables you to send an MCI command string directly to the currently active multimedia device.
+
+<BR></P>
+
+<P>The Record button can be made available for devices that can record.
+
+<BR></P>
+
+<P>The trackbar is used to display the current playback or recording position relative to the size of the file. The trackbar can also be used to move to different locations in the file during playback.
+
+<BR></P>
+
+<P>Optimal video playback performance requires that the playback window be aligned on a four-pixel boundary. Normally, Windows aligns the playback window automatically.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B><I>MCIWnd</I></B><B> Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>An MCIWnd window is created by a call to MCIWndCreate. A call to this function registers the MCIWnd class and creates an MCIWnd window.
+
+<BR></P>
+
+<P>In addition to specifying the handle of the parent window and an instance handle, parameters to this function also specify a set of window styles and an optional filename.
+
+<BR></P>
+
+<P>The window style settings control which elements of the MCIWnd window are visible, and how it interacts with the user on the one hand and the application code on the other. For example, by specifying the MCIWNDF_RECORD window style, you can create an MCIWnd window with a visible Record button. Specifying the MCIWNDF_NOTIFYSIZE causes the MCIWnd window to send notification messages to its parent whenever the window's size changes.
+
+<BR></P>
+
+<P>MCIWnd windows can be created as child windows or overlapped windows. If created as an overlapped window, an MCIWnd window will have a title bar with contents specified with the appropriate style settings (MCIWNDF_SHOWMODE, MCIWNDF_SHOWNAME, or MCIWNDF_SHOWPOS).
+
+<BR></P>
+
+<P>MCIWnd windows can also be created via calls to CreateWindow or CreateWindowEx. Before you can do so, however, you must call MCIWndRegisterClass. This function registers the window class specified by the constant MCIWND_WINDOW_CLASS.
+
+<BR></P>
+
+<P>There are two additional functions that use windows of class MCIWnd. The functions GetOpenFileNamePreview and GetSaveFileNamePreview enhance the standard GetOpenFileName and GetSaveFileName functions by adding a multimedia preview window to the standard file open dialog (Figure 37.4).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="37vcu04.gif">Figure 37.4. A file open dialog with a preview window, </B><B>created using </B><B>GetOpenFileNamePreview</B><B>.</A></B>
+
+<BR></P>
+
+<P>The program in Listing 37.2 demonstrates the use of GetOpenFileNamePreview. To compile this program, type cl ofnp.c vfw32.lib.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 37.2. Using </B><B>GetOpenFileNamePreview</B><B>.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;vfw.h&gt;
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                     LPSTR lpCmdLine, int nCmdShow)
+
+{
+
+    OPENFILENAME ofn;
+
+    memset(&amp;ofn, 0, sizeof(ofn));
+
+    ofn.lStructSize = sizeof(ofn);
+
+    GetOpenFileNamePreview(&amp;ofn);
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B><I>MCIWnd</I></B><B> Macros</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Applications can communicate with an MCIWnd window by sending messages to it using the Windows SendMessage function. A large number of helper macros exist that simplify sending most of these messages.
+
+<BR></P>
+
+<P>Through these messages, applications can control the appearance and behavior of the MCIWnd window, start and stop playback and recording, close the MCI device or file and open a new file or device for recording or playback, seek specific playback and recording positions, retrieve information on device capabilities and current settings, specify MCI device attributes, and control the MCI device.
+
+<BR></P>
+
+<P>Table 37.1 summarizes MCIWnd messages and helper macros.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 37.1. </B><B>MCIWnd</B><B> messages and macros.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Message</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Macro</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>MCI_CLOSE</P>
+
+<TD>
+
+<P>MCIWndClose</P>
+
+<TD>
+
+<P>Close MCI device or file</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_OPEN</P>
+
+<TD>
+
+<P>MCIWndOpenDialog</P>
+
+<TD>
+
+<P>Open data file</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_PAUSE</P>
+
+<TD>
+
+<P>MCIWndPause</P>
+
+<TD>
+
+<P>Pause playback or record</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_PLAY</P>
+
+<TD>
+
+<P>MCIWndPlay</P>
+
+<TD>
+
+<P>Start playback</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_RECORD</P>
+
+<TD>
+
+<P>MCIWndRecord</P>
+
+<TD>
+
+<P>Start recording</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_RESUME</P>
+
+<TD>
+
+<P>MCIWndResume</P>
+
+<TD>
+
+<P>Resume playback or record</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_SAVE</P>
+
+<TD>
+
+<P>MCIWndSave</P>
+
+<TD>
+
+<P>Save content</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_SAVE</P>
+
+<TD>
+
+<P>MCIWndSaveDialog</P>
+
+<TD>
+
+<P>Save content</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_SEEK</P>
+
+<TD>
+
+<P>MCIWndEnd</P>
+
+<TD>
+
+<P>Move to end of content</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_SEEK</P>
+
+<TD>
+
+<P>MCIWndHome</P>
+
+<TD>
+
+<P>Move to start of content</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_SEEK</P>
+
+<TD>
+
+<P>MCIWndSeek</P>
+
+<TD>
+
+<P>Move to position</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_STEP</P>
+
+<TD>
+
+<P>MCIWndStep</P>
+
+<TD>
+
+<P>Move position</P>
+
+<TR>
+
+<TD>
+
+<P>MCI_STOP</P>
+
+<TD>
+
+<P>MCIWndStop</P>
+
+<TD>
+
+<P>Stop playback or record</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CAN_CONFIG</P>
+
+<TD>
+
+<P>MCIWndCanConfig</P>
+
+<TD>
+
+<P>Can configure device?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CAN_EJECT</P>
+
+<TD>
+
+<P>MCIWndCanEject</P>
+
+<TD>
+
+<P>Can eject media?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CAN_PLAY</P>
+
+<TD>
+
+<P>MCIWndCanPlay</P>
+
+<TD>
+
+<P>Can play device?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CAN_RECORD</P>
+
+<TD>
+
+<P>MCIWndCanRecord</P>
+
+<TD>
+
+<P>Can record on device?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CAN_SAVE</P>
+
+<TD>
+
+<P>MCIWndCanSave</P>
+
+<TD>
+
+<P>Can save to file?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CAN_WINDOW</P>
+
+<TD>
+
+<P>MCIWndCanWindow</P>
+
+<TD>
+
+<P>Window commands supported?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_CHANGESTYLES</P>
+
+<TD>
+
+<P>MCIWndChangeStyles</P>
+
+<TD>
+
+<P>Change window style</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_EJECT</P>
+
+<TD>
+
+<P>MCIWndEject</P>
+
+<TD>
+
+<P>Eject media</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETACTIVETIMER</P>
+
+<TD>
+
+<P>MCIWndGetActiveTimer</P>
+
+<TD>
+
+<P>Return update period</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETALIAS</P>
+
+<TD>
+
+<P>MCIWndGetAlias</P>
+
+<TD>
+
+<P>Return device alias</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GET_DEST</P>
+
+<TD>
+
+<P>MCIWndGetDest</P>
+
+<TD>
+
+<P>Return playback rectangle</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETDEVICE</P>
+
+<TD>
+
+<P>MCIWndGetDevice</P>
+
+<TD>
+
+<P>Return device name</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETDEVICEID</P>
+
+<TD>
+
+<P>MCIWndGetDeviceID</P>
+
+<TD>
+
+<P>Return device identifier</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETEND</P>
+
+<TD>
+
+<P>MCIWndGetEnd</P>
+
+<TD>
+
+<P>Return end location</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETERROR</P>
+
+<TD>
+
+<P>MCIWndGetError</P>
+
+<TD>
+
+<P>Return last MCI error</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETFILENAME</P>
+
+<TD>
+
+<P>MCIWndGetFileName</P>
+
+<TD>
+
+<P>Return current filename</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETINACTIVETIMER</P>
+
+<TD>
+
+<P>MCIWndGetInactiveTimer</P>
+
+<TD>
+
+<P>Return update period</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETLENGTH</P>
+
+<TD>
+
+<P>MCIWndGetLength</P>
+
+<TD>
+
+<P>Return content length</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETMODE</P>
+
+<TD>
+
+<P>MCIWndGetMode</P>
+
+<TD>
+
+<P>Return current mode</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETPALETTE</P>
+
+<TD>
+
+<P>MCIWndGetPalette</P>
+
+<TD>
+
+<P>Return MCI palette handle</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETPOSITION</P>
+
+<TD>
+
+<P>MCIWndGetPosition</P>
+
+<TD>
+
+<P>Return position</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETPOSITION</P>
+
+<TD>
+
+<P>MCIWndGetPositionString</P>
+
+<TD>
+
+<P>Return position</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETREPEAT</P>
+
+<TD>
+
+<P>MCIWndGetRepeat</P>
+
+<TD>
+
+<P>Continuous playback?</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETSOURCE</P>
+
+<TD>
+
+<P>MCIWndGetSource</P>
+
+<TD>
+
+<P>Return cropping rectangle</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETSPEED</P>
+
+<TD>
+
+<P>MCIWndGetSpeed</P>
+
+<TD>
+
+<P>Return playback speed</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETSTART</P>
+
+<TD>
+
+<P>MCIWndGetStart</P>
+
+<TD>
+
+<P>Return start location</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETSTYLES</P>
+
+<TD>
+
+<P>MCIWndGetStyles</P>
+
+<TD>
+
+<P>Return window style</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETTIMEFORMAT</P>
+
+<TD>
+
+<P>MCIWndGetTimeFormat</P>
+
+<TD>
+
+<P>Return time format</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETVOLUME</P>
+
+<TD>
+
+<P>MCIWndGetVolume</P>
+
+<TD>
+
+<P>Return volume setting</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_GETZOOM</P>
+
+<TD>
+
+<P>MCIWndGetZoom</P>
+
+<TD>
+
+<P>Return zoom setting</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_NEW</P>
+
+<TD>
+
+<P>MCIWndNew</P>
+
+<TD>
+
+<P>Create new file</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_OPEN</P>
+
+<TD>
+
+<P>MCIWndOpen</P>
+
+<TD>
+
+<P>Open MCI device and file</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_OPENINTERFACE</P>
+
+<TD>
+
+<P>MCIWndOpenInterface</P>
+
+<TD>
+
+<P>Open IAVI interface</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_PLAYFROM</P>
+
+<TD>
+
+<P>MCIWndPlayFrom</P>
+
+<TD>
+
+<P>Playback at position</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_PLAYTO</P>
+
+<TD>
+
+<P>MCIWndPlayFromTo</P>
+
+<TD>
+
+<P>Playback range</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_PLAYREVERSE</P>
+
+<TD>
+
+<P>MCIWndPlayReverse</P>
+
+<TD>
+
+<P>Playback in reverse</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_PLAYTO</P>
+
+<TD>
+
+<P>MCIWndPlayTo</P>
+
+<TD>
+
+<P>Playback to position</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_PUT_DEST</P>
+
+<TD>
+
+<P>MCIWndPutDest</P>
+
+<TD>
+
+<P>Change playback rectangle</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_PUT_SOURCE</P>
+
+<TD>
+
+<P>MCIWndPutSource</P>
+
+<TD>
+
+<P>Change cropping rectangle</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_REALIZE</P>
+
+<TD>
+
+<P>MCIWndRealize</P>
+
+<TD>
+
+<P>Realize MCI palette</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_RETURNSTRING</P>
+
+<TD>
+
+<P>MCIWndReturnString</P>
+
+<TD>
+
+<P>Return MCI reply</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SENDSTRING</P>
+
+<TD>
+
+<P>MCIWndSendString</P>
+
+<TD>
+
+<P>Send MCI command</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETACTIVETIMER</P>
+
+<TD>
+
+<P>MCIWndSetActiveTimer</P>
+
+<TD>
+
+<P>Set update period</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETINACTIVETIMER</P>
+
+<TD>
+
+<P>MCIWndSetInactiveTimer</P>
+
+<TD>
+
+<P>Set update period</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETOWNER</P>
+
+<TD>
+
+<P>MCIWndSetOwner</P>
+
+<TD>
+
+<P>Set owner window</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETPALETTE</P>
+
+<TD>
+
+<P>MCIWndSetPalette</P>
+
+<TD>
+
+<P>Set MCI palette</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETREPEAT</P>
+
+<TD>
+
+<P>MCIWndSetRepeat</P>
+
+<TD>
+
+<P>Set repeat mode</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETSPEED</P>
+
+<TD>
+
+<P>MCIWndSetSpeed</P>
+
+<TD>
+
+<P>Set playback speed</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETTIMEFORMAT</P>
+
+<TD>
+
+<P>MCIWndSetTimeFormat</P>
+
+<TD>
+
+<P>Set time format</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETTIMERS</P>
+
+<TD>
+
+<P>MCIWndSetTimers</P>
+
+<TD>
+
+<P>Set update period</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETVOLUME</P>
+
+<TD>
+
+<P>MCIWndSetVolume</P>
+
+<TD>
+
+<P>Set volume</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETZOOM</P>
+
+<TD>
+
+<P>MCIWndSetZoom</P>
+
+<TD>
+
+<P>Sets video zoom</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETTIMEFORMAT</P>
+
+<TD>
+
+<P>MCIWndUseFrames</P>
+
+<TD>
+
+<P>Set time format</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_SETTIMEFORMAT</P>
+
+<TD>
+
+<P>MCIWndUseTime</P>
+
+<TD>
+
+<P>Set time format</P>
+
+<TR>
+
+<TD>
+
+<P>MCIWNDM_VALIDATEMEDIA</P>
+
+<TD>
+
+<P>MCIWndValidateMedia</P>
+
+<TD>
+
+<P>Updates positions</P>
+
+<TR>
+
+<TD>
+
+<P>WM_CLOSE</P>
+
+<TD>
+
+<P>MCIWndDestroy</P>
+
+<TD>
+
+<P>Close MCIWnd window</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B><I>MCIWnd</I></B><B> Notifications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>If enabled, MCIWnd windows can send notification messages to their parent windows. Specifically, five types of notification messages can be sent. All five can be enabled by specifying the MCIWNDF_NOTIFYALL window style when creating the window. Alternatively, notification messages can be enabled individually.
+
+<BR></P>
+
+<P>The MCIWNDM_NOTIFYERROR message is sent to the parent window to notify it of MCI errors. This notification can be enabled by specifying the MCIWNDF_NOTIFYERROR window style.
+
+<BR></P>
+
+<P>The MCIWNDM_NOTIFYMEDIA message notifies the parent window of any media changes that may have occurred. These messages are enabled by specifying the MCIWNDF_NOTIFYMEDIA window style.
+
+<BR></P>
+
+<P>The parent window is notified of changes in the MCIWnd window's position and size through MCIWNDM_NOTIFYPOS and MCIWNDM_NOTIFYSIZE messages. These messages are enabled by the MCIWNDF_NOTIFYPOS and MCIWNDF_NOTIFYSIZE window styles, respectively.
+
+<BR></P>
+
+<P>Finally, the parent window is notified of any operating mode changes (for example, changes from play to stop mode) by MCIWNDM_NOTIFYMODE messages. These messages are enabled by the MCIWNDF_NOTIFYMODE window style.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=4><B>The Media Control Interface</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Media Control Interface provides a set of device-independent command messages and command strings for controlling multimedia devices. Command messages and command strings can be used interchangeably.
+
+<BR></P>
+
+<P>The MCI recognizes a variety of different multimedia devices. These devices are listed in Table 37.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 37.2. Multimedia devices.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Device name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>animation</P>
+
+<TD>
+
+<P>Animation device</P>
+
+<TR>
+
+<TD>
+
+<P>cdaudio</P>
+
+<TD>
+
+<P>Audio CD player</P>
+
+<TR>
+
+<TD>
+
+<P>dat</P>
+
+<TD>
+
+<P>Digital-audio tape player</P>
+
+<TR>
+
+<TD>
+
+<P>digitalvideo</P>
+
+<TD>
+
+<P>Non GDI-based digital video in a window</P>
+
+<TR>
+
+<TD>
+
+<P>other</P>
+
+<TD>
+
+<P>Undefined device</P>
+
+<TR>
+
+<TD>
+
+<P>overlay</P>
+
+<TD>
+
+<P>Analog video in a window</P>
+
+<TR>
+
+<TD>
+
+<P>scanner</P>
+
+<TD>
+
+<P>Image scanner</P>
+
+<TR>
+
+<TD>
+
+<P>sequencer</P>
+
+<TD>
+
+<P>MIDI sequencer</P>
+
+<TR>
+
+<TD>
+
+<P>vcr</P>
+
+<TD>
+
+<P>Video cassette recorder or player</P>
+
+<TR>
+
+<TD>
+
+<P>videodisc</P>
+
+<TD>
+
+<P>Video disc player</P>
+
+<TR>
+
+<TD>
+
+<P>waveaudio</P>
+
+<TD>
+
+<P>Waveform audio device</P></TABLE>
+
+<P>Both command messages and command strings can be used to control devices and to retrieve information from devices. Command messages retrieve information in the form of structures, which are easy to interpret in C programs. Command strings retrieve information in the form of strings that must be parsed and interpreted by the application.
+
+<BR></P>
+
+<P>All MCI devices support a core set of MCI commands and messages. Many devices support additional, device-specific commands.
+
+<BR></P>
+
+<P>Command strings are sent to devices using the mciSendString function. A simple use of this function is demonstrated in Listing 37.3; this application, which takes a single filename as its command-line argument, plays back a multimedia file. For example, if you specify the pathname for an AVI video file, this application will play back the video in full-screen mode. To compile this application, type cl mcistr.c user32.lib winmm.lib.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 37.3. MCI playback using command strings.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;stdlib.h&gt;
+
+#define CMDSTR &quot;OPEN %s ALIAS MOVIE&quot;
+
+int WINAPI
+
+    WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR lpCmdLine, int d4)
+
+{
+
+    char *pBuf;
+
+    pBuf = malloc(sizeof(CMDSTR) + strlen(lpCmdLine) - 2);
+
+    if (!pBuf) return -1;
+
+    wsprintf(pBuf, CMDSTR, lpCmdLine);
+
+    mciSendString(pBuf, NULL, 0, NULL);
+
+    free(pBuf);
+
+    mciSendString(&quot;PLAY MOVIE WAIT&quot;, NULL, 0, NULL);
+
+    mciSendString(&quot;CLOSE MOVIE&quot;, NULL, 0, NULL);
+
+    return 0;
+
+}</PRE>
+
+<P>Command messages are sent to devices using the mciSendCommand function. This function takes several parameters, one of which is a command-specific structure. The structure may either be a general purpose one such as MCI_OPEN_PARMS or a device-specific extension to the general purpose version. Applications fill in this structure as appropriate prior to executing the call to mciSendCommand; commands that return information do so by modifying elements in this structure. The program in Listing 37.4 demonstrates simple playback using the MCI command message interface; this program can be compiled from the command line by typing cl mcimsg.c winmm.lib. Like its command string counterpart, this program also takes the name of a multimedia file on the command line and plays back that file.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 37.4. MCI playback using command messages.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;stdlib.h&gt;
+
+int WINAPI
+
+    WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR lpCmdLine, int d4)
+
+{
+
+    MCI_OPEN_PARMS mciOpen;
+
+    MCI_PLAY_PARMS mciPlay;
+
+    MCI_GENERIC_PARMS mciClose;
+
+    mciOpen.dwCallback = 0;
+
+    mciOpen.lpstrElementName = lpCmdLine;
+
+    mciOpen.lpstrAlias = &quot;MOVIE&quot;;
+
+    mciSendCommand(0, MCI_OPEN, MCI_OPEN_ALIAS | MCI_OPEN_ELEMENT, (DWORD)&amp;mciOp
+
+en);
+
+    mciPlay.dwCallback = 0;
+
+    mciSendCommand(mciOpen.wDeviceID, MCI_PLAY, MCI_WAIT, (DWORD)&amp;mciPlay);
+
+    mciClose.dwCallback = 0;
+
+    mciSendCommand(mciOpen.wDeviceID, MCI_CLOSE, 0, (DWORD)&amp;mciClose);
+
+    return 0;
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>MCI Command String Syntax</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The generic syntax for MCI command strings is as follows:
+
+<BR></P>
+
+<PRE><I>command identifier [argument [, argument]]</I></PRE>
+
+<P>The <I>command</I> portion specifies an MCI command such as PLAY, OPEN, or CLOSE. The <I>identifier</I> identifies an MCI device. This may be an MCI device name or an alias name. This identifier represents an instance of the appropriate MCI driver that was created when the device was opened.
+
+<BR></P>
+
+<P>Command arguments are used to specify flags and parameters specific to each MCI command.
+
+<BR></P>
+
+<P>For example, consider the following MCI command string:
+
+<BR></P>
+
+<PRE>play music from 0 to 100 wait</PRE>
+
+<P>In this string, play is an MCI command; music is (presumably) an alias that was created when the device was opened; and from 0 to 100 wait is a series of arguments and flags applicable to the play command.
+
+<BR></P>
+
+<P>The wait flag in this command specifies that the call to mciSendString should not return before the command is finished. Normally, calls return immediately and the commands are processed in the background.
+
+<BR></P>
+
+<P>Another commonly used flag is the notify flag. Specifying this flag causes the MCI to post a multimedia notification (MM_MCINOTIFY) message to the application whenever a command is completed.
+
+<BR></P>
+
+<P>Some devices (for example, digital video devices) support the test flag. A command submitted with this flag is not executed; however, the MCI tests whether the command can be executed by the specified device and returns an error if that is not the case.
+
+<BR></P>
+
+<P>These flags can also be specified for commands submitted in the form of MCI command messages.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>MCI Command Sets</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>MCI commands fall into different categories. These include system commands, required commands, and optional commands.
+
+<BR></P>
+
+<P>The two system commands, break and sysinfo, are recognized and processed by the MCI itself. The break command is used to set a virtual key code that aborts other MCI commands; the sysinfo command returns information on MCI services and devices.
+
+<BR></P>
+
+<P>Required commands are those that every MCI device must implement. This set includes the following five commands: capability, close, info, open, and status. The capability, info, and status commands obtain information on the status and capabilities of the device. The open and close commands are used to open or close the device.
+
+<BR></P>
+
+<P>Optional commands can be further broken down into two categories; basic commands and extended commands. Basic commands include load and save, play, record, and stop, pause and resume, seek and set, and certain forms of the status command. For most devices, it is reasonable to assume that a subset of these commands applicable to the device is supported. For example, a playback device can reasonably be expected to support at least the play and stop commands; a recording device can be expected to support record and stop.
+
+<BR></P>
+
+<P>Extended commands include several additional configuration and editing commands. Your application should not expect that any of these commands are supported; instead, it should use the capability command to find out about the available set of commands.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>MCI Functions and Macros</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>We have already encountered two MCI functions: mciSendCommand is used to send an MCI command message, while mciSendString is used to send an MCI command string.
+
+<BR></P>
+
+<P>Another set of three functions can be used to retrieve information about an MCI device. The mciGetCreatorTask function returns the handle of the task that created a specific MCI device. The mciGetDeviceID function returns the MCI device identifier for a named device. The mciGetErrorString returns the error message string corresponding to a specific error code.
+
+<BR></P>
+
+<P>Two additional functions, mciGetYieldProc and mciSetYieldProc, can be used to yield procedure. The yield procedure is a function that the MCI calls regularly while waiting for the completion of a command that was issued with the wait flag.
+
+<BR></P>
+
+<P>The MCI also offers a series of macros that deal with time formats. Various time formats are used in MCI commands to set the recording or playback position, or to read back the current position. Positions can be expressed as time values, track positions, and so on. Time format macros are used to create position values and to retrieve individual elements of a position value. For example, MCI_HMS_HOUR retrieves the hour component of a position expressed in the form of hours, minutes, and seconds (HMS); MCI_MAKE_HMS creates a time value from parameters specifying hours, minutes, and seconds.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>MCI Notifications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>MCI devices can send two types of messages to the application. The MM_MCINOTIFY message is used to notify the application of the completion of a command. Parameters to this message identify the command and specify whether the command was successfully completed, or whether its execution was interrupted due to an error or some other condition.
+
+<BR></P>
+
+<P>The MM_MCISIGNAL message is used specifically in response to the extended MCI command signal. Through this command, applications can request that the MCI send an MM_MCISIGNAL message when a specific spot in the content is reached.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>Advanced Interfaces</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Windows offers several low-level interfaces for manipulating multimedia.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B><I>AVIFile</I></B><B> and </B><B><I>AVIStream</I></B><B> Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>AVIFile functions and macros offer low-level access to files containing RIFF (Resource Information File Format) data; examples for such files include digital video and waveform audio files.
+
+<BR></P>
+
+<P>AVIFile functions are based on the OLE Component Object Model. AVIFile functions can be used to open and close files, place files to the Windows clipboard, and obtain and manipulate file properties. AVIStream functions can be used to read or write the actual audio or video data.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Custom File and Stream Handlers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>For video and audio data sources other than AVI video and waveform audio files, you can write custom file and stream handlers. Custom file and stream handlers are installable drivers that provide access to data in different sources using the OLE Component Object Model.
+
+<BR></P>
+
+<P>Custom handlers are dynamic link libraries (&quot;inproc&quot; OLE servers) that implement the IAVIFile and IAVIStream interfaces. These interfaces are used by the AVIFile and AVIStream family of functions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>DrawDib Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>DrawDib functions provide high-performance capabilities for drawing device-independent bitmaps (DIBs) in 8-bit, 16-bit, 24-bit, and 32-bit graphic modes.
+
+<BR></P>
+
+<P>DrawDib functions do not rely on the GDI but write directly to video memory. The provide a variety of services ranging from image stretching, dithering, to compression and decompression of many known formats.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>The Video Compression Manager</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The video compression manager, or VCM, provides access to installable compressors that handle real-time video data.
+
+<BR></P>
+
+<P>Applications can use the VCM to compress and decompress video data, and handle the interaction between compressed video data, custom data, and renderers.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Video Capture</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Video capture can be accomplished using the AVICap window class and a series of related functions and macros.
+
+<BR></P>
+
+<P>In the simplest scenario, applications create an AVICap window through the capCreateCaptureWindow function and send messages to this window to control capturing. A large number of macros exist that simplify the sending of messages to AVICap windows and the processing of message results.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>Waveform Audio Recording and Playback</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows offers a series of functions dealing with recording and playback of waveform audio. Simplest among these is the PlaySound function that enables you to play audio files that fit into available memory.
+
+<BR></P>
+
+<P>Other waveform audio functions can be used to control individual waveform input and output devices.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>The Audio Compression Manager</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows also provides a programming interface to the audio compression manager, or ACM. The ACM provides for the transparent compression and decompression of waveform audio data during recording and playback.
+
+<BR></P>
+
+<P>The ACM is installed as a &quot;mapper.&quot; This means that the ACM can intercept audio recording and playback requests and decode or encode data as necessary. The ACM can also search for a waveform device or an ACM compressor or decompressor that can handle a specific format.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=3><B>MIDI Recording and Playback</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>MIDI file playback is performed by the MCI MIDI sequencer. Low-level MIDI functions enable applications to control MIDI playback and recording, and to process MIDI data.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=3><B>Audio Mixers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Audio lines can be controlled through mixer devices. Windows offers a series of functions for opening and using mixer devices.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I27" NAME="I27">
+
+<FONT SIZE=3><B>Miscellaneous Multimedia Services</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Other multimedia services include a series of functions for low-level buffered file I/O optimized for media recording and playback; file services specific to RIFF (Resource Interchange File Format); functions and notification messages for handling joystick devices; and functions to create and manage high resolution multimedia timers.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I28" NAME="I28">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>With the rapid deployment of powerful personal computers that are equipped with CD-ROM drives, multimedia has been brought to the masses. The Windows programmer can no longer ignore this area of programming; multimedia, if only in the form of sound effects or tutorial video clips, is quickly becoming a part of most new applications.
+
+<BR></P>
+
+<P>Multimedia in windows consists of the capabilities to record and play video and audio files. Windows recognizes one video format (AVI files) and two audio formats (MIDI and waveform audio).
+
+<BR></P>
+
+<P>Windows offers multimedia interfaces on three distinct levels. At the highest level is the MCIWnd window class. Through this window class, it is possible to perform video playback with a single function call. The MCIWnd API also offers a large number of macros that utilize the SendMessage function to communicate with an MCIWnd window. These windows can also send notification messages to their parent window.
+
+<BR></P>
+
+<P>The mid-level multimedia programming interface is the Media Control Interface, or MCI. MCI offers command strings and command messages for controlling multimedia devices; command strings and command messages can be used interchangeably. All MCI devices recognize a set of core commands; many devices recognize a set of additional, device-specific commands. While using the command string interface is generally simpler, for commands that retrieve information from the device it is often advantageous to use command messages instead. Unlike command strings, which return responses in the form of strings that need to be parsed an interpreted by the application, command messages return information in the form of structures.
+
+<BR></P>
+
+<P>Low-level video services include the AVIFile family of functions, interfaces to video compression and video capture, and high performance functions for drawing device-independent bitmaps. For data in nonstandard sources, custom file and stream handler drivers can be developed.
+
+<BR></P>
+
+<P>The AVIFile function family as well as custom file and stream handlers are also applicable to waveform audio. Other low-level audio services include functions for recording and playback of waveform audio and MIDI data. Additional interfaces are provided to access the audio compression manager and audio mixer devices.
+
+<BR></P>
+
+<P>Other low-level multimedia interfaces include high performance buffered file I/O, joystick control, and multimedia timers.</P>
+
+<P><A HREF="vcu36fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu38fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

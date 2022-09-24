@@ -1,0 +1,956 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu44fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcubibfi.htm">
+
+<LINK REL="Previous" HREF="vcu43fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu43fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcubibfi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">44 &#151; High-Performance Graphics and Sound: The Game SDK</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">The DirectX APIs</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">DirectX and the Common Object Model</A></LI>
+
+<LI>
+
+<A HREF="#I5">DirectDraw</A></LI>
+
+<LI>
+
+<A HREF="#I6">DirectSound</A></LI>
+
+<LI>
+
+<A HREF="#I7">DirectPlay</A></LI>
+
+<LI>
+
+<A HREF="#I8">DirectInput</A></LI>
+
+<LI>
+
+<A HREF="#I9">DirectSetup</A></LI></UL>
+
+<LI>
+
+<A HREF="#I10">A Simple Example</A></LI>
+
+<LI>
+
+<A HREF="#I11">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>44 &#151; High-Performance Graphics and Sound: The Game SDK</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Early in my career I had the opportunity to spend almost a year as a member of a programmer team working on games for the Commodore 64 home computer. Although we barely earned enough to eat, I have the fondest memories of this period. I don't think I ever had as much fun with computers as I did then, designing green dragons, writing a real-time executive, coding Bartok's Allegro Barbaro on the C64's primitive sound synthesizer, and learning about high-performance drawing algorithms. Game programming is probably the most technically challenging form of programming for desktop systems, and the joy of seeing your creation come to life is a reward by itself.
+
+<BR></P>
+
+<P>Games under Windows are as old as Windows itself; I vaguely remember playing Reversi with a machine that had Windows 1.0 installed. However, creating true arcade-style games with real-time animation and sound under Windows proved to be an elusive target until now. That despite the fact that the benefits of using the Windows platform for game development are enormous. Under Windows, you no longer need to contend with the multitude of graphics accelerators, sound cards, TSR drivers, and the rest of the paraphernalia that make developing even the simplest graphic application under MS-DOS a nightmare. Windows' device-independence takes care of it all.
+
+<BR></P>
+
+<P>One reason game development under Windows has lagged so far behind the DOS platform is speed. The GDI, although great on device-independence, is not very efficient; updating a window of a relatively large surface area takes a considerable amount of time.
+
+<BR></P>
+
+<P>In the past, Microsoft has attempted to provide high-efficiency graphics libraries and other tools for game developers. However, nothing compares to their latest product, the Windows 95 Game SDK. At the heart of this product is the family of DirectX libraries for graphics, sound, joystick control, and communications (for multiple-player games). These libraries are based on Microsoft's Common Object Model, the foundation of Microsoft's OLE technology.
+
+<BR></P>
+
+<P>The Game SDK is not part of Visual C++; it is available separately, as part of the Microsoft Developer Network Level 2 subscription.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>The DirectX APIs</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Windows 95 Game SDK consists of a series of APIs. The names of these APIs begin with the word Direct, and thus they are collectively referred to as the <I>DirectX APIs</I>.
+
+<BR></P>
+
+<P>The first of these APIs, <I>DirectDraw</I>, provides a low-level, high-speed interface to your computer's graphics hardware. Through DirectDraw, it is possible to write games that use real-time animation in a window; the API also provides the capability to write full-screen graphical applications.
+
+<BR></P>
+
+<P>The <I>DirectSound</I> API provides low-level access to your computer's sound hardware. The most important capabilities of this API include the ability to play sounds continuously in a loop and the ability to mix sounds.
+
+<BR></P>
+
+<P>The <I>DirectPlay</I> API provides a game-oriented communication interface to facilitate multiplayer gaming across a modem, network connection, or through an online service.
+
+<BR></P>
+
+<P>The <I>DirectInput</I> API provides improved, more reliable access to joystick services.
+
+<BR></P>
+
+<P>Lastly, the <I>DirectSetup</I> API provides a single-function setup capability for DirectX run-time components.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>DirectX and the Common Object Model</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The DirectDraw, DirectSound, and DirectPlay APIs provide services using the Common Object Model (COM). A COM object is exposed to the outside world through one or more interfaces; each interface is essentially a table of function pointers representing the object's <I>methods</I>. Thus, the interface resembles the implementation of a pure virtual class in C++; the actual implementations of these functions are provided by the object itself.
+
+<BR></P>
+
+<P>The similarity to C++ classes ends, however, when it comes to inheritance. Although it is possible to create a new interface using an old interface, the new interface will not inherit the implementation of the old interface's methods. For example, although all COM interfaces are derived from the basic interface, IUnknown, they must individually implement mandatory IUnknown methods.
+
+<BR></P>
+
+<P>COM interfaces are compatible with the implementation of C++ classes. The table of methods in a COM interface easily translates into virtual member functions of the C++ class representing the interface. When applications use COM interfaces from the C language, they must refer to the interface's virtual function table (vtable) explicitly. The DirectX API header files provide convenience macros for all DirectX methods.
+
+<BR></P>
+
+<P>As I mentioned, all COM interfaces are derived from IUnknown. The IUnknown interface has three methods. The first of these methods, QueryInterface, can be used to determine if a particular interface is present. AddRef and Release implement reference counting for objects as they are created, referred to from other objects, or released. These methods must be implemented by all IUnknown-derived COM interfaces.
+
+<BR></P>
+
+<P>By convention, the names of COM interfaces begin with the uppercase letter I. Also by convention, interface methods are referenced using a C++ syntax even though they can also be accessed from C using an explicit vtable reference.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>DirectDraw</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>DirectDraw is a client to the services provided by the DirectDraw HAL (Hardware Abstraction Layer) and HEL (Hardware Emulation Layer). DirectDraw is implemented in the dynamic link library ddraw.dll. The DirectDraw HAL implements device-dependent functions; it only implements functions that are supported by the device. For unsupported functions, the HAL simply reports that they are unavailable. The HAL performs no parameter validation; all parameter validation is performed by DirectDraw.
+
+<BR></P>
+
+<P>The DirectDraw HEL appears to DirectDraw just like the DirectDraw HAL and provides software emulation for capabilities not implemented in hardware. The DirectDraw HAL and DirectDraw HEL are implemented in the form of driver libraries like ati.vxd and atim32.drv).
+
+<BR></P>
+
+<P>The DirectDraw API provides access to low-level graphics services through a series of COM (Common Object Model) interfaces. These interfaces and their relationships are schematically depicted in Figure 44.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="44vcu01.gif">Figure 44.1. DirectDraw COM interfaces.</A></B>
+
+<BR></P>
+
+<P>The first of these interfaces, IDirectDraw, represents the graphics hardware (accelerator card) in your computer. Applications that use DirectDraw services begin their operation by creating a DirectDraw object using the DirectDrawCreate function. DirectDrawCreate returns a pointer to an IDirectDraw interface. Before doing any other work, applications must also call IDirectDraw::SetCooperativeLevel. Applications that request exclusive access to the computer's graphics hardware through IDirectDraw::SetCooperativeLevel can change the video mode and implement full-screen graphics and animation; other applications are restricted to the current video mode and should confine their graphic activity to windows they own.
+
+<BR></P>
+
+<P>The IDirectDraw::CreateSurface method creates a DirectDrawSurface object and returns a pointer to an IDirectDrawSurface interface. DirectDrawSurface objects represent rectangular areas in memory (typically, video memory) where applications can draw. The primary drawing surface is the visible display surface; secondary drawing surfaces may exist in video memory or the computer's main memory and are used for off-screen drawing.
+
+<BR></P>
+
+<P>Drawing onto a surface is possible through any of a variety of bit blit methods provided by the IDirectDrawSurface interface or by using ordinary GDI functions. The IDirectDrawSurface::GetDC method can be used to obtain a device-context handle to the surface. GDI will treat this handle as a handle to a memory-device context&#151;even when the surface is the primary drawing surface.
+
+<BR></P>
+
+<P>IDirectDrawSurface supports smooth animation with back-buffer surfaces. The IDirectDrawSurface::Flip method can be used to switch the contents of the primary surface and the back-buffer surface. Applications can use the back-buffer surface to perform off-screen drawing, flip the two surfaces when drawing is finished, and start drawing the next frame in the back buffer. Of course, this is only one of several techniques that can be used to achieve smooth animation. If only small portions of the display surface are updated at any given time, another technique (such as the technique using multiple buffers implemented by the example shown later in this chapter) may be more beneficial.
+
+<BR></P>
+
+<P>Another interface, IDirectDrawPalette, provides access to palette services. This interface represents the hardware palette and bypasses Windows palettes. Because of this, use of IDirectDrawPalette requires exclusive access to the video hardware. IDirectDrawPalette can be used for many effects, including palette animation. Note that this interface may not be available on systems that do not support a hardware palette.
+
+<BR></P>
+
+<P>An IDirectDrawPalette interface is created by a call to IDirectDraw::CreatePalette. The palette must be attached to a display surface through IDirectDrawSurface::SetPalette.
+
+<BR></P>
+
+<P>The IDirectDrawClipper interface represents clip lists. A clip list can be attached to a DirectDrawSurface object and used during bit blit operations. A window handle can also be attached to a clip list, in which case the clip list represents the clipping rectangles of the window.
+
+<BR></P>
+
+<P>An IDirectDrawClipper interface is created by calling IDirectDraw::CreateClipper and attached to a drawing surface by calling IDirectDrawSurface::SetClipper.
+
+<BR></P>
+
+<P>The DirectDraw API can be used to represent not only the primary video hardware in your computer, but also secondary display devices that are not normally recognized by Windows. For example, consider a development system that has a secondary display card and monitor for testing purposes. An IDirectDraw interface representing this secondary device can be created by a call to DirectDrawCreate. The first parameter of this function represents the GUID (globally unique identifier) of a display driver; when it is set to NULL, DirectDrawCreate creates an interface representing the active display driver. However, you can also specify an explicit GUID representing any secondary device that may be installed on your system.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>DirectSound</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The DirectSound API provides access to your computer's waveform sound hardware. The sound device is represented by the IDirectSound interface; individual buffers are represented by IDirectSoundBuffer.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>Note:</B> DirectSound does not provide MIDI functionality. To utilize your sound hardware's MIDI capability, use the standard Win32 multimedia APIs for MIDI.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>The most important DirectSound capability is wave mixing. It is accomplished by using a series of primary and secondary sound buffers.
+
+<BR></P>
+
+<P>A primary buffer represents the hardware buffer of the sound device; that is, the buffer that is currently playing. Secondary buffers may represent different audio streams that are mixed together into the primary buffer for playback. This mechanism is depicted schematically in Figure 44.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="44vcu02.gif">Figure 44.2. DirectSound wave mixing.</A></B>
+
+<BR></P>
+
+<P>An IDirectSound interface is created by calling DirectSoundCreate. Before the interface can be used, you must also call DirectSoundCreate::SetCooperativeLevel to specify the level of access you require to the sound card. For most applications, this should be DSSCL_NORMAL. This level of access ensures smooth cooperation between applications that compete for the same hardware resources.
+
+<BR></P>
+
+<P>A sound buffer is allocated by calling IDirectSound::CreateSoundBuffer. An interface to the sound buffer is returned in the form of an IDirectSoundBuffer pointer. Applications do not normally need to allocate a primary sound buffer; this buffer is allocated implicitly when the contents of secondary buffers are played back.
+
+<BR></P>
+
+<P>When a secondary buffer is allocated, you must specify the size of the buffer. Afterwards, you can use IDirectSoundBuffer::Lock to obtain a pointer to this buffer. You can then use standard C library functions to copy waveform information into this buffer.
+
+<BR></P>
+
+<P>The content of a buffer is played back using the IDirectSoundBuffer::Play method. Calling this function while a buffer is playing will update playback flags but will not affect playback otherwise (for example, it will not cause playback to restart at the beginning of the buffer). To change the playback position, use IDirectSoundBuffer::SetCurrentPosition.
+
+<BR></P>
+
+<P>IDirectSoundBuffer::Play can also be used for continuous (looping) playback. This capability is ideal to provide background sounds, such as the engine sounds in an aircraft simulation game.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>DirectPlay</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Game-oriented communication services are provided through the DirectPlay API.
+
+<BR></P>
+
+<P>The DirectPlay API consists of two components: the IDirectPlay interface and the DirectPlay server. Microsoft provides DirectPlay servers for modem and network connections; other servers (for example, servers for online services) are provided by third party developers. To find out what DirectPlay servers are installed on a computer, use the DirectPlayEnumerate function.
+
+<BR></P>
+
+<P>A DirectPlay object is created by the DirectPlayCreate function. You must pass the GUID of the selected DirectPlay server to this function. In turn, DirectPlayCreate returns a pointer to an IDirectPlay interface.
+
+<BR></P>
+
+<P>You can enumerate existing DirectPlay sessions by calling IDirectPlay::EnumSessions. This method must be called after the DirectPlay object has been created.
+
+<BR></P>
+
+<P>You can create a DirectPlay session or connect to an existing session using the IDirectPlay::Open method. This method actually establishes the communication link. DirectPlay invokes the necessary user interface for configuring the communication protocol; for example, if a modem connection is requested, DirectPlay will invoke a dialog requesting the telephone number and other dialing information.
+
+<BR></P>
+
+<P>Games using DirectPlay must be identified by a globally unique identifier, a GUID. You can generate a GUID using the guidgen.exe utility that is part of Visual C++.
+
+<BR></P>
+
+<P>After you have connected to a session, you must create players. A player is created through IDirectPlay::CreatePlayer. You can obtain the list of players in the session by calling IDirectPlay::EnumPlayers.
+
+<BR></P>
+
+<P>To actually exchange messages between players, you can use IDirectPlay::Send and IDirectPlay::Receive.
+
+<BR></P>
+
+<P>Other methods exist for managing sessions, players, groups of players, and messages. Players are destroyed using IDirectPlay::DestroyPlayer; a session is terminated by calling IDirectPlay::Close.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>DirectInput</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The DirectInput API consists of joystick-related Win32 services. These include the joyGetPosEx function that can return position and button state information for joysticks with six degrees of freedom (axes) and 32 buttons. They also include functions for querying device capabilities: joyGetDevCaps, joyGetNumDevs, and joyConfigChanged.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>DirectSetup</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The DirectSetup API provides a single-function setup capability for DirectX redistributable components.
+
+<BR></P>
+
+<P>When distributing applications that use the DirectX APIs, you must distribute with them the contents of the redist subdirectory that is part of your Windows 95 Game SDK distribution. The contents of the redist directory must be redistributed in unaltered form, in accordance with the license Windows 95 Game SDK license agreement. Included in this subdirectory are the DirectSetup DLLs that implement the DirectXSetup function.
+
+<BR></P>
+
+<P>DirectXSetup is called with parameters that specify the installation root path and flags that specify which DirectX components to install. Although it is possible to install only selected components, Microsoft recommends that you do not do so; disk space savings would be minimal due to interdependencies among the DirectX components.
+
+<BR></P>
+
+<P>The existence of DirectXSetup is more than a convenience. Because of the complexities of DirectX installation, developers should not attempt to perform a manual installation.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=4><B>A Simple Example</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The application shown in Listing 44.1 uses DirectDraw and DirectSound services to implement a noisy bouncing ball.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 44.1. Simple DirectX application.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+#include &lt;ddraw.h&gt;
+
+#include &lt;dsound.h&gt;
+
+IDirectDraw *dd;
+
+IDirectDrawSurface *dds0, *dds1, *dds2, *dds3;
+
+IDirectDrawClipper *ddc;
+
+IDirectSound *ds;
+
+IDirectSoundBuffer *dsb1, *dsb2;
+
+int x = 20, y = 20;
+
+int vx = 5, vy = 3;
+
+void MoveBall(HWND hwnd, BOOL bMove)
+
+{
+
+    BOOL bBounce = FALSE;
+
+    RECT rectSrc, rectDest;
+
+    int ox, oy, nx, ny;
+
+    GetClientRect(hwnd, &amp;rectDest);
+
+    ClientToScreen(hwnd, (POINT *)&amp;rectDest.left);
+
+    ClientToScreen(hwnd, (POINT *)&amp;rectDest.right);
+
+    if (bMove)
+
+    {
+
+        ox = rectDest.left +
+
+             MulDiv(rectDest.right - rectDest.left - 32, x, 500);
+
+        oy = rectDest.top +
+
+             MulDiv(rectDest.bottom - rectDest.top - 32, y, 500);
+
+        x += vx;
+
+        y += vy;
+
+        if (x &lt; 0) { x = 0; vx = -vx; bBounce = TRUE; }
+
+        if (x &gt;= 500) { x = 1000 - x; vx = -vx; bBounce = TRUE; }
+
+        if (y &lt; 0) { y = -y; vy = -vy; bBounce = TRUE; }
+
+        if (y &gt;= 500) { y = 1000 - y; vy = -vy; bBounce = TRUE; }
+
+        if (bBounce)
+
+        {
+
+            dsb1-&gt;SetCurrentPosition(0);
+
+            dsb1-&gt;Play(0, 0, 0);
+
+        }
+
+    }
+
+    nx = rectDest.left +
+
+         MulDiv(rectDest.right - rectDest.left - 32, x, 500);
+
+    ny = rectDest.top +
+
+         MulDiv(rectDest.bottom - rectDest.top - 32, y, 500);
+
+    rectSrc.left = rectSrc.top = 0;
+
+    rectSrc.right = rectSrc.bottom = 32;
+
+    if (bMove)
+
+    {
+
+        rectDest.left = rectDest.top = 0;
+
+        rectDest.right = rectDest.bottom = 32;
+
+        dds2-&gt;Blt(&amp;rectDest, dds3, &amp;rectSrc, DDBLT_WAIT, NULL);
+
+        if (abs(nx - ox) &lt; 32 &amp;&amp; abs(ny - oy) &lt; 32)
+
+        {
+
+            if (nx &lt; ox)
+
+            {
+
+                rectSrc.left = ox - nx;
+
+                rectSrc.right = 32;
+
+                rectDest.left = 0;
+
+                rectDest.right = 32 - rectSrc.left;
+
+            }
+
+            else
+
+            {
+
+                rectDest.left = nx - ox;
+
+                rectDest.right = 32;
+
+                rectSrc.left = 0;
+
+                rectSrc.right = 32 - rectDest.left;
+
+            }
+
+            if (ny &lt; oy)
+
+            {
+
+                rectSrc.top = oy - ny;
+
+                rectSrc.bottom = 32;
+
+                rectDest.top = 0;
+
+                rectDest.bottom = 32 - rectSrc.top;
+
+            }
+
+            else
+
+            {
+
+                rectDest.top = ny - oy;
+
+                rectDest.bottom = 32;
+
+                rectSrc.top = 0;
+
+                rectSrc.bottom = 32 - rectDest.top;
+
+            }
+
+            dds2-&gt;Blt(&amp;rectDest, dds1, &amp;rectSrc, DDBLT_WAIT, NULL);
+
+        }
+
+        rectSrc.left = rectSrc.top = 0;
+
+        rectSrc.right = rectSrc.bottom = 32;
+
+        rectDest.left = ox;
+
+        rectDest.top = oy;
+
+        rectDest.right = rectDest.left + 32;
+
+        rectDest.bottom = rectDest.top + 32;
+
+        dds0-&gt;Blt(&amp;rectDest, dds2, &amp;rectSrc, DDBLT_WAIT, NULL);
+
+    }
+
+    rectDest.left = nx;
+
+    rectDest.top = ny;
+
+    rectDest.right = rectDest.left + 32;
+
+    rectDest.bottom = rectDest.top + 32;
+
+    dds0-&gt;Blt(&amp;rectDest, dds1, &amp;rectSrc, DDBLT_WAIT, NULL);
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    HDC hDC;
+
+    PAINTSTRUCT paintStruct;
+
+    switch(uMsg)
+
+    {
+
+        case WM_PAINT:
+
+            hDC = BeginPaint(hwnd, &amp;paintStruct);
+
+            if (hDC != NULL)
+
+            {
+
+                MoveBall(hwnd, FALSE);
+
+                EndPaint(hwnd, &amp;paintStruct);
+
+            }
+
+            break;
+
+        case WM_TIMER:
+
+            MoveBall(hwnd, TRUE);
+
+            break;
+
+        case WM_KEYDOWN:
+
+            switch (wParam)
+
+            {
+
+                case VK_LEFT: vx--; break;
+
+                case VK_UP: vy--; break;
+
+                case VK_RIGHT: vx++; break;
+
+                case VK_DOWN: vy++; break;
+
+                case VK_ESCAPE: PostMessage(hwnd, WM_CLOSE, 0, 0);
+
+            }
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                        LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    DDSURFACEDESC ddsd;
+
+    DSBUFFERDESC dsbd;
+
+    HDC hddDC;
+
+    RECT rect;
+
+    HRSRC hrsrc;
+
+    HGLOBAL hRData;
+
+    DWORD *pRData;
+
+    LPBYTE pMem1, pMem2;
+
+    DWORD dwSize1, dwSize2;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;BOUNCE&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;BOUNCE&quot;, &quot;BOUNCE&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    DirectDrawCreate(NULL, &amp;dd, NULL);
+
+    dd-&gt;SetCooperativeLevel(hwnd,
+
+                            DDSCL_NORMAL | DDSCL_NOWINDOWCHANGES);
+
+    memset(&amp;ddsd, 0, sizeof(DDSURFACEDESC));
+
+    ddsd.dwSize = sizeof(DDSURFACEDESC);
+
+    ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+
+    ddsd.dwFlags = DDSD_CAPS;
+
+    dd-&gt;CreateSurface(&amp;ddsd, &amp;dds0, NULL);
+
+    dd-&gt;CreateClipper(0, &amp;ddc, NULL);
+
+    dds0-&gt;SetClipper(ddc);
+
+    ddc-&gt;SetHWnd(0, hwnd);
+
+    ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
+
+    ddsd.dwHeight = 32;
+
+    ddsd.dwWidth = 32;
+
+    ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+
+    dd-&gt;CreateSurface(&amp;ddsd, &amp;dds1, NULL);
+
+    dd-&gt;CreateSurface(&amp;ddsd, &amp;dds2, NULL);
+
+    dd-&gt;CreateSurface(&amp;ddsd, &amp;dds3, NULL);
+
+    dds1-&gt;GetDC(&amp;hddDC);
+
+    SaveDC(hddDC);
+
+    rect.left = rect.top = 0;
+
+    rect.right = rect.bottom = 32;
+
+    FillRect(hddDC, &amp;rect, (HBRUSH)(COLOR_WINDOW + 1));
+
+    SelectObject(hddDC, GetStockObject(BLACK_BRUSH));
+
+    SelectObject(hddDC, GetStockObject(BLACK_PEN));
+
+    Ellipse(hddDC, 0, 0, 32, 32);
+
+    RestoreDC(hddDC, -1);
+
+    dds1-&gt;ReleaseDC(hddDC);
+
+    dds3-&gt;GetDC(&amp;hddDC);
+
+    FillRect(hddDC, &amp;rect, (HBRUSH)(COLOR_WINDOW + 1));
+
+    dds3-&gt;ReleaseDC(hddDC);
+
+    DirectSoundCreate(NULL, &amp;ds, NULL);
+
+    ds-&gt;SetCooperativeLevel(hwnd, DSSCL_NORMAL);
+
+    memset(&amp;dsbd, 0, sizeof(DSBUFFERDESC));
+
+    dsbd.dwSize = sizeof(DSBUFFERDESC);
+
+    dsbd.dwFlags = DSBCAPS_STATIC | DSBCAPS_CTRLDEFAULT;
+
+    hrsrc = FindResource(hInstance, &quot;BOUNCE.WAV&quot;, &quot;WAVE&quot;);
+
+    hRData = LoadResource(hInstance, hrsrc);
+
+    pRData = (DWORD *)LockResource(hRData);
+
+    dsbd.dwBufferBytes = *(pRData + 10);
+
+    dsbd.lpwfxFormat = (LPWAVEFORMATEX)(pRData + 5);
+
+    ds-&gt;CreateSoundBuffer(&amp;dsbd, &amp;dsb1, NULL);
+
+    dsb1-&gt;Lock(0, dsbd.dwBufferBytes, &amp;pMem1, &amp;dwSize1,
+
+                                      &amp;pMem2, &amp;dwSize2, 0);
+
+    memcpy(pMem1, (LPBYTE)(pRData + 11), dwSize1);
+
+    if (dwSize2 != 0)
+
+        memcpy(pMem2, (LPBYTE)(pRData + 11) + dwSize1, dwSize2);
+
+    dsb1-&gt;Unlock(pMem1, dwSize1, pMem2, dwSize2);
+
+    hrsrc = FindResource(hInstance, &quot;HUM.WAV&quot;, &quot;WAVE&quot;);
+
+    hRData = LoadResource(hInstance, hrsrc);
+
+    pRData = (DWORD *)LockResource(hRData);
+
+    dsbd.dwBufferBytes = *(pRData + 10);
+
+    dsbd.lpwfxFormat = (LPWAVEFORMATEX)(pRData + 5);
+
+    ds-&gt;CreateSoundBuffer(&amp;dsbd, &amp;dsb2, NULL);
+
+    dsb2-&gt;Lock(0, dsbd.dwBufferBytes, &amp;pMem1, &amp;dwSize1,
+
+                                      &amp;pMem2, &amp;dwSize2, 0);
+
+    memcpy(pMem1, (LPBYTE)(pRData + 11), dwSize1);
+
+    if (dwSize2 != 0)
+
+        memcpy(pMem2, (LPBYTE)(pRData + 11) + dwSize1, dwSize2);
+
+    dsb2-&gt;Unlock(pMem1, dwSize1, pMem2, dwSize2);
+
+    dsb2-&gt;Play(0, 0, DSBPLAY_LOOPING);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    SetTimer(hwnd, 1, 100, NULL);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    KillTimer(hwnd, 1);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>This application uses both DirectDraw and DirectSound services. Its execution begins in WinMain, where first a perfectly ordinary window class is registered and the application's window is created.
+
+<BR></P>
+
+<P>Next, DirectDrawCreate is called to create an IDirectDraw interface to the display hardware. This interface is used to create a primary display surface. Then a clip list is created using IDirectDraw::CreateClipper and attached to this primary surface. The window handle of the application's window is attached to this clip list, ensuring that subsequent bit blit operations into the primary surface will operate correctly when the window is partially covered.
+
+<BR></P>
+
+<P>Next, a series of secondary display surfaces is created. These secondary surfaces are used in a special algorithm that ensures smooth repainting of the bouncing ball. Two of these surfaces are initialized, one with the image of the ball (created through the GDI Ellipse function), the other with the background color.
+
+<BR></P>
+
+<P>When initialization of the drawing surfaces is complete, an interface to the computer's sound hardware is created using DirectSoundCreate. Two secondary sound buffers are then created using IDirectSound::CreateBuffer. One is used to store the audio stream for the background hum, the other stores the stream for the bouncing noise. Continuous playing of the background sound is started by calling IDirectSoundBuffer::Play with the DSBPLAY_LOOPING parameter.
+
+<BR></P>
+
+<P>Before we enter the application's main message loop, a call is made to SetTimer to set up a 100-millisecond timer. This timer is used to periodically update the bouncing ball's position and redraw the display.
+
+<BR></P>
+
+<P>When a WM_TIMER event is received, the application's window procedure calls the MoveBall function. This function calculates the ball's new position based on the global velocity values vx and vy. The ball's position is expressed in the form of integers running between 0 and 500; these are then translated into screen coordinates using the MulDiv function.
+
+<BR></P>
+
+<P>Redrawing the ball is a complex process involving three secondary buffers. Why is this complexity necessary?
+
+<BR></P>
+
+<P>Obviously, if we are to update the ball's position on the screen, we have to do two things: erase the ball at its old position and draw it at its new position. However, unless the ball moves very fast, chances are that its old and new positions overlap. Simply erasing the ball at its old position would cause unwanted flicker, as those screen pixels that are covered by the ball at both its old and its new position also turn briefly white.
+
+<BR></P>
+
+<P>To avoid this, instead of simply erasing the ball at its old position, we create a secondary buffer that represents the ball's old position. Into this buffer we draw portions of the ball that will be visible after the ball is at its new position. We copy this buffer at the ball's old position; we also copy the entire ball at its new position. Figure 44.3 shows a schematic representation of this multistep process. When your application updates only small areas of its window, this procedure may yield better performance than updating a back-buffer and using the IDirectDrawBuffer::Flip function.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="44vcu03.gif">Figure 44.3. Smooth screen update using multiple </B><B>buffers.</A></B>
+
+<BR></P>
+
+<P>The application also responds to keyboard events. The arrow keys can be used to accelerate or decelerate the ball in the horizontal or vertical direction. Hitting the Escape key causes the application to terminate.
+
+<BR></P>
+
+<P>The two sounds that the application uses are in the waveform files hum.wav and bounce.wav. These files are referenced in the application's tiny resource file, shown in Listing 44.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 44.2. Simple DirectX application resource file.</B></LH></UL>
+
+<PRE>BOUNCE.WAV              WAVE    DISCARDABLE     &quot;bounce.wav&quot;
+
+HUM.WAV                 WAVE    DISCARDABLE     &quot;hum.wav&quot;</PRE>
+
+<P>Note that in order to keep the application simple, some explicit assumptions were made as to the contents and structure of these waveform files. If you wish to utilize another file, you may be well advised to look at some of the Game SDK samples for ideas as to how to provide a generic parsing capability.
+
+<BR></P>
+
+<P>The application can be compiled from the command line using the C/C++ compiler of Visual C++:
+
+<BR></P>
+
+<PRE>rc bounce.rc
+
+cl bounce.cpp bounce.res user32.lib gdi32.lib ddraw.lib dsound.lib</PRE>
+
+<P>Note that in order for the compilation to succeed, you must have the Windows 95 Game SDK already installed on your system.
+
+<BR></P>
+
+<P>The completed application looks similar to Figure 44.4. To run the application, you must have the DirectX run-time libraries installed.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="44vcu04.gif">Figure 44.4. The bouncing ball application.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Recognizing the need for a high-performance interface for real-time Windows game applications, Microsoft developed the Windows 95 Game SDK. The Game SDK provides a family of APIs, collectively referred to as the DirectX APIs, for access to the computer's video, sound, communication, and joystick hardware.
+
+<BR></P>
+
+<P>The basis for many elements in the DirectX APIs is Microsoft's Component Object Model. Several of the interfaces in the DirectX APIs are derived from the COM IUnknown interface.
+
+<BR></P>
+
+<P>Video hardware is represented by DirectDraw objects, accessed through the IDirectDraw interface. Through a DirectDraw object, applications can create drawing surfaces, palettes, and clip lists. The interface to drawing surfaces, IDirectDrawSurface, provides high-performance bit blit capabilities. The IDirectDraw interface can be used to manipulate the display hardware in a variety of ways; this includes exclusive access to the display hardware for games that provide full-screen graphics and animation. A special use of IDirectDraw is to provide access to secondary video hardware not normally recognized by Windows itself.
+
+<BR></P>
+
+<P>Access to sound hardware is provided through the IDirectSound interface. Applications typically use the sound hardware by creating a series of secondary sound buffers; the contents of these buffers are mixed into the primary buffer and played back by DirectSound. This wave mixing capability as well as the capability to play back in looping mode are the key game-related capabilities of DirectSound.
+
+<BR></P>
+
+<P>DirectPlay provides communication services for multiplayer applications. Such applications can communicate through networks, modems, or online services. DirectPlay provides a simple send-receive functionality for game programs that participate in game sessions.
+
+<BR></P>
+
+<P>The DirectInput API consists of Win32 joystick services such as joyGetPosEx that can return position and other information for multibutton, multiaxis control devices.
+
+<BR></P>
+
+<P>Setting up the DirectX API is a complex task. A single-function interface that performs DirectX setup from the standard redistributable directories is provided in the form of the DirectXSetup function.</P>
+
+<P><A HREF="vcu43fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcubibfi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

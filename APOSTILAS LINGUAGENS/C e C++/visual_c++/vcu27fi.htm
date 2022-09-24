@@ -1,0 +1,1568 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu27fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="p04vcufi.htm">
+
+<LINK REL="Previous" HREF="vcu26fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu26fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p04vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">27 &#151; Exceptions, Multithreading, and Other MFC Classes</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Using Exceptions in MFC Applications</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Exception Handling with Macros</A></LI>
+
+<LI>
+
+<A HREF="#I5">C++ Exceptions and the CException Class</A></LI>
+
+<LI>
+
+<A HREF="#I6">The CMemoryException Class</A></LI>
+
+<LI>
+
+<A HREF="#I7">The CFileException Class</A></LI>
+
+<LI>
+
+<A HREF="#I8">The CArchiveException Class</A></LI>
+
+<LI>
+
+<A HREF="#I9">The CNotSupportedException Class</A></LI>
+
+<LI>
+
+<A HREF="#I10">The CResourceException Class</A></LI>
+
+<LI>
+
+<A HREF="#I11">The CDaoException Class</A></LI>
+
+<LI>
+
+<A HREF="#I12">The CDBException Class</A></LI>
+
+<LI>
+
+<A HREF="#I13">The COleException Class</A></LI>
+
+<LI>
+
+<A HREF="#I14">The COleDispatchException Class</A></LI>
+
+<LI>
+
+<A HREF="#I15">The CUserException Class</A></LI>
+
+<LI>
+
+<A HREF="#I16">Throwing an MFC Exception</A></LI></UL>
+
+<LI>
+
+<A HREF="#I17">MFC and Multithreading</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I18">Thread-Safe MFC</A></LI>
+
+<LI>
+
+<A HREF="#I19">Creating Threads in MFC</A></LI>
+
+<LI>
+
+<A HREF="#I20">Thread Synchronization</A></LI>
+
+<LI>
+
+<A HREF="#I21">The CEvent Class</A></LI>
+
+<LI>
+
+<A HREF="#I22">The CMutex Class</A></LI>
+
+<LI>
+
+<A HREF="#I23">The CCriticalSection Class</A></LI>
+
+<LI>
+
+<A HREF="#I24">The CSemaphore Class</A></LI>
+
+<LI>
+
+<A HREF="#I25">Synchronization with CSingleLock and CMultiLock</A></LI></UL>
+
+<LI>
+
+<A HREF="#I26">Miscellaneous MFC Classes</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I27">Simple Value Types</A></LI>
+
+<LI>
+
+<A HREF="#I28">Structures and Support Classes</A></LI></UL>
+
+<LI>
+
+<A HREF="#I29">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>27 &#151; Exceptions, Multithreading, and Other MFC Classes</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Many MFC functions use C++ exceptions for reporting errors. We begin this chapter by looking at exception handling in MFC, with particular emphasis on C++ style exception handling and the CException class.
+
+<BR></P>
+
+<P>The MFC Library fully supports multithreading. Specific support for Win32 multithreading is available in the form of synchronization classes that wrap Win32 synchronization objects. MFC multithreading support and the CSyncObject class are the subject of the second half of this chapter.
+
+<BR></P>
+
+<P>Finally, we take a brief look at a series of miscellaneous MFC classes including simple data types, support classes for OLE and databases, and other classes and structures.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Using Exceptions in MFC Applications</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Microsoft Foundation Classes Library provides two different forms of exception handling. It supports C++ style typed expressions, and it also supports exception handling through old-style MFC macros.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Exception Handling with Macros</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>New applications should not use MFC exception processing macros. That said, as there are probably many applications out there that rely on the old, macro-based exception handling mechanism, it is probably helpful to have a brief summary of how those macros can be converted into code following the C++ exception syntax.
+
+<BR></P>
+
+<P>The first and most obvious step is to replace the macro names with C++ keywords. The macros TRY, CATCH and AND_CATCH, and THROW and THROW_LAST should be replaced with the C++ keywords try, catch, and throw. The END_CATCH macro has no C++ equivalent and should simply be deleted.
+
+<BR></P>
+
+<P>The syntax of the CATCH macro and the C++ catch keyword are different. What used to look like this:
+
+<BR></P>
+
+<PRE>CATCH(CException, e)</PRE>
+
+<P>should be replaced with:
+
+<BR></P>
+
+<PRE>catch(CException *e)</PRE>
+
+<P>An important difference between the two forms of exception handling is that when you are using the C++ exception handling mechanism, you are supposed to delete the exception object yourself. You can delete objects of type CException by calling their Delete member function. For example, if you used to catch an exception like this:
+
+<BR></P>
+
+<PRE>TRY
+
+{
+
+    // Do something nasty here
+
+}
+
+CATCH(CException, e)
+
+{
+
+    // Process the exception here
+
+}
+
+END_CATCH</PRE>
+
+<P>should be translated into code similar to this:
+
+<BR></P>
+
+<PRE>try
+
+{
+
+    // Do something nasty here
+
+}
+
+catch (CException *e)
+
+{
+
+    // Process the exception here
+
+    e-&gt;Delete();
+
+}</PRE>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Do not attempt to delete an exception object in a catch block using the delete operator. The delete operator will fail if the exception object was not allocated on the heap.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>C++ Exceptions and the </B><B><I>CException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The C++ language provides support for the reporting and detection of abnormal conditions through typed exceptions. The MFC Library utilizes this support through a series of exception types that are derived from the class CException.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> The MFC Library does not directly support Win32 structured exceptions. If you wish to process structured exceptions, you may have to use the C style structured exception handling mechanism or write your own translator function that translates structured exceptions into C++ exceptions.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>The primary function of the CException class is to provide a distinct type for MFC Library exceptions. It could fulfill that function even as an empty class. It does, however, provide several member functions that can be utilized when processing an exception.
+
+<BR></P>
+
+<P>The member function GetErrorMessage can be used to retrieve a textual description of the error. The member function ReportError can be used to retrieve this error message and display it in a standard message box. Note that not all exceptions caught by a CException handler have a valid error message associated with them.
+
+<BR></P>
+
+<P>The third member function that is important to know about is the Delete function. Use this function to delete an exception in a catch block if you process the exception. (Do not delete the exception if you use throw to pass it to another exception handler.)
+
+<BR></P>
+
+<P>There are several classes derived from CException (Figure 27.1). These classes are used to indicate errors and abnormal conditions relating to memory, file management, serialization, resource management, data access objects (DAO), database functions, OLE, and other categories. In the following sections, we review these exception classes individually.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="27vcu01.gif">Figure 27.1. Exception classes in MFC.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>The </B><B><I>CMemoryException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type CMemoryException are thrown to indicate a memory allocation failure. These exceptions are thrown automatically in MFC applications by the new operator. If you write your own memory allocation functions, you are responsible for throwing such exceptions yourself; for example:
+
+<BR></P>
+
+<PRE>char *p = malloc(1000);
+
+if (p == NULL) AfxThrowMemoryException();
+
+else
+
+{
+
+    // Populate p with data
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>The </B><B><I>CFileException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type CFileException indicate one of many file-related failures. To determine the cause of the exception, examine the m_cause member variable. For example:
+
+<BR></P>
+
+<PRE>try
+
+{
+
+    CFile myFile(&quot;myfile.txt&quot;, CFile::modeRead);
+
+    // Read the contents of the file
+
+}
+
+catch(CFileException *e)
+
+{
+
+    if (e-&gt;m_cause == CFileException::fileNotFound)
+
+        cout &lt;&lt; &quot;File not found!\n&quot;;
+
+    else
+
+        cout &lt;&lt; &quot;A disk error has occurred.\n&quot;;
+
+    e-&gt;Delete();
+
+}</PRE>
+
+<P>Table 27.1 lists the possible values of m_cause.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 27.1. </B><B>CFileException::m_cause</B><B> values.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Value</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>none</P>
+
+<TD>
+
+<P>No error.</P>
+
+<TR>
+
+<TD>
+
+<P>generic</P>
+
+<TD>
+
+<P>Unspecified error.</P>
+
+<TR>
+
+<TD>
+
+<P>fileNotFound</P>
+
+<TD>
+
+<P>File could not be located.</P>
+
+<TR>
+
+<TD>
+
+<P>badPath</P>
+
+<TD>
+
+<P>Part of the path name is invalid.</P>
+
+<TR>
+
+<TD>
+
+<P>tooManyOpenFiles</P>
+
+<TD>
+
+<P>Maximum number of open files exceeded.</P>
+
+<TR>
+
+<TD>
+
+<P>accessDenied</P>
+
+<TD>
+
+<P>Attempt to open file with insufficient privileges.</P>
+
+<TR>
+
+<TD>
+
+<P>invalidFile</P>
+
+<TD>
+
+<P>Attempt to use an invalid file handle.</P>
+
+<TR>
+
+<TD>
+
+<P>removeCurrentDir</P>
+
+<TD>
+
+<P>Attempt to remove current directory</P>
+
+<TR>
+
+<TD>
+
+<P>directoryFull</P>
+
+<TD>
+
+<P>Maximum number of directory entries reached.</P>
+
+<TR>
+
+<TD>
+
+<P>badSeek</P>
+
+<TD>
+
+<P>Could not set file pointer to specified location.</P>
+
+<TR>
+
+<TD>
+
+<P>hardIO</P>
+
+<TD>
+
+<P>Hardware error.</P>
+
+<TR>
+
+<TD>
+
+<P>sharingViolation</P>
+
+<TD>
+
+<P>Attempt to access a locked region.</P>
+
+<TR>
+
+<TD>
+
+<P>lockViolation</P>
+
+<TD>
+
+<P>Attempt to lock a previously locked region.</P>
+
+<TR>
+
+<TD>
+
+<P>diskFull</P>
+
+<TD>
+
+<P>The disk is full.</P>
+
+<TR>
+
+<TD>
+
+<P>endOfFile</P>
+
+<TD>
+
+<P>The end of the file was reached.</P></TABLE>
+
+<P>These m_cause values are operating system independent. If you wish to retrieve an operating system specific error code, examine the member variable m_IOsError.
+
+<BR></P>
+
+<P>Two member functions, OsErrorToException and ErrnoToException, can be used to translate operating system specific error codes and C run-time library error numbers into exception codes. Two helper member functions, ThrowOsError and ThrowErrno, can be used to throw exceptions using these error codes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>The </B><B><I>CArchiveException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CArchiveException class is used in exceptions indicating serialization errors. These exceptions are thrown by member functions of the CArchive class.
+
+<BR></P>
+
+<P>To determine the cause of the exception, examine the m_cause member variable. For example:
+
+<BR></P>
+
+<PRE>CMyDocument::Serialize(CArchive &amp;ar)
+
+{
+
+    try
+
+    {
+
+        if (ar.IsLoading())
+
+        {
+
+            // Load from the archive here
+
+        }
+
+        else
+
+        {
+
+            // Store in the archive here
+
+        }
+
+    }
+
+    catch (CArchiveException *e)
+
+    {
+
+        if (e-&gt;m_cause == CArchiveException::badSchema)
+
+        {
+
+            AfxMessageBox(&quot;Invalid file version&quot;);
+
+            e-&gt;Delete();
+
+        }
+
+        else
+
+            throw;
+
+    }
+
+}</PRE>
+
+<P>Table 27.2 lists the possible values of m_cause.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 27.2. </B><B>CArchiveException::m_cause</B><B> values.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Value</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>none</P>
+
+<TD>
+
+<P>No error.</P>
+
+<TR>
+
+<TD>
+
+<P>generic</P>
+
+<TD>
+
+<P>Unspecified error.</P>
+
+<TR>
+
+<TD>
+
+<P>readOnly</P>
+
+<TD>
+
+<P>Attempt to store into an archive opened for loading.</P>
+
+<TR>
+
+<TD>
+
+<P>endOfFile</P>
+
+<TD>
+
+<P>The end of the file was reached.</P>
+
+<TR>
+
+<TD>
+
+<P>writeOnly</P>
+
+<TD>
+
+<P>Attempt to load from an archive opened for storing.</P>
+
+<TR>
+
+<TD>
+
+<P>badIndex</P>
+
+<TD>
+
+<P>Invalid file format.</P>
+
+<TR>
+
+<TD>
+
+<P>badClass</P>
+
+<TD>
+
+<P>Attempt to read an object of the wrong type.</P>
+
+<TR>
+
+<TD>
+
+<P>badSchema</P>
+
+<TD>
+
+<P>Incompatible schema number in class.</P></TABLE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>The </B><B><I>CNotSupportedException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type CNotSupportedException are thrown when a feature is requested that is not supported. No further information is available on this error.
+
+<BR></P>
+
+<P>This exception is frequently used in overridden versions of member functions in derived classes when the derived class does not support a base class feature. For example, the class CStdioFile does not support the base class feature LockRange:
+
+<BR></P>
+
+<PRE>try
+
+{
+
+    CStdioFile myFile(stdin);
+
+    myFile.LockRange(0, 1024);
+
+    ...
+
+}
+
+catch (CNotSupportedException *e)
+
+{
+
+    cout &lt;&lt; &quot;Unsupported feature requested.\n&quot;;
+
+    e-&gt;Delete();
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The </B><B><I>CResourceException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type CResourceException are thrown when a resource allocation fails or when a resource is not found. No further information is available on this error.
+
+<BR></P>
+
+<P>Exceptions of this type are used in conjunction with GDI resources. For example:
+
+<BR></P>
+
+<PRE>try
+
+{
+
+    CPen myPen(PS_SOLID, 0, RGB(255, 0, 0));
+
+}
+
+catch (CResourceException *e)
+
+{
+
+    AfxMessageBox(&quot;Failed to create GDI pen resource\n&quot;);
+
+    e-&gt;Delete();
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>The </B><B><I>CDaoException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>CDaoException exceptions are used to indicate errors that occur when MFC database classes are used in conjunction with data access objects (DAO). All DAO errors are expressed in the form of DAO exceptions of the type CDaoException.
+
+<BR></P>
+
+<P>To obtain detailed information about the error, examine members of the CDaoErrorInfo structure pointed to by m_pErrorInfo. Further OLE and extended MFC error codes can be obtained by examining the member variables m_scode and m_nAfxDaoError.
+
+<BR></P>
+
+<P>To obtain information about a specific DAO error code, use the GetErrorInfo member function. To find out the number of error codes for which error information can be obtained, call GetErrorCount.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The </B><B><I>CDBException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type CDBException are used to indicate errors that occur when using MFC ODBC database classes.
+
+<BR></P>
+
+<P>To obtain information about the error, examine the m_nRetCode member variable, that contains an ODBC error code. To obtain a textual description of the error, examine the m_strError member variable. More detailed information is available in the member variable m_strStateNativeOrigin, which provides a textual description of the error in the following format:
+
+<BR></P>
+
+<PRE>&quot;State: %s,Native: %ld,Origin: %s&quot;</PRE>
+
+<P>In this string, the format codes are replaced as follows. The first code (%s) is replaced by a five character ODBC error code corresponding to the <I>szSqlState</I> parameter of the ::SQLError function. The second code corresponds to the <I>pfNativeError</I> parameter of ::SQLError and represents a native error code specific to the data source. Finally, the third code corresponds to error message text returned in the <I>szErrorMsg</I> parameter of ::SQLError.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>The </B><B><I>COleException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The COleException class is used in exceptions indicating general OLE errors. To obtain information about the error, examine the m_sc member variable, which contains an OLE status code.
+
+<BR></P>
+
+<P>The static member function Process can be used to turn any caught exception into an OLE status code. For example, this function, when passed an object of type CMemoryException, returns the OLE status code E_OUTOFMEMORY.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>The </B><B><I>COleDispatchException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type COleDispatchException are used to indicate OLE errors related to the OLE IDispatch interface. This interface is used in conjunction with OLE automation and OLE controls.
+
+<BR></P>
+
+<P>An error code specific to IDispatch can be obtained by examining the m_wCode member variable. The member variable m_strDescription contains a textual description of the error.
+
+<BR></P>
+
+<P>Additional member variables identify a help context (m_dwHelpContext), the name of the applicable help file (m_strHelpFile), and the name of the application that threw the exception (m_strSource).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>The </B><B><I>CUserException</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Exceptions of type CUserException are meant to be used by application programs to indicate an error caused by the user. Typically, these exceptions are thrown after the user has been notified of the error condition through a message box.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Throwing an MFC Exception</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>If you wish to throw an MFC exception from your own code, you can do so by using one of the helper functions that are available in the MFC Library for this purpose. These helper functions are summarized in Table 27.3.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 27.3. Exception helper functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Function Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Action</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowArchiveException</P>
+
+<TD>
+
+<P>Throws a CArchiveException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowDaoException</P>
+
+<TD>
+
+<P>Throws a CDaoException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowDBException</P>
+
+<TD>
+
+<P>Throws a CDBException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowFileException</P>
+
+<TD>
+
+<P>Throws a CFileException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowMemoryException</P>
+
+<TD>
+
+<P>Throws a CMemoryException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowNotSupportedException</P>
+
+<TD>
+
+<P>Throws a CNotSupportedException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowOleDispatchException</P>
+
+<TD>
+
+<P>Throws a COleDispatchException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowOleException</P>
+
+<TD>
+
+<P>Throws a COleException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowResourceException</P>
+
+<TD>
+
+<P>Throws a CResourceException</P>
+
+<TR>
+
+<TD>
+
+<P>AfxThrowUserException</P>
+
+<TD>
+
+<P>Throws a CUserException</P></TABLE>
+
+<P>These functions take a varying number of parameters in accordance with the type of the exception being thrown.
+
+<BR></P>
+
+<P>These functions construct an exception object of the specified type, initialize it using the supplied parameters, and then throw the exception.
+
+<BR></P>
+
+<P>Naturally, you can also elect to construct an exception object and throw the exception manually. This may be necessary if you derive a class from CException yourself.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>MFC and Multithreading</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>MFC support for multithreading has two aspects. First, the MFC Library is thread-safe; it can be used in the context of multithreading applications. Second, the library provides a series of classes that provide explicit support for multithreading-related synchronization objects in Win32.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Thread-Safe MFC</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A curious, frequently seen phrase in the MFC documentation states that &quot;MFC objects are not thread safe at the object level, only at the class level.&quot; I believe that this sentence requires more elaboration than what is provided in the pages of various MFC manuals.
+
+<BR></P>
+
+<P>If read at face value, this would mean that it is patently unsafe to use separate threads in your application to manipulate two member variables in, say, a CDocument-derived class of your application. If this were indeed the case, it would mean a very severe restriction on multithreading usage, almost to the point where it would render multithreading and the MFC fundamentally incompatible in most real-life situations. Fortunately, this is not so.
+
+<BR></P>
+
+<P>When you define member variables in an MFC-derived class of your own, you are responsible for making them thread-safe if necessary. This can be accomplished, for example, by providing wrapper functions that restrict access to these variables and by the judicious use of synchronization techniques inside those wrapper functions.
+
+<BR></P>
+
+<P>In view of this, what the sentence I quoted above really means is that for reasons of performance and simplicity, this was not done in the MFC Library. For this reason, accessing the same object from two different threads may fail because no synchronization mechanism is used.
+
+<BR></P>
+
+<P>Consider, for example, the case of a CString. When you assign a value to a CString object, it frees any memory previously allocated for it, allocates the necessary memory for the new string data, and copies the data to this memory block. These operations are not protected by synchronization techniques, which means that if another thread attempts to obtain the value of the CString, the object will be in an inconsistent transitory state. When the attempt is made to retrieve its value, only parts of the string may be returned, garbage information may be returned, or worse yet, an access violation may occur.
+
+<BR></P>
+
+<P>On the other hand, if you add a CString member variable to your own CDocument-derived class, you can make this a protected or private member variable and restrict access to it through wrapper functions. In the wrapper functions, you can use, for example, mutex objects to provide exclusive access to the CString. This way, different threads in your application will be able to safely access the same object.
+
+<BR></P>
+
+<P>In fact, notwithstanding the blanket statement quoted above, many MFC objects are actually safely accessible from separate threads <I>assuming </I><I>that you know what you are doing</I>. For example, you can access a CString object through the operator LPCSTR operator from as many threads as you wish; but do not try to modify the same CString object from two different threads simultaneously!
+
+<BR></P>
+
+<P>The rule of thumb: unless you <I>know</I> that what you are doing is safe, do not do it. By default, accessing an object from two different threads should be considered unsafe, unless you know explicitly that the particular access mechanism you intend to use has no harmful consequences.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Creating Threads in MFC</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC Library differentiates between two types of threads. <I>User-interface threads</I> are threads that have a message loop and process messages; <I>worker threads</I> are everything else.
+
+<BR></P>
+
+<P>The typical use of a user-interface thread is to create a message loop for a window that runs independently of your application's main message loop. The typical use of a worker thread is to perform some background processing (for example, background printing).
+
+<BR></P>
+
+<P>Creating a user-interface thread involves deriving a class from CWinThread and calling AfxBeginThread to create the thread object. In the class derived from CWinThread, you must override several CWinThread member functions. As a minimum, you must provide an override version of InitInstance, the member function that is called when the thread is initialized.
+
+<BR></P>
+
+<P>The creation of worker threads is simpler. Worker threads do not require a separate CWinThread-derived class; instead, AfxBeginThread is called with the address of the thread function.
+
+<BR></P>
+
+<P>Note that MFC objects should not be used in conjunction with threads not created using AfxBeginThread.
+
+<BR></P>
+
+<P>As an example for creating a worker thread, consider the following code:
+
+<BR></P>
+
+<PRE>UINT MyWorkerThread(LPVOID pParam)
+
+{
+
+    // Do something lengthy with pParam
+
+    return 0; // Terminate the thread
+
+}
+
+...
+
+    // elsewhere
+
+    AfxBeginThread(MyWorkerThread, myParam);</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Thread Synchronization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Win32 API provides a series of synchronization objects that support the synchronization of concurrently executing threads. Of these, events, mutexes, critical sections, and semaphores are supported by MFC class wrappers.
+
+<BR></P>
+
+<P>The base class for all MFC synchronization classes is CSyncObject, which is a pure virtual base class. The hierarchy of MFC synchronization classes is shown in Figure 27.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="27vcu02.gif">Figure 27.2. Synchronization classes.</A></B>
+
+<BR></P>
+
+<P>The CSyncObject class supports creation of a synchronization object by name through its constructor. Subsequently, the Lock and Unlock member functions can be used to gain access to, and release, the synchronization object. The specific meaning of these functions depends on the synchronization class being used.
+
+<BR></P>
+
+<P>CSyncObject-derived objects can be used in conjunction with the CSingleLock or CMultiLock classes. These classes provide an access control mechanism to the objects. After examining the synchronization classes, we return our attention to these synchronization access classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>The </B><B><I>CEvent</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CEvent class encapsulates the functionality of a Win32 event. An event's state is set to signaled by calling the CEvent::SetEvent function.
+
+<BR></P>
+
+<P>An event can be either a manual-reset event or an automatic event. A manual-reset event must be explicitly reset to its nonsignaled state; an automatic event is reset to nonsignaled when a waiting thread is released.
+
+<BR></P>
+
+<P>An event can be waited upon by calling the Lock member function. The Unlock member function is not used for CEvent objects.
+
+<BR></P>
+
+<P>The PulseEvent member function sets the event's state to signaled, releases waiting threads (if any), and resets the event's state to nonsignaled. In case of a manual-reset event, all waiting threads are released; in case of an automatic event, only a single thread is released.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>The </B><B><I>CMutex</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Mutex objects, represented by the CMutex class, are used to gain mutually exclusive access to a resource. While one thread owns a mutex, other threads cannot gain access to it.
+
+<BR></P>
+
+<P>When you construct a CMutex object, you can specify in the call to the constructor whether you wish to initially own the mutex object. If yes, the constructor will not return until it gains ownership of the mutex object.
+
+<BR></P>
+
+<P>To otherwise gain ownership to a mutex object, call the Lock member function. To release the mutex object, call Unlock.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>The </B><B><I>CCriticalSection</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Critical section objects have functionality similar to that of mutexes; however, critical sections are slightly more efficient but cannot be used across process boundaries. A critical section object is typically used to prevent multiple threads from executing the same piece of code simultaneously.
+
+<BR></P>
+
+<P>The critical section object is initialized by the CCriticalSection constructor. Subsequently, you can use the Lock and Unlock member functions to access the critical section. To access the underlying critical section object, you can use the operator CRITICAL_SECTION* operator.
+
+<BR></P>
+
+<P>Note that objects of type CCriticalSection cannot be used in conjunction with the classes CSingleLock and CMultiLock.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>The </B><B><I>CSemaphore</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Semaphores are used to limit the number of accesses to a resource. Semaphore objects are represented by the CSemaphore class.
+
+<BR></P>
+
+<P>When a semaphore is object created through the CSemaphore constructor, you can specify the initial and maximum usage count. The usage count can be increased by calling CSemaphore::Lock; if the usage count exceeds the maximum usage count, this function will wait until the semaphore object becomes available. The usage count can be decreased by calling Unlock.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=3><B>Synchronization with </B><B><I>CSingleLock</I></B><B> and </B><B><I>CMultiLock</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Synchronization objects of type CEvent, CMutex, and CSemaphore can be accessed through the synchronization access classes CSingleLock and CMultiLock.
+
+<BR></P>
+
+<P>To create an access object of type CSingleLock, create the synchronization object first, then pass a pointer to this object to the CSingleLock constructor. Subsequently, you can gain access to the object by calling CSingleLock::Lock and release the object using CSingleLock::Unlock. To determine if an object has been locked, use the CSingleLock::IsLocked member function.
+
+<BR></P>
+
+<P>The functionality of the CMultiLock class is similar to that of CSingleLock; however, CMultiLock makes it possible for you to wait on several synchronization objects at the same time.
+
+<BR></P>
+
+<P>To construct a CMultiLock object, pass an array of CSyncObject-derived objects to its constructor. Later, you can wait for any or all of these objects to become signaled by calling the Lock member function. The return value of this function identifies the object that was signaled. You can release that object by calling CMultiLock::Unlock. The CMultilock::IsLocked function can be used to determine the locked state of a specific synchronization object.
+
+<BR></P>
+
+<P>Note that objects of type CCriticalSection cannot be used in conjunction with CSingleLock and CMultiLock.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=4><B>Miscellaneous MFC Classes</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Microsoft Foundation Classes Library provides a series of miscellaneous classes. Some of these are general purpose (for example, CString) while others are used in specific contexts. In the remainder of this chapter, we take a brief tour exploring these classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I27" NAME="I27">
+
+<FONT SIZE=3><B>Simple Value Types</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC Library provides a series of classes that represent simple data types.
+
+<BR></P>
+
+<P>The CPoint class is an MFC wrapper for the Win32 POINT structure. A pointer to a CPoint object can be used every time when a pointer to a POINT structure is expected. The CPoint class supports a series of operators including addition and subtraction, testing for equality an inequality, and the += and -= operators. The Offset member function can be used to offset a CPoint by a given pair of values in the horizontal and vertical direction.
+
+<BR></P>
+
+<P>The CRect class wraps the functionality of the Win32 RECT structure. Pointers to objects of this class and pointers to structures of type RECT can be used interchangeably.
+
+<BR></P>
+
+<P>CRect supports a variety of member functions and overloaded operators to compare, copy, offset, inflate, or deflate rectangles, calculate the union and intersection of two rectangles and perform other operations.
+
+<BR></P>
+
+<P>The CSize class is an MFC wrapper for the Win32 SIZE structure. Pointers to type CSize and pointers to SIZE structures can be used interchangeably. The CSize class defines a series of operators for comparing, adding, and subtracting CSize objects.
+
+<BR></P>
+
+<P>The addition and subtraction operators can also be used with mixed types. Objects of type CPoint and CRect can be offset by an object of type CSize or CPoint using the addition or subtraction operator.
+
+<BR></P>
+
+<P>The CString type represents a variable-length string. Memory for the string in a CString object is dynamically allocated and released as appropriate. Objects of type CString can be used to store ANSI and OEM strings, and on systems supporting Unicode (such as Windows NT), Unicode strings as well. The CString class defines a large variety of functions and operations that can be used for manipulating the string.
+
+<BR></P>
+
+<P>In particular, CString objects can be concatenated using the addition operator. They can be compared using the equality, less than, and greater than operators. The Mid, Left, and Right member functions can be used to perform operations similar to those available in the BASIC language. Other functions can be used to extract parts of a string, change the case of a string, find substrings in the string, and collate and compare strings.
+
+<BR></P>
+
+<P>The CString class supports loading a string value directly from a Windows resource file via the LoadString function.
+
+<BR></P>
+
+<P>The CString class also supports serialization and the use of the &lt;&lt; and &gt;&gt; operators with CString objects in conjunction with the CArchive class.
+
+<BR></P>
+
+<P>CString objects can be used in many situations in place of pointers to type char, thanks to the existence of the operator LPCSTR operator.
+
+<BR></P>
+
+<P>The CTime class represents an absolute time; the CTimeSpan class represents the difference between two time values. Both of these classes support a variety of member functions to set, compare, and manipulate time values, and to extract various elements (for example, seconds, minutes, hours) from time values. The CTime class also supports time zones and the conversion of a CTime value into a formatted string representing date and time. Both CTime and CTimeSpan support serialization and the use of the &lt;&lt; and &gt;&gt; operators in conjunction with a CArchive.
+
+<BR></P>
+
+<P>Much of the functionality of these two classes has been superseded by the COleDateTime class.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I28" NAME="I28">
+
+<FONT SIZE=3><B>Structures and Support Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There is a series of miscellaneous structures and classes in MFC that support specific areas of functionality.
+
+<BR></P>
+
+<P>The CCommandLineInfo encapsulates command line information in an MFC application. An object of type CCommandLineInfo or an object of a derived class can be used in conjunction with CWinApp::ParseCommandLine to parse the command line. The default implementation of CCommandLineInfo supports a filename on the command line and a variety of flags that specify printing, DDE, OLE automation, and editing an OLE embedded item. If other command-line flags or parameters are needed, derive a class from CCommandLineInfo and override its ParseParam member function.
+
+<BR></P>
+
+<P>The CCreateContext class is used when the framework creates frame windows and views associated with a document in an MFC framework application. Member variables of CCreateContext are pointers identifying the view class, the document, and the view and the frame windows.
+
+<BR></P>
+
+<P>The CFileStatus structure is used by the functions CFile::GetStatus and CFile::SetStatus to retrieve and set a file's attributes (such as creation date, permissions, or the filename).
+
+<BR></P>
+
+<P>The CMemoryState class is used for detecting memory leaks. By creating CMemoryState objects and calling their Checkpoint member functions at various stages during program execution, you can verify that all allocated memory has been correctly released and dump the contents of unreleased objects.
+
+<BR></P>
+
+<P>The CPrintInfo class is used to store information about a print job. Objects of this type are used by the framework when calling printing relating member functions of the CView class.
+
+<BR></P>
+
+<P>The CCmdUI class is used in ON_UPDATE_COMMAND_UI handler functions of classes derived from CCmdTarget. Through objects of this type, applications can enable, disable, or otherwise manipulate user-interface items.
+
+<BR></P>
+
+<P>The CDataExchange class is used to support dialog data exchange. Objects of this type store context information that is used by dialog data exchange (DDX) and dialog data validation (DDV) functions. Classes of similar functionality include CPropExchange (used to exchange data on persistent properties of OLE controls), CFieldExchange (used for exchanging data between ODBC records and dialog controls), and CDaoFieldExchange (used for exchanging data between DAO records and dialog controls).
+
+<BR></P>
+
+<P>The CRectTracker class implements a tracking rectangle for on-screen objects. It is used by the framework in conjunction with embedded OLE objects, but can also be used by applications for application-specific objects.
+
+<BR></P>
+
+<P>The CWaitCursor class provides a one-line mechanism for displaying an hourglass cursor. When the object is constructed, the hourglass cursor is displayed; when the object is destroyed, the original cursor is restored. Declare an object of this class in functions that perform lengthy operations.
+
+<BR></P>
+
+<P>Additional support classes and structures provide support for OLE, OLE automation, ODBC, and DAO.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I29" NAME="I29">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The MFC Library uses C++ style exceptions to communicate error conditions. Exceptions that are of a type derived from CException are thrown using a variety of helper functions and caught by your application.
+
+<BR></P>
+
+<P>Older MFC applications that predate C++ exception support in Visual C++ used a series of macros for this purpose. These macros can be easily translated into the C++ keywords try, throw, and catch.
+
+<BR></P>
+
+<P>The CException-derived classes that are used by MFC functions are summarized in Table 27.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 27.4. Exception helper functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Function Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Action</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>CArchiveException</P>
+
+<TD>
+
+<P>Serialization errors</P>
+
+<TR>
+
+<TD>
+
+<P>CDaoException</P>
+
+<TD>
+
+<P>Errors occurring with data access objects</P>
+
+<TR>
+
+<TD>
+
+<P>CDBException</P>
+
+<TD>
+
+<P>Errors occurring during ODBC usage</P>
+
+<TR>
+
+<TD>
+
+<P>CFileException</P>
+
+<TD>
+
+<P>File system errors</P>
+
+<TR>
+
+<TD>
+
+<P>CMemoryException</P>
+
+<TD>
+
+<P>Memory allocation failure</P>
+
+<TR>
+
+<TD>
+
+<P>CNotSupportedException</P>
+
+<TD>
+
+<P>Notification of unsupported feature request</P>
+
+<TR>
+
+<TD>
+
+<P>COleDispatchException</P>
+
+<TD>
+
+<P>OLE IDispatch errors (automation, controls)</P>
+
+<TR>
+
+<TD>
+
+<P>COleException</P>
+
+<TD>
+
+<P>Generic OLE errors</P>
+
+<TR>
+
+<TD>
+
+<P>CResourceException</P>
+
+<TD>
+
+<P>Resource allocation failure (GDI)</P>
+
+<TR>
+
+<TD>
+
+<P>CUserException</P>
+
+<TD>
+
+<P>Errors caused by the user</P></TABLE>
+
+<P>For every one of these exception types, there is a corresponding helper function (for example, AfxThrowArchiveException). You can also construct a CException-derived object and throw an exception manually.
+
+<BR></P>
+
+<P>In the exception handler, you are responsible for deleting the CException-derived object by calling its Delete member function.
+
+<BR></P>
+
+<P>You can also derive your own exception class from CException.
+
+<BR></P>
+
+<P>Multithreading support in MFC can be considered from two aspects. First, the MFC Library is thread safe at the class level. Second, it provides multithreading support in the form of CWinThread and a series of synchronization classes derived from CSyncObject.
+
+<BR></P>
+
+<P>The MFC distinguishes between threads that maintain a message loop (user-interface threads) and threads that do not (worker threads). User-interface threads are created by deriving a type from CWinThread, while work threads only require a worker thread function. Both types of threads are created by calling AfxBeginThread.
+
+<BR></P>
+
+<P>CSyncObject-derived synchronization classes include CEvent, CMutex, CCriticalSection, and CSemaphore. All of these classes with the exception of CCriticalSection can be used in conjunction with the classes CSingleLock and CMultiLock.
+
+<BR></P>
+
+<P>The MFC Library defines a series of support classes that encapsulate various Win32 structures or provide support for various operations. Simple data types include CPoint, CSize, CRect, CString, CTime, and CTimeSpan. Other support classes and structures include CCommandLineInfo, CCreateContext, CFileStatus, CMemoryState, CPrintInfo, and CCmdUI. Dialog data exchange is supported by CDataExchange, and the specific classes CPropExchange, CFieldExchange, and CDaoFieldExchange. The CRectTracker class implements a tracking rectangle; the CWaitCursor class can be used to easily display an hourglass cursor. Additional support classes and structures exist for OLE, ODBC, and DAO.</P>
+
+<P><A HREF="vcu26fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="p04vcufi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

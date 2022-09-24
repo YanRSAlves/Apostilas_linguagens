@@ -1,0 +1,1070 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu01fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu02fi.htm">
+
+<LINK REL="Previous" HREF="p01vcufi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="p01vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu02fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">1 &#151; Visual C++ and the Developer Studio</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Developer Studio: An Overview</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">The Project Workspace</A></LI>
+
+<LI>
+
+<A HREF="#I5">Projects and Subprojects</A></LI>
+
+<LI>
+
+<A HREF="#I6">Project Configuration</A></LI>
+
+<LI>
+
+<A HREF="#I7">Editing Source Files</A></LI>
+
+<LI>
+
+<A HREF="#I8">Resources</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Resource Editing</A></LI>
+
+<LI>
+
+<A HREF="#I10">Resource Localization</A></LI>
+
+<LI>
+
+<A HREF="#I11">Resource Templates</A></LI></UL>
+
+<LI>
+
+<A HREF="#I12">Building a Project</A></LI>
+
+<LI>
+
+<A HREF="#I13">The InfoViewer</A></LI>
+
+<LI>
+
+<A HREF="#I14">Other Integrated Components</A></LI>
+
+<LI>
+
+<A HREF="#I15">Miscellaneous Tools</A></LI>
+
+<LI>
+
+<A HREF="#I16">Integration with Other Applications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I17">Command-Line Tools</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I18">The C/C++ Compiler</A></LI>
+
+<LI>
+
+<A HREF="#I19">The Linker</A></LI>
+
+<LI>
+
+<A HREF="#I20">The Library Manager</A></LI>
+
+<LI>
+
+<A HREF="#I21">The Program Maintenance Utility</A></LI>
+
+<LI>
+
+<A HREF="#I22">Other Command-Line Tools</A></LI></UL>
+
+<LI>
+
+<A HREF="#I23">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>1 &#151; Visual C++ and the Developer Studio</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The Visual C++ Developer Studio application is the centerpiece of the Visual C++ development system. It offers a variety of features, provides access to most Visual C++ development system components, and also provides a front end for other Microsoft development products, such as Microsoft Test, Microsoft SourceSafe, or the Developer Library CD-ROM.
+
+<BR></P>
+
+<P>This new Developer Studio (Figure 1.1) sports a much-improved source editor, an excellent resource editor, an integrated help system, project build options, and access to other integrated components such as the AppWizard, the ClassWizard, the integrated debugger, and the profiler.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu01.gif">Figure 1.1. The Developer Studio.</A></B>
+
+<BR></P>
+
+<P>Although the Developer Studio represents the interface of choice for accessing the features of Visual C++, the C/C++ compiler and other components of the development system can also be used from the command line. In some cases, such as when compiling simple test programs, it is actually easier to do than to use the graphical interface.
+
+<BR></P>
+
+<P>In this chapter, we begin our tour of Visual C++ by reviewing the Developer Studio and its basic features. In the second half of the chapter, we examine the use of Visual C++ command-line tools.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Developer Studio: An Overview</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Developer Studio offers a series of interfaces for projects, source files, resource file components; and a series of tools for building, running, and testing applications. It also offers integrated access to the Visual C++ help system and other media titles, such as the Microsoft Developer Library.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>The Project Workspace</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>For those of us familiar with earlier versions of Visual C++, perhaps the most striking new feature in Version 4 is the new project workspace window (Figure 1.2).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu02.gif">Figure 1.2. The Project Workspace in ClassView.</A></B>
+
+<BR></P>
+
+<P>In addition to the old-fashioned presentation of a project as a collection of source files, you are now provided with two new ways of looking at a project. In <I>ClassView</I>, the classes that comprise a project, their member functions and variables, and the project's global variables and functions are presented; in <I>ResourceView</I>, the project's resource file components can be viewed.
+
+<BR></P>
+
+<P>The ClassView window provides a hierarchical representation of classes when they are embedded in other classes. It also uses different symbols to identify private, protected, and public class members.
+
+<BR></P>
+
+<P>Apart from being pretty, the ClassView is also useful. Double-clicking on any item opens the appropriate file for editing and positions the text cursor on the item. For example, double-clicking on a class name opens the file containing the class declaration and positions the cursor at the beginning of the declaration. Double-clicking on a member function name opens the appropriate implementation file and positions the cursor at the beginning of the function definition.
+
+<BR></P>
+
+<P>The <I>FileView</I> window presents a more traditional view of your project. This view lists all your project source files and dependencies. Double-clicking on any file opens the file for editing.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Unlike previous versions of Visual C++, Version 4 does not allow file groupings. This feature is replaced in part by the ClassView window, and in part by the new capability of handling projects and subprojects.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>Often you add new files to a project implicitly, such as when you create a new class through ClassWizard. However, if you need to explicitly add a new file to your project, use the Files into Project command from the Insert menu.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Projects and Subprojects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Project Workspace is not restricted to a single project. You can use the Project command from the Insert menu to insert additional projects into a workspace.
+
+<BR></P>
+
+<P>You can add new projects to the workspace as top-level projects or as subprojects. The major distinction is that a subproject participates in the build process; when a project with subproject is rebuilt, its subprojects are rebuilt first.
+
+<BR></P>
+
+<P>The use of projects and subprojects allows for a variety of scenarios. For example, a project may have subprojects representing dynamic link libraries. Two top-level projects may represent a client and a server application.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> You cannot add an existing project to your workspace. The Insert Project command can only be used to add new projects created through AppWizard. One way to overcome this limitation is to create a blank project with the same settings as your existing project and copy the appropriate files into your new project directory. Another approach is to create a new project specifying an external make file.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Project Configuration</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A project configuration defines how the executable program or library that a project defines is built. When you create a project through AppWizard, a set of default project configurations is also created. For example, if you create a project for the Win32 Intel platform, AppWizard creates two configurations: one for debug and one for release build. Later, project configurations can be added or removed using the Configurations button from the Build menu (Figure 1.3).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu03.gif">Figure 1.3. The Configurations dialog.</A></B>
+
+<BR></P>
+
+<P>The settings for a specific configuration or set of configurations can be modified using the Settings command in the Build menu. We return to the Project Settings dialog later in this chapter when we discuss building a project.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Editing Source Files</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The new Visual C++ source editor offers familiar features, such as drag and drop editing and syntax coloring. It is also extensively customizable.
+
+<BR></P>
+
+<P>The editor can be made key-compatible with the Brief or Epsilon editors. Key settings can also be customized by the Customize command from the Tools menu and selecting the Keyboard tab in the Customize dialog (Figure 1.4).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu04.gif">Figure 1.4. Keyboard customization.</A></B>
+
+<BR></P>
+
+<P>The preset Brief or Epsilon editor configurations can be invoked through the Options command in the Tools menu. In the Options dialog, select the Compatibility tab. In the Recommended options drop-down box, select the desired editor emulation. The four choices include the default Developer Studio configuration, the Visual C++ 2.0 compatibility mode, and the Epsilon and Brief emulations (Figure 1.5).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu05.gif">Figure 1.5. Selecting editor emulations.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Resources</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The integrated resource editor in Developer Studio provides a comprehensive editing facility for all types of resources. This includes the new toolbar editing facility, as well as the capability to insert and edit custom resources.
+
+<BR></P>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Resource Editing</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>Resource editing begins with the ResourceView in the Project Workspace window (Figure 1.6). This window provides a view of all the elements in a project's resource file.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu06.gif">Figure 1.6. ResourceView.</A></B>
+
+<BR></P>
+
+<P>You can insert a new resource by selecting the Resource command from the Insert menu. This command displays a dialog (Figure 1.7) where you can select the type of the new resource. In addition to predefined types, user-defined types also appear in this dialog. You can use this dialog to insert a blank resource; however, when inserting a cursor or a dialog, you can also use a predefined template as the basis for your new resource.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu07.gif">Figure 1.7. Inserting a new resource.</A></B>
+
+<BR></P>
+
+<P>Accelerators (Figure 1.8) are keyboard shortcuts that generate WM_COMMAND messages; the same type of messages as those generated by menu commands and dialog controls. A project can have several accelerator tables; for example, if it uses multiple menus, it may use different accelerator tables for those. To edit a specific accelerator key, double-click the key in this window to invoke its properties.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu08.gif">Figure 1.8. Editing an accelerator table.</A></B>
+
+<BR></P>
+
+<P>The bitmap editor (Figure 1.9) enables you to create monochrome or color bitmaps. A variety of graphics tools can be used when drawing the bitmap. Use the mouse to select the desired tool and the foreground and background colors, and then draw the bitmap.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu09.gif">Figure 1.9. Editing a bitmap.</A></B>
+
+<BR></P>
+
+<P>While a bitmap is displayed on screen, a new menu, the Image menu, becomes available in the Developer Studio menu bar. Commands in this menu can be used to manipulate the bitmap; in particular, the Grid Settings command can be used to set up a grid of guide lines. Use this grid when creating a bitmap that consists of many small pictures.
+
+<BR></P>
+
+<P>Editing a cursor (Figure 1.10) is very similar to editing a bitmap. However, for cursors, the color palette also contains two special &quot;colors&quot;; one that corresponds to the background color, and another that corresponds to the inverse background color.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu10.gif">Figure 1.10. Editing a cursor.</A></B>
+
+<BR></P>
+
+<P>You can also specify a cursor's hotspot. The hotspot is the position in the cursor image that Windows uses to track the cursor and to generate cursor-related events.
+
+<BR></P>
+
+<P>The dialog editor (Figure 1.11) is the tool for editing dialog templates. Editing a dialog template consists of selecting controls from the control palette and placing them on the template, and specifying dialog and control properties.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu11.gif">Figure 1.11. Editing a dialog.</A></B>
+
+<BR></P>
+
+<P>The dialog control palette supports all standard controls as well as most Windows 95 Common Controls. It also provides a tool for placing OLE controls in your dialog.
+
+<BR></P>
+
+<P>While a dialog is being edited, a new menu, the Layout menu, is displayed by the Developer Studio. This menu offers several commands that help to adjust the placement of controls in a dialog template. Among these is the Guide Settings command. This command invokes a dialog (Figure 1.12) where you can specify rulers, guides, and grid settings to assist you during dialog template editing.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu12.gif">Figure 1.12. Guide settings for dialog editing.</A></B>
+
+<BR></P>
+
+<P>Editing an icon (Figure 1.13) is very similar to editing a cursor. The only notable difference is the lack of a hotspot in icons. When creating an icon, you may wish to create several versions of the icon. For example, compatibility with Windows 95 requires that your application register a 16x16 icon in addition to the standard, 32x32 icon.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu13.gif">Figure 1.13. Icon editing.</A></B>
+
+<BR></P>
+
+<P>Editing menus is easy and straightforward using the graphical menu editor (Figure 1.14). To insert a new item in either a horizontal menu bar or a vertical popup menu, simply grab the blank item at the end of the menu using the mouse and move it to the desired position, then type the menu text. The menu editor will automatically assign a symbolic identifier to the menu based on the text you typed; however, should you desire another identifier, you are free to change it through the menu item's property sheet. Through this property sheet, you can also adjust the initial settings of a menu item.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu14.gif">Figure 1.14. Menu editing.</A></B>
+
+<BR></P>
+
+<P>To insert a separator, create a blank menu item, and check the Separator box in the item's property sheet. To insert a menu item that has a submenu, create the item and check the popup box in the item's property sheet.
+
+<BR></P>
+
+<P>For every menu item, you can also prescribe a prompt string. The prompt string consists of two parts, separated by the newline (\n) character. The first part of the prompt string appears in the status bar of standard MFC applications; the second part is used for tooltips. The string you specify as the prompt string is actually deposited in your application's string table, with an identifier that matches the identifier of the menu item.
+
+<BR></P>
+
+<P>A string table (Figure 1.15) is a collection of text strings used in your application. The major advantage of using a string table is that it lets you use the resource file as the depository of all language-dependent elements of your application. If such an application is localized in a foreign language, only the resource file needs to be changed and relinked; it is not necessary to modify and recompile the application's source code.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu15.gif">Figure 1.15. Editing a string table.</A></B>
+
+<BR></P>
+
+<P>The MFC Framework uses the string table extensively for MFC text constants. To edit a string in the string table, simply double-click the item and modify it as needed using the property sheet that is displayed. You can add a new string to the table by double-clicking the blank entry at the end of the list.
+
+<BR></P>
+
+<P>A new feature in Visual C++ 4 is the toolbar editor (Figure 1.16). Previously, it was necessary to edit toolbars as bitmaps and manually adjust corresponding structures in your application's source code&#151;a procedure that was cumbersome and error-prone. With the new toolbar editor, you can edit toolbar buttons, assign command identifiers, and prompt strings all within the resource editor.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu16.gif">Figure 1.16. The toolbar editor.</A></B>
+
+<BR></P>
+
+<P>To add a new toolbar button to the toolbar, grab the blank button at the end of the toolbar using the mouse and drag it to the desired position. To remove a toolbar button, select it with the mouse and drag it out of the toolbar window altogether (pressing the Delete key will only erase the button bitmap instead of removing the button from the toolbar altogether).
+
+<BR></P>
+
+<P>You can assign a symbolic identifier and a prompt string to a toolbar button the same way you assign them to menu items. Note that in order for a toolbar button to be functional, it is not necessary to have a menu item with the same identifier. In other words, your program may have commands that are accessible from a toolbar only.
+
+<BR></P>
+
+<P>The version information resource (Figure 1.17) identifies the current version of your executable program or library file. This version information is used by software installation functions; it is also displayed by the Windows 95 Explorer when QuickView is selected.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu17.gif">Figure 1.17. The version information resource.</A></B>
+
+<BR></P>
+
+<P>Lastly, the resource editor can also edit custom resources. A custom resource type is identified by a type name enclosed in double quotes. Custom resources are edited through a binary editor (Figure 1.18); more likely, they are resources that are created using an external tool. A good example for a custom resource is a multimedia sound or video file.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu18.gif">Figure 1.18. Binary editor for custom resources.</A></B>
+
+<BR></P>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Resource Localization</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>The Developer Studio supports multiple language resources in the same resource file. To specify the language for a resource, select the resource identifier in ResourceView, and invoke the Properties command from the Edit menu (Figure 1.19). Note that the resource file can contain several localized versions of the same resource sharing the same identifier. Compilation of localized resources is controlled through preprocessor directives in the resource file. You can utilize localized resources in language-specific build configurations by adding the appropriate preprocessor definitions in the configuration's resource settings in the Project Settings dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu19.gif">Figure 1.19. Setting the language for a resource.</A></B>
+
+<BR></P>
+
+<H5 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Resource Templates</B>
+
+<BR></FONT></A></CENTER></H5>
+
+<P>The Developer Studio supports resource templates. Resource templates are predefined resources that are used as templates when new resources are created. For example, when you select the Resource command from the Insert menu, in addition to the default dialog, you can select from a variety of additional dialog templates (Figure 1.20).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu20.gif">Figure 1.20. Using resource templates.</A></B>
+
+<BR></P>
+
+<P>To create custom resource templates, copy the desired resources to a new resource file, and save the file as a resource template file in your msdev\template directory using the Save As command in the File menu. The new templates will appear the next time you invoke the Resource command from the Insert menu.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Building a Project</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Building a project means recompiling and relinking the project's components to produce the project's target executable or library file. Every project has a make file associated with it. When a project is being rebuilt, dependencies in the project's make file are evaluated, and components that are affected by changes are recompiled and relinked. To rebuild a project, select the Build command from the Build menu. Incidentally, you can also rebuild a project using the command line nmake.exe utility; to do so, enter the project directory and type nmake /f projname.mak where projname represents your project's name.
+
+<BR></P>
+
+<P>The Rebuild All command in the Build menu rebuilds all project components unconditionally; it does so by removing all files that are the results of previous builds and then reevaluating the project's make file.
+
+<BR></P>
+
+<P>The Developer Studio provides an interface where a multitude of project build options can be specified or changed. To invoke this interface, select the Settings command from the Build menu (Figure 1.21). On the left side of the Project Settings dialog, you see the list of project configurations; on the right side a property sheet provides access to many project options.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu21.gif">Figure 1.21. Project Settings: General options.</A></B>
+
+<BR></P>
+
+<P>When you initially invoke this dialog, all project configurations are selected in the left side. Correspondingly, any settings that are displayed on the right side are those that are common to all configurations. If you wish to alter settings that are specific to one configuration or another, select the desired configuration first, before making any changes on the right side.
+
+<BR></P>
+
+<P>In addition to being able to specify configuration-specific settings, you can specify settings that apply to individual files. To do so, expand the desired configuration by double-clicking its title. The files that comprise that configuration are displayed, and by selecting a specific file, you can alter settings for that specific file. Note that the set of tabs shown on the right side of the dialog changes to reflect your selection; for example, if you select a C++ source file, only the General and the C/C++ tabs will be available.
+
+<BR></P>
+
+<P>The first property page on the right side of the Project Settings dialog is the General page. In this page, you specify the MFC Library you wish to link your project with; you can also specify separate directories where intermediate files and output files are deposited.
+
+<BR></P>
+
+<P>The next property page shows debugging options. Figure 1.22 shows the Debug property page; or, to be more precise, the first subpage of this property page. Using the Category control, you can select either the General category, shown in Figure 1.22, or the Additional DLLs category. Yes, this is property pages within property pages.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu22.gif">Figure 1.22. Project Settings: Debug options.</A></B>
+
+<BR></P>
+
+<P>In the General subpage, you can specify the debugging environment in which your program will run. Of particular importance is the executable filename field. Why would you want this to have anything other than the name of the program you are currently debugging? The answer is simple; by specifying an executable in this dialog, you can debug DLLs and other components that are not directly executable from the command line.
+
+<BR></P>
+
+<P>For example, if you use Visual C++ to develop a MAPI transport provider, specify the name of the MAPI spooler, mapisp32.exe, as the name of the executable, because it is this program that would load your transport provider DLL. If you are developing an OLE control (OCX file), specify an OLE control container application, such as the tstcon32.exe application that comes with Visual C++, as the executable.
+
+<BR></P>
+
+<P>The third property page in the Project Settings dialog, the Custom Build page, enables you to add customized build steps to a standard make file. For example, if your project contains a grammar specification file that is to be processed by the yacc parser generator, you may wish to add a custom build step for your grammar file, gram.y, as shown in Figure 1.23. Note that if your custom build step produces files that further need to be processed, you must also include those files in your project; in the example shown in Figure 1.23, this means that the file gram.c had to be added to the project separately.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu23.gif">Figure 1.23. Using Custom Build options.</A></B>
+
+<BR></P>
+
+<P>The fourth property page enables you to set several compiler options. This property page has several subpages, again selectable using the Categories field.
+
+<BR></P>
+
+<P>Of particular interest is the Precompiled Headers subpage, which enables you to specify how the compiler creates and uses precompiled header (PCH) files during compilation. The use of precompiled headers is of great importance, as it enhances the compiler's performance very significantly.
+
+<BR></P>
+
+<P>Basically, there are two options; one is self-evident, the other is not. If you select the Automatic use of precompiled headers option, the compiler will look for and identify common headers in your project's files, and generate and use a precompiled header accordingly.
+
+<BR></P>
+
+<P>However, automatic precompiled headers are not what AppWizard-generated projects use. Instead, in those projects, the generation and use of precompiled headers is prescribed explicitly. If you wish to copy this behavior, it is important to realize that you should pick one file in your project (for example, stdafx.cpp) that the compiler uses to create the precompiled header (Figure 1.24); all other source files should be set to use the precompiled header (Figure 1.25).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu24.gif">Figure 1.24. Compiler options: creating a precompiled </B><B>header.</A></B>
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu25.gif">Figure 1.25. Compiler options: using a precompiled </B><B>header.</A></B>
+
+<BR></P>
+
+<P>The Project Setting dialog's fifth property page, the Link page, provides access to various link options. This is the third property page with several subpages.
+
+<BR></P>
+
+<P>The sixth property page in this dialog, the Resources page, contains fields that control the building of the project's resources.
+
+<BR></P>
+
+<P>The seventh property page, OLE Types, control how OLE type library files (TLB files) are constructed from Object Description Language (ODL) files. This page is relevant for OLE automation servers and OLE control projects.
+
+<BR></P>
+
+<P>The eighth and last property page controls the building of a browse information file. If you wish to use the browsing features of Developer Studio, make sure that the Build browse info file box is checked (Figure 1.26).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu26.gif">Figure 1.26. Building the browse information file.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>The InfoViewer</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A brand new feature of Visual C++ Version 4 is the built-in InfoViewer. The InfoViewer is a Developer Studio component for reading Microsoft MediaView titles (MVB files); most notably, the online documentation that comes with Visual C++ itself.
+
+<BR></P>
+
+<P>When Visual C++ 4 is installed on a system on which the Microsoft Developer Library was installed previously, the Visual C++ installation program will add the Developer Library media title to the set of titles that can be browsed using the InfoViewer. Unfortunately, no easy-to-use facility exists for adding other titles.
+
+<BR></P>
+
+<P>In my experimentation with Visual C++, I discovered how new titles can be added to the InfoViewer; however, this method, apart from being completely undocumented, requires manually altering Registry contents, so use at your own risk! I used this method successfully to add the MAPI SDK documentation, available for downloading from Compuserve, to the set of media titles that can be browsed using InfoViewer.
+
+<BR></P>
+
+<P>Essentially, adding a new title requires adding several subkeys and values under the HKEY_CURRENT_USER\Software\Microsoft key in the Registry. The subkeys and values that I needed to add for the MAPI SDK documentation, stored in the file f:\msdn\mapisdk.mvb, are as follows:
+
+<BR></P>
+
+<PRE>InfoViewer\DocSets\MAPISDK\mapisdk.mvb\MAPISDK=1
+
+InfoViewer\Series\MAPISDK\Title=&quot;mapisdk.mvb&quot;
+
+InfoViewer\Titles\MAPISDK.MVB\aux=&quot;MAPISDK.AUX&quot;
+
+InfoViewer\Titles\MAPISDK.MVB\Localdir=&quot;F:\MSDN&quot;
+
+InfoViewer\Titles\MAPISDK.MVB\Path=&quot;F:\MSDN\&quot;
+
+InfoViewer\Titles\MAPISDK.MVB\Series=&quot;MAPISDK&quot;
+
+InfoViewer\Titles\MAPISDK.MVB\Title=&quot;MAPI Documentation&quot;</PRE>
+
+<P>This method works well for titles that consist of a single MVB file. I have not experimented with titles consisting of multiple MVB files.
+
+<BR></P>
+
+<P>Note once again that all the affected Registry keys are under HKEY_CURRENT_USER. Even though there is an InfoViewer subkey under HKEY_LOCAL_MACHINE, you should not alter that key or its subkeys in any way.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="warning.gif" WIDTH = 37 HEIGHT = 35><B>WARNING:</B> Editing undocumented Registry entries may yield results incompatible with your version of Visual C++. It is a very good idea to back up the Registry first.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>If your effort is successful, the new title shows up in the InfoViewer toolbar (Figure 1.27).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu27.gif">Figure 1.27. The InfoViewer toolbar with a manually </B><B>added title.</A></B>
+
+<BR></P>
+
+<P>Hopefully, future versions of Visual C++ will make it easier to add or remove InfoViewer titles.
+
+<BR></P>
+
+<P>To browse an InfoViewer title, select the InfoView in your Project Workspace window (Figure 1.28). If you have no project open, this is the only view that is visible in that window. To select a specific article, double-click on its title; the InfoViewer will display the article together with a toolbar that contains several navigation buttons.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu28.gif">Figure 1.28. InfoView.</A></B>
+
+<BR></P>
+
+<P>You can set a variety of options for the InfoViewer through the Options command in the Tools menu. InfoViewer search options can be selected through the InfoViewer tab in the Options menu (Figure 1.29); the appearance of text in InfoViewer windows can be specified using the Format tab.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu29.gif">Figure 1.29. InfoViewer options.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Other Integrated Components</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Developer Studio, in addition to providing the features discussed in this chapter, also provides an integrated interface to some of the major Visual C++ tools.
+
+<BR></P>
+
+<P>The AppWizard is a tool for generating skeleton applications. Through the AppWizard, application skeletons for OLE component servers, containers, ODBC and DAO applications, OLE automation servers, OLE controls, and more can be created.
+
+<BR></P>
+
+<P>The ClassWizard is perhaps the most often used Visual C++ tool; in addition to being a browser tool for CCmdTarget-derived classes, it can also be used to create new classes and add member functions and variables to existing classes.
+
+<BR></P>
+
+<P>The source browser provides the capability to review definitions and references of symbols in your application.
+
+<BR></P>
+
+<P>The integrated debugger is a highly powerful symbolic debugger for C and C++ applications. It can be used to debug Win32 executables as well as dynamic link libraries.
+
+<BR></P>
+
+<P>The Visual C++ Profiler is a performance analysis tool. With the help of the Profiler, you can easily determine which areas of your application represent performance bottlenecks.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Miscellaneous Tools</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Visual C++ development system also includes a set of extra tools that are available from the Tools menu. These tools are stand-alone applications that help you exercise and test programs and components that you develop.
+
+<BR></P>
+
+<P>The first of these tools is Spy++, a new application for snooping messages (Figure 1.30). With Spy++, you can display all messages sent or posted to selected windows; you can also specify a subset of messages that you are interested in. Spy can also display the hierarchy of current processes, threads, and windows owned by threads; this way you can select windows for tracing that are normally hidden and could not otherwise be selected on the screen.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu30.gif">Figure 1.30. Microsoft Spy++.</A></B>
+
+<BR></P>
+
+<P>The MFC Tracer application (Figure 1.31) enables you to turn on various MFC trace flags. With these flags on, MFC applications that have been compiled with the debug version of the MFC Library send a variety of debugging messages to debugging output.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu31.gif">Figure 1.31. MFC Tracer.</A></B>
+
+<BR></P>
+
+<P>The Register Control option invokes the regsvr32.exe program. This program is used to register an OLE control. It does so by loading the control DLL (the OCX file) and calling its DllRegisterServer exported function.
+
+<BR></P>
+
+<P>The OLE Control Test Container (Figure 1.32) is useful for testing the behavior of OLE controls. You can use this application to insert any registered OLE control, invoke the control's properties and methods, and trace control notifications.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu32.gif">Figure 1.32. OLE Control Test Container.</A></B>
+
+<BR></P>
+
+<P>The OLE Object View application (Figure 1.33) is a testing tool that enables you to view the all installed OLE types, their properties, interfaces, version numbers, type libraries, and more.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="01vcu33.gif">Figure 1.33. OLE Object View.</A></B>
+
+<BR></P>
+
+<P>There is a series of additional tools that are not included in the Developer Studio Tools menu. These include DDESpy, a utility to monitor Dynamic Data Exchange activity; the PView process viewer utility; ZoomIn, a utility to capture and enlarge portions of your Windows screen; and WinDiff, a file and directory comparison utility.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Integration with Other Applications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Developer Studio, in addition to presenting an excellent interface to many Visual C++ features, also provides integration with other Microsoft development tools. One, I already mentioned; through InfoViewer, the Developer Studio can be used as the reader for the Microsoft Developer Library.
+
+<BR></P>
+
+<P>Another product that the Developer Studio provides integration for is Microsoft FORTRAN. If you have Microsoft's FORTRAN PowerStation installed, you can use the Developer Studio to create and build both C++ and FORTRAN projects.
+
+<BR></P>
+
+<P>The Developer Studio can also be used in conjunction with Microsoft Test, Microsoft's scripting tool for application testing.
+
+<BR></P>
+
+<P>The Developer Studio is also integrated with Microsoft's new source code control system, Visual SourceSafe. If you have Visual SourceSafe installed, a series of additional menu commands appears, providing access to source code control functions.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=4><B>Command-Line Tools</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Is using the wonderful tools of Visual C++ from the command line a heresy? I don't think so. Often it is much simpler to type cl myprog.c than to go through the elaborate process of setting up a Visual C++ project, adding your files to it, and recompiling and running your project through the graphical interface.
+
+<BR></P>
+
+<P>When would you use the command-line tools? I would like to offer some simple rules of thumb: If your project is complex enough to require a make file, use the graphical interface. If you wish to debug your program interactively, use the graphical interface. If your program has a resource file, use the graphical interface.
+
+<BR></P>
+
+<P>However, if you just want to key in a 10-line example from a textbook and quickly test it, you may find it more convenient to do so at the command line. In fact, many simple examples in this book can easily be compiled from the command line (of course, nothing prevents you from loading them as Visual C++ projects).
+
+<BR></P>
+
+<P>Many command-line tools depend on the appropriate Visual C++ directories being on the path and on other environment variables being properly set. If you are using Windows NT as your development platform, the Visual C++ installation program offered you the option to register these environment variables so they automatically appear in DOS sessions. If you are using Windows 95, you must run the vcvars32.bat batch file (found in your msdev\bin directory) to register these variables before you can use the command-line tools. Note that it may be necessary to increase the environment size for DOS windows (select the Properties command from the DOS window's control menu and use the Memory tab) before vcvars32.bat can be successfully run.
+
+<BR></P>
+
+<P>The vcvars32.bat batch file also accepts an optional parameter that specifies the target system (X86, Motorola 68k, or the PowerPC). Use this parameter to specify a target environment other than Intel X86 on systems with a Visual C++ cross-development edition installed.
+
+<BR></P>
+
+<P>The environment variables set by vcvars32.bat include the following: INCLUDE specifies the location of include files for the compiler; LIB specifies the location of library files for the linker; and PATH specifies the location of Visual C++ executables (in addition to any other directories that you may have included there). There are several other environment variables interpreted by the various utilities; for example, the compiler, cl.exe, reads the contents of the CL environment variable for additional command-line options, while the linker reads additional command-line arguments from the LINK environment variable. All Visual C++ programs make use of the TMP environment variable to find the location for temporary files.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>The C/C++ Compiler</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Visual C++ compiler is invoked from the command line using the cl command. If invoked with the name of source files on its command line and no other parameters, it compiles those source files, then invokes the linker to create an executable.
+
+<BR></P>
+
+<P>If you specify the name of object files or library files on the command line, those will be passed to the linker. For example, consider the following compiler command line:
+
+<BR></P>
+
+<PRE>cl hello.c myfunc.obj mylib.lib</PRE>
+
+<P>In response to this command, the Visual C++ compiler will compile hello.c, then invoke the linker with hello.obj and myfunc.obj. It will also pass the name of the library file mylib.lib to the linker, which will use this file in addition to any default libraries when searching for library functions.
+
+<BR></P>
+
+<P>If you wish to compile a file but not produce an executable, use the /c option:
+
+<BR></P>
+
+<PRE>cl /c hello.c</PRE>
+
+<P>Note that using the forward slash or the dash is equivalent when specifying command-line options.
+
+<BR></P>
+
+<P>Some other useful options include /MT (link with the multithreaded version of the run-time library), /MD (link with the DLL version of the run-time library), and /LD (create a DLL). Of course, the compiler has a myriad other options (type cl /? to find out just how many). However, if you need to specify complex options, you're probably better off compiling from the Developer Studio.
+
+<BR></P>
+
+<P>The object files produced by the Visual C++ compiler are of the Common Object File Format (COFF).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>The Linker</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The linker, link.exe, is a tool that accepts Common Object File Format (COFF) files, 32-bit Object Module Format (OMF) files, library files, and other input files and produces Win32 executable files or dynamic link libraries. In its simplest form, the linker is invoked with the name of an object file on the command line:
+
+<BR></P>
+
+<PRE>link hello.obj</PRE>
+
+<P>The linker accepts many command-line options. Among these is the /subsystem option that specifies the type of the resulting executable. For example, specifying /subsystem:windows forces the output file to be a Windows executable. However, often it is not necessary to use this option; the linker defaults to /subsystem:console if the object files contain a definition for the main (or the wide-character version, wmain) function, and to /subsystem:windows if a WinMain (or wWinMain) function exists.
+
+<BR></P>
+
+<P>If you wish to produce a dynamic link library instead of an executable file, use the /DLL option. This option is automatically specified when the linker is invoked by the compiler, and the compiler was run with the /MD option.
+
+<BR></P>
+
+<P>Many other options control how input files are processed, what default libraries are used, and the type and contents of output files. In additional to executables, the linker can also produce debugging files (such as map files); you can also specify whether the executable is to include debugging information or not.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>The Library Manager</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The library manager, lib.exe, is used to create libraries of COFF object files. It can also be used to create export files and import libraries for DLLs.
+
+<BR></P>
+
+<P>In its simplest form, lib.exe is invoked with a series of object filenames on its command line. It uses the base name of the first object file as the base name of a library file, and creates (or updates) a library consisting of the object files on its command line. The name of the output file can be overridden using the /OUT option.
+
+<BR></P>
+
+<P>If you wish to later remove the contents of an object file from the library, use the /REMOVE option. The /EXTRACT option can be used to extract the contents of the object file into a separate file.
+
+<BR></P>
+
+<P>To use the library manager to create an export file and an import library, use the /DEF option. Note that you rarely need to use this option, as the linker usually automatically creates the export file and the import library. Using the library manager is only required to resolve a situation when a program exports to, and imports from, the same library.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>The Program Maintenance Utility</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The program maintenance utility, or make tool for short (nmake.exe), is used to evaluate dependencies in make files and invoke the appropriate commands to generate targets. For example, a simple make file may look like this:
+
+<BR></P>
+
+<PRE>test.exe: test.obj
+
+          link test.obj
+
+test.obj: test.c
+
+          cl /c test.c</PRE>
+
+<P>In all make files, the make tool evaluates targets in the order of their dependencies and updates all targets if they are older than any of their dependencies.
+
+<BR></P>
+
+<P>In addition to targets and dependencies, make files can contain many additional features, including macros and inference rules. These features render make files a formidably powerful and versatile tool.
+
+<BR></P>
+
+<P>Important options for nmake.exe include /a (specifying that all targets should be rebuilt unconditionally), /n (specifying that the make tool should only display, but not execute, commands), and /f (specifying the name of a make file).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Other Command-Line Tools</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Other command-line tools that ship with Visual C++ include rc.exe, bscmake.exe, dumpbin.exe, aviedit.exe, and editbin.exe.
+
+<BR></P>
+
+<P>The resource compiler, rc.exe, can be used to compile resource files and prepare them for linking with your project's object files. The resource compiler accepts the name of a resource file (with the .rc extension) and optional switches on the command line. Switches include /d (to define a symbol for the preprocessor), /fo (to specify the name of the output file), and /v (for verbose output). To obtain a complete list of command-line options, run rc.exe with the /? option.
+
+<BR></P>
+
+<P>The browse information maintenance utility, bscmake.exe, is used to create browse information (BSC) files from SBR files created during compilation. Browse information files can be viewed from the Developer Studio using its browsing facilities.
+
+<BR></P>
+
+<P>The binary file dumper, dumpbin.exe, displays information about COFF object files.
+
+<BR></P>
+
+<P>The aviedit.exe program is a simple tool to edit AVI files intended for animation controls. Use this tool to create an animation file from a series of bitmaps.
+
+<BR></P>
+
+<P>The binary file editor, editbin.exe, can be used to view and modify certain properties of COFF object files. Among these options is the ability to change a file's base address, the default heap size, and the default stack size.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Microsoft Developer Studio is the centerpiece of the Visual C++ development system. It provides a series of different views on your projects through the Project Workspace windows; through this window, a project's class structure, files and dependencies, and resource file components can be examined.
+
+<BR></P>
+
+<P>A project workspace may contain one or more top-level projects; each project can have several subprojects, which can further be nested. For each project, Developer Studio maintains a series of configurations; a project configuration consists of settings used to rebuild the project. For example, when you create a new project using the Intel version of Visual C++, by default two project configurations (a debug and a release configuration) are created.
+
+<BR></P>
+
+<P>Source files in a project can be edited using the Developer Studio's customizable editor. Resource file components can be edited using the built-in resource editor; these components include accelerator tables, menus, dialogs, toolbars, icons, cursors, bitmaps, string tables, and custom resources.
+
+<BR></P>
+
+<P>Project settings can be modified using the Settings command in the Build menu. The Project Settings dialog is a complex dialog with eight property pages and several subpages. Settings for all configurations, specific configurations, a subset of files, or individual files can be specified or altered using this facility. Settings categories include the General, C/C++, Linker, Debug, Resource, OLE Types, Custom Build, and Browse Info categories.
+
+<BR></P>
+
+<P>Another useful Developer Studio facility is the InfoViewer; this facility provides access to MediaView titles, such as the Visual C++ on-line documentation or the Microsoft Developer Library.
+
+<BR></P>
+
+<P>The Developer Studio is also integrated with tools such as the AppWizard, ClassWizard, the integrated debugger, profiler, and source browser.
+
+<BR></P>
+
+<P>Many Visual C++ components can be used from the command line. For example, a basic Hello, World program can be compiled by typing cl hello.c. Other command-line tools include the linker, library manager, and the program maintenance utility (make tool).</P>
+
+<P><A HREF="p01vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu02fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

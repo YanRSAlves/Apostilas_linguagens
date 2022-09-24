@@ -1,0 +1,920 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu25fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu26fi.htm">
+
+<LINK REL="Previous" HREF="vcu24fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu24fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu26fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">25 &#151; Serialization: File and Archive Objects</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">The CFile Class</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">CFile Initialization</A></LI>
+
+<LI>
+
+<A HREF="#I5">Reading from and Writing to a CFile Object</A></LI>
+
+<LI>
+
+<A HREF="#I6">File Management</A></LI>
+
+<LI>
+
+<A HREF="#I7">Error Handling</A></LI>
+
+<LI>
+
+<A HREF="#I8">Locking</A></LI>
+
+<LI>
+
+<A HREF="#I9">Using a CFile in a Simple Application</A></LI>
+
+<LI>
+
+<A HREF="#I10">The CStdioFile Class</A></LI>
+
+<LI>
+
+<A HREF="#I11">The CMemFile Class</A></LI>
+
+<LI>
+
+<A HREF="#I12">The COleStreamFile Class</A></LI>
+
+<LI>
+
+<A HREF="#I13">The CSocketFile Class</A></LI></UL>
+
+<LI>
+
+<A HREF="#I14">CArchive</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I15">Creating a CArchive</A></LI>
+
+<LI>
+
+<A HREF="#I16">Reading and Writing Objects</A></LI>
+
+<LI>
+
+<A HREF="#I17">The Overloaded &gt;&gt; and &lt;&lt; Operators</A></LI>
+
+<LI>
+
+<A HREF="#I18">The CObject::Serialize Member Function</A></LI>
+
+<LI>
+
+<A HREF="#I19">Error Handling</A></LI>
+
+<LI>
+
+<A HREF="#I20">Using CArchive in Simple Applications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I21">Serialization in MFC Framework Applications</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I22">Serialization in Documents</A></LI>
+
+<LI>
+
+<A HREF="#I23">Helper Macros</A></LI>
+
+<LI>
+
+<A HREF="#I24">Serialization, OLE, and the Clipboard</A></LI></UL>
+
+<LI>
+
+<A HREF="#I25">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>25 &#151; Serialization: File and Archive Objects</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>A concept of central importance in the Microsoft Foundation Class Library is serialization.
+
+<BR></P>
+
+<P>Through serialization, objects derived from CObject obtain persistence. Before you begin wondering why such glorified terminology is used for what is essentially saving and loading data to or from a file, let me point out that serialization can take place with a target other than a disk file. It is also through serialization that a CObject-derived object is copied to or from the clipboard or passed to other applications through OLE.
+
+<BR></P>
+
+<P>Serialization represents a relationship between objects derived from the CObject class, the CArchive class representing an archive, and the CFile class that represents physical storage (Figure 25.1).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="25vcu01.gif">Figure 25.1. Relationship of </B><B>CObject</B><B>, </B><B>CArchive</B><B>, and </B><B>CFile.</B><B></A></B>
+
+<BR></P>
+
+<P>This relationship notwithstanding, the utility of the CFile class transcends CObject serialization. The next section presents an examination of the CFile class and shows how it can be utilized in simple scenarios.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>The </B><B><I>CFile</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>CFile is the base class for MFC file services. As is, CFile supports unbuffered binary input/output for disk files. Through derived classes, it supports text files, memory files, and Windows sockets. The hierarchy of CFile and its derived classes is shown in Figure 25.2.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="25vcu02.gif">Figure 25.2. </B><B>CFile</B><B> class hierarchy.</A></B>
+
+<BR></P>
+
+<P>A recurring theme with MFC classes that act as wrapper classes for Windows objects is the duality of the C++ object versus the Windows object itself. Briefly, a CFile object is not identical to a file object in Windows; it merely represents one. Construction of the CFile object does not necessarily ensure construction of a file object (that is, constructing a CFile object may or may not mean that a file is actually opened).
+
+<BR></P>
+
+<P>In a CFile object, the member variable m_hFile contains (usually) the handle of the file that the CFile object represents. This handle may be initialized in the CFile constructor or through an explicitly called initialization function.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> The file handle m_hFile is a Win32 file handle; this is not to be confused with the file handles or file descriptors used in the C/C++ low-level file I/O libraries.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B><I>CFile</I></B><B> Initialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Construction of a CFile object may be done in either one or two steps. To construct a CFile object in a single step, use the form of the constructor that accepts a handle to an already open file or the name of file that is to be opened with the CFile object.
+
+<BR></P>
+
+<P>Alternatively, you can use a parameterless constructor and call the Open member function.
+
+<BR></P>
+
+<P>When you are opening a file through the CFile constructor or the Open member function, several flags can be specified. Files can be opened for reading or writing, in text or binary mode. Both the constructor and the Open member function can also create files. Additional mode flags specify file sharing and other attributes.
+
+<BR></P>
+
+<P>An open file can be closed by calling the Close member function. The Abort member function can also be used for this purpose; unlike Close, Abort will close the file under all circumstances, ignoring any errors.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Reading from and Writing to a </B><B><I>CFile</I></B><B> Object</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Quite unsurprisingly, reading and writing to/from a CFile object can be accomplished by calling the Read or Write member functions. Needless to say, the file must be opened with the appropriate mode in order for the reading or writing operation to be successful.
+
+<BR></P>
+
+<P>The Flush member function can be used to force any buffered data to be written to the file.
+
+<BR></P>
+
+<P>Random access to files is provided through the Seek member function. This function is used to set the position within the file for the next read or write operation. Two variants, SeekToBegin and SeekToEnd, set the position to the beginning or the end of the file, respectively. The current position can be obtained by calling GetPosition.
+
+<BR></P>
+
+<P>The length of the file can be obtained through GetLength. The SetLength function can be used to set the length of the file; the file will be extended with uninitialized data or truncated as applicable.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>File Management</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Two static CFile member functions can be used without constructing a CFile object. CFile::Rename can be used to rename a file; CFile::Remove can be used to delete a file.
+
+<BR></P>
+
+<P>The status of a file can be obtained by calling the GetStatus member function. This function sets the values of a CFileStatus object. GetStatus also has a static variant that can be used to obtain the status of a file that was not opened previously.
+
+<BR></P>
+
+<P>To set the status of a file from a CFileStatus object, call the SetStatus member function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Error Handling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Many file operations can fail. While some CFile member functions (for example, Open) indicate such failures in their return values, many other member functions throw an exception to indicate such conditions. The exception is always of type CFileException. To handle error conditions, you would write code similar to the following:
+
+<BR></P>
+
+<PRE>CFile myFile(&quot;filename.txt&quot;, CFile::modeWrite)
+
+try
+
+{
+
+    CFile.Write(&quot;Data&quot;, 4);
+
+    CFile.Close();
+
+}
+
+catch (CFileException *e)
+
+{
+
+    if (e-&gt;m_cause == CFileException::diskFull)
+
+        cout &lt;&lt; &quot;The disk is full!&quot;;
+
+    else
+
+    {
+
+        // Handle other errors
+
+    }
+
+    e-&gt;Delete();
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Locking</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CFile class also supports locking. A region of a file, as determined by the starting position and the number of bytes that are part of the region, can be locked using the LockRange member function. To unlock the region, use the UnlockRange member function.
+
+<BR></P>
+
+<P>Simultaneous locking of several regions is allowed; however, locking of overlapping regions is not. Calls to UnlockRange must match exactly earlier calls to LockRange; for example, if you lock two regions of the file using LockRange, you must use two separate calls to UnlockRange even if the regions are adjacent.
+
+<BR></P>
+
+<P>An attempt to lock a region of a file that is already locked results in an error.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Using a </B><B><I>CFile</I></B><B> in a Simple Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CFile class can be used in many situations, including console applications. Such a simple application is demonstrated in Listing 25.1. You can compile this program from the command line by typing cl /MT hello.cpp.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 25.1. Using </B><B>CFile</B><B> in a console application.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+#define HELLOSTR &quot;Hello, World!\n&quot;
+
+#define HELLOLEN (sizeof(HELLOSTR)-1)
+
+void main(void)
+
+{
+
+        CFile file((int)GetStdHandle(STD_OUTPUT_HANDLE));
+
+        file.Write(HELLOSTR, HELLOLEN);
+
+}</PRE>
+
+<P>As this example also illustrates, there is little advantage to using CFile in this fashion. The real advantages of the CFile class come to light when it is used in conjunction with CArchive for MFC object serialization.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The </B><B><I>CStdioFile</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CStdioFile class is used to associate a CFile-derived object with a standard C stream (that is, a FILE pointer). Its use is demonstrated with yet another simple program in Listing 25.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 25.2. Using </B><B>CStdioFile.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+#define HELLOSTR &quot;Hello, World!\n&quot;
+
+#define HELLOLEN (sizeof(HELLOSTR)-1)
+
+void main(void)
+
+{
+
+    CStdioFile file(stdout);
+
+    file.Write(HELLOSTR, HELLOLEN);
+
+}</PRE>
+
+<P>The stream pointer that a CStdioFile object is associated with is stored in the m_pStream member variable.
+
+<BR></P>
+
+<P>CStdioFile objects are intended primarily for text I/O. Two additional member functions, ReadString and WriteString, support the input and output of CString objects and null-terminated text strings.
+
+<BR></P>
+
+<P>The CStdioFile class does not support the CFile member functions Duplicate, LockRange, and UnlockRange. Attempts to use these functions result in a CNotSupportedException being thrown.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>The </B><B><I>CMemFile</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMemFile class supports CFile functionality in memory. One possible use of CMemFile objects is to provide fast temporary storage.
+
+<BR></P>
+
+<P>When a CMemFile object is created, you can specify a parameter that defines the amount by which the CMemFile object grows its storage at every subsequent allocation. The CMemFile class uses the standard C library functions malloc, realloc, free, and memcpy to allocate and deallocate memory and to transfer data to or from allocated memory blocks.
+
+<BR></P>
+
+<P>It is possible to derive a class from CMemFile and override the default memory allocation behavior. Overridable member functions include Alloc, Free, Realloc, Memcpy, and GrowFile.
+
+<BR></P>
+
+<P>A CMemFile object can also be attached to a previously allocated memory block. Use the Attach member function or the three-parameter version of the CMemFile constructor for this purpose. Note that in order to make the CMemFile object use the contents of the attached memory block, you must set the parameter controlling the growth of memory allocation to zero; in other words, a memory block attached in this fashion cannot be grown.
+
+<BR></P>
+
+<P>Use the Detach member function to detach the memory block from a CMemFile object and obtain a pointer to it. To determine the size of the memory block, use the GetLength member function prior to calling Detach.
+
+<BR></P>
+
+<P>CMemFile does not support the CFile member functions Duplicate, LockRange, and UnlockRange. Attempts to use these functions result in a CNotSupportedException being thrown.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The </B><B><I>COleStreamFile</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The COleStreamFile class is associated with the OLE IStream interface. It provides CFile-like functionality on OLE streams.
+
+<BR></P>
+
+<P>To construct a COleStreamFile object, pass to its constructor the pointer to an IStream interface. Alternatively, you can create a COleStreamFile object using the default constructor, and then call one of the initialization member functions.
+
+<BR></P>
+
+<P>Initialization member functions include Attach (attaches the COleStreamFile object to an IStream interface), CreateMemoryStream, CreateStream, and OpenStream. To detach the COleStreamFile object from the IStream interface and obtain a pointer to that interface, call the Detach member function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>The </B><B><I>CSocketFile</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CSocketFile class provides a CFile-like interface on Windows socket (CSocket) objects. A CSocketFile object can be attached to a CArchive object to support serialization through a socket; it can also be used as a stand-alone file object.
+
+<BR></P>
+
+<P>Note that CSocketFile does not support several CFile member functions (such as Seek and related functions) and thus any use that assumes availability of these functions will fail. In particular, this renders the CEditView member function SerializeRaw unusable with CSocketFile objects.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=4><B><I>CArchive</I></B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>What is a CArchive object? What is its significance? Why can CObject objects not be written directly to CFile objects?
+
+<BR></P>
+
+<P>While the CFile class is a generic wrapper class for Win32 file objects, CArchive creates the link between permanent storage and the serialization functions in a CObject. In other words, CArchive enables the objects to serialize themselves. While in some cases (for example, when you are serializing an array of integers) it is enough to simply write out the memory image of the objects to permanent storage, in many other cases (for example, when the objects contain pointers) this is clearly not sufficient. By delegating the actual task of creating a persistent image to the objects themselves, the CArchive class provides an elegant solution to this problem.
+
+<BR></P>
+
+<P>A CArchive object must be thought of as a &quot;one-shot&quot; or &quot;single pass&quot; entity. A CArchive is used for the sole purpose of either writing or reading a series of objects to/from permanent storage. You cannot perform random reads or writes, nor can you use the same CArchive object for both reading and writing. For example, if you wish read back a series of objects after they have been written to permanent storage, you need to create a separate CArchive object for this purpose. Furthermore, you will have to read back the objects in the same order in which they were written to the archive originally.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Creating a </B><B><I>CArchive</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Creating and using a CArchive object is a multistep process. Before the CArchive can be created, you must have a CFile object representing a file that was opened with permissions appropriate for what you are planning to do.
+
+<BR></P>
+
+<P>Once the CFile object has been created, the CArchive object can be created by passing a pointer to the CFile object to its constructor.
+
+<BR></P>
+
+<P>In the constructor, you also specify whether the archive is used for reading or writing.
+
+<BR></P>
+
+<P>Every CArchive object has a member variable m_pDocument that is a pointer to a CDocument object. Common use of this pointer is to refer to the document that is being serialized in MFC framework applications. However, it is not necessary to use this member variable for this purpose (or indeed, for any purpose at all) if the objects you serialize do not depend on the presence of a valid m_pDocument.
+
+<BR></P>
+
+<P>If you wish to obtain a pointer to the CFile object that a CArchive is associated with, call the GetFile member function.
+
+<BR></P>
+
+<P>The CFile can be closed and the archive disconnected from it by calling the Close member function. Calling this function is usually not necessary, as the CFile is closed automatically when the archive is destroyed. If you do call Close, note that no further operations on the archive are permitted.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Reading and Writing Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CArchive class can be used to read and write simple data types as well as CObject-derived objects.
+
+<BR></P>
+
+<P>You can determine whether a CArchive object has been created for reading or writing by calling the IsLoading or IsStoring member functions.
+
+<BR></P>
+
+<P>To read or write raw binary data, use the Read or Write member functions. To read or write null-terminated strings, use the ReadString or WriteString member functions.
+
+<BR></P>
+
+<P>To write a CObject-derived object to the archive, call the WriteObject function. The ReadObject function creates and reads a CObject-derived object from the archive. This function uses run-time type information when creating the CObject; therefore, it is necessary that the CObject-derived class be declared and implemented using the DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE macros.
+
+<BR></P>
+
+<P>CArchive supports the concept of a <I>schema number</I> through the GetObjectSchema and SetObjectSchema member functions. Schema numbers enable an application to distinguish between different versions of the same archive. Using schema numbers, you can implement upward compatibility.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>The Overloaded </B><B><I>&gt;&gt;</I></B><B> and </B><B><I>&lt;&lt;</I></B><B> Operators</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In many situations, applications do not call CArchive member functions directly in order to read or write an object to/from and archive. Instead, they rely on the overloaded input and output operators for this purpose.
+
+<BR></P>
+
+<P>These overloaded operators have been defined for many simple types as well as the CObject type. The simple types include BYTE, WORD, LONG, DWORD, float, and double. An obvious question is, why haven't these operators been defined for basic C types, such as int, short, or long? The answer is that the size of these types is implementation dependent; using them in CArchive operations would render the resulting storage object also dependent on the operating system version under which it was created. For example, in a 16-bit Windows application, the size of an int variable is two bytes; in contrast, the size of an int in 32-bit Windows is 4 bytes.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Do not define your own versions of the operators &lt;&lt; and &gt;&gt; to archive basic C types in a CArchive. Use type casting instead and rely on the existing operators instead to avoid a dependence on the operating system version.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>When a simple type is being archived, the data is simply copied to or from the archive. The situation is very different when a CObject is being archived. The operators &lt;&lt; and &gt;&gt; refer to the CObject's Serialize member function, passing to it a reference to the archive object. Thus, the object is responsible for serializing itself.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>The </B><B><I>CObject::Serialize</I></B><B> Member Function</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Serialize member function in objects of type CObject is used to write an object to, or read an object from, a CArchive.
+
+<BR></P>
+
+<P>This function is called with a reference to the CArchive object. The implementation of Serialize should use the CArchive::IsLoading or CArchive::IsStoring member function to determine whether the archive is used for reading or writing. A typical Serialize member function implementation looks like this skeleton:
+
+<BR></P>
+
+<PRE>void CMyClass::Serialize(CArchive &amp;ar)
+
+{
+
+    if (ar.IsLoading())
+
+    {
+
+        // Load the data
+
+    }
+
+    else
+
+    {
+
+        // Save the data
+
+    }
+
+}</PRE>
+
+<P>In the Serialize member function, calls are often made to the &gt;&gt; or &lt;&lt; operators or to the Serialize member functions of other objects. For example, if your class CMyClass contains a member variable m_other of type COtherClass (and this is also a class derived from CObject), your serialize member function may look like this:
+
+<BR></P>
+
+<PRE>void CMyClass::Serialize(CArchive &amp;ar)
+
+{
+
+    m_other.Serialize(ar);
+
+    if (ar.IsLoading())
+
+    {
+
+        // Load the data
+
+    }
+
+    else
+
+    {
+
+        // Save the data
+
+    }
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Error Handling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>During the course of archive operations, many types of errors can occur. There can be a file operation error; there can be an inconsistency in the archive; there can be memory allocation problems. Most CArchive member functions use exceptions to communicate the fact that an error occurred.
+
+<BR></P>
+
+<P>CArchive member functions can throw three types of exceptions: CFileException exceptions are thrown in case of file errors; CArchiveException exceptions are thrown in case of archive problems (for example, when an object of the wrong type is being read); and CMemoryException exceptions indicate memory allocation problems (for example, when the CArchive is attempting to allocate memory for an object it is about to read).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Using </B><B><I>CArchive</I></B><B> in Simple Applications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Before we proceed exploring the use of CArchive in MFC framework applications, I believe that an example that demonstrates the use of CArchive in simple situations is probably in order.
+
+<BR></P>
+
+<P>The program shown in Listing 25.3 uses a CArchive object to write the contents of a list to permanent storage. The list is built using the template class CList. Because CList is derived from CObject, it provides support for a Serialize member function. However, it does not support the operators &lt;&lt; and &gt;&gt;. We can add this support, though, by explicitly declaring an operator&lt;&lt; function. This is exactly what we do for objects of type CList&lt;WORD, WORD&gt;.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 25.3. Saving a list using a </B><B>CArchive.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+#include &lt;afxtempl.h&gt;
+
+#include &lt;iostream.h&gt;
+
+CArchive&amp; operator&lt;&lt;(CArchive&amp; ar, CList&lt;WORD, WORD&gt; &amp;lst)
+
+{
+
+    lst.Serialize(ar);
+
+    return ar;
+
+}
+
+void main(void)
+
+{
+
+    CList&lt;WORD, WORD&gt; myList;
+
+    cout &lt;&lt; &quot;Creating list: &quot;;
+
+    for (int i = 0; i &lt; 10; i++)
+
+    {
+
+        int n = rand();
+
+        cout &lt;&lt; n &lt;&lt; ' ';
+
+        myList.AddTail(n);
+
+    }
+
+    CFile myFile(&quot;mylist.dat&quot;, CFile::modeCreate | CFile::modeWrite);
+
+    CArchive ar(&amp;myFile, CArchive::store);
+
+    ar &lt;&lt; myList;
+
+}</PRE>
+
+<P>The real power of CArchive becomes apparent when you consider that most of this code is about building a sample list; two lines are used to construct the archive object; and the entire list is written out using a single line of code. Similarly, the entire list can be read in a single line, as demonstrated by the reading program shown in Listing 25.4.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 25.4. Loading a list from a </B><B>CArchive.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+#include &lt;afxtempl.h&gt;
+
+#include &lt;iostream.h&gt;
+
+CArchive&amp; operator&gt;&gt;(CArchive&amp; ar, CList&lt;WORD, WORD&gt; &amp;lst)
+
+{
+
+    lst.Serialize(ar);
+
+    return ar;
+
+}
+
+void main(void)
+
+{
+
+    CList&lt;WORD, WORD&gt; myList;
+
+    CFile myFile(&quot;mylist.dat&quot;, CFile::modeRead);
+
+    CArchive ar(&amp;myFile, CArchive::load);
+
+    ar &gt;&gt; myList;
+
+    POSITION pos = myList.GetHeadPosition();
+
+    cout &lt;&lt; &quot;Reading list: &quot;;
+
+    while (pos)
+
+    {
+
+        int n = myList.GetNext(pos);
+
+        cout &lt;&lt; n &lt;&lt; ' ';
+
+    }
+
+}</PRE>
+
+<P>Both these programs can be compiled from the command line (for example, type cl /MT readlst.cpp).
+
+<BR></P>
+
+<P>Note that this simple example may be a little misleading. When using a collection template such as CList, it may be necessary to implement the SerializeElements helper function. The default implementation simply performs a bitwise read or write on elements of the collection; while this is adequate when the elements are of type WORD, it falls short of what is required in case of more complex types (such as types derived from CObject). (Why do the collection templates not rely the Serialize member function of objects that comprise the collection? For the simple reason that these collection classes are not restricted to CObject-derived objects only.)
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=4><B>Serialization in MFC Framework Applications</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>CFile and CArchive are the building blocks; CObject::Serialize is the glue that connects objects and archives. But it is in MFC Framework applications where the concepts behind archives and serialization realize their full potential.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Serialization in Documents</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In an MFC framework application, classes derived from CDocument play a central role. These classes represent the entities your applications manipulate. CDocument-derived objects achieve persistence through the serialization mechanism that we reviewed in this chapter.
+
+<BR></P>
+
+<P>When AppWizard creates a skeleton framework application, it already supplies implementations for the File Open and File Save (and Save As) menu commands. These implementations create a CArchive object and call the document class's Serialize member function. It is your responsibility to supply an implementation of this member function that serializes all persistent data members of your document class.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>Helper Macros</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC provides several helper macros that make serialization CObject-derived classes possible.
+
+<BR></P>
+
+<P>When the CArchive reads data for a new object from a file, it is necessary for it to have a mechanism whereby an object of the given type can be created. This is accomplished by adding a static member function named CreateObject to the class in question. However, you do not need to declare or implement this function by hand; instead, you can use the DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE macros for this purpose.
+
+<BR></P>
+
+<P>How does the CArchive know the type of the object that is about to be created? Simple: together with the object, run-time type information is also saved. In order for a CObject-derived class to support run-time type information (through CRuntimeClass), you can use the DECLARE_DYNAMIC and IMPLEMENT_DYNAMIC macros; however, as the functionality of these macros is implied by DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE, it is not necessary to explicitly add these to the class declaration.
+
+<BR></P>
+
+<P>Yet another pair of macros is DECLARE_SERIAL and IMPLEMENT_SERIAL. Although the documentation states that these macros are required to enable serialization, you may find that in an AppWizard-generated skeleton, the obviously serializable CDocument-derived class of your application does not use these macros. The reason for this is that DECLARE_SERIAL and IMPLEMENT_SERIAL are really only needed if you intend to use the &lt;&lt; and &gt;&gt; operators with your class and a CArchive. (DECLARE_SERIAL and IMPLEMENT_SERIAL declare and implement the overloaded &gt;&gt; operator for your class).
+
+<BR></P>
+
+<P>DECLARE_SERIAL and IMPLEMENT_SERIAL encompass the functionality of DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE so you do not need to use those macros if DECLARE_SERIAL and IMPLEMENT_SERIAL are used.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>Serialization, OLE, and the Clipboard</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>So far, we have discussed serialization in the context of file load and save operations. However, MFC applications also use serialization for OLE-related operations.
+
+<BR></P>
+
+<P>MFC framework applications that act as OLE servers use the COleServerItem-derived class to provide a server interface. The Serialize member function of this class provides the mechanism whereas application specific data is stored for embedded or linked OLE objects.
+
+<BR></P>
+
+<P>In the simplest implementation, this Serialize function delegates the task of serializing the document to the Serialize member function of the CDocument-derived document class. However, if the application supports serializing only portions of a document, a separate implementation may be required.
+
+<BR></P>
+
+<P>Serialization of portions of a document can happen under two circumstances. First, it may happen for linked items. Second, the COleServerItem-derived class is also used for clipboard operations. If the application supports copying the user's selection to the clipboard (as opposed to the entire document), the Serialize member function of the COleServerItem-derived class must provide an implementation where only the user's selection is serialized.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Serialization in MFC applications represents a relationship of CObject-derived objects (those that need to be serialized), CFile-derived objects that represent persistent storage such as a disk file, and CArchive objects that provide the serialization interface.
+
+<BR></P>
+
+<P>The CFile class encapsulates the functionality of a Win32 file object. Its member functions provide the means to open, read, write, and otherwise manipulate disk files.
+
+<BR></P>
+
+<P>Variants of the CFile class include CStdioFile, CMemFile, COleStreamFile, and CSocketFile. These classes provide I/O functionality through C-style stream objects (FILE pointers), memory blocks, OLE IStream interfaces, and Windows sockets.
+
+<BR></P>
+
+<P>The CArchive class provides the basic interface for serialization. Serialization is a mechanism that enables CObject-derived classes to assume responsibility for writing or reading their own data to/from persistent storage. CArchive accomplishes this by calling the Serialize member function for CObject-derived objects whenever data transfer takes place.
+
+<BR></P>
+
+<P>The CObject::Serialize member function must be implemented for classes derived from CObject. In this function, data is written to, or read from a CArchive object, a reference to which is passed to the function as its sole parameter. The direction of the operation, namely whether it is a save to, or load from the archive, can be determined by calling the CArchive object's IsLoading member function.
+
+<BR></P>
+
+<P>Inside Serialize, member variables of the class are transferred to or from the archive. This can be accomplished by using the &lt;&lt; or &gt;&gt; operators, by calling the member variable's Serialize member function (if the member variable is of a type derived from CObject), or calling the CArchive::Read or CArchive::Write functions for bitwise transfer of data.
+
+<BR></P>
+
+<P>Serialization is used throughout in MFC framework applications. The framework provides a default implementation for the File Open and File Save commands. These default implementations call your document class's Serialize member function. This function, which you must implement yourself, should serialize all your document's persistent data.
+
+<BR></P>
+
+<P>In order for a CObject-derived class to be serializable, it must be declared using the DECLARE_SERIAL macro and implemented using IMPLEMENT_SERIAL. If you do not plan to use the overloaded &gt;&gt; operator with your class, you may declare it using DECLARE_DYNCREATE and IMPLEMENT_DYNCREATE. For an example of a class with this behavior, take a look at any document class created by AppWizard.</P>
+
+<P><A HREF="vcu24fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu26fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

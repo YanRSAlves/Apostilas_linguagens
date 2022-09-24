@@ -1,0 +1,888 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu29fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu30fi.htm">
+
+<LINK REL="Previous" HREF="vcu28fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu28fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu30fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">29 &#151; OLE Servers</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Server Concepts</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Full-Servers and Mini-Servers</A></LI>
+
+<LI>
+
+<A HREF="#I5">In-Place Editing</A></LI>
+
+<LI>
+
+<A HREF="#I6">Server Activation</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">Creating a Server Application with MFC</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">Using AppWizard to Create an Application Skeleton</A></LI>
+
+<LI>
+
+<A HREF="#I9">The OLE Server Skeleton Application</A></LI>
+
+<LI>
+
+<A HREF="#I10">The Server Item</A></LI>
+
+<LI>
+
+<A HREF="#I11">COleDocument and Document Items</A></LI>
+
+<LI>
+
+<A HREF="#I12">The In-Place Frame Window</A></LI>
+
+<LI>
+
+<A HREF="#I13">Modes of Operation and Resources</A></LI>
+
+<LI>
+
+<A HREF="#I14">Running the Server Skeleton</A></LI></UL>
+
+<LI>
+
+<A HREF="#I15">Customizing a Skeleton Server</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I16">Modifying the Document</A></LI>
+
+<LI>
+
+<A HREF="#I17">Adding Drawing Code</A></LI>
+
+<LI>
+
+<A HREF="#I18">Adding a Dialog</A></LI>
+
+<LI>
+
+<A HREF="#I19">Serialization</A></LI>
+
+<LI>
+
+<A HREF="#I20">Registering the New Application</A></LI></UL>
+
+<LI>
+
+<A HREF="#I21">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>29 &#151; OLE Servers</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>OLE servers or OLE component applications are applications that provide OLE components for use within OLE container applications. MFC and Visual C++ support the development of servers, containers, and server-containers in a variety of ways.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Server Concepts</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>This section offers a review of a few server-related concepts before we begin exploring how MFC supports the construction of OLE servers.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Full-Servers and Mini-Servers</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There is a distinction between full-servers and mini-servers. A full-server is an OLE component application that can also be run stand-alone. A mini-server can only operate when launched from within a container application.
+
+<BR></P>
+
+<P>Note that a mini-server should not be confused with the concept of an in-process server. An in-process server runs in the process space of the client application. A typical example of an OLE in-process server is an OLE control. Mini-servers are executable applications; however, they do not offer facilities that would make their execution in a stand-alone configuration meaningful. For example, a mini-server typically does not offer functions to save a file to disk, nor does it have printing capabilities on its own.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>In-Place Editing</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In-place editing represents the capability of presenting a server item within the container application's window. As simple as it sounds, it requires a complex series of interactions between the server and the container application.
+
+<BR></P>
+
+<P>In addition to presenting the server item in a rectangular area within the container application's window, servers also take over the container application's toolbars and parts of their menu bars.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Server Activation</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Servers are activated through <I>verbs</I>. Executing a verb means calling the method DoVerb of the IOleObject interface. A series of predefined verb values corresponds to editing the object in-place or within its own window, activating or hiding an object.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Creating a Server Application with MFC</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>OLE component server applications can be created using the Visual C++ AppWizard. Server capabilities can be easily added or modified through the ClassWizard.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Using AppWizard to Create an Application Skeleton</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>To create an OLE server application through AppWizard, first of all you must specify an application that is either single-document-based or multiple-document-based. Server capabilities are not supported for dialog-based applications. If you wish to develop a server using a dialog-like interface (such a server would typically not support visual editing and in-place sessions), you can still use a view class based on CFormView.
+
+<BR></P>
+
+<P>Regardless of whether your new program is an SDI or MDI application, you specify OLE server capabilities in Step 3 of AppWizard (Figure 29.1). Three forms of support are available. You can select mini-server, full-server, or container-server support for your application.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu01.gif">Figure 29.1. Creating an OLE server through </B><B>AppWizard.</A></B>
+
+<BR></P>
+
+<P>On this page, you can also specify whether your application should use OLE compound files. Using OLE files requires more disk space, but it offers the advantages of improved performance and a standardized file structure.
+
+<BR></P>
+
+<P>On this page of AppWizard, there are also check boxes for OLE automation and OLE controls. These options are not connected to OLE container and OLE component server support and are of no concern to us at this moment.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>The OLE Server Skeleton Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>This section examines a full-server skeleton application that was created by AppWizard.
+
+<BR></P>
+
+<P>The OSRV application was created with default AppWizard settings as a multiple-document interface full-server application. Figure 29.2 shows the classes created by AppWizard for this application.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu02.gif">Figure 29.2. Classes created by AppWizard for an OLE </B><B>server.</A></B>
+
+<BR></P>
+
+<P>In what way do these classes differ from the classes that AppWizard creates for a non-OLE application? There are two readily visible differences: two new classes, CInPlaceFrame and COSRVSrvrItem. Another difference is less obvious; if you double-click on the class name COSRVDoc, you may notice that this class is not derived from CDocument as would be the case for a non-OLE application. Instead, this class is derived from COleServerDoc.
+
+<BR></P>
+
+<P>The reason for these changes is easy to explain. First of all, the application's document class is now derived from COleServerDoc because it is this base class that provides a number of services that implement the application's document in a server environment. Among other things, this class implements interaction with an in-place frame, provides container notification functions, and has helper functions that assist in positioning items (possibly zoomed) within a container application's window during in-place editing.
+
+<BR></P>
+
+<P>The role of the new class CInPlaceFrame is closely related. This class, derived from COleIPFrameWnd, represents the in-place frame window. During an in-place editing session, it is this window that takes over the role of the child frame window (or, in the case of SDI applications, the application's frame window). Figure 29.3 compares the relationship between frame windows and views during stand-alone and in-place sessions.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu03.gif">Figure 29.3. Comparing in-place and stand-alone </B><B>sessions.</A></B>
+
+<BR></P>
+
+<P>The other new class, COSRVSrvrItem, is a class that represents the OLE interface during a session with a container application.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The Server Item</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The COleServerItem-derived class representing the server item has a very special role. This class, among other things, implements the OLE interfaces IOleObject and IDataObject, which facilitate its role in representing an OLE server item.
+
+<BR></P>
+
+<P>COleServerItem-derived server items are closely linked with COleDocument-derived documents. Their purpose is to represent all or part of a document in an OLE data transfer context. However, their role is not limited to OLE linking or embedding; other roles of COleServerItem-derived objects include facilitating clipboard transfers and OLE drag and drop.
+
+<BR></P>
+
+<P>Among the overridable member functions of COleServerItem are OnDraw and Serialize. Both of these functions play a very important role in OLE. COleServerItem::Serialize is used to serialize an embedded item for storage in the container application. COleServerItem::OnDraw is called to render the item's appearance; typically, this function is called to render the embedded item into a metafile device context. The resulting metafile object will be stored by the container application, thus avoiding the need to activate the server whenever the item needs to be redrawn.
+
+<BR></P>
+
+<P>The default, AppWizard-supplied implementation of COleServerItem::Serialize (Listing 29.1) relies on the document class's Serialize member function to accomplish its task. While satisfactory in simple situations, this implementation needs to be revised if a COleServerItem-derived object is used to represent only parts of a document. This is the case when the server enables OLE links, and also if COleServerItem is used, for example, to transfer portions of a document (the current selection) to the clipboard.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 29.1. AppWizard-supplied implementation of the </B><B>Serialize</B><B> member </B><B>function of a server item class.</B></LH></UL>
+
+<PRE>void COSRVSrvrItem::Serialize(CArchive&amp; ar)
+
+{
+
+    // COSRVSrvrItem::Serialize will be called by the framework if
+
+    //  the item is copied to the clipboard.  This can happen
+
+    //  automatically through the OLE callback OnGetClipboardData.
+
+    //  A good default for the embedded item is simply to delegate
+
+    //  to the document's Serialize function.  If you support
+
+    //  links, then you will want to serialize just a portion of
+
+    //  the document.
+
+    if (!IsLinkedItem())
+
+    {
+
+        COSRVDoc* pDoc = GetDocument();
+
+        ASSERT_VALID(pDoc);
+
+        pDoc-&gt;Serialize(ar);
+
+    }
+
+}</PRE>
+
+<P>The default implementation of COleServerItem::OnDraw (Listing 29.2) does not perform any drawing. You must provide your own implementation of this function. In simple situations, the drawing function here may be a replica of the OnDraw member function of your application's view class.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 29.2. AppWizard-supplied implementation of the </B><B>OnDraw</B><B> member </B><B>function of a server item class.</B></LH></UL>
+
+<PRE>BOOL COSRVSrvrItem::OnDraw(CDC* pDC, CSize&amp; rSize)
+
+{
+
+    COSRVDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: set mapping mode and extent  (The extent is usually
+
+    //  the same as the size returned from OnGetExtent)
+
+    pDC-&gt;SetMapMode(MM_ANISOTROPIC);
+
+    pDC-&gt;SetWindowOrg(0,0);
+
+    pDC-&gt;SetWindowExt(3000, 3000);
+
+    // TODO: add drawing code here.  Optionally, fill in the
+
+    //  HIMETRIC extent.  All drawing takes place in the metafile
+
+    //  device context (pDC).
+
+    return TRUE;
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B><I>COleDocument</I></B><B> and Document Items</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The class COleDocument, which is the base class of COleServerDoc, offers a very useful capability. It can maintain a list of document items of type CDocItem. The CDocItem class is used, among other things, as the base class for COleServerItem; however, you can also use it to implement application-specific document items. Thus, it is possible to create a simple OLE server application without adding any code to the application's COleDocument-derived document class; the code provided by AppWizard already manages the list of CDocItem objects.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The In-Place Frame Window</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The in-place frame window essentially has the same functionality as the frame window in SDI applications. It is the parent window for the current view; it also manages menus and toolbars. However, it does so by cooperating with the container application's frame window, replacing the menus and toolbars of that frame window for the duration of the in-place session.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Modes of Operation and Resources</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>When you work with an OLE server, you must never forget about this dual role of the application. Did I say dual? Actually, a full OLE server has three basic modes of operation. It can operate in stand-alone mode, it can be used to edit an OLE item in its own window, and it can be used for in-place editing. This fact is also reflected in the AppWizard-generated resource file (Figure 29.4). As you can see, the application has three accelerators, four menus, and two different toolbars.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu04.gif">Figure 29.4. Duplicate resources in an OLE server </B><B>application.</A></B>
+
+<BR></P>
+
+<P>Of the four menus, two are found in every multiple document application; one is displayed when the application has no documents open, the other one is used otherwise. An OLE server, however, has to provide a third menu reflecting the state when it is used to edit an embedded item. The basic difference between this and the regular menu bar is that the File menu contains the choices Update and Save Copy As, instead of Save and Save As. This is to reflect the fact that &quot;saving&quot; an embedded item implies serializing it into the container application; saving it under a different filename creates a stand-alone copy of the embedded item.
+
+<BR></P>
+
+<P>The fourth menu is a very special one. This menu (Figure 29.5) is displayed when the server is used for in-place editing. What makes this menu so special is that it is incomplete; in place of two of its top-level menu items there are only separate bars.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu05.gif">Figure 29.5. The incomplete menu used during in-place </B><B>editing.</A></B>
+
+<BR></P>
+
+<P>During an in-place session, this menu and a similarly incomplete menu provided by the server are &quot;combed&quot; together, forming the menu seen by the user. This combing reflects the fact that during the in-place session, various functions are carried out by the server application, while other functions (for example, window management) remain the responsibility of the container application. Figure 29.6 shows how the complete menu is formed from the incomplete menus provided by the server and the container.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu06.gif">Figure 29.6. How server and container menus are </B><B>combined during in-place editing.</A></B>
+
+<BR></P>
+
+<P>If you know that there are separate menus, the need for separate acceleration tables is easy to understand. As for the toolbars, a brief look at them (Figure 29.7) quickly reveals that the toolbar used during in-place editing simply lacks those file-related functions that the server does not offer during such sessions.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu07.gif">Figure 29.7. Toolbars in an OLE server skeleton.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Running the Server Skeleton</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As is, the server skeleton supplied by AppWizard can be compiled and run. Although it does not perform any useful function, the interaction between the server and the container works and can be demonstrated. For example, you can use the Windows 95 WordPad application to invoke the new server. Note that you must run the server stand-alone first in order for it to create the appropriate entries in the Registry. Afterwards, when running WordPad, you can insert a new object of type &quot;OSRV Document&quot; by selecting the Object command from its Insert menu. Figure 29.8 shows an in-place editing session using the OSRV server with WordPad.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu08.gif">Figure 29.8. In-place editing session.</A></B>
+
+<BR></P>
+
+<P>Notice how the Edit and View menus, the toolbar, and the status bar have been taken over by the server application; WordPad's toolbar, ruler, and menus that are normally visible disappear for the session's duration.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Customizing a Skeleton Server</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Now to add some very simple functionality to our skeleton server. The new OSRV server will do a very simple task: it will display a string in the middle of view windows. The string will be stored in the form of a member variable of the server's document class and will be serialized by that class.
+
+<BR></P>
+
+<P>In order to make modification of the string possible, we must add a dialog. The dialog will be invoked when the user clicks within a view using the left mouse button.
+
+<BR></P>
+
+<P>Although this is clearly a very simple example, it nevertheless demonstrates all the key aspects that one must pay attention to while developing a server. Although a real-life OLE server application is significantly more complex, the basic steps and principles remain the same.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Modifying the Document</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The first thing to do to implement the new behavior is to add a member variable to the document class, COSRVDoc. A member variable of type CString should be added in the Attributes section of the declaration of COSRVDoc:
+
+<BR></P>
+
+<PRE>// Attributes
+
+public:
+
+    COSRVSrvrItem* GetEmbeddedItem()
+
+       { return (COSRVSrvrItem*)COleServerDoc::GetEmbeddedItem(); }
+
+CString m_sData;</PRE>
+
+<P>This member variable should also be initialized to some meaningful value. In the implementation file of COSRVDoc, modify COSRVDoc::OnNewDocument as follows:
+
+<BR></P>
+
+<PRE>BOOL COSRVDoc::OnNewDocument()
+
+{
+
+    if (!COleServerDoc::OnNewDocument())
+
+        return FALSE;
+
+    // TODO: add reinitialization code here
+
+    // (SDI documents will reuse this document)
+
+m_sData = &quot;Hello, World!&quot;;
+
+return TRUE;
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Adding Drawing Code</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the case of nonserver applications, we had to add drawing code to the appropriate view class. In the case of a server application, we also have to add drawing code to the OnDraw member function of the OLE server item class.
+
+<BR></P>
+
+<P>To add drawing code to the view class, modify the implementation of COSRVView::OnDraw function as follows:
+
+<BR></P>
+
+<PRE>void COSRVView::OnDraw(CDC* pDC)
+
+{
+
+    COSRVDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: add draw code for native data here
+
+CRect rect;
+
+    CFont font, *pOldFont;
+
+    GetClientRect(&amp;rect);
+
+    font.CreateStockObject(SYSTEM_FONT);
+
+    pOldFont = pDC-&gt;SelectObject(&amp;font);
+
+    pDC-&gt;DPtoLP(&amp;rect);
+
+    pDC-&gt;DrawText(pDoc-&gt;m_sData, &amp;rect,
+
+                  DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+    pDC-&gt;SelectObject(pOldFont);
+
+}</PRE>
+
+<P>A similar modification must be made to COSRVSrvrItem::OnDraw:
+
+<BR></P>
+
+<PRE>BOOL COSRVSrvrItem::OnDraw(CDC* pDC, CSize&amp; rSize)
+
+{
+
+    COSRVDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    // TODO: set mapping mode and extent  (The extent is usually
+
+    //  the same as the size returned from OnGetExtent)
+
+    pDC-&gt;SetMapMode(MM_ANISOTROPIC);
+
+    pDC-&gt;SetWindowOrg(0,0);
+
+    pDC-&gt;SetWindowExt(3000, 3000);
+
+    // TODO: add drawing code here.  Optionally, fill in the
+
+    //  HIMETRIC extent.  All drawing takes place in the metafile
+
+    //  device context (pDC).
+
+CRect rect;
+
+    CFont font, *pOldFont;
+
+    rect.TopLeft() = pDC-&gt;GetWindowOrg();
+
+    rect.BottomRight() = rect.TopLeft() + pDC-&gt;GetWindowExt();
+
+    font.CreateStockObject(SYSTEM_FONT);
+
+    pOldFont = pDC-&gt;SelectObject(&amp;font);
+
+    pDC-&gt;DrawText(pDoc-&gt;m_sData, &amp;rect,
+
+                  DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+    pDC-&gt;SelectObject(pOldFont);
+
+return TRUE;
+
+}</PRE>
+
+<P>In a more sophisticated application, the first part of this function would also be modified, reflecting the true size of the item (as opposed to the rather arbitrary size chosen here). Similarly, the COSRVSrvrItem::OnGetExtent function would also use a more sophisticated mechanism for determining the size of the embedded item.
+
+<BR></P>
+
+<P>At this time, you can recompile and run the application. To test it from within an OLE container application, use the container's Insert Object function, and insert on OSRV document. Figure 29.9 shows the new OSRV application during an in-place session with the Windows 95 WordPad.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu09.gif">Figure 29.9. OSRV and the Windows 95 WordPad.</A></B>
+
+<BR></P>
+
+<P>If you play around with OSRV, you may notice an odd behavior. While the string is normally centered during an in-place session, after the session has been terminated, this is no longer so. Instead, the string's upper-left corner appears to be positioned at the center of the item's rectangle.
+
+<BR></P>
+
+<P>This odd behavior is specific to CDC::DrawText in a metafile device context. We are not going to be concerned about this right now (consider it a documented bug); however, let this serve as a warning that the two OnDraw functions (one in the view class, the other in the OLE server item class) are invoked under very different circumstances and must be tested separately.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Adding a Dialog</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order to make the text displayed by OSRV changeable, we need to add a dialog where the user can enter the or modify the text item. Adding the dialog is easy using the built-in dialog editor. The dialog, as shown in Figure 29.10, should contain a single edit field, IDC_TEXT, where the new text can be entered.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="29vcu10.gif">Figure 29.10. The Window Text dialog in OSRV.</A></B>
+
+<BR></P>
+
+<P>To complete creation of this dialog, invoke the ClassWizard. Let the ClassWizard create a new class representing this dialog (CTextDlg), and add a member variable m_sText, representing the edit field IDC_TEXT.
+
+<BR></P>
+
+<P>How will this dialog be invoked? To avoid having to mess with menus or toolbars, I decided to use the simplest possible method. The dialog will be invoked whenever a view window receives a WM_LBUTTONDOWN message; that is, whenever the user clicks within the view using the left mouse button.
+
+<BR></P>
+
+<P>The simplest way to add a handler to the view class for these messages is to open the implementation file for the OSRV view class (OSRVView.cpp) and use the WizardBar. In the WizardBar, select the WM_LBUTTONDOWN item in the Messages combo box, and answer affirmatively when you are asked if a new handler should be created for this message.
+
+<BR></P>
+
+<P>The handler function is shown in Listing 29.3. Nothing mysterious here; the function simply creates and invokes the dialog, and transfers the data between the dialog and the document. Note that in order for this function to compile successfully, you must also include the TextDlg.h header file at the top of the file OSRVView.cpp.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 29.3. Implementation of </B><B>COSRVView::OnLButtonDown</B><B>.</B></LH></UL>
+
+<PRE>void COSRVView::OnLButtonDown(UINT nFlags, CPoint point)
+
+{
+
+    // TODO: Add your message handler code here and/or call default
+
+//  CView::OnLButtonDown(nFlags, point);
+
+    CTextDlg dlg;
+
+    COSRVDoc* pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    dlg.m_sText = pDoc-&gt;m_sData;
+
+    if ((dlg.DoModal() == IDOK) &amp;&amp; (dlg.m_sText != pDoc-&gt;m_sData))
+
+    {
+
+        pDoc-&gt;m_sData = dlg.m_sText;
+
+        pDoc-&gt;UpdateAllViews(NULL);
+
+        pDoc-&gt;UpdateAllItems(NULL);
+
+        pDoc-&gt;SetModifiedFlag();
+
+    }
+
+}</PRE>
+
+<P>In addition to calling the document class member functions UpdateAllViews (to reflect the user's entry in all views of the document) and SetModifiedFlag (to notify the document class that its contents changed and may need to be saved), the function also calls UpdateAllItems. Through UpdateAllItems, it notifies containers that the contents of the embedded item have changed and may need to be redrawn.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Serialization</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There is one thing missing before we can call our application complete: Its data must be saved. Namely, the m_sData member variable of the document class needs to be serialized in COSRVDoc::Serialize. This is very easily done:
+
+<BR></P>
+
+<PRE>void COSRVDoc::Serialize(CArchive&amp; ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        // TODO: add storing code here
+
+ar &lt;&lt; m_sData;
+
+}
+
+    else
+
+    {
+
+        // TODO: add loading code here
+
+ar &gt;&gt; m_sData;
+
+}
+
+}</PRE>
+
+<P>At this time, our simple server application is complete and can be recompiled.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Registering the New Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>You might have noticed that we have run the OSRV application without ever attempting to enter anything into the Windows Registry. How do clients, such as the Windows 95 WordPad, know about our application?
+
+<BR></P>
+
+<P>The reason it was not necessary to update the Registry manually is because AppWizard-generated applications register themselves. Every time such an application is run stand-alone, it creates or updates the appropriate entries in the Registry. This also applies to mini-servers; although a mini-server would not typically be run stand-alone, you can do so for the purpose of registering.
+
+<BR></P>
+
+<P>However, AppWizard also creates a file that contains all relevant Registry entries. In the case of OSRV, this file is called OSRV.reg. It contains the following Registry entries (all under the key HKEY_CLASSES_ROOT):
+
+<BR></P>
+
+<PRE>OSRV.Document = OSRV Document
+
+OSRV.Document\protocol\StdFileEditing\server = OSRV.EXE
+
+OSRV.Document\protocol\StdFileEditing\verb\0 = &amp;Edit
+
+OSRV.Document\Insertable =
+
+OSRV.Document\CLSID = {494CDF20-FE4B-11CE-87C3-00403321BFAC}</PRE>
+
+<P>It is through these items that an OLE container can identify OSRV documents as insertable objects. The last of these items identifies the CLSID under which additional information about the server can be found (note that your CLSID may be different from mine). A further set of Registry entries is made using this CLSID, under the key HKEY_CLASSES_ROOT\CLSID:
+
+<BR></P>
+
+<PRE>494CDF20-FE4B-11CE-87C3-00403321BFAC} = OSRV Document
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\DefaultIcon = OSRV.EXE,1
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\LocalServer32 = OSRV.EXE
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\ProgId = OSRV.Document
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\MiscStatus = 32
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\AuxUserType\3 = OSRV
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\AuxUserType\2 = OSRV
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\Insertable =
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\verb\1 = &amp;Open,0,2
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\verb\0 = &amp;Edit,0,2
+
+{494CDF20-FE4B-11CE-87C3-00403321BFAC}\InprocHandler32 = ole32.dll</PRE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>OLE servers, or OLE component servers, are applications that maintain OLE component items that can be used from within OLE container applications.
+
+<BR></P>
+
+<P>Creating an MFC-based OLE server application is easy using the Visual C++ AppWizard. All you need to do is to specify server support during AppWizard Step 3.
+
+<BR></P>
+
+<P>OLE server capability is supported only for single- or multiple-document-based applications (not for dialog-based programs). However, you can develop an OLE server with a dialog-like interface using the CFormView class.
+
+<BR></P>
+
+<P>The MFC distinguishes between mini-servers, full-servers, and container-servers. A mini-server is an application that can only be used in conjunction with embedded objects; a full-server is a program that can also operate in a stand-alone mode and can save its data to files. A container server is an OLE server that also offers container functionality.
+
+<BR></P>
+
+<P>To create an OLE server with AppWizard, specify the desired server behavior in AppWizard Step 2. When compared to applications that do not support OLE, an OLE server offers two new classes. The server item class, derived from COleServerItem, represents an embedded item in the container application and offers the IOleObject OLE interface through which the container application can communicate with the server. The in-place frame window class, derived from COleIPFrameWnd, represents the frame window during in-place sessions, and manages the interaction between the server and the frame window of the container.
+
+<BR></P>
+
+<P>The in-place frame window provides the functionality that is necessary for the menus and toolbars of the container and the server application to coexist. During an in-place session, the server application takes over the container's toolbar and status bars. The menu bar that is visible during such a session is created from a combination of menus provided by the container and the server.
+
+<BR></P>
+
+<P>The server item class provides two member functions of fundamental importance. Its OnDraw member function is used to draw an image of the OLE item into a metafile device context; this image is used later by the container to display the item without invoking the server. The Serialize member function is used to serialize the item for storage in the container document.
+
+<BR></P>
+
+<P>Customizing an AppWizard-generated server skeleton consists of the following steps:
+
+<BR></P>
+
+<OL>
+
+<LI>After having created the server skeleton, implement basic functionality by adding member variables and code to the application's document and view classes. Add other elements (resources, dialogs) as appropriate.
+
+<BR>
+
+<BR></LI>
+
+<LI>Modify the server item's OnDraw member function to draw the item into a metafile device context. This is the image that will be displayed by containers when there is no active session with the server.
+
+<BR>
+
+<BR></LI>
+
+<LI>Modify the server item's Serialize member function to serialize the item for embedding. If your application supports only embedded items, you can use the default implementation that relies on your document class's serialization function. If you support links, or if you use the server item class to facilitate clipboard transfers, add code here that serializes selected items only.
+
+<BR>
+
+<BR></LI></OL>
+
+<P>Your application does not have to be registered; it registers itself (or updates the appropriate registry entries) whenever it is run as a stand-alone application. However, AppWizard also emits a file that can be used for registering the application manually or from within an installation program.</P>
+
+<P><A HREF="vcu28fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu30fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

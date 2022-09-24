@@ -1,0 +1,2486 @@
+<HTML><HEAD>
+
+   <TITLE>TutoriaL sobre C - Nocturnus Labs. Inc.</TITLE>
+</HEAD>
+<BODY>
+
+<P><FONT FACE="Courier New,Courier">7. <A HREF="#7">Vari&aacute;veis e
+Operadores</A></FONT>
+<BR><FONT FACE="Courier New,Courier">8. <A HREF="#8">Tomadas de Decis&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">9. <A HREF="#9">Loops</A></FONT>
+<BR><FONT FACE="Courier New,Courier">10. <A HREF="#10">Comandos Desestruturadores</A></FONT>
+<BR><FONT FACE="Courier New,Courier">11. <A HREF="#11">Matrizes</A></FONT>
+<BR><FONT FACE="Courier New,Courier">12. <A HREF="#12">Ordena&ccedil;&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">13. <A HREF="#13">Ponteiros - Apresenta&ccedil;&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">14. <A HREF="#14">Ponteiros - Conceitos
+de Endere&ccedil;os</A></FONT>
+<BR><FONT FACE="Courier New,Courier">15. <A HREF="#15">Ponteiros - Conceitos
+Avan&ccedil;ados</A></FONT>
+<BR><FONT FACE="Courier New,Courier">16. <A HREF="#16">Ponteiros - Pilhas</A></FONT>
+<BR><FONT FACE="Courier New,Courier">17. <A HREF="#17">Ponteiros - Conceitos
+Complementares</A></FONT>
+<BR><FONT FACE="Courier New,Courier">18. <A HREF="#18">Ponteiros x Matrizes
+e Entradas e Sa&iacute;das - Arquivos</A></FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Vari&aacute;veis
+e Operadores&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<H4>
+<FONT FACE="Courier New,Courier">Todas as vari&aacute;veis devem ser delaradas
+desta forma: "tipo lista_de_vari&aacute;veis;"</FONT></H4>
+<FONT FACE="Courier New,Courier">Exemplos:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">int i,j,l;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">short int si;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">unsigned int ui;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">double balanco, consolidacao;</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier">De maneira semelhante ao que ocorre no
+Pascal e demais linguagens estruturadas, em C as vari&aacute;veis tem seus
+valores localizados nas rotinas onde foram declaradas (escopo).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Basicamente, as vari&aacute;veis podem
+ser declaradas fora das fun&ccedil;&otilde;es (globais) que valem para
+todas as fun&ccedil;&otilde;es do programa. Podem ser declaradas dentro
+de uma fun&ccedil;&atilde;o (locais) sendo desconhecida no restante do
+programa. Al&eacute;m disso podem ser usadas para passagem de valores entre
+fun&ccedil;&otilde;es (par&acirc;metros).</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Vari&aacute;veis locais e globais;
+par&acirc;metros.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">int soma;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* global */
+main()
+{
+int cont;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* local */
+soma = 0;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* soma(global) = 0 */
+for (cont = 0; cont &lt; 10; cont ++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total(cont);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display();
+&nbsp; }
+}
+
+total(x)
+int x;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* x &eacute; par&acirc;metro e vale cont */
+{
+soma = x + soma;
+}
+
+display()
+{
+int cont;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* cont &eacute; local e difere de cont da fun&ccedil;&atilde;o main() */
+for (cont = 0; cont &lt; 10; cont++) printf("-");
+cont++;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* equivale a cont = cont + 1&nbsp;&nbsp;&nbsp; */
+printf("A Soma atual &eacute; %d\n",soma);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Resultando em 0 1 3 6 10 15 21 28 36 45</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operadores</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">C &eacute; uma das linguagens com maior
+n&uacute;mero de operadores, devido possuir todos os operadores comuns
+de uma linguagem de alto n&iacute;vel, por&eacute;m tamb&eacute;m possuindo
+os operadores mais usuais a linguagens de baixo n&iacute;vel. Para fins
+did&aacute;ticos, dividiremos os operadores em aritm&eacute;ticos, l&oacute;gicos
+e de bits. No momento abordaremos apenas as duas primeiras classes.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operadores Aritm&eacute;ticos</FONT></FONT></H2>
+
+<TABLE BORDER >
+<TR>
+<TD WIDTH="158"><FONT FACE="Courier New,Courier">Operador</FONT></TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">A&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">+</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Adi&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">*</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Multiplica&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">/</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Divis&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">%</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Resto de Divis&atilde;o
+Inteira&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">-</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Subtra&ccedil;&atilde;o
+o menos un&aacute;rio&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">--&nbsp;</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Decremento&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">++</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Incremento&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operadores Relacionais e
+L&oacute;gicos</FONT></FONT></H2>
+
+<TABLE BORDER >
+<TR>
+<TD WIDTH="158"><FONT FACE="Courier New,Courier">Operador&nbsp;</FONT></TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">A&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">></FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Maior que&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">>=&nbsp;</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Maior ou igual que&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">&lt;&nbsp;</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Menor que&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">&lt;=&nbsp;</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Menor ou igual que&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">==</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Igual a&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">!=</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Diferente de&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">&amp;&amp;</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Condi&ccedil;&atilde;o
+"E"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">||</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">Condi&ccedil;&atilde;o
+"OU"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="158">
+<CENTER><FONT FACE="Courier New,Courier">!</FONT></CENTER>
+</TD>
+
+<TD WIDTH="208"><FONT FACE="Courier New,Courier">N&atilde;o&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"><B>Observa&ccedil;&atilde;o</B><I>:</I>
+Em C o resultado da compara&ccedil;&atilde;o ser&aacute; ZERO se resultar
+em FALSO e DIFERENTE DE ZERO no caso de obtermos VERDADEIRO num teste qualquer.
+Programadores experientes utilizam-se desta conclus&atilde;o em alguns
+programas, onde "inexplicavelmente" algo &eacute; testado contra ZERO.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Compara&ccedil;&otilde;es
+e Testes</FONT></FONT></H2>
+
+<H4>
+<FONT FACE="Courier New,Courier">Observemos antes de mais nada que ++x
+&eacute; diferente de x++!</FONT></H4>
+<FONT FACE="Courier New,Courier">Se</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">x = 10;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">y = ++x;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">ent&atilde;o</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">x = 11 (pois x foi incrementado) e
+y = 11</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">por&eacute;m Se</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">x = 10;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">y = x++;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">ent&atilde;o</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">x = 11 e y = 10 (pois x foi atribu&iacute;do
+a y ANTES de ser incrementado)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Se</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">x = 1;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">y = 2;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">printf("%d == %d e' %d\n",x,y,x==y);</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">ent&atilde;o resultaria em 1 == 2 0
+(pois a express&atilde;o &eacute; falsa)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">if (10 > 4 &amp;&amp; !(10 &lt; 9)
+|| 3 &lt;= 4)</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">resultaria em Verdadeiro pois dez &eacute;
+maior que quatro E dez n&atilde;o &eacute; menor que nove OU tr&ecirc;s
+&eacute; menor ou igual a quatro</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operador Sizeof</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Este operador retorna o tamanho da vari&aacute;vel
+ou tipo que est&aacute; em seu operando.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Por exemplo "sizeof(char)" resultaria
+em 1.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Convers&otilde;es de Tipos</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Quando forem misturadas vari&aacute;veis
+de diferentes tipos, o compilador C converter&aacute; os operandos para
+o tipo de operando maior, de acordo com as regras descritas a seguir:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Todo char e short int &eacute; convertido
+para int. Todo float &eacute; convertido para double.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Para os demais pares de operandos valem
+as seguintes regras em seq&uuml;&ecirc;ncia:</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">2.1- Se um operando for long double, o
+outro tamb&eacute;m o ser&aacute;.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2.2- Se um operando for double, o outro
+tamb&eacute;m o ser&aacute;.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2.3- Se um operando for long, o outro
+tamb&eacute;m o ser&aacute;.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2.4- Se um operando for unsigned, o outro
+tamb&eacute;m o ser&aacute;.</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier"><B>Nota:</B> Devemos observar que o compilador
+C &eacute; bastante flex&iacute;vel e pouco vigilante, comportando-se de
+maneira muito diferente de um compilador Clipper ou Pascal, sempre vigilantes
+com rela&ccedil;&atilde;o aos tipos das vari&aacute;veis. De fato aqueles
+compiladores podem gerar execut&aacute;veis misturando tipos, por&eacute;m
+a ocorr&ecirc;ncia de erros de execu&ccedil;&atilde;o &eacute; quase inevit&aacute;vel.
+Ao contr&aacute;rio destes compiladores, os compiladores C "ajeitam" as
+coisas para o programa funcionar da "melhor maneira poss&iacute;vel", o
+que n&atilde;o significa em hip&oacute;tese alguma que os resultados ser&atilde;o
+os esperados por programadores "relapsos". Assim esta boa caracter&iacute;stica
+dos compiladores C, pode transformar-se numa aut&ecirc;ntica "bomba rel&oacute;gio"
+para programas n&atilde;o muito bem elaborados.</FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+07L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Observe o programa a seguir.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i=1,j=2,k=3,l=4;
+i++;
+k=++i;
+l=j++;
+++j;
+printf("%d %d %d %d",i,j,k,l);</FONT></PRE>
+<FONT FACE="Courier New,Courier">}</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Constate os resultados do programa
+acima.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Elabore programa contendo 2 vari&aacute;veis
+x e y, que atribuam valores a i e j desta forma: i = ++x e j = y++. Constate
+os resultados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- Dados 3 n&uacute;meros, os imprima
+em ordem crescente usando apenas 1 comando printf.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">4- Dados 2 n&uacute;meros inteiros,
+imprima 1 se ambos forem positivos ou negativos, 2 se tiverem sinais opostos
+ou 3 se um deles for zero.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">5- Observe o programa a seguir.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i=1,j=2,k,l;
+i++;
+k=++i+k;;
+l=j++ +l;
+++j;
+printf("%d %d %d %d",i,j,k,l);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Processe o programa 3 vezes. Justifique
+os resultados.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">6- Utilize fun&ccedil;&atilde;o DOSTIME,
+dispon&iacute;vel no Classic C.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">7- Processe o programa a seguir e constate
+os resultados</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i=1,j=2,k,l;
+i++;
+k=++i +k;
+l=j++ +l;
+++j;
+printf("%d %d %d %d",i,j,k,l);
+}</FONT></PRE>
+<A NAME="8"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Tomadas de Decis&atilde;o
+- Parte II&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Analisaremos mais detidamente o comando
+"if" e tamb&eacute;m os comandos "switch" e "?", destinados a promover
+desvios condicionais em nossos programas.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>if</B></FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Sintaxe</FONT></FONT></H3>
+
+<MENU>
+<LI>
+<I><FONT FACE="Courier New,Courier">if &lt;condi&ccedil;&atilde;o></FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">&lt;bloco de comandos>;</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">[else</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">&lt;bloco de comandos>;]</FONT></I></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplos: Compara&ccedil;&otilde;es Simples,
+uso ou n&atilde;o do else.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">if (t == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("T vale Zero");
+if (t == 2 || t = 4) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("T vale Dois\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("ou T vale Quatro");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("T nao e'2 ou 4\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (t > 10)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("E supera 10");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Mas nao supera 10");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</FONT></PRE>
+<FONT FACE="Courier New,Courier"><B>Exemplo:</B> Evitar-se divis&otilde;es
+por Zero, usando recursos do comando if.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,b;
+printf("Digite 2 n&uacute;meros: ");
+scanf("%d %d",&amp;a,&amp;b);
+if (b)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%f",a/b);
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Nao posso dividir por zero\n");
+}</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operador ?</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">A declara&ccedil;&atilde;o Se-Ent&atilde;o-Sen&atilde;o
+pode ser substitu&iacute;da por:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exp1 ? Exp2 : Exp3</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Se Exp1 for verdadeira, ent&atilde;o
+Exp2 &eacute; avaliada tornando-se o valor de Exp1, sen&atilde;o Exp3 &eacute;
+que ser&aacute; avaliada e tornar-se-&aacute; o valor da express&atilde;o.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Uso do ?.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">x = 10;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">y = (x > 20) ? 200 : 100;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">assim y valer&aacute; 100</FONT></LI>
+</MENU>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Comando switch</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Diversas vezes precisamos determinar se
+um valor encontra-se numa lista de valores. Apesar de podermos usar uma
+seq&uuml;&ecirc;ncia de ifs, este recurso al&eacute;m de n&atilde;o ser
+elegante, por vezes confunde o entendimento do programa. Vejamos uma op&ccedil;&atilde;o
+melhor: o comando switch.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Sintaxe:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">switch &lt;vari&aacute;vel> {</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">case &lt;constante 1> :</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">&lt;comandos>;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">[break;]</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">case &lt;constante 2> :</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">&lt;comandos>;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">[break;]</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">case &lt;constante 3> :</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">&lt;comandos>;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">[break;]</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">[default :</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">&lt;comandos>;]</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">}</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Observe que "break" serve para terminar
+a seq&uuml;&ecirc;ncia de comandos em execu&ccedil;&atilde;o, por serem
+opcionais, se forem suprimidos permitem que o "case" a seguir seja executado,
+sem haver qualquer quebra na seq&uuml;&ecirc;ncia do processamento.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Frases Montadas</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int t;
+for (t = 0; t &lt; 10; t ++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch (t) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 1:&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Agora");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("e'");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 3:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 4:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("hora ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("de todos os homens bons\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 5:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 6:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("trabalharem");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 7:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 8:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 9:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("-");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Resultar&aacute; em:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Agora &eacute; hora de todos os homens
+bons</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">hora de todos os homens bons</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">hora de todos os homens bons</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">trabalharem trabalharem ---</FONT></LI>
+</MENU>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+08L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Elabore programa que solicite 2 n&uacute;meros
+e uma opera&ccedil;&atilde;o matem&aacute;tica elementar (+-*/) e a execute.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Elabore programa que imprima a seq&uuml;&ecirc;ncia
+de frases abaixo, usando switch.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Verde Verde Vermelho</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Amarelo</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Amarelo</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Amarelo</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Azul Branco e Preto</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Branco e Preto</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- Elabore programa que 'z' termine
+com o valor 4 se 'a' for maior que 10 ou 5 se 'a' for menor ou igual a
+10. Os comandos if e switch n&atilde;o poder&atilde;o ser utilizados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">4- Elabore um menu de op&ccedil;&otilde;es
+com 4 situa&ccedil;&otilde;es diversas, utilizando switch.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">5- Elabore programa que permita a 5
+pessoas escolherem sua cor favorita entre Verde, Vermelho, Amarelo, Azul,
+Laranja ou Roxo e exiba os resultados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">6- Elabore programa que permita a escolha
+entre 1, 2 e 3 ou indique erro de escolha.</FONT>
+<BR><A NAME="9"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Loops&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">Estruturas de repeti&ccedil;&atilde;o
+normalmente usadas nos programas, ter&atilde;o em C tr&ecirc;s sintaxes
+distintas (for, while e do-while), cada uma delas indicada para determinado
+tipo de necessidade.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>for</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><I>Sintaxe:</I></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><I>for (&lt;in&iacute;cio>;&lt;condi&ccedil;&atilde;o>;&lt;incremento>)
+&lt;comando>;</I></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Al&eacute;m da sintaxe vista anteriormente,
+"for" permite a escrita de express&otilde;es mais elaboradas, sem qualquer
+paralelo nas linguagens BASIC, Pascal e COBOL, como pode ser vista a seguir:</FONT>
+<PRE><FONT FACE="Courier New,Courier">for (x=0,y=0;x+y&lt;100;++x,y=y+x)&nbsp;
+printf("%d",x+y);</FONT></PRE>
+<FONT FACE="Courier New,Courier">Esta instru&ccedil;&atilde;o inicializaria
+x e y com zero, incrementando x de 1 em 1 e y receberia seu valor acrescido
+do de x. O resultado a cada itera&ccedil;&atilde;o seria impresso desta
+forma: 0 (x=0 e y=0) 2 (x=1 e y=1) 5 (x=2 e y=3) 9 14 e assim sucessivamente.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Contagem simples com condi&ccedil;&atilde;o
+no teste "for".</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i,j,resposta;
+char feito = ' ';
+for (i=1;i&lt;100 &amp;&amp; feito != 'N';i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (j=1;j&lt;10;j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Quanto e' %d + %d? ",i,j);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",&amp;resposta);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (resposta != i+j)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Errou!\n);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Acertou!\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Mais? (S/N) ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;feito);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 2: Contagem com fun&ccedil;&otilde;es
+nos argumentos do "for".</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int t;
+for (prompt();t=readnum();prompt())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sqrnum(t);
+}
+
+prompt()
+{
+printf("Digite um n&uacute;mero inteiro!");
+}
+readnum()
+{
+int t;
+scanf("%d",&amp;t);
+return t;
+}
+
+sqrnum(num)
+int num;
+{
+printf("%d\n",num*num);
+}</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Loops Infinitos</FONT></FONT></H3>
+
+<PRE><FONT FACE="Courier New,Courier">for(;;)</FONT></PRE>
+<FONT FACE="Courier New,Courier">printf("Este loop rodar&aacute; eternamente!\n");</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">A aus&ecirc;ncia de condi&ccedil;&otilde;es
+de inicializa&ccedil;&atilde;o, continuidade e termina&ccedil;&atilde;o,
+causar&atilde;o um processo cont&iacute;nuo e teoricamente infinito (veremos
+posteriormente a intru&ccedil;&atilde;o <B>break</B>, que tem a capacidade
+de encerrar um processo assemelhado ao exemplificado).</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Loop Vazio</FONT></FONT></H3>
+
+<PRE><FONT FACE="Courier New,Courier">for(i=0;i&lt;10;i++);</FONT></PRE>
+<FONT FACE="Courier New,Courier">A presen&ccedil;a do ponto e v&iacute;rgula
+finalizando o comando, for&ccedil;a a execu&ccedil;&atilde;o do loop sem
+que seja executado qualquer outro comando.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Loop Finito</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Ao contr&aacute;rio de outras linguagens
+que n&atilde;o permitem o t&eacute;rmino do loop a n&atilde;o ser quando
+a condi&ccedil;&atilde;o de finaliza&ccedil;&atilde;o for satisfeita, a
+linguagem C permite que um loop seja interrompido antes de seu t&eacute;rmino
+normal (desestrutura&ccedil;&atilde;o) sem que exista qualquer tipo de
+inconveniente. O comando "break" causa a interrup&ccedil;&atilde;o conforme
+pode ser visto a seguir:</FONT>
+<PRE><FONT FACE="Courier New,Courier">for(;;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",&amp;c);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (c == 'A')&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break; /* interrompe o que deveria ser um anel eterno */
+&nbsp;&nbsp; }
+printf("Fim do Loop!");</FONT></PRE>
+<FONT FACE="Courier New,Courier">Conclus&atilde;o</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">As caracter&iacute;sticas do comando
+"for", como pudemos notar s&atilde;o bem superiores as dos comandos "for"
+das linguagens BASIC, Clipper, Pascal e COBOL. Enquanto em algumas daquelas
+linguagens &eacute; recomend&aacute;vel que seu uso seja evitado, em C
+seu uso &eacute; normalmente o mais recomendado, pois substitui geralmente
+com vantagem seu an&aacute;logo "while", como veremos a seguir.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Loop while</FONT></FONT></H3>
+
+<MENU>
+<LI>
+<I><FONT FACE="Courier New,Courier">Sintaxe:</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">while &lt;condi&ccedil;&atilde;o> &lt;comando>;</FONT></I></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">O loop se repete, enquanto a condi&ccedil;&atilde;o
+for verdadeira.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Contagem</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i;
+while (i &lt; 10) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i--;
+&nbsp; }
+}</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Loop do/while</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Ao contr&aacute;rio das estruturas "for"
+e "while" que testam a condi&ccedil;&atilde;o no come&ccedil;o do loop,
+"do / while" sempre a testa no final, garantido a execu&ccedil;&atilde;o
+ao menos uma vez da estrutura. Este comando &eacute; similar (por&eacute;m
+n&atilde;o id&ecirc;ntico) ao "repeat" da linguagem Pascal.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Sintaxe:</FONT>
+<MENU>
+<LI>
+<I><FONT FACE="Courier New,Courier">do {</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">&lt;comandos>;</FONT></I></LI>
+
+<LI>
+<I><FONT FACE="Courier New,Courier">} while &lt;condi&ccedil;&atilde;o>;</FONT></I></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: T&eacute;rmino determinado pelo
+usu&aacute;rio.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int num;
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",&amp;num);
+} while (num &lt; 100);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+09L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Retome o programa da tabuada, por&eacute;m
+agora imprimindo todas de 1 ao 10.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Elabore programa que decida se um n&uacute;mero
+informado &eacute; primo.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Imprima todos os n&uacute;meros primos
+dentro de um intervalo fornecido pelo usu&aacute;rio.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">4- Dada uma seq&uuml;&ecirc;ncia de n&uacute;meros
+reais, calcule sua m&eacute;dia e desvio padr&atilde;o.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">5- Dada uma seq&uuml;&ecirc;ncia de n&uacute;meros
+reais, imprima a mediana da s&eacute;rie.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">6- Retome o exerc&iacute;cio 2 e o resolva
+usando do/while e while.</FONT></LI>
+</MENU>
+<A NAME="10"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Comandos Desestruturadores&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">Vimos anteriormente o comando "break"
+finalizando op&ccedil;&otilde;es do comando "switch" e tamb&eacute;m terminando
+um loop "for". Apesar deste &uacute;ltimo tipo de uso n&atilde;o ser recomendado
+por alguns defensores da programa&ccedil;&atilde;o estruturada, quando
+usado de forma adequada (isto &eacute; aumentando a velocidade de execu&ccedil;&atilde;o
+sem prejudicar a compreens&atilde;o do programa), n&atilde;o h&aacute;
+qualquer inconveniente para esta utiliza&ccedil;&atilde;o. Aproveitamos
+para lembrar que a linguagem C &eacute; conhecida como "a linguagem dos
+profissionais" n&atilde;o tendo a pretens&atilde;o de ser compreendida
+por leigos como por exemplo as chamadas linguagens de comit&ecirc;s (BASIC
+e COBOL). O comando "break" &eacute; an&aacute;logo ao comando "exit" da
+linguagem Clipper.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>break</B></FONT>
+<H4>
+<FONT FACE="Courier New,Courier">Exemplo: Loops encadeados terminados com
+uso do "break"</FONT></H4>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int t,cont;
+for (t=0;t&lt;100;++t) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cont = 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (;;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",cont);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cont++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (cont == 0) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Observe que break, quebra apenas a estrutura
+"for" mais interna, a externa ser&aacute; processada at&eacute; o final
+normalmente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>continue</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O comando "<B>continue</B>" funciona
+de maneira an&aacute;loga ao "<B>break</B>", contudo ao inv&eacute;s de
+for&ccedil;ar o encerramento do loop, for&ccedil;a nova itera&ccedil;&atilde;o
+(semelhante a instru&ccedil;&atilde;o "loop" da linguagem Clipper) saltando
+o c&oacute;digo entre seu uso e a marca de t&eacute;rmino do loop.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Imprimir somente os n&uacute;meros
+pares entre 1 e 100.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x;
+for (x=0;x&lt;100;x++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (x%2) continue;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d",x);
+&nbsp; }
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Desta forma toda vez que for gerado um
+n&uacute;mero &iacute;mpar "if" ser&aacute; executado saltando o comando
+"printf". "Continue" assemelha-se ao "loop" da linguagem Clipper.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><B>goto</B></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">De maneira geral o comando "goto" &eacute;
+considerado o grande vil&atilde;o das linguagens de programa&ccedil;&atilde;o
+e geralmente seu uso &eacute; desaconselhado quando n&atilde;o proibido
+por equipes de desenvolvimento e por autores de manuais de linguagens.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Devemos dizer a priori, que uma instru&ccedil;&atilde;o
+apenas n&atilde;o teria o poder de causar tantos estragos, por&eacute;m
+certos programadores ...</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">"Goto" apesar de n&atilde;o ser imprescind&iacute;vel
+para escrita de programas em linguagem C e de ter seu uso restrito a condi&ccedil;&otilde;es
+particulares, pode ajudar n&atilde;o s&oacute; a tornar a execu&ccedil;&atilde;o
+de um programa mais r&aacute;pida como tamb&eacute;m mais clara (!!), conforme
+veremos posteriormente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">"Goto" necessita de um r&oacute;tulo
+para poder operar. O r&oacute;tulo nada mais &eacute; que um identificador
+v&aacute;lido em C seguido de dois pontos. Al&eacute;m disso o r&oacute;tulo
+dever&aacute; pertencer a fun&ccedil;&atilde;o onde se encontra o "goto".
+Um uso indevido do "goto" est&aacute; exemplificado a seguir:</FONT>
+<PRE><FONT FACE="Courier New,Courier">x = 1;
+loop1:
+x++;
+if (x&lt;100)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto loop1;</FONT></PRE>
+<FONT FACE="Courier New,Courier">Preferencialmente dever&iacute;amos ter
+usado uma estrutura "while" ou "for" para elabora&ccedil;&atilde;o deste
+trecho de programa.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Exemplo: Uso adequado do
+"goto"</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">O esbo&ccedil;o de programa a seguir,
+estruturado, &eacute; bastante confuso, conforme &eacute; f&aacute;cil
+observar:</FONT>
+<PRE><FONT FACE="Courier New,Courier">feito = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; feito = 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (feito) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (feito) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+if (feito)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;</FONT></PRE>
+<FONT FACE="Courier New,Courier">Vejamos a solu&ccedil;&atilde;o desestruturada
+(usando Goto)</FONT>
+<PRE><FONT FACE="Courier New,Courier">for (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (...)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto stop;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}
+
+stop:
+printf("Sa&iacute;da!");</FONT></PRE>
+<FONT FACE="Courier New,Courier">Normalmente solu&ccedil;&otilde;es n&atilde;o
+estruturadas s&atilde;o mais r&aacute;pidas que aquelas estruturadas, e
+neste caso a solu&ccedil;&atilde;o tamb&eacute;m &eacute; muito mais clara,
+justamente pela utiliza&ccedil;&atilde;o adequada do "goto".</FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Velocidade x Estilo x Clareza</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">As tr&ecirc;s vers&otilde;es do programa
+de verifica&ccedil;&atilde;o de um n&uacute;mero primo, servem para nos
+mostrar as diferen&ccedil;as de desempenho que podem ocorrer, independente
+da linguagem utilizada, somente em fun&ccedil;&atilde;o do algoritmo que
+utilizarmos. Processe estes exemplos e constate as diferen&ccedil;as:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Vers&atilde;o 1: Algoritmo Estruturado,
+sem conceitua&ccedil;&atilde;o matem&aacute;tica:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+&nbsp; int i,ini,fim,n,j,nao;
+&nbsp; char ac[80];
+&nbsp; cls();
+&nbsp; printf("Digite extremo inferior: "); scanf("%d",&amp;ini);
+&nbsp; printf("\nDigite extremo superior: ");scanf("%d",&amp;fim);
+&nbsp; dostime(ac, 2);
+&nbsp; puts(ac);
+&nbsp; for(i=ini;i&lt;=fim;i++) {
+&nbsp;&nbsp;&nbsp; nao = 1;
+&nbsp;&nbsp;&nbsp; for(j=2;j&lt;i;j++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(i % j == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 0;
+&nbsp;&nbsp;&nbsp; if (nao || i == 2)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d ",i);
+&nbsp; }
+&nbsp; printf("\n");
+&nbsp; dostime(ac, 2);
+&nbsp; puts(ac);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Vers&atilde;o 2: Algoritmo Estruturado
+com conceitua&ccedil;&atilde;o matem&aacute;tica.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+&nbsp; char ac[80];
+&nbsp; int j,i,ini,fim,n,nao;
+&nbsp; double r;
+&nbsp; cls();
+&nbsp; printf("Digite extremo inferior: "); scanf("%d",&amp;ini);
+&nbsp; printf("\nDigite extremo superior: ");scanf("%d",&amp;fim);
+&nbsp; dostime(ac, 2);
+&nbsp; puts(ac);
+&nbsp; for(i=ini;i&lt;=fim;i++) {
+&nbsp;&nbsp;&nbsp; nao = 1;
+&nbsp;&nbsp;&nbsp; j = 2;
+&nbsp;&nbsp;&nbsp; r = i;
+&nbsp;&nbsp;&nbsp; r = sqrt(r);
+&nbsp;&nbsp;&nbsp; while (j&lt;=r) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(i % j == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j++;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; if (nao || i == 2)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d ",i);
+&nbsp; }
+&nbsp; printf("\n");&nbsp;&nbsp;
+&nbsp; dostime(ac, 2);
+&nbsp; puts(ac);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Vers&atilde;o 3: Algoritmo com conceitua&ccedil;&atilde;o
+matem&aacute;tica, com liberdades na estrutura&ccedil;&atilde;o</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+&nbsp; char ac[80];
+&nbsp; int j,i,ini,fim,n,nao;
+&nbsp; double r;
+&nbsp; cls();
+&nbsp; printf("Digite extremo inferior: "); scanf("%d",&amp;ini);
+&nbsp; printf("\nDigite extremo superior: ");scanf("%d",&amp;fim);
+&nbsp; dostime(ac, 2);
+&nbsp; puts(ac);
+&nbsp; for(i=ini;i&lt;=fim;i++) {
+&nbsp;&nbsp;&nbsp; nao = 1;
+&nbsp;&nbsp;&nbsp; if (i % 2 == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 0;
+&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = 3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r = i;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r = sqrt(r);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (j&lt;=r) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i % j == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nao = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j =j + 2;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; if (nao || i == 2)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d ",i);
+&nbsp; }
+&nbsp; printf("\n");
+&nbsp; dostime(ac, 2);
+&nbsp; puts(ac);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aulas
+10L,11L e 12L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Elabore um jogo onde o humano tenta descobrir
+o n&uacute;mero do computador e vice-versa. Os n&uacute;meros devem estar
+entre 1 e 1023, sendo que o jogo s&oacute; termina quando um (ou ambos)
+jogadores acertarem o n&uacute;mero de seu oponente. O Empate ocorre quando
+os dois jogadores acertarem o n&uacute;mero de seu oponentes na mesma jogada.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Solu&ccedil;&atilde;o:</FONT>
+<PRE><FONT FACE="Courier New,Courier">/* Autores: Deusdeth, Luis Fernando, Ana */
+int verif=0,numm,numh,ia=0,ib=1023,contm=0,conth=0,resph,palpm;
+char nome[32];
+main ()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+cls ();&nbsp;
+apresent ();
+nome_hum ();
+num_maq ();
+while (verif == 0){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; joga_hum ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; joga_maq ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rotina_verif ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rotina_verif1 ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rotina_verif2 ();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+rotina_venceu ();
+}
+
+apresent ()
+{
+puts ("|*********************************************************|");
+puts ("|*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; J O G O&nbsp;&nbsp;&nbsp;&nbsp; A L O - V E J A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|");
+puts ("|************* ( A P R E S E N T A C A O ) ***************|");
+puts ("|* - JOGO ENTRE A MICRO E VOCE. O MICRO IRA' ESCOLHER UM *|");
+puts ("|*&nbsp;&nbsp; NUMERO E VOCE OUTRO NUM INTERVALO ENTRE 1 E 1023.&nbsp;&nbsp; *|");
+puts ("|* - CADA UM IRA' TENTAR DESCOBRIR O NUMERO DO OPONENTE, *|");
+puts ("|*&nbsp;&nbsp; ATE' QUE UM DOS JOGADORES ADIVINHE O NUMERO DO OUTRO*|");
+puts ("|* - O MICRO IRA' INFORMAR SE O SEU PALPITE FOI CORRETO, *|");
+puts ("|*&nbsp;&nbsp; BAIXO OU ALTO.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|");
+puts ("|* - VOCE DEVERA' FAZER O MESMO, INFORMANDO:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|");
+puts ("|*&nbsp;&nbsp; (1) PARA UM CHUTE BAIXO;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|");
+puts ("|*&nbsp;&nbsp; (2) PARA UM CHUTE ALTO;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|");
+puts ("|*&nbsp;&nbsp; (3) PARA CERTO.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|");
+puts ("|*********************************************************|");
+}
+
+nome_hum ()
+{
+printf ("INFORME O SEU NOME: ");
+gets (nome);
+}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+num_maq ()
+{
+numm=rand()/32;
+}
+
+joga_hum ()
+{
+printf ("%s, tente acertar o numero que eu escolhi : ",nome);
+scanf&nbsp; ("%d",&amp;numh);
+puts&nbsp;&nbsp; ("o resultado sera divulgado apos a jogada do micro");
+conth=conth+1;
+puts ("*************************************************************");
+puts&nbsp;&nbsp; (" ");
+}&nbsp;&nbsp;
+
+joga_maq ()
+{
+palpm=(ia+ib+1)/2;
+printf ("%s, acho que voce pensou no numero %d",nome,palpm);
+puts&nbsp;&nbsp; (" ");
+printf ("digite (1) baixo, (2) alto ou (3) certo : ");
+scanf&nbsp; ("%d",&amp;resph);
+contm=contm+1;
+puts ("*************************************************************");
+puts&nbsp;&nbsp; (" ");
+}
+
+rotina_verif ()
+{
+if (numh == numm)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; verif = verif + 1;
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (resph == 3)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; verif = verif + 1;
+}
+
+rotina_verif1 ()
+{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if (numh > numm){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf ("seu chute foi alto");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts (" ");&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (numh &lt; numm){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf ("seu chute foi baixo");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts (" ");
+&nbsp;&nbsp; }
+}
+
+rotina_verif2 ()
+{
+if (resph == 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ia = palpm;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (resph == 2)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ib = palpm;
+}
+
+rotina_venceu ()
+{&nbsp;
+if (numh == numm)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (resph == 3)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nOcorreu Empate! \n\n* fim do jogo.\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("* %s parabens, voce acertou em %d tentativas.",nome,conth);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; ("* fim do jogo.");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (resph == 3){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("* %s o micro acertou em %d tentativas.",nome,contm);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; (" ");&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; ("* fim do jogo.");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts&nbsp; (" ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}</FONT></PRE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Exerc&iacute;cio:</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Elabore programa baseado no Jogo da Velha,
+onde o jogador humano enfrenta a m&aacute;quina. Observe que o computador
+nunca dever&aacute; ser derrotado, podendo eventualmente derrotar o jogador
+humano.</FONT>
+<BR><A NAME="11"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Matrizes</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">Correspondem a elementos do mesmo
+tipo, agrupados sob o mesmo nome e diferenciados entre si atrav&eacute;s
+de &iacute;ndices. Na linguagem C, todos os vetores ou matrizes consistem
+em posi&ccedil;&otilde;es cont&iacute;guas, sendo que o endere&ccedil;o
+mais baixo corresponde ao primeiro elemento e o endere&ccedil;o mais alto
+ao &uacute;ltimo elemento.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Declara&ccedil;&atilde;o</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Deve ser feita nestes formatos:</FONT>
+<PRE><FONT FACE="Courier New,Courier">char nome[20];
+float preco[30];
+int m[5][3]; /* bidimensional */
+char c[3] = {'f','i','m'}; /* declarada e inicializada */
+char d[3] = "fim"; /* idem */
+int a[5] = {1,10,3,5,30} /* declarada e inicializada, num&eacute;rica */</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Imprima 5 n&uacute;meros na
+ordem oposta a que forem informados.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Solu&ccedil;&atilde;o sem matriz</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,b,c,d,e;
+scanf("%d %d %d %d %d",&amp;a,&amp;b,&amp;c,&amp;d,&amp;e);
+printf("%d %d %d %d %d",e,d,c,b,a);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Solu&ccedil;&atilde;o com matriz</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i,a[5];
+for (i=1;i&lt;=5;i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Elemento %d: ",i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",a[i]);
+}
+puts(" ");
+for (i=5;i>0;i--)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Elemento %d: ",a[i]);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 2: Tabuada em matrizes.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a[10], i, t = 3;
+for (i=0;i&lt;11;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[i] = i * t;
+for (i=0;i&lt;11;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d * %d = %d",i,t,a[i]);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exerc&iacute;cio: Retome o Exerc&iacute;cio
+da Aula de Laborat&oacute;rio 8, exerc&iacute;cio 3 e o resolva com o uso
+de matrizes.</FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+11L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Jogo da Velha: Continua&ccedil;&atilde;o.</FONT>
+<BR><A NAME="12"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ordena&ccedil;&atilde;o</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Exemplo: Dada uma s&eacute;rie de n&uacute;meros
+inteiros, ordene-a de forma crescente.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Algoritmo:</FONT></LI>
+</MENU>
+
+<PRE><I><FONT FACE="Courier New,Courier">leia n
+para i de 1 at&eacute; n
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; leia a[i]
+para i de 1 at&eacute; n-1 fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; para j de i+1 at&eacute; n fa&ccedil;a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; se a[i] > a[j] ent&atilde;o
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m = a[i]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[i] = a[j]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[j] = m
+para i de 1 at&eacute; n
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imprima a[i]</FONT></I></PRE>
+<FONT FACE="Courier New,Courier">Em C ter&iacute;amos:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x,y,z,w,a[100];
+do
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; traca_linha()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Programa para ordenar 'n' numeros digitados.");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; traca_linha();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Quantos Numeros (0=fim) -> ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = leintf();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (x==0) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; traca_linha()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (y = 0; y &lt; x; y++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("a[%2d]= ",y);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[y] = leintf();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; traca_lina();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (y=0;y&lt;(x-2),y++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (z=y+1;z&lt;(x-1);z++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (a[y] > a[z]) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; w = a[y];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[y] = a[z];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[z] = w;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (y=0;y&lt;(x-1);y++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d\n",a[y]);
+&nbsp;&nbsp;&nbsp;&nbsp; } while(1);
+}
+
+traca_linha()
+{
+int x;
+for (x=1;x != 80; x++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchar('=');
+putchar('\n');
+}&nbsp;&nbsp;
+
+leintf()
+{&nbsp;
+char s[20];
+gets(s);
+return(atoi(s));
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+12L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Jogo da Velha: Continua&ccedil;&atilde;o.</FONT>
+<BR><A NAME="13"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ponteiros -
+Apresenta&ccedil;&atilde;o</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier"><U>Introdu&ccedil;&atilde;o</U></FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Ponteiros s&atilde;o endere&ccedil;os,
+isto &eacute;, s&atilde;o vari&aacute;veis que cont&eacute;m um endere&ccedil;o
+de mem&oacute;ria. Se uma vari&aacute;vel cont&eacute;m o endere&ccedil;o
+de outra, ent&atilde;o a primeira (o ponteiro) aponta para a segunda.</FONT>
+<CENTER><IMG SRC="IMG.GIF" ></CENTER>
+<FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">"x" o "ponteiro" aponta para o "inteiro"
+a</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operadores</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">&amp;- (E comercial) que fornece o endere&ccedil;o
+de determinada vari&aacute;vel. N&atilde;o confundir com o operador l&oacute;gico
+de opera&ccedil;&otilde;es de baixo n&iacute;vel, de mesmo s&iacute;mbolo.
+Atribui o endere&ccedil;o de uma vari&aacute;vel para um ponteiro.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">*- (Aster&iacute;stico) que acessa
+o conte&uacute;do de uma vari&aacute;vel, cujo endere&ccedil;o &eacute;
+o valor do ponteiro. N&atilde;o confundir com o operador aritm&eacute;tico
+de multiplica&ccedil;&atilde;o de mesmo s&iacute;mbolo. Devolve o valor
+endere&ccedil;ado pelo ponteiro.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplos:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int *pont, cont, valor;
+cont = 100;
+pont = &amp;cont;
+val = *pont;
+printf("%d",val);&nbsp;&nbsp; /* 100 */
+}
+
+main()
+{
+char a,b,*x;
+b = 'c';
+p = &amp;a;
+*p = b;
+printf("%c",a);&nbsp;&nbsp; /* c */
+}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+main()
+{
+int x,y,*px,*py;
+x = 100;
+px = &amp;x;&nbsp;&nbsp; /* px tem o endereco de x */
+py = px;&nbsp;&nbsp; /* py tem o endereco de x */
+y = *py;&nbsp;&nbsp; /* y vale 100, pois recebe o conte&uacute;do de x */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* , atrav&eacute;s do&nbsp; ponteiro py */
+printf("%d %d",x,y);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+13L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Executar Programa de Ordena&ccedil;&atilde;o
+de uma S&eacute;rie de N&uacute;meros.</FONT></LI>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">2- Dado um nome invert&aacute;-o.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Calcule a m&eacute;dia de "n" n&uacute;meros,
+posteriormente imprimindo-os.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">4- Dada uma s&eacute;rie com "n" n&uacute;meros,
+imprima a m&eacute;dia dos n-1 maiores termos, usando matrizes obrigatoriamente.</FONT></LI>
+</MENU>
+
+<LI>
+<FONT FACE="Courier New,Courier">5- Simule a execu&ccedil;&atilde;o do
+programa abaixo:</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">#include "stdio.h"
+main()
+{
+int i,k,*pi,*pk;
+char a;
+i = 2; k = 0;
+puts("Qual sera o valor de k? ");
+pk = &amp;k;
+pi = &amp;i;
+*pk = i;
+printf("para *pk = i, temos k= %d\n",k);
+k = *pi;
+printf("para k = *pi, temos k= %d\n",k);
+scanf("%c",&amp;a);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">6- Simule a execu&ccedil;&atilde;o do
+programa abaixo:</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x,y,*px,*py;
+printf("Digite um valor: ");
+scanf("%d",&amp;x);
+px = &amp;x;
+y = *px;
+printf("digitou= %d e y= %d\n",x,y);
+*px = 8;
+printf("valor mudou para %d\n",x);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">7- Simule a execu&ccedil;&atilde;o do
+programa a seguir:</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+char a,b,*p;
+b = 'c';&nbsp;
+p = &amp;a;
+*p = b;
+printf("%c",a);
+}</FONT></PRE>
+<A NAME="14"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ponteiros -
+Conceitos de Endere&ccedil;os</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Aritm&eacute;tica de Ponteiros</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">S&atilde;o v&aacute;lidas as opera&ccedil;&otilde;es
+de soma e subtra&ccedil;&atilde;o, sendo que seu resultado depende do tipo
+de vari&aacute;vel apontada pelo ponteiro.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Supondo que</FONT></FONT></H3>
+
+<PRE><FONT FACE="Courier New,Courier">int *p, x;
+char *q, a;</FONT></PRE>
+<FONT FACE="Courier New,Courier">se</FONT>
+<PRE><FONT FACE="Courier New,Courier">q = &amp;a;&nbsp;
+p = &amp;x;</FONT></PRE>
+<FONT FACE="Courier New,Courier">e ainda que</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">a-endere&ccedil;o 100</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">x-endere&ccedil;os 101/102</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">ent&atilde;o q++ --> q "apontar&aacute;"
+para o endere&ccedil;o 101</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">p++ --> p "apontar&aacute;" para o
+endere&ccedil;o 103</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Este conceito &eacute; particularmente
+importante no que se refere a matrizes pois como se sabe, matriz nada mais
+&eacute; que um conjunto de vari&aacute;veis do mesmo tipo, dispostas seq&uuml;encialmente
+em mem&oacute;ria.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Por conterem endere&ccedil;os, ponteiros
+permitem apenas as opera&ccedil;&otilde;es de soma e subtra&ccedil;&atilde;o.
+Supondo que:</FONT>
+<PRE><FONT FACE="Courier New,Courier">int i,*pi;
+char c,*pc;
+float f,*pf;</FONT></PRE>
+<FONT FACE="Courier New,Courier">Supondo ainda que pi, pc e pf apontem
+para i, c e f que estariam com os seguintes endere&ccedil;os: 2340, 2345
+e 2350.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Se</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">pc = pc + 1, ent&atilde;o pc valer&aacute;
+2346, pois vari&aacute;veis caracteres possuem apenas 1 byte.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">pi = pi + 1, ent&atilde;o pi valer&aacute;
+2342 (!), pois vari&aacute;veis inteiras ocupam 2 bytes.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">pf = pf + 5, ent&atilde;o pf valer&aacute;
+2370 (!), pois vari&aacute;veis pt. flutuante ocupam quatro bytes.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier"><I>Exemplo</I></FONT>
+<PRE><FONT FACE="Courier New,Courier">int i,*pi;
+char c,*pc;
+float f,*pf;</FONT></PRE>
+<FONT FACE="Courier New,Courier">Supondo ainda que pi, pc e pf apontem
+para i, c e f que estariam com os seguintes endere&ccedil;os: 2340, 2345
+e 2350.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Se</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">pc = pc + 1, ent&atilde;o pc valer&aacute;
+2346, pois vari&aacute;veis caracteres possuem apenas 1 byte.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">pi = pi + 1, ent&atilde;o pi valer&aacute;
+2342 (!), pois vari&aacute;veis inteiras ocupam 2 bytes.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">pf = pf + 5, ent&atilde;o pf valer&aacute;
+2370 (!), pois vari&aacute;veis pt. flutuante ocupam quatro bytes.</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Atribui&ccedil;&otilde;es indiretas</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x,y,*px,*py;
+x = 100;
+px = &amp;x;&nbsp;&nbsp; /* px tem o endereco de x */
+py = px;&nbsp;&nbsp; /* py tem o endereco de x */
+y = *py;&nbsp;&nbsp; /* y vale 100, pois recebe o conte&uacute;do de x, atrav&eacute;s do&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ponteiro py */
+printf("%d %d",x,y);
+}</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Compara&ccedil;&atilde;o
+de Ponteiros</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Por se tratar de endere&ccedil;os os ponteiros
+podem ser comparados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">if (p > q) puts("p aponta para endere&ccedil;o maior que q");</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Ponteiros - Pr&aacute;tica
+- Conceitos B&aacute;sicos (Aula 14L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Processar exemplos vistos em teoria.</FONT>
+<BR><A NAME="15"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ponteiros Conceitos
+Avan&ccedil;ados</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Strings</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">Consideremos o trecho de c&oacute;digo
+abaixo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">char linha[80],*p;*p1;
+p = &amp;linha[0];
+p1 = linha;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* p1 e p possuem o mesmo endere&ccedil;o, i.&eacute;, */
+if (p==p1)&nbsp;
+puts("iguais!");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* apontam para o 1&ordm; elemento da matriz! */</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo: Inverter os elementos de uma
+string, usando ponteiros.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Solu&ccedil;&atilde;o: Pela maneira
+convencional ter&iacute;amos:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+char str[80];
+int i;
+printf("Digite uma palavra: "); gets(str);
+for (i=strlen(str)-1;i>=0;i--)
+printf("%c",str[i]);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">com ponteiros ter&iacute;amos:</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+char str[80],*p;
+int i;
+printf("Digite uma palavra: "); gets(str);
+p = str;
+for(i = strlen(str) - 1;i>=0;i--)
+printf("%c",*(p+i));
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Uso de Ponteiros e String em
+mesma vari&aacute;vel</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">char *p = "Imprimindo Algo\n";
+main()
+{
+int i;
+printf("%s\n - por ponteiro...\n\n",p);
+for(i=0;p[i];i++)
+printf("%c",p[i]);
+puts("\n - por caracteres em ponteiro ");
+}</FONT></PRE>
+
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Velocidade</FONT></FONT></H2>
+<FONT FACE="Courier New,Courier">O acesso aos elementos da matriz &eacute;
+mais r&aacute;pido quando feito atrav&eacute;s de endere&ccedil;os do que
+seria caso fosse executado pela maneira convencional, por&eacute;m express&otilde;es
+que envolvam c&aacute;lculos para se obter um elemento espec&iacute;fico
+da matriz devem ser feitas preferencialmente pelo m&eacute;todo convencional,
+pois express&otilde;es complexas envolvendo ponteiros s&atilde;o processadas
+em velocidade semelhante &agrave;quelas feitas pelo modo convencional,
+que apresenta a vantagem de ser mais facilmente compreendido.</FONT>
+<H2>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Matrizes e Ponteiros</FONT></FONT></H2>
+
+<H4>
+<FONT FACE="Courier New,Courier">Em C voc&ecirc; pode indexar um ponteiro
+como se este fosse uma matriz!</FONT></H4>
+<FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i,*p,a[5];
+for (i=0;i&lt;=4;i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite o %d elemento",);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",&amp;a[i]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+p = a;
+for (i=0;i&lt;=4;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d %d %d\n",a[i],p[i],*(p+i));
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Ponteiros - Pr&aacute;tica
+- Conceitos Avan&ccedil;ados (Aula 15L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Processar Exemplos vistos em teoria</FONT>
+<BR><A NAME="16"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ponteiros -
+Pilhas</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">Uma pilha &eacute; uma lista de vari&aacute;veis
+do mesmo tipo (semelhantes a uma matriz, ou mesmo uma matriz), onde utilizamos
+o conceito de que "o primeiro que entra &eacute; o &uacute;ltimo a sair".
+Imaginemos um bloco de folhas. Normalmente utilizaremos primeiro a &uacute;ltima
+folha do bloco ("a de cima"), enquanto que a primeira folha colocada ("a
+de baixo") ser&aacute; a &uacute;ltima a ser utilizada. Nos exemplos a
+seguir ser&atilde;o utilizadas duas fun&ccedil;&otilde;es: push() e pop().
+Usaremos push() para inserir elementos na pilha e pop() para sac&aacute;-los.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo: Fa&ccedil;a com que seja criada
+uma pilha com no m&aacute;ximo 50 elementos, onde n&uacute;meros positivos
+empilhem elementos na pilha, 0 tire o &uacute;ltimo elemento da pilha e
+-1 cause o encerramento do programa:</FONT>
+<PRE><FONT FACE="Courier New,Courier">int pilha[50],*p1,*to;
+main()
+{
+int valor;
+p1 = pilha;
+to = p1;
+printf("Numero --> Pilha, 0 recupera e -1 finaliza \n");
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",&amp;valor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (valor != 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; push(valor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valor = pop();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d\n",valor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while (valor != -1);
+}
+
+push(i)
+int i;
+{
+p1++;
+if (p1 == (to + 50)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Estouro da Pilha (superior) ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+*p1 = i;
+}
+
+pop()
+{
+if ((p1) == to) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Estouro da Pilha (inferior) ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;}
+p1--;
+return *(p1+1);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Imaginemos agora uma pilha onde n&atilde;o
+soub&eacute;ssemos antecipadamente o total de elementos de uma pilha, neste
+caso precisar&iacute;amos de instru&ccedil;&otilde;es que permitissem a
+manipula&ccedil;&atilde;o da &aacute;rea de mem&oacute;ria livre entre
+o programa e &aacute;rea de trabalho utilizada pelo programa conforme mostra
+o esquema abaixo:</FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Mem&oacute;ria do Sistema</FONT></FONT></H1>
+
+<TABLE BORDER >
+<TR>
+<TD WIDTH="292"><FONT FACE="Courier New,Courier">Usada para Vari&aacute;veis
+Locais e endere&ccedil;os de Rotinas&nbsp;</FONT></TD>
+
+<TD WIDTH="292"><FONT FACE="Courier New,Courier">Do "fim" para o inicio</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="292"><FONT FACE="Courier New,Courier">Mem&oacute;ria Livre para
+Aloca&ccedil;&atilde;o&nbsp;</FONT></TD>
+
+<TD WIDTH="292"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="292"><FONT FACE="Courier New,Courier">Vari&aacute;veis Globais</FONT></TD>
+
+<TD WIDTH="292"><FONT FACE="Courier New,Courier">Do "inicio" para o fim&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="292"><FONT FACE="Courier New,Courier">Programa</FONT></TD>
+
+<TD WIDTH="292"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">As fun&ccedil;&otilde;es malloc() e free()
+permitem que utilizemos a &aacute;rea de mem&oacute;ria livre para criar
+nossas vari&aacute;veis, por exemplo matrizes com limites a serem definidos
+em tempo de execu&ccedil;&atilde;o.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">char x,y,*px;
+main()
+{
+px = malloc(1000);
+if (!px) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Mem&oacute;ria Insuficiente!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+x = 'a';
+push(x);
+x = 'b';
+push(x);
+y = pop();
+printf("%c\n",y);
+y = pop();
+printf("%c",y);
+}
+
+push(i)
+char i;
+{
+px++;
+*px=i;
+}
+
+pop()
+{
+px--;
+return *(px+1);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo: Aloque uma certa quantidade de
+mem&oacute;ria e posteriormente escreva letras na &aacute;rea alocada,
+recupere estas letras e depois libere a mem&oacute;ria previamente alocada.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+char c,*p,*q;
+int i=0,j,r;
+cls();
+q = malloc(1000);
+p = q;
+puts("Digite Letras ... para parar digite &lt;enter>");
+for(;;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite a %d letra: ",i+1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;c);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (c == ' ')
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *p = c;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = ' ';
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i++
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+p = q;
+printf("\n\nLetras Digitadas:\n");
+for(j=1;j&lt;=i;j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d Letra = %c\n",j,*p);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+r=free(q);
+if (r==0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nLiberada Mem&oacute;ria Utilizada!");
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nFalha na Libera&ccedil;&atilde;o da Mem&oacute;ria Alocada!");
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo: Retome o exerc&iacute;cio anterior,
+por&eacute;m ao inv&eacute;s de armazernar letras, armazene n&uacute;meros.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+char c,*q,*p;
+int i = 0, j, r, m, n;
+cls();
+q = malloc(1000);
+p = q;
+puts("Digite Numeros ...&nbsp; para parar digite &lt;enter> ");
+for(;;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite o %do. Numero: ", i+1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%d",&amp;m);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (m==0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *p = m;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p=p+2;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i++;
+}
+p = q;
+printf("\n\nLetras Digitadas: \n");
+for(j=1;j&lt;=i;j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d Letra = %d\n",j,*p);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p=p+2;
+}
+r=free(q);
+if (r==0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nLiberada Memoria Usada!");
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("\nFalha na Libera&ccedil;&atilde;o de Mem&oacute;ria Reservada!");
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier"><B>Nota:</B> A caracter&iacute;stica t&iacute;pica
+da linguagem C, que facilita a mistura de tipos, permite o endere&ccedil;amento
+de vari&aacute;veis <I>atrav&eacute;s de sua posi&ccedil;&atilde;o na mem&oacute;ria,</I>
+ou seja, podemos usar um ponteiro de caracteres para apontar um n&uacute;mero
+inteiro e recuper&aacute;-lo sem qualquer tipo de inconveniente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Devemos notar entretanto que esta caracter&iacute;stica
+pode acarretar grandes problemas, e caso seja utilizada de forma inadequada,
+pode gerar problemas se acessarmos (ou principalmente se escrevermos) alguma
+&aacute;rea de mem&oacute;ria importante.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Outro ponto importante, &eacute; percebermos
+que <I>n&atilde;o temos n&uacute;meros, caracteres ou qualquer outra coisa
+aramazenadas na mem&oacute;ria al&eacute;m de bits</I>, portanto tudo o
+que necessitamos saber &eacute; <I>onde</I> est&aacute; uma informa&ccedil;&atilde;o
+procurada e <I>qual </I>&eacute; seu formato e simplesmente acess&aacute;-la
+(ou substitu&iacute;-la) de acordo com nossa necessidade.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">&Eacute; desnecess&aacute;rio dizer,
+que estas s&atilde;o caracter&iacute;sticas dos assemblers pr&oacute;prios
+de cada equipamento, portanto a Linguagem C nos desobriga a aprender o
+Assembler de cada microprocessador, por&eacute;m n&atilde;o elimina a necessidade
+de conhecermos sua arquitetura.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Matriz de Ponteiros e Indexa&ccedil;&atilde;o
+M&uacute;ltipla</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">S&atilde;o v&aacute;lidas express&otilde;es
+como as que seguem abaixo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">int *x[10];
+x[2] = &amp;valor;
+&nbsp;.
+&nbsp;.
+&nbsp;.
+printf("%d",*x[2]);</FONT></PRE>
+<FONT FACE="Courier New,Courier">ou</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x,*p,**q;
+x = 10;
+p = &amp;x;
+q = &amp;p;
+printf("%d",**q); /* 10 */
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Ponteiros - Pr&aacute;tica
+- Conceitos Avan&ccedil;ados (Aula 16L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">Processar Exemplos de Pilha.</FONT>
+<BR><A NAME="17"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ponteiros Conceitos
+Complementares</FONT></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Ponteiros como Strings</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Em C podemos usar o fato do ponteiro nulo
+(0 bin&aacute;rio) ser o terminador de</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">strings combinado a possibilidade de
+representa&ccedil;&atilde;o de matriz como ponteiros,</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">conforme mostra o exemplo a seguir:</FONT>
+<PRE><FONT FACE="Courier New,Courier">char *p = "Frase a demonstrar \n";
+main()
+{
+int i;
+printf("%s",p);
+for (i=0;p[i];i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%c",p[i]);
+}</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Problemas a serem evitados
+com ponteiros</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Os erros vistos a seguir podem passar
+n&atilde;o ser notados durante a fase de desenvolvimento do sistema e mesmo
+durante algum tempo em sua fase operacional e ser detectado apenas esporadicamente,
+tornando muito dif&iacute;cil sua localiza&ccedil;&atilde;o pelo programador,
+pois s&oacute; ser&atilde;o observados, no caso de serem apontados endere&ccedil;os
+vitais para o sistema.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Atribui&ccedil;&atilde;o de posi&ccedil;&atilde;o
+de mem&oacute;ria desconhecida:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x,*p;
+x = 10;
+*p = x;
+printf("%d",*p);&nbsp; /* valor desconhecido */
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Observe que 10 &eacute; atribu&iacute;do
+a uma posi&ccedil;&atilde;o de mem&oacute;ria desconhecida, pois o endere&ccedil;o
+de "p" n&atilde;o &eacute; conhecido. Caso "p" estiver apontando para algum
+endere&ccedil;o vital, o sistema ser&aacute; paralisado, causando suspeita
+de mal funcionamento (hardware) ou presen&ccedil;a de v&iacute;rus (software).
+Na verdade, esta ocorr&ecirc;ncia &eacute; o chamado "bug" (pequeno erro
+no programa), pois somente algumas vezes causar&aacute; erro. Observe serem
+grandes as possibilidades deste programa funcionar perfeitamente, pois
+o ponteiro provavelmente jogar&aacute; o valor num local n&atilde;o usado.
+Por&eacute;m quanto maior for o programa, mais prov&aacute;vel ser&aacute;
+a possibilidade de encontrarmos um erro conforme descrito anteriormente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Atribui&ccedil;&atilde;o de valor para
+o ponteiro:</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x,*p;
+x = 10;
+p = x;
+printf("%d",*p);&nbsp; /* valor desconhecido */
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Observe que n&atilde;o ser&aacute; impresso
+10, mas um valor desconhecido qualquer, pois 10 ser&aacute; atribu&iacute;do
+ao ponteiro p, que supostamente cont&eacute;m um endere&ccedil;o e n&atilde;o
+um valor. Se tiv&eacute;ssemos "p = &amp;x;" a&iacute; o programa funcionaria
+de forma correta.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Passagem de Vari&aacute;veis
+ou Valores atrav&eacute;s Fun&ccedil;&otilde;es</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Quando desejamos que uma fun&ccedil;&atilde;o
+altere o valor de uma vari&aacute;vel da fun&ccedil;&atilde;o que a chamou,
+passamos para a fun&ccedil;&atilde;o chamada o endere&ccedil;o desta vari&aacute;vel
+(passagem de par&acirc;metro por refer&ecirc;ncia). Quando somente precisamos
+do valor da vari&aacute;vel e n&atilde;o pretendemos alter&aacute;-lo na
+rotina (passagem de par&acirc;metro por valor), passamos diretamente a
+vari&aacute;vel, conforme visto a seguir:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 1: Passagem por Valor (a mant&eacute;m
+seu valor)</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,r,x;
+printf("Digite um valor: ");
+scanf("%d",&amp;a);
+x = 2 * a + 3;
+r = soma(a);
+printf("%d, %d e %d",a,x,r);
+}
+
+soma(z)
+int z;
+{
+int x=5;
+x = 2 * x + z;
+z = 0;
+return(x);
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo 2: Passagem por Refer&ecirc;ncia
+(a muda seu valor)</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,r,x;
+printf("Digite um valor: ");
+scanf("%d",&amp;a);
+x = 2 * a + 3;
+r = soma(&amp;a);
+printf("%d, %d e %d",a,x,r);
+}
+
+soma(z)
+int *z;
+{
+int x=5;
+x = 2 * x + *z;
+*z = 0;
+return(x);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo 3- Uso de ponteiros em fun&ccedil;&otilde;es.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a,b;
+a = 100;
+b = 20;
+swapg(&amp;a,&amp;b);
+printf("Maior = %d ",a);
+printf("Menor = %d ",b);
+}
+
+swapg(c,d)
+int *c,*d;
+{
+int t;
+if (*c &lt;= *d)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;&nbsp;&nbsp; /*&nbsp;&nbsp; nao troca&nbsp;&nbsp; */
+t&nbsp; = *c;
+*c = *d;
+*d = t;
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+17L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Troque o valor de 2 vari&aacute;veis
+usando ponteiros, sem usar fun&ccedil;&otilde;es. Compare com o exemplo
+visto na aula te&oacute;rica.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Crie um programa de contagem com
+loop usando ponteiros.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- Crie um programa com 2 vari&aacute;veis,
+sendo que a primeira ser&aacute; do tipo caracter e a segunda do tipo inteiro.
+Atribua valores da primeira para a segunda e vice-versa atrav&eacute;s
+de ponteiros.</FONT>
+<BR><A NAME="18"></A>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Ponteiros x
+Matrizes e Entradas e Sa&iacute;das</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">Exemplo: Retomando o exemplo da tabuada,
+resolvendo ao "estilo C de programar"</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Estilo Pascal</FONT></FONT></H3>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int a[10],i;
+for(i=0;i&lt;10;i++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a[i] = i*3;
+for(i=0;i&lt;10;i++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d x 3 = %d \n",i,a[i]);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Apesar da solu&ccedil;&atilde;o apresentada
+acima ser correta logicamente, peca por desconsiderar a raz&atilde;o principal
+de um programa ser escrito em C, a velocidade. Intui-se facilmente que
+se endere&ccedil;armos uma vari&aacute;vel por seu endere&ccedil;o, com
+certeza seremos mais velozes do que se a acessarmos pela tabela de vari&aacute;veis
+(como feito no exemplo acima).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Antes de resolvermos novamente este
+problema, voltemos aos ponteiros neste pequeno programa, que servir&aacute;
+para entendermos a estrat&eacute;gia comumente usada pelos programadores
+C.</FONT>
+<CENTER>
+<H4>
+<FONT FACE="Courier New,Courier"><FONT SIZE=-2>Endere&ccedil;os</FONT></FONT></H4></CENTER>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT SIZE=-2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Instru&ccedil;&otilde;es&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1002
+main()
+{
+&nbsp; char c,*pc,x;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; declara&ccedil;&otilde;es&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x
+&nbsp; c = 'A';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atribui&ccedil;&atilde;o&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ?
+&nbsp; pc = &amp;c;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atribui&ccedil;&atilde;o&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ?
+&nbsp; printf("%c",*pc);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exibir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A
+&nbsp; x = *pc;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atribui&ccedil;&atilde;o&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A
+}</FONT></FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=-2>Tabuada ao Estilo C</FONT></FONT></H3>
+
+<PRE><FONT FACE="Courier New,Courier"><FONT SIZE=-2>main()
+{
+int a[10],i,*p;
+p = &amp;a;
+for(i=1;i&lt;10;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *(ponteiro+i) = i*3;
+for(i=0;i&lt;10;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d x 3 = %d \n",i,a[i]);
+}</FONT></FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Entradas e Sa&iacute;das</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Al&eacute;m das fun&ccedil;&otilde;es
+"printf" e "scanf", muito poderosas existem outras instru&ccedil;&otilde;es
+de entrada e sa&iacute;da, por&eacute;m de menores recursos e ocupando
+menos espa&ccedil;o em mem&oacute;ria.</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier"><B>Instru&ccedil;&otilde;es</B>&nbsp;</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier"><B>Descri&ccedil;&atilde;o</B>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier">getchar()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">l&ecirc; um caracter do
+teclado aguardando &lt;Enter>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier">getche()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">l&ecirc; um caracter do
+teclado e prossegue&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier">getch()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">l&ecirc; um caracter sem
+eco na tela e prossegue&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier">putchar()&nbsp;</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">escreve um caracter na
+tela&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier">gets()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">l&ecirc; uma string do
+teclado&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="149"><FONT FACE="Courier New,Courier">puts()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">escreve uma string na
+tela&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Todas as instru&ccedil;&otilde;es vistas
+anteriormente tem como argumento uma vari&aacute;vel do tipo necess&aacute;rio
+(caracter ou seq&uuml;&ecirc;ncia de caracteres).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo 1: Escrever "A" de diversas
+formas.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i;
+char c;
+i = 65;
+c = 'A';
+putchar(65);
+putchar('A');
+putchar(i);
+putchar('\n');
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">A linguagem C &eacute; pr&oacute;diga
+em "confundir" dispositivos, como podemos constatar no exemplo a seguir.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Exemplo 2: Teclado &eacute;
+Arquivo!</FONT></FONT></H3>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+char s[30];
+int c;
+while ((c=getchar()) != EOF)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchar(c);
+get(s);
+puts(c);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Revisando o comando "scanf", agora estamos
+em condi&ccedil;&otilde;es de justificar o porqu&ecirc; devemos endere&ccedil;ar
+as vari&aacute;veis com &amp;. O sinal % na frente dos especificadores
+de entrada serve para informar o tipo de dado a ser lido. Um caracter n&atilde;o
+branco na string faz com que "scanf" leia e desconsidere um caracter coincidente.
+Por exemplo, a string de controle "%d,%d" faz com que "scanf" primeiro
+leia um inteiro, depois leia e desconsidere um v&iacute;rgula e, finalmente,
+leia outro inteiro. Se n&atilde;o houver ',', "scanf" ser&aacute; encerrada.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O comando "scanf" deve receber valores
+passados por seus endere&ccedil;os. Devemos lembrar que C trabalha desta
+forma para chamadas por refer&ecirc;ncia, permitindo que uma fun&ccedil;&atilde;o
+altere o conte&uacute;do de um argumento, como em "scanf("%d",&amp;cont);".</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Para leitura de strings (matrizes de
+caracteres), o nome da matriz sem &iacute;ndice informa o "endere&ccedil;o
+do primeiro elemento" da matriz, ou seja um ponteiro, portanto n&atilde;o
+devemos usar &amp;, como em "scanf("%s",matriz);".</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Os programadores BASIC devem ter em
+mente que solu&ccedil;&otilde;es como as separa&ccedil;&otilde;es por v&iacute;rgula
+no comando "INPUT" n&atilde;o funcionaram adequadamente em instru&ccedil;&otilde;es
+do tipo "scanf("%d %d",&amp;r,&amp;c);".</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">No exemplo a seguir o 't' (se digitado!)
+ser&aacute; descartado, 10 ficar&aacute; em x e 20 em y como em "scanf("%st%s",&amp;x,&amp;y);".</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Outro cuidado a ser tomado pode ser
+constatado na express&atilde;o a seguir "scanf("%s ",dado);", somente ap&oacute;s
+voc&ecirc; digitar um caracter ap&oacute;s um caracter branco. Isto ocorre
+pois "%s " instruiu "scanf()" a ler e desconsiderar espa&ccedil;os.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Os usu&aacute;rios BASIC (e alguns
+do Clipper) tem o seguinte costume:</FONT>
+<PRE><FONT FACE="Courier New,Courier">INPUT"Digite um N&uacute;mero: ";A%</FONT></PRE>
+<FONT FACE="Courier New,Courier">Analogamente pensa-se (de forma errada)
+que podemos fazer:</FONT>
+<PRE><FONT FACE="Courier New,Courier">scanf("Digite um n&uacute;mero %d ",&amp;a);</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">algo totalmente sem sentido em C.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Ter&iacute;amos a seguinte estrutura equivalente:</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">puts("Digite um n&uacute;mero: ");
+scanf("%d",&amp;a);</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Principais C&oacute;digos
+de Formata&ccedil;&atilde;o de scanf e printf</FONT></FONT></H3>
+
+<TABLE BORDER >
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier"><B>C&oacute;digo</B>&nbsp;</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier"><B>Significado</B>&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"><B>Observa&ccedil;&otilde;es</B>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%c</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve um &uacute;nico
+caracter&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%d</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve inteiro
+decimal&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%i</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve inteiro
+decimal&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%e</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve n&uacute;mero
+com ponto flutuante&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier">Nota&ccedil;&atilde;o
+Cient&iacute;fica&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%f</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve n&uacute;mero
+com ponto flutuante&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%h</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve um inteiro
+curto&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%o</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve um n&uacute;mero
+octal&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%s</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve uma string&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%x</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve um n&uacute;mero
+hexadecimal&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%p</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">l&ecirc;/escreve um ponteiro&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%n</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">receber um valor inteiro
+igual ao n&uacute;mero de caracteres lidos at&eacute; o momento&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">n&uacute;mero</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">especificar&aacute; o
+total de caracteres a serem lidos para um campo qualquer&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%g</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">Usa %e ou %f, aquele que
+for menor&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier">Somente printf</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%%</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">Imprime %&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier">Somente printf</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">%u</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">Decimal sem Sinal&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier">Somente printf</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">h</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">Modificador short&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="92"><FONT FACE="Courier New,Courier">l</FONT></TD>
+
+<TD WIDTH="340"><FONT FACE="Courier New,Courier">Modificador long&nbsp;</FONT></TD>
+
+<TD WIDTH="152"><FONT FACE="Courier New,Courier"></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Exemplificando:</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">%ld- especifica um inteiro longo.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Os modificadores "acompanham" o outro
+c&oacute;digo de formato, modificando sua apresenta&ccedil;&atilde;o.</FONT>
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Ponteiros x Matrizes e Entradas
+e Sa&iacute;das (Aula 18L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Processar Exemplos vistos em teoria.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Retome exerc&iacute;cios anteriores,
+utilizando as instru&ccedil;&otilde;es de entrada e sa&iacute;da getchar(),
+getche(), getch(), putchar(), gets() e puts().</FONT>
+<BR><A NAME="19"></A>
+</BODY>
+</HTML>

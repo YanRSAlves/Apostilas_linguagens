@@ -1,0 +1,1052 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu20fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu21fi.htm">
+
+<LINK REL="Previous" HREF="vcu19fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu19fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu21fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">20 &#151; Working with Documents and Views</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">The CDocument Class</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Declaring a Document Class in Your Application</A></LI>
+
+<LI>
+
+<A HREF="#I5">CDocument Member Functions</A></LI>
+
+<LI>
+
+<A HREF="#I6">Documents, Events, and Overridable Functions</A></LI>
+
+<LI>
+
+<A HREF="#I7">Document Data</A></LI>
+
+<LI>
+
+<A HREF="#I8"> CCmdTarget and CDocItem</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">The CView Class</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I10">Declaring a View Class</A></LI>
+
+<LI>
+
+<A HREF="#I11">CView Member Functions</A></LI>
+
+<LI>
+
+<A HREF="#I12">Views and Messages</A></LI>
+
+<LI>
+
+<A HREF="#I13">Variants of CView</A></LI>
+
+<LI>
+
+<A HREF="#I14"> Dialog-Based Applications</A></LI></UL>
+
+<LI>
+
+<A HREF="#I15">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>20 &#151; Working with Documents and Views</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>At the core of an MFC application is the concept of a <I>document object</I> and a corresponding <I>view window</I>. The document object represents (usually) a file opened by the application; the view window provides a visual presentation of the document's data and accepts user interaction. The relationship between documents and views is a <I>one-to-many</I> relationship; a view can be associated with only one document, but a document may have many views associated with it.
+
+<BR></P>
+
+<P>Document objects are represented by a class derived from CDocument. View window classes are derived from CView. In this chapter, we review these two classes, the most common ways of utilizing their capabilities to build a versatile representation of your data, and an efficient user interface.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>The </B><B><I>CDocument</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The CDocument class provides the basic functionality for your application's document objects. This includes the ability to create a new document, serialize document data, and provide basic cooperation between a document and a view window. MFC also provides a series of CDocument-derived classes that implement functionality specific to OLE applications.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Declaring a Document Class in Your Application</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In the case of an AppWizard-created application, you often don't have to worry about declaring your document class; the AppWizard does it for you. However, it is still useful to know more about the behavior of CDocument. Not only does this knowledge enable you to enhance the AppWizard-provided application skeleton, it may also help you easily add additional document types that your application supports. The AppWizard, in contrast, only creates application skeletons that support a single document type.
+
+<BR></P>
+
+<P>When you are building a simple MFC application, it is often enough to make relatively minor modifications to your application's AppWizard-supplied document class. Often no more is needed that a few member variables and perhaps a couple of member functions that provide access to those variables.
+
+<BR></P>
+
+<P>For example, consider a simple communication program (terminal emulator). Its document object is a series of settings (telephone number, speed, parity, and so on) that correspond to a connection. These can easily be represented by a set of simple data items in the document class, something similar to the following:
+
+<BR></P>
+
+<PRE>class CTerminalDoc : public CDocument
+
+{
+
+protected: // create from serialization only
+
+    CTerminalDoc();
+
+    DECLARE_DYNCREATE(CTerminalDoc)
+
+// Attributes
+
+public:
+
+    CString m_sPhone;
+
+    DWORD m_dwSpeed;
+
+    WORD m_nParity;
+
+    WORD m_nBits;
+
+    ...</PRE>
+
+<P>In addition to the declaration of member variables, all you need to do is to initialize them to reasonable defaults in your document class's OnNewDocument member function, and ensure that they are properly serialized:
+
+<BR></P>
+
+<PRE>...
+
+BOOL CTerminalDoc::OnNewDocument
+
+{
+
+    if (!CDocument::OnNewDocument())
+
+        return FALSE;
+
+    m_sPhone = &quot;555-1212&quot;;
+
+    m_dwSpeed = 2400;
+
+    m_nParity = 0;
+
+    m_nBits = 8;
+
+    return TRUE;
+
+}
+
+...
+
+void CTerminalDoc::Serialize(CArchive &amp;ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        ar &lt;&lt; m_sPhone;
+
+        ar &lt;&lt; m_dwSpeed;
+
+        ar &lt;&lt; m_nParity;
+
+        ar &lt;&lt; m_nBits;
+
+    }
+
+    else
+
+    {
+
+        ar &gt;&gt; m_sPhone;
+
+        ar &gt;&gt; m_dwSpeed;
+
+        ar &gt;&gt; m_nParity;
+
+        ar &gt;&gt; m_nBits;
+
+    }
+
+}</PRE>
+
+<P>For a simple application, nothing else needs to be done to have a complete, fully functional document class.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B><I>CDocument</I></B><B> Member Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDocument class has several member functions that are frequently used by applications.
+
+<BR></P>
+
+<P>The first set of member functions provides access to the associated view objects. Every document object has a list of view objects associated with it. An iterator to this list, in the form of a variable of type POSITION, can be obtained by calling the GetFirstViewPosition member function.
+
+<BR></P>
+
+<P>Values of type POSITION are used throughout the MFC, primarily in association with collection classes. Applications that need to traverse a list usually obtain an iterator that is associated with the first object on the list, and then use an iterator function to access the list's elements one by one. The case of CDocument and its associated views is no different; after obtaining a list iterator using GetFirstViewPosition, the elements of the list can be obtained by repeatedly calling GetNextView.
+
+<BR></P>
+
+<P>Thus, to process all the views associated with a document, your code would typically look like this:
+
+<BR></P>
+
+<PRE>POSITION pos = GetFirstViewPosition();
+
+while (pos != NULL)
+
+{
+
+    CView *pView = GetNextView(pos);
+
+    // Do something with pView
+
+}</PRE>
+
+<P>If all you want to accomplish is to notify the views for this document that the document has changed, it may not be necessary to use an iteration at all. Instead, you can call the UpdateAllViews member function. When calling this member function, you can also specify application-specific data that enables the view objects to selectively update only portions of the view windows. We take another look at this issue later, when we discuss the CView::OnUpdate member function.
+
+<BR></P>
+
+<P>Much less frequently used view-related functions are AddView and RemoveView. These functions let you manually add views to and remove views from your document's list of views. The reason these functions are not used that often is that most applications rely on the default MFC implementation with little or no modification for managing their windows.
+
+<BR></P>
+
+<P>Whenever the document's data changes, you should call the SetModifiedFlag member function. Consistent use of this function ensures that the framework prompts the user before destroying an unsaved, changed document. The status of this flag can be obtained by calling the IsModified member function.
+
+<BR></P>
+
+<P>The SetTitle member function can be used to set the document's title. This title is displayed as the document's title in the frame window (the main frame window in the case of an SDI application or the child frame in the case of an MDI application).
+
+<BR></P>
+
+<P>The fully qualified path name for the document can be set by calling SetPathName and obtained through GetPathName.
+
+<BR></P>
+
+<P>The document template object associated with the current document can be obtained by calling GetDocTemplate.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Documents, Events, and Overridable Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Although a CDocument object is not directly associated with a window, it is nevertheless a command target object that can receive messages. Messages are routed to CDocument objects by the associated view objects.
+
+<BR></P>
+
+<P>While it is up to you to decide which messages will be handled by your document object and which should be left to the view window (or perhaps the frame window) for processing, there are a few sensible rules of thumb to follow.
+
+<BR></P>
+
+<P>Always keep in mind that the document is an abstract representation of your data, independent of the visual representation provided by the view window. Moreover, a document may have several views attached to it (or possibly none at all). Any messages the document responds to should by global in nature, having an immediate effect on the document data itself that should be reflected in all the views. In contrast, views should respond to messages that are specific to that window only.
+
+<BR></P>
+
+<P>How does this translate into practical terms? Take, for example, the command message that is generated when the user selects the Save command from the File menu. What you are saving is the document as a whole, not a visual representation of it; thus, this command is best handled by the document class.
+
+<BR></P>
+
+<P>Take, in contrast, the Cut command in the Edit menu. If you ask yourself what it is you are cutting, you come to the quick conclusion that whatever it is, it is selected through a view of the document. In fact, if multiple views exist for the same document, chances are that different selections are active in them; thus the meaning of the Cut command changes from one view to the next. Conclusion: This command should likely be handled by the view class.
+
+<BR></P>
+
+<P>Then there are some borderline cases. Is the Paste command best handled by the document class or the view class? True, this command affects the entire document, not just a single view. However, it may have particular effects in the current view&#151;for example, it may cause the current selection to be replaced by the pasted data). Therefore, the decision regarding which class should handle this command is dependent on your application's design.
+
+<BR></P>
+
+<P>I should also mention that there are commands that should not be handled by either the view class or the document class, but by the frame window instead. Commands that hide and show toolbars are good examples. The presence or absence of a toolbar is not a feature of a document or one of its views; instead, this is a configuration issue with an effect that's global to the entire application.
+
+<BR></P>
+
+<P>Now we'll return our attention to the CDocument class. The MFC framework provides default implementations for many commands; these implementations, in turn, call overridable member functions in CDocument. (These functions are overridable because they are declared virtual; thus, you can provide your overrides in a class derived from CDocument and expect the override version to be called instead of the base class version.)
+
+<BR></P>
+
+<P>The OnNewDocument member function is called during the initialization of a new document object (or when an existing document is reused in an SDI application). Call to this function is typically part of handling the File New command.
+
+<BR></P>
+
+<P>The OnCloseDocument member function is called when a document is about to be closed. You should override this function if it is necessary to perform any cleanup operations before your document is destroyed.
+
+<BR></P>
+
+<P>The OnOpenDocument and OnSaveDocument functions are called to read a document from disk or save the document to a disk file. You should override these functions only if the default implementation (which calls your document class's Serialize member function) is not sufficient for your purposes.
+
+<BR></P>
+
+<P>The DeleteContents function is called from the default implementations of OnCloseDocument and OnOpenDocument to delete the document's previous contents before opening the new file. This function deletes the document's data without actually destroying the document object.
+
+<BR></P>
+
+<P>The OnFileSendMail member function sends the document object as an attachment to a mail message. It calls OnSaveDocument to save a copy of the document to a temporary disk file, which it then attaches to a MAPI mail message. The OnUpdateFileSendMail member function is used to enable the command identified by ID_FILE_SEND_MAIL in the application's menu or remove it altogether if MAPI support is not available. Both OnFileSendMail and OnUpdateFileSendMail are overridable functions, which enables you to implement customized messaging behavior.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Document Data</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>I already mentioned simple CDocument-derived classes, where the document's data can be implemented in the form of simple member variables. However, real-world applications tend to be more demanding, their data requirements far beyond what can be reasonably represented by a few variables of simple data types.
+
+<BR></P>
+
+<P>Perhaps the best approach to implement an application with a complex series of data elements is to use a set of CObject-derived classes to represent the data elements themselves, while relying on a standard or custom collection class to embed these elements in your document class. For example, in one application I created I used classes like this:
+
+<BR></P>
+
+<PRE>class CMyObject : public CObject
+
+{
+
+// ...
+
+};
+
+class CMyFirstSubObject : public CObject
+
+{
+
+// ...
+
+};
+
+class CMySecondSubObject : public CObject
+
+{
+
+// ...
+
+};</PRE>
+
+<P>In the declaration of the document class, I included a CObList member:
+
+<BR></P>
+
+<PRE>class CMyDocument : public CDocument
+
+{
+
+// ...
+
+// Attributes
+
+public:
+
+    CObList m_obList;
+
+// ...
+
+};</PRE>
+
+<P>In a complex situation like this, it is often not sufficient to just declare member variables. Member functions are also needed that provide methods to access the document's data. For example, in the above case you may not want to allow other classes (such as the view class) to manipulate the m_obList member variable directly; instead, you may wish to provide member functions that add data to or remove data from this list.
+
+<BR></P>
+
+<P>Such member functions should also ensure that all the document's views are updated properly. They should also call the document's SetModified member function to indicate that a change to the document's data has been made. If your application supports an undo capability, this is where you should update your buffered undo data.
+
+<BR></P>
+
+<P>As a simple example, consider the following function, which updates the document's object list by adding a new object:
+
+<BR></P>
+
+<PRE>BOOL CMyDocument::AddObject(CMyObject *pObject)
+
+{
+
+    try
+
+    {
+
+        m_obList.AddTail((CObject *)pObject);
+
+        SetModifiedFlag(TRUE);
+
+        UpdateAllViews(NULL, UPDATE_OBJECT, pObject);
+
+        return TRUE;
+
+    }
+
+    catch(CMemoryException *e)
+
+    {
+
+        TRACE(&quot;CMyDocument::AddObject memory allocation error.\n&quot;);
+
+        e-&gt;Delete();
+
+        return FALSE;
+
+    }
+
+}</PRE>
+
+<P>Consider, for a moment, how control is passed back and forth between the document and its views. First, the user interacts with the view, which results in a new object being added. The view object than calls the document object's AddObject member. Once the new object has been added successfully, the document object calls UpdateAllViews, which, in turn, calls the OnUpdate member function of each view associated with the document. The hint passed to UpdateAllViews (in the form of the application-defined constant UPDATE_OBJECT and a pointer to a CObject) assists views in implementing an efficient window update by only repainting those regions that are affected by the appearance of the new object. This control-passing mechanism is illustrated in Figure 20.1.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="20vcu01.gif">Figure 20.1. Interaction between the view and the </B><B>document when an item is modified.</A></B>
+
+<BR></P>
+
+<P>Another advantage of using MFC collection classes is that they support serialization. For example, to load and save your document's data that is stored in the form of a CObList collection, all you need to do in the document's Serialize member function is this:
+
+<BR></P>
+
+<PRE>void CTerminalDoc::Serialize(CArchive &amp;ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        // Serialize any non CObject-derived data
+
+    }
+
+    else
+
+    {
+
+        // Serialize any non CObject-derived data
+
+    }
+
+    m_obList.Serialize(ar);
+
+}</PRE>
+
+<P>Be warned, though, that for this to work you must implement the Serialize member function for all your object classes. A CObject-derived class will not magically serialize itself.
+
+<BR></P>
+
+<P>If you decide to use one of the collection templates, serialization is an issue that requires special attention. The collection templates CArray, CList, and CMap rely on the SerializeElements function to serialize the objects in the collection. This function is declared as follows:
+
+<BR></P>
+
+<PRE>template &lt;class TYPE&gt; void
+
+    SerializeElements(CArchive &amp;ar, TYPE *pElements, int nCount);</PRE>
+
+<P>Because the collection class templates do not require TYPE to be derived from CObject, they do not call the Serialize member function of their elements (simply because this member function is not guaranteed to exist). Instead, the default implementation of SerializeElements performs a <I>bitwise read or write</I>. This is definitely not what we want in most cases! (Arguably, it might have been better if the MFC provided no default implementation at all, thus forcing the programmer to write SerializeElements rather than fall prey to a subtle trap.) Here is an example of how you would implement SerializeElements for an object type you define that supports a Serialize member function:
+
+<BR></P>
+
+<PRE>void SerializeElements(CArchive &amp;ar, CMyObject **pObs, int nCount)
+
+{
+
+    for (int i = 0; i &lt; nCount; i++, pObs++)
+
+        (*pObs)-&gt;Serialize(ar);
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B> </B><B><I>CCmdTarget</I></B><B> and </B><B><I>CDocItem</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Often it is not sufficient to derive your document's objects from the CObject class. A prime example for this is when you wish to support OLE automation. OLE automation support requires that your objects be command targets; something that CObject does not support. For this reason, it may be beneficial to use CCmdTarget as the base class for your objects.
+
+<BR></P>
+
+<P>Better yet, you should consider the CDocItem class. You can either create a collection of CDocItem objects yourself or rely on the COleDocument class for this purpose; that is, derive your document class from COleDocument instead of CDocument. COleDocument is used in OLE applications where either this class or a class derived from it serves as the base class for the OLE application's document class. COleDocument supports a collection of CDocItem objects; these are objects of type COleServerItem and COleClientItem. However, the support for a list of CDocItem objects in COleDocument is generic. You can add your own CDocItem-derived objects to the collection maintained by COleDocument and not fear that it would interfere with normal OLE behavior.
+
+<BR></P>
+
+<P>How do you declare additional CDocItem members in a COleDocument? Funny thing is, you don't have to! All you need to do is use COleDocument member functions such as AddItem, RemoveItem, GetStartPosition, and GetNextItem to add, remove, and retrieve document items. The rest (such as serialization) comes for free.
+
+<BR></P>
+
+<P>There is a catch, though. Because of how your document items and the OLE COleClientItem and COleServerItem objects are derived, it may be necessary to add some magic to implement certain functions. For example, consider that you declared your objects as follows:
+
+<BR></P>
+
+<PRE>class CMyDocItem : public CDocItem
+
+{
+
+    // ...
+
+    CRect m_rect;
+
+};</PRE>
+
+<P>Further suppose that you also support the m_rect member variable in your OLE client items:
+
+<BR></P>
+
+<PRE>class CMyClientItem : public COleClientItem
+
+{
+
+    // ...
+
+    CRect m_rect;
+
+};</PRE>
+
+<P>Given these class declarations, how would you create a function that can take an item from your document and utilize its m_rect member?
+
+<BR></P>
+
+<P>The obvious answer is also the wrong one:
+
+<BR></P>
+
+<PRE>MyFunc(CDocItem *pItem)
+
+{
+
+    AnotherFunc(pItem-&gt;m_rect);  // Error!
+
+}</PRE>
+
+<P>This will not compile because the CDocItem class has no member variable named m_rect. Using a pointer to your own CDocItem-derived class does not help either:
+
+<BR></P>
+
+<PRE>MyFunc(CMyDocItem *pItem)
+
+{
+
+    AnotherFunc(pItem-&gt;m_rect);
+
+}</PRE>
+
+<P>This version of MyFunc does not support OLE client items. Obviously, you could simply create two override versions of MyFunc, but it is a real pain having to maintain two identical versions because of this problem. So the solution that remains is to create a wrapper function that takes a pointer to a CDocItem object and uses MFC run-time type information to obtain the member variable:
+
+<BR></P>
+
+<PRE>CRect GetRect(CDocItem *pDocItem)
+
+{
+
+    if (pDocItem-&gt;IsKindOf(RUNTIME_CLASS(CMyDocItem)))
+
+        return ((CMyDocItem *)pDocItem)-&gt;m_rect;
+
+    else if (pDocItem-&gt;IsKindOf(RUNTIME_CLASS(CMyClientItem)))
+
+        return ((CMyClientItem *)pDocItem)-&gt;m_rect;
+
+    ASSERT(FALSE);
+
+    return CRect(0, 0, 0, 0);
+
+}
+
+MyFunc(CDocItem *pItem)
+
+{
+
+    AnotherFunc(GetRect(pItem));
+
+}</PRE>
+
+<P>Note that this solution requires that both CMyDocItem and CMyClientItem be declared and implemented using the DECLARE_DYNAMIC/IMPLEMENT_DYNAMIC macros. This is usually not a problem as your application probably supports serializing these items, and thus the items are declared and implemented using DECLARE_SERIAL/IMPLEMENT_SERIAL (which imply DECLARE_DYNAMIC/IMPLEMENT_DYNAMIC).
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>The </B><B><I>CView</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>For every CDocument-derived class, there is a CView-derived class that provides the visual presentation of your document's data and handles user interaction through the view window.
+
+<BR></P>
+
+<P>The view window is a child of a frame window. In the case of SDI applications, this is the main frame window. For MDI applications, this is the MDI child frame. Additionally, it can be the in-place frame window during OLE in-place editing (if your application supports it).
+
+<BR></P>
+
+<P>A frame window may contain several view windows (for example, splitter windows).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Declaring a View Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>All data that is part of a document should be declared as part of the document class. That said, there are many data elements that pertain to a specific view and, more importantly, are transient in nature, not saved as part of the document.
+
+<BR></P>
+
+<P>Consider, for example, an application that is capable of presenting its data at different zoom factors. The zoom factor is specific to an individual view. (Different views may use different zoom factors even when they present parts of the same application.) The zoom factor is also transient; it is not saved as part of the document.
+
+<BR></P>
+
+<P>Under these conditions, the zoom factor would best be declared as a member variable of your view class:
+
+<BR></P>
+
+<PRE>class CZoomView : public CView
+
+{
+
+protected: // create from serialization only
+
+    CZoomView();
+
+    DECLARE_DYNCREATE(CZoomView)
+
+// Attributes
+
+public:
+
+    CZoomDoc* GetDocument();
+
+    double m_dZoom;
+
+...</PRE>
+
+<P>Much more important than any member variables representing a setting is a member variable that represents the <I>current selection</I>. This is the collection of objects in your document that the user selected for manipulation. The nature and type of that manipulation are entirely application-dependent, but may include such inter-application operations as clipboard cut and copy, or OLE drag and drop.
+
+<BR></P>
+
+<P>Perhaps the easiest way to implement a selection is to use a collection class just as you would in the document class. For example, you may declare the collection representing the current selection like this:
+
+<BR></P>
+
+<PRE>class CMyView : public CView
+
+{
+
+    // ...
+
+    CList&lt;CDocItem *, CDocItem *&gt; m_selList;
+
+    // ...</PRE>
+
+<P>In addition to modifying the declaration of the view class, you must write at least one member function to give your view class some functionality. The function in question is the OnDraw member function. The default implementation does nothing; you must write code here that displays your document's data items.
+
+<BR></P>
+
+<P>For example, if your document class is derived from COleDocument and you rely on CDocItem objects for your document's data, your OnDraw member function implementation may look like this:
+
+<BR></P>
+
+<PRE>void CMyView::OnDraw(CDC *pDC)
+
+{
+
+    CMyDoc *pDoc = GetDocument();
+
+    ASSERT_VALID(pDoc);
+
+    POSITION pos = pDoc-&gt;GetStartPosition();
+
+    while (pos != NULL)
+
+    {
+
+        CDocItem *pObject = pDoc-&gt;GetNextItem(pos);
+
+        if (pObject-&gt;IsKindOf(RUNTIME_CLASS(CMyDocItem)))
+
+        {
+
+            ((CMyDocItem *)pObject)-&gt;Draw(pDC);
+
+        }
+
+        else if (pObject-&gt;IsKindOf(RUNTIME_CLASS(CMyClientItem)))
+
+        {
+
+            ((CMyClientItem *)pObject)-&gt;Draw(pDC);
+
+        }
+
+        else
+
+            ASSERT(FALSE);
+
+    }
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B><I>CView</I></B><B> Member Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CView class offers a rich selection of member functions.
+
+<BR></P>
+
+<P>Among the most commonly used member functions is GetDocument, which returns a pointer to the document object associated with the view. Another member function is DoPreparePrinting; this function displays the Print dialog and creates a printer device context in accordance with the user's selections.
+
+<BR></P>
+
+<P>The remaining CView member functions are overridables. They supplement the large number of overridable functions available as part of the CWnd class (the base class of CView) and handle most types of user-interface events. These functions are far too numerous to be listed here; among them are message handlers for keyboard, mouse, timer, system and other messages, clipboard and MDI events, initialization and termination messages. Your application should provide overrides for these as appropriate; for example, if your application enables the user to place an object in a document by clicking and dragging the mouse, you should provide an override for the CWnd::OnLButtonDown member function. As most of these overrides are recognized by the ClassWizard, adding and manipulating them is easy.
+
+<BR></P>
+
+<P>There are some notable CView overridables. One, I already mentioned; overriding OnDraw is a must for a CView-derived object to display anything.
+
+<BR></P>
+
+<P>The IsSelected member function must be implemented for OLE applications. This function returns TRUE if the object that is pointed to by its argument is part of the view's current selection. If you implemented your selection using the CList template collection as a list of CDocItem objects, here is how you could implement IsSelected:
+
+<BR></P>
+
+<PRE>BOOL CMyView::IsSelected(const CObject* pDocItem) const
+
+{
+
+        return (m_selList.Find((CDocItem *)pDocItem) != NULL);
+
+}</PRE>
+
+<P>Another notable overridable is the OnUpdate member function. This function is called by the UpdateAllViews member function of the document class associated with the view. The default implementation simply invalidates the entire client area of the view window. To improve your application's performance, you may wish to override this function and invalidate only those areas that need updating. For example, you may implement OnUpdate as follows:
+
+<BR></P>
+
+<PRE>void CMyView::OnUpdate(CView *pView, LPARAM lHint, CObject *pObj)
+
+{
+
+    if (lHint == UPDATE_OBJECT)
+
+        InvalidateRect(((CMyObject *)pObj)-&gt;m_rect);
+
+    else
+
+        Invalidate();
+
+}</PRE>
+
+<P>Normally you should not do any drawing in OnUpdate. Use your view's OnDraw member function for that purpose.
+
+<BR></P>
+
+<P>The OnPrepareDC member function acquires special significance if your view supports nonstandard mapping modes like zooming. It is in this function that you can set the view window's mapping mode before any actual drawing takes place. Make sure that if you create a device context for your view window, you call OnPrepareDC yourself to ensure that the proper settings are applied to the device context.
+
+<BR></P>
+
+<P>Sometimes it is necessary to create a device context just to retrieve the current mapping using OnPrepareDC. For example, your view's OnLButtonDown member function may need to convert the position of the mouse click from physical to logical coordinates:
+
+<BR></P>
+
+<PRE>void CMyView::OnLButtonDown(UITN nFlags, CPoint point)
+
+{
+
+    CClientDC dc(this);
+
+    OnPrepareDC(&amp;dc);
+
+    dc.DPtoLP(&amp;point);
+
+    // ...</PRE>
+
+<P>Other CView overridables deal with initialization and termination, OLE drag and drop support, scrolling, view activation and deactivation, and printing. Whether these functions require overriding or not depends on whether you support the particular feature, and whether the default implementation (if it exists) is sufficient for your purposes or not.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Views and Messages</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In addition to messages for which default handlers already exist in CView or its parent, CWnd, a typical view class handles many other messages. These are typically command messages representing the user's selection of a menu command, toolbar button, or other user-interface object.
+
+<BR></P>
+
+<P>As I explained earlier, when deciding whether it is the view or the document (or the frame) that should handle a particular message, the prevailing criteria is the scope and the effect of the message or command. If the command affects the entire document, it is best handled by the document class (unless the command's effect is through a specific view, as in some implementations of the Paste command). If the command only affects a particular view (such as setting a zoom factor), it should be handled by that view object.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Variants of </B><B><I>CView</I></B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In addition to the basic CView class, the MFC Library provides several derived classes that serve specific purposes. These classes are summarized in Table 20.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 20.1. </B><B>CView</B><B> variants.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Class Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>CCtrlView</P>
+
+<TD>
+
+<P>This view class supports views that are based on a control (such as a tree or edit control).</P>
+
+<TR>
+
+<TD>
+
+<P>CDaoRecordView</P>
+
+<TD>
+
+<P>This view class displays database records using dialog controls.</P>
+
+<TR>
+
+<TD>
+
+<P>CEditView</P>
+
+<TD>
+
+<P>This view class provides a multiline text editor window using an edit control.</P>
+
+<TR>
+
+<TD>
+
+<P>CFormView</P>
+
+<TD>
+
+<P>This view class is based on a dialog template and displays dialog box controls.</P>
+
+<TR>
+
+<TD>
+
+<P>CListView</P>
+
+<TD>
+
+<P>This view class displays a list control.</P>
+
+<TR>
+
+<TD>
+
+<P>CRecordView</P>
+
+<TD>
+
+<P>This view class displays database records using dialog controls.</P>
+
+<TR>
+
+<TD>
+
+<P>CRichEditView</P>
+
+<TD>
+
+<P>This view class displays a rich-text edit control.</P>
+
+<TR>
+
+<TD>
+
+<P>CScrollView</P>
+
+<TD>
+
+<P>This view class enables the use of scrollbars.</P>
+
+<TR>
+
+<TD>
+
+<P>CTreeView</P>
+
+<TD>
+
+<P>This view class displays a tree control.</P></TABLE>
+
+<P>A rarely overridden variant of CView is CPreviewView; this class is used by the MFC framework to provide print preview support.
+
+<BR></P>
+
+<P>All these classes provide member functions that are specific to their function. Member functions of view classes derived from CCtrlView encapsulate Windows messages that are specific to the control class they represent.
+
+<BR></P>
+
+<P>CFormView and classes derived from it (CDaoRecordView and CRecordView) support Dialog Data Exchange. You can use these classes in a fashion similar to the way CDialog-derived classes would be used.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B> Dialog-Based Applications</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Dialog-based applications represent an exception from the standard MFC document-view model. If you create a dialog-based application using the AppWizard, the resulting program will not have a document or a view class (nor a frame window class, for that matter). Instead, all functionality will be implemented by a single dialog class, derived from CDialog.
+
+<BR></P>
+
+<P>While this is sufficient for many simple applications, it also means a loss of support for many MFC features that you have come to like. A dialog-based application will have no menu, toolbar, or status bar; it will not support OLE or MAPI; it will not have printing capabilities.
+
+<BR></P>
+
+<P>An alternative to using a dialog-based application is to build your application using the CFormView class as the base class for your view window and utilize the SDI application model. This enables you to retain all the advantages of a full-featured MFC application, yet present the same dialog-like appearance, utilize a dialog box template for defining the view's contents, and use dialog data exchange.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Most MFC applications are based on the <I>document-view model</I>. The document, an abstract object, represents the application's data and typically corresponds to the contents of a file. The view, in turn, provides presentation of the data and accepts user-interface events. The relationship is one-to-many; a document may have several associated views, but a view is always associated with exactly one document.
+
+<BR></P>
+
+<P>Document classes are derived from CDocument. This class encapsulates much of the basic functionality of a document object. In the simplest case, applications need only add member variables representing application-specific data and provide overrides for the OnNewDocument (initialization) and Serialize (saving and loading) member functions to obtain a fully functional document class.
+
+<BR></P>
+
+<P>More sophisticated applications often rely on collection classes to implement the set of objects that comprise a document. In particular, applications can use the COleDocument class and rely on its capability to manage a list of CDocItem objects that is not restricted to OLE client and server objects.
+
+<BR></P>
+
+<P>View classes are derived from CView. View windows that are represented by CView objects are child windows of frame windows; a frame window may have several child view windows, as is the case when splitter windows are used.
+
+<BR></P>
+
+<P>A view object, in addition to containing member variables representing view-specific settings, often implements a current selection. The current selection is the set of document objects that the user designated in the current view for further manipulation. As with documents, applications can use collection classes for this purpose.
+
+<BR></P>
+
+<P>At the very least, a view class must provide an implementation for the OnDraw member function to draw the objects of the associated document. OLE applications must also provide an implementation for the IsSelected member function. Other, frequently overridden, member functions include OnPrepareDC and OnUpdate.
+
+<BR></P>
+
+<P>The CView class has several variants specifically designed to handle scrolling views, views based on dialogs, controls, and views representing database records. You should select the class that is most appropriate for your application as the base class for your view class.
+
+<BR></P>
+
+<P>Both documents and views (as well as frame objects) handle messages. A decision about which of these three classes should handle a particular message is based upon the effects of the message. If the message affects the entire document, it is the document class that should handle the message, unless the effect takes place through a specific view. In that case, or in the case when the effect is specific to a view, it is the view class that should provide handling. Lastly, messages that have a global effect on the application are best handled by the frame class.</P>
+
+<P><A HREF="vcu19fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu21fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

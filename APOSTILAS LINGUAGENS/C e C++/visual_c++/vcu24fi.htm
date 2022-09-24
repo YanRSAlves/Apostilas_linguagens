@@ -1,0 +1,1158 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu24fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu25fi.htm">
+
+<LINK REL="Previous" HREF="vcu23fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu23fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu25fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">24 &#151; Device Context and GDI Objects</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Device Contexts</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">The Basic CDC Class</A></LI>
+
+<LI>
+
+<A HREF="#I5">Creating a Device Context</A></LI>
+
+<LI>
+
+<A HREF="#I6">Paint-Time Device Contexts</A></LI>
+
+<LI>
+
+<A HREF="#I7">Client-Area Device Contexts</A></LI>
+
+<LI>
+
+<A HREF="#I8">Window Device Contexts</A></LI>
+
+<LI>
+
+<A HREF="#I9">Metafile Device Contexts</A></LI>
+
+<LI>
+
+<A HREF="#I10">CDC Attributes</A></LI>
+
+<LI>
+
+<A HREF="#I11">Coordinate Mapping and Views</A></LI>
+
+<LI>
+
+<A HREF="#I12">Simple Drawing Functions</A></LI>
+
+<LI>
+
+<A HREF="#I13">Selecting GDI Objects</A></LI>
+
+<LI>
+
+<A HREF="#I14">Basic Lines and Shapes</A></LI>
+
+<LI>
+
+<A HREF="#I15">Bitmaps and Scrolling</A></LI>
+
+<LI>
+
+<A HREF="#I16">Text and Font Functions</A></LI>
+
+<LI>
+
+<A HREF="#I17">Clipping Operations</A></LI>
+
+<LI>
+
+<A HREF="#I18">Printing</A></LI>
+
+<LI>
+
+<A HREF="#I19">Path Functions</A></LI></UL>
+
+<LI>
+
+<A HREF="#I20">GDI Object Support in MFC</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I21">Pens</A></LI>
+
+<LI>
+
+<A HREF="#I22">Brushes</A></LI>
+
+<LI>
+
+<A HREF="#I23">Bitmaps</A></LI>
+
+<LI>
+
+<A HREF="#I24">Fonts</A></LI>
+
+<LI>
+
+<A HREF="#I25">Palettes</A></LI>
+
+<LI>
+
+<A HREF="#I26">Regions</A></LI></UL>
+
+<LI>
+
+<A HREF="#I27">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>24 &#151; Device Context and GDI Objects</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>Drawing and graphics has special significance in almost every Windows application; MFC applications are no exception to this rule.
+
+<BR></P>
+
+<P>The Windows Graphics Device Interface (GDI) capabilities are encapsulated in two families of MFC classes. Device context classes provide an encapsulation of GDI device contexts and most drawing functions; GDI object classes encapsulate GDI objects such as pens, brushes, bitmaps, or fonts.
+
+<BR></P>
+
+<P>As in non-MFC Windows applications, drawing to an output device consists of obtaining the appropriate device context, setting up GDI drawing objects, performing drawing operations, and cleaning up. The MFC framework greatly simplifies these steps by assuming many of the more mundane responsibilities that used to befall on the application developer. For example, you can construct a pen object by passing the appropriate parameters to the Cpen constructor function:
+
+<BR></P>
+
+<PRE>Cpen myPen(PS_SOLID, 0, RGB(255, 0, 0));</PRE>
+
+<P>and never worry about it afterwards; the GDI pen object is destroyed automatically by the Cpen destructor when the Cpen object goes out of scope.
+
+<BR></P>
+
+<P>As is the case with windows and CWnd objects, there is a distinction between the MFC (CDC- or CGdiObject-derived) object and the actual device context or GDI object in Windows. Constructing the MFC object does not automatically imply construction of an underlying Windows object. On the contrary, it is a legitimate practice to construct a blank MFC object first and later associate it with the Windows object as the need arises.
+
+<BR></P>
+
+<P>In this chapter, we first focus our attention on device contexts, which serve as the &quot;canvas&quot; onto which drawing takes place. Actual drawing operations (functions such as Rectangle, Ellipse, or DrawText) are also encapsulated in the CDC class and are discussed here. In the second part of this chapter, we shift our focus to classes that encapsulate GDI objects, which represent drawing tools.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Device Contexts</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Although constructing a device context using MFC is easy, often trivial, there are many situations where it is not even necessary. Typical drawing functions (such as the OnDraw member function in a view class) are called by the MFC framework with a pointer to a device context object representing a device context that is already created and configured for use.
+
+<BR></P>
+
+<P>MFC classes that represent device contexts are all derived from the CDC base class. Figure 24.1 illustrates the hierarchy of device context classes.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="24vcu01.gif">Figure 24.1. Hierarchy of device context classes.</A></B>
+
+<BR></P>
+
+<P>Although there are several classes derived from CDC, the CDC class itself is frequently used as a wrapper class for device contexts. The other CDC-derived classes differ from CDC primarily in their constructor function and offer no extra functionality. If you need to construct an MFC object that is attached to an existing device context handle, you should always use the base CDC class instead of any of the derived classes.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>The Basic CDC Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDC class encapsulates the functionality of the Windows device context. And there is a lot of functionality to encapsulate! The CDC class not only maps functions that are directly related to configuring and managing a device context, it also maps all GDI drawing functions. Last time I counted, there were approximately 180 documented member functions.
+
+<BR></P>
+
+<P>With such a large and complex interface, where should we begin? With the simplest. First, we review how a CDC object is created and attached to a GDI device context.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Creating a Device Context</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>When a CDC object is created through its constructor function, a GDI device context is not automatically created. Instead, it is necessary to create a device context through the CreateDC function or attach the CDC object to a device context that has been created earlier.
+
+<BR></P>
+
+<P>The CreateDC member function takes several parameters that specify the device, the device driver software, and the port the device is attached to. These parameters correspond to the parameters of the GDI ::CreateDC function.
+
+<BR></P>
+
+<P>A CDC object has not one, but two member variables that are GDI device context handles. These are m_hDC and m_hAttribDC. Usually, these two handles point to the same device context object. The m_hDC handle, or output device context handle, is used for all output operations; the m_hAttribDC handle, or attribute device context handle, is used, in turn, for operations that request information from the device context.
+
+<BR></P>
+
+<P>To attach a CDC object to a device context handle that has been created earlier, use the Attach member function. To detach a CDC object from a device handle, use the Detach member function. Note that neither Detach, nor the member functions ReleaseOutputDC and ReleaseAttributeDC (which reset the values of m_hDC and m_hAttribDC to NULL) actually delete the GDI device context object. In this case, if the device context object was created using the GDI function ::CreateDC, it may be necessary to manually call ::DeleteDC. Calling ::DeleteDC is not required if you do not detach the CDC object from the device context; the CDC destructor function makes this call automatically.
+
+<BR></P>
+
+<P>The CDC class also has a member function DeleteDC, which can be used to detach the CDC object from the GDI device context and delete the device context. This function should only be used if the device context was created using the CreateDC member function.
+
+<BR></P>
+
+<P>Another function that creates a device context object is CreateCompatibleDC. This function creates a memory device context that is compatible with a given device context. For example, applications may use this function in conjunction with the CClientDC class to create a memory device context that is compatible with the device context representing the current window's client area:
+
+<BR></P>
+
+<PRE>CClientDC clientDC(&amp;myWnd);
+
+CDC memDC;
+
+memDC.CreateCompatibleDC(&amp;clientDC);</PRE>
+
+<P>Subsequently, operations such as CDC::BitBlt can be used to transfer blocks of pixels between the two device contexts. Similar techniques are often used in programs that perform smooth animation; by constructing the next animation frame in a memory device context and transferring only completed frames to the display, you can create animations that are free of jerkiness.
+
+<BR></P>
+
+<P>A static CDC member function is CDC::FromHandle. This function enables you to retrieve the address of a CDC object (if such an object exists) that corresponds to a device context handle. If no such CDC object exists, a temporary CDC object is created. This function may be called as follows:
+
+<BR></P>
+
+<PRE>CDC *pDC = CDC::FromHandle(hDC);</PRE>
+
+<P>Be warned that the pointer returned by this function is not be stored beyond immediate use. As it points to a CDC object that may be under the control of another part of your application, you do not usually know when the CDC object may be destroyed, rendering the pointer returned by CDC::FromHandle invalid. Temporary CDC objects returned by CDC::FromHandle are also deleted by the CDC::DeleteTempMap function, which is typically called from by the idle-time handler in your application's CWinApp object.
+
+<BR></P>
+
+<P>One more function worth mentioning is the GetSafeHdc function. This function returns the m_hDC member of the CDC object. This is a &quot;safe&quot; function inasmuch as it can also be used with NULL pointers; that is, the following code would be valid and not cause an exception:
+
+<BR></P>
+
+<PRE>CDC *pDC = NULL;
+
+HDC hDC = pDC-&gt;GetSafeHdc();</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Paint-Time Device Contexts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CPaintDC class encapsulates the calls to the BeginPaint and EndPaint in its constructor and destructor. This class is designed to be used when responding to WM_PAINT messages.
+
+<BR></P>
+
+<P>Note that most applications do not need to create a CPaintDC object directly. The default implementation of the Cview::OnPaint member function creates such a device context and passes it to the class's OnDraw member function (which is usually overridden to provide application-specific drawing of a view).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Client-Area Device Contexts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CClientDC class is used to create a device context object corresponding to the client area of a given window. The constructor and destructor of CClientDC encapsulate calls to the GetDC and ReleaseDC functions. CClientDC objects are most often used when drawing into a device context is required outside an OnDraw function.
+
+<BR></P>
+
+<P>A particular use of CClientDC objects concerns mapping modes. Sometimes, it is necessary for an application to translate logical coordinates into physical coordinates or vice versa even when no actual drawing is performed. In these situations, it is a frequently used practice to create a CClientDC object for the sole purpose of being able to use one of its coordinate transformation functions. For example:
+
+<BR></P>
+
+<PRE>CClientDC dc(myView);
+
+myView-&gt;OnPrepareDC(&amp;dc);
+
+dc.LPtoDP(&amp;point);</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Window Device Contexts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Similar to client-area device contexts are window device contexts, represented by the CWindowDC class. The constructor and destructor of CWindowDC encapsulate calls to GetWindowDC and ReleaseDC, respectively.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Metafile Device Contexts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMetaFileDC class represents metafile device contexts. Metafile device contexts provide a means to draw into Windows metafiles or the new enhanced metafiles.
+
+<BR></P>
+
+<P>Metafile device contexts differ from other device contexts in a variety of ways. Most importantly, the m_hAttribDC member of a metafile device context, which would normally be set to refer to the same device as m_hDC, is set to NULL instead. Thus, calls that would retrieve information about the device context would typically fail for an object of type CMetaFileDC.
+
+<BR></P>
+
+<P>It is possible to assign a value to the m_hAttribDC member. For example, you can assign it the value of another device context that you created, which represents the screen, the printer, or another output device.
+
+<BR></P>
+
+<P>Constructing a metafile device context is a two-step process. First, the CMetaFileDC object is created; next, its Create or CreateEnhanced member functions are called.
+
+<BR></P>
+
+<P>Depending on whether you supply a filename to the Create or CreateEnhanced member functions or not, the metafile will be either file-based or memory-based. A memory-based metafile exists only temporarily.
+
+<BR></P>
+
+<P>When you are finished with drawing into the metafile, you close the metafile object by calling CMetaFileDC::Close or CMetaFileDC::CloseEnhanced (depending on the type of the metafile). These functions return a handle to a metafile object. This handle can be used, for example, in a call to CDC::PlayMetafile to play back the metafile into another device context. It can also be passed to the Windows function ::CopyMetaFile (or ::CopyEnhMetaFile) to copy the metafile to a disk file.
+
+<BR></P>
+
+<P>As soon as you call its Close or CloseEnhanced member function, you can delete the CMetaFileDC object. When you are done with using the metafile handle obtained through calling Close or CloseEnhanced, you should delete the Windows metafile object by calling DeleteMetaFile or DeleteEnhMetaFile.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>CDC Attributes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A device context object has many attributes that can be set or retrieved through CDC member functions. Of these, we review attributes that relate to mapping modes and coordinate transformations in the next section. This section focuses on other attributes.
+
+<BR></P>
+
+<P>The background color, used to fill the gaps in styled lines, hatched brushes, and in character cells, is set by the SetBkColor member function. The current background color can be retrieved by calling GetBkColor. The background mode, which determines whether the background is transparent or opaque, is set by calling SetBkMode; GetBkMode retrieves the current background mode.
+
+<BR></P>
+
+<P>The SetROP2 member function can be used to set the drawing mode. The drawing mode determines how bits in the drawing tool and bits on the device surface are combined. The default drawing mode is R2_COPYPEN; in this mode, pixels from the drawing tool are copied over pixels in the device bitmap. This is what you would expect as normal behavior; as you draw with a specific pen or brush, the pen or brush will simply overwrite what may already be on the device context surface.
+
+<BR></P>
+
+<P>There are several other commonly used drawing modes that can be set with SetROP2. These include, for example, R2_BLACK (the target pixels turn always black), R2_NOTCOPYPEN (the target pixel acquires a color that is the inverse of the drawing tool's color), or R2_XORPEN (the target pixel's color is formed by performing an exclusive OR operation between the target pixel and the pixel in the drawing tool).
+
+<BR></P>
+
+<P>Drawing modes are not restricted to these preset values; the drawing mode setting can specify an arbitrary binary operation between pixels of the device surface and pixels of the drawing tool.
+
+<BR></P>
+
+<P>The current drawing mode setting can be acquired by calling GetROP2. Note that drawing mode settings are specific to raster devices and have no effect on vector devices, like plotters.
+
+<BR></P>
+
+<P>The SetPolyFillMode function determines the polygon filling mode. The difference between the ALTERNATE and WINDING filling modes is illustrated in Figure 24.2. The current filling mode can be retrieved by calling GetPolyFillMode.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="24vcu02.gif">Figure 24.2. Filling modes.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Coordinate Mapping and Views</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The coordinates for most graphical operations are provided in the form of logical coordinates. Logical coordinates are translated into device coordinates through what is called coordinate mapping.
+
+<BR></P>
+
+<P>Mapping defines a linear relationship between the logical and the physical coordinate space. Mapping matches the origin of the logical coordinate space to the origin of the physical coordinate space, and also matches logical and physical coordinate units. Mapping in the horizontal and vertical directions may be independent of each other.
+
+<BR></P>
+
+<P>Windows defines a set of mapping modes. These mapping modes can be set using the SetMapMode member function.
+
+<BR></P>
+
+<P>On a raster device such as the screen or printer, device coordinates represent pixel coordinates. The upper-left corner is assigned the coordinates [0,0]; the horizontal coordinate increases from left to right, the vertical coordinate increases from top to bottom.
+
+<BR></P>
+
+<P>Of the many predefined mapping modes, MM_TEXT matches logical coordinates to physical coordinates. Other predefined mapping modes reverse the direction of the horizontal coordinate, so it grows from bottom to top. These mapping modes are listed in Table 24.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 24.1. Mapping modes.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Mapping mode</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Description</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>MM_LOENGLISH</P>
+
+<TD>
+
+<P>100 logical units equal one inch on the device</P>
+
+<TR>
+
+<TD>
+
+<P>MM_HIENGLISH</P>
+
+<TD>
+
+<P>1,000 logical units equal one inch on the device</P>
+
+<TR>
+
+<TD>
+
+<P>MM_LOMETRIC</P>
+
+<TD>
+
+<P>100 logical units equal one centimeter on the device</P>
+
+<TR>
+
+<TD>
+
+<P>MM_HIMETRIC</P>
+
+<TD>
+
+<P>1,000 logical units equal one centimeter on the device</P>
+
+<TR>
+
+<TD>
+
+<P>MM_TWIPS</P>
+
+<TD>
+
+<P>One logical unit is one twentieth of a point (1/1440&quot;)</P></TABLE>
+
+<P>In all of these mapping modes, applications can use the SetWindowOrg and SetViewportOrg functions to set the origin of the logical coordinate space (window) and physical coordinate space (viewport). The significance of these settings is that the two origins are mapped onto each other when coordinates are transformed.
+
+<BR></P>
+
+<P>In addition to MM_TEXT and the mapping modes in Table 24.1, Windows also defines the MM_ISOTROPIC and MM_ANISOTROPIC mapping mode. In these mapping modes, applications can not only specify the origin, but also the extent of the window and viewport coordinate space. By specifying the extent, applications define how many logical units are mapped to how many physical units. The difference between MM_ISOTROPIC and MM_ANISOTROPIC is that in the former mode, applications only define extents in the horizontal direction, while Windows calculates the vertical extent preserving the device aspect ratio. In the latter mode, applications can freely define any extents in both directions.
+
+<BR></P>
+
+<P>Figure 24.3 illustrates the effects of a typical mapping from logical to physical coordinates.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="24vcu03.gif">Figure 24.3.Coordinate mapping.</A></B>
+
+<BR></P>
+
+<P>For those who prefer to think in terms of formulae, here is how device coordinates (Dx and Dy) are derived from logical coordinates (Lx and Ly) and vice versa, using the window and viewport origin (xWo and yWO, xVO and yVO), and window and viewport extent (xWE and yWE, xVE and yVE) values:
+
+<BR></P>
+
+<PRE>D<I>x</I> = (L<I>x</I> &#208; <I>x</I>WO) * <I>x</I>VE/<I>x</I>WE + <I>x</I>VO
+
+D<I>y</I> = (L<I>y</I> &#208; <I>y</I>WO) * <I>y</I>VE/<I>y</I>WE + <I>y</I>VO
+
+L<I>x</I> = (D<I>x</I> &#208; <I>x</I>VO) * <I>x</I>WE/<I>x</I>VE + <I>x</I>WO
+
+L<I>y</I> = (D<I>y</I> &#208; <I>y</I>VO) * <I>y</I>WE/<I>y</I>VE + <I>y</I>WO</PRE>
+
+<P>The CDC class does not directly support world coordinate transformations that are available in Windows NT. To use world coordinate transforms, applications may need to call the Windows function SetWorldTransform directly.
+
+<BR></P>
+
+<P>The CDC class provides a set of coordinate transformation functions that can be used to obtain logical coordinates from physical coordinates or vice versa. These functions are DPtoLP and LPtoDP; both of these functions have several overloaded versions that enable them to be used on points, rectangles, and SIZE objects, or MFC classes that encapsulate these objects (CPoint, CRect, CSize).
+
+<BR></P>
+
+<P>Additional transformation functions include DPtoHIMETRIC, HIMETRICtoDP, LPtoHIMETRIC, and HIMETRICtoLP. These functions are particularly useful for OLE applications. OLE objects are usually measured in HIMETRIC units; these functions provide a direct means of transforming those units directly into physical or logical coordinates or vice versa.
+
+<BR></P>
+
+<P>Coordinate mapping is used extensively in views (that is, classes derived from CView). In these classes, the member function OnPrepareDC is used to set up coordinate mapping that appropriately reflects the view and its current state. For example, in scroll views, OnPrepareDC is used by the framework to displace the window and/or viewport origin to reflect the amount by which the view client area is scrolled. Applications that wish to implement features such as zooming can do so, for example, by overriding CView::OnPrepareDC and changing the window or viewport extent.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Simple Drawing Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDC class offers a series of member functions that correspond to low-level GDI drawing operations. Among these is the function FillRect (fills a rectangle with a specific brush), FillSolidRect (fills a rectangle with a specific color), FrameRect (draws the borders of a rectangle), and InvertRect (inverts the interior of a rectangle). Analogous functions that accept regions as their parameters are FillRgn, FrameRgn, and InvertRgn.
+
+<BR></P>
+
+<P>Additional functions include DrawIcon (draws an icon) and DrawDragRect (erases and draws a dragging rectangle). Other simple drawing functions assist in drawing controls in various (selected, deselected) states and with various border settings.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Selecting GDI Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Many drawing functions that operate on device contexts require that you select a GDI object into the device context first. To select a GDI object into a device context, use the CDC::SelectObject member function. This member function has several overloaded versions that enable you to select an object of type CPen, CBrush, CFont, CBitmap, or CRgn into the device context.
+
+<BR></P>
+
+<P>Selecting a pen into a device context is required for functions that draw lines. These include simple line drawing functions (such as Line, Arc) as well as functions that draw shapes, as the contour of shapes is drawn using the current pen.
+
+<BR></P>
+
+<P>Selecting a brush is required when a shape (for example, Ellipse, Rectangle) is drawn. The brush will be used to fill the interior of the shape.
+
+<BR></P>
+
+<P>Select an object of type CFont into a device context if you wish to draw text using a specific font.
+
+<BR></P>
+
+<P>To use memory device contexts, you must select a CBitmap object into them. The CBitmap object must represent either a monochrome bitmap or a bitmap that is compatible with the device context.
+
+<BR></P>
+
+<P>Selecting a CRgn object into a device context sets the clipping region of the device context to the specified region. Doing this is equivalent to calling the CDC::SelectClipRgn member function.
+
+<BR></P>
+
+<P>In many situations, it is expected that when you are finished using a device context, you restore its previous state including any previous GDI object selections. There are two ways of doing this. You can save the return value of SelectObject (which is usually a pointer to a CPen, CBrush, CFont, or CBitmap object representing the previous selection) and use it in a subsequent call to SelectObject. Alternatively, you can use the SaveDC and RestoreDC member functions. In either case, it is your responsibility to delete any GDI objects you created once they are no longer in use.
+
+<BR></P>
+
+<P>A variant of SelectObject is SelectStockObject; this CDC member function enables you to select a GDI stock object into the device context.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Basic Lines and Shapes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDC class provides a series of drawing functions that correspond to Windows GDI drawing functions. Basic drawing functions include those that draw various (straight and curved) lines and those that draw shapes.
+
+<BR></P>
+
+<P>Many line drawing functions make use of the concept of the current position in the device context. The current position is a pair of coordinates that usually represents the endpoint of the last drawing operation. The current position can be set using the MoveTo member function and can be retrieved using the GetCurrentPosition member function.
+
+<BR></P>
+
+<P>Line drawing functions use the current pen for drawing the line. To draw a straight line, use the MoveTo and LineTo member functions. To draw an elliptical arc, use the Arc or ArcTo functions. The direction of the arc can be controlled using the SetArcDirection member function; (use GetArcDirection to retrieve the current setting).
+
+<BR></P>
+
+<P>The Polyline and PolylineTo functions can be used to draw a series of connected line segments; PolyPolyline is a function to draw several polylines in a single operation. Windows can also draw B&#142;zier curves; use the PolyBezier or PolyBezierTo member functions. Finally, a series of line segments and B&#142;zier curves can be drawn in a single operation using PolyDraw.
+
+<BR></P>
+
+<P>Shape functions include Rectangle, RoundRect, Ellipse, Chord, Pie, and Polygon. The shapes generated by these functions are shown in Figure 24.4. One additional function, PolyPolygon, enables the drawing of multiple polygons in a single operation.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="24vcu04.gif">Figure 24.4. Some basic shapes.</A></B>
+
+<BR></P>
+
+<P>The PaintRgn function draws a region using the current brush. The DrawFocusRect function is used to draw a rectangle around an object to indicate that the object has the focus. The focus rectangle is drawn using the exclusive OR logical function, so calling DrawFocusRect for the second time effectively removes the focus rectangle. Note that if you scroll an area containing a focus rectangle, it is necessary to remove the focus rectangle first, scroll the area, and then redraw the focus rectangle.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Bitmaps and Scrolling</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Many member functions in the CDC class are used to perform bitwise operations on pixel maps, or bitmaps.
+
+<BR></P>
+
+<P>Perhaps the simplest pixel operation is SetPixel, which sets a pixel, specified by its logical coordinates, to a specific color. The current color of a pixel can be retrieved by calling GetPixel. A somewhat faster variant of SetPixel is SetPixelV; this version of the function does not return the actual color of the pixel.
+
+<BR></P>
+
+<P>The BitBlt member function can be used to transfer a rectangular area from one location to another. BitBlt can also be used to transfer blocks of pixels between device contexts. Thus, BitBlt is the operation of choice when, for example, you are transferring blocks of pixels from the screen to a compatible memory bitmap or vice versa.
+
+<BR></P>
+
+<P>A variant of BitBlt, StretchBlt, also transfers blocks of pixels from one location to another, but it also compresses and stretches the pixel block to fit the destination rectangle. The stretching mode (the method used to eliminate and/or add pixels) is controlled by SetStretchMode (GetStretchMode) and SetColorAdjustment (GetColorAdjustment).
+
+<BR></P>
+
+<P>The PatBlt member function combines the pixels on the device with the pixels of the selected brush in a bitwise logical operation. The MaskBlt operation combines the source and destination bitmaps and a mask bitmap in a bitwise logical operation.
+
+<BR></P>
+
+<P>To fill an area in a bitmap using the current brush, call the FloodFill or ExtFloodFill member functions.
+
+<BR></P>
+
+<P>To scroll an area within a device context, use the ScrollDC member function. This function also provides information about the areas uncovered by the scrolling operation, which you can use for repainting purposes. However, if you wish to scroll the entire client area of a window, you should instead utilize the CWnd::ScrollWindow function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Text and Font Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>In order to perform text output, applications can use any one of a wide selection of text output and font manipulation functions.
+
+<BR></P>
+
+<P>The simplest text output function is CDC::TextOut. This function places a character string at a specified location using the currently selected font. A variant, CDC::ExtTextOut, outputs a character string into a specified rectangle.
+
+<BR></P>
+
+<P>Yet another variant is TabbedTextOut; this function expands tabs in the text that is to be outputted in accordance with an array specifying tab stop positions.
+
+<BR></P>
+
+<P>The color of the text is determined by SetTextColor (use GetTextColor to retrieve the current setting). The horizontal and vertical text alignment are determined by SetTextAlign (GetTextAlign). This function can also be used to specify that text output functions use the current position (as specified by functions such as MoveTo) rather than any coordinates specified in the function call as the location of the text.
+
+<BR></P>
+
+<P>It is possible to obtain the size of a block of text without actually drawing the text. The function GetTextExtent calculates the width and height of a line of text using the attribute device context. To perform the same calculation using the output device context, use GetOutputTextExtent. The functions GetTabbedTextExtent and GetOutputTabbedTextExtent perform the same calculations for text that contains tab characters that are to be expanded.
+
+<BR></P>
+
+<P>The function SetTextJustification can be used in conjunction with the function GetTextExtent to create justified text. SetTextJustification evenly distributes an amount of space among the break characters (usually spaces) in the text. A related function is SetTextCharacterSpacing, which can be used to set the amount of intercharacter spacing. (Use GetTextCharacterSpacing to retrieve the current setting.)
+
+<BR></P>
+
+<P>A more sophisticated text output function is DrawText. This function can be used to output multiline text. Note that the DrawText function is not recorded in standard Windows metafiles. (It is recorded in enhanced metafiles.)
+
+<BR></P>
+
+<P>The GrayString function can be used to create grayed (dimmed) text.
+
+<BR></P>
+
+<P>Information about the current font can be obtained using GetTextFace (retrieves the name of the font), GetTextMetrics (retrieves a TEXTMETRICS structure containing information about the font currently selected in the attribute device context), and GetOutputTextMetrics (same, for the output device context).
+
+<BR></P>
+
+<P>Several other CDC member functions deal with scaleable (TrueType) fonts and information that can be retrieved from such font files.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Clipping Operations</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>A particularly important GDI capability is the ability to clip output to a specified rectangle or region. This capability is used by Windows throughout; for example, clipping is used to only repaint portions of a window that are not covered by other windows.
+
+<BR></P>
+
+<P>Applications can make explicit use of clipping through a series of CDC member functions that act as wrappers for similar GDI functions. These include SelectClipRgn, ExcludeClipRect, ExcludeUpdateRgn, IntersectClipRect, and OffsetClipRgn. To obtain the smallest rectangle that encloses the entire clipping region, call GetClipBox. To determine whether a point or any parts of a rectangle are inside the clipping region, use the PtVisible or RectVisible member functions.
+
+<BR></P>
+
+<P>Windows can also maintain a bounding rectangle in which bounding information about the bounds of subsequent drawing operations is accumulated. To access the bounding rectangle, use the SetBoundsRect and GetBoundsRect member functions.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>Printing</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Although printing is essentially no different from drawing into any other kind of device contexts, the CDC class offers a series of printer escape member functions that control specific aspects of printing.
+
+<BR></P>
+
+<P>Printing a document and individual pages is controlled by the StartDoc, StartPage, EndPage, and EndDoc member functions. To abort the printing process (and effectively erase everything that has been sent to the printer device context since the last call to StartDoc), call the AbortDoc member function. Note that if printing is canceled or the printer device driver returns any other error, your application should not call the EndDoc or AbortDoc member functions.
+
+<BR></P>
+
+<P>Use the SetAbortDoc member function to create a callback function that Windows calls when the print job is canceled or must be terminated. The QueryAbort member function can be used to query this callback function to determine whether printing should be aborted.
+
+<BR></P>
+
+<P>Device driver specific features can be accessed through the Escape member function. However, because Win32 provides many more printer control functions, the utility of this function relative to earlier Windows implementations has greatly diminished.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Path Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CDC class also offers member functions that encapsulate path functionality. A path is a complex shape create by a series of GDI function calls. A path is created by calling the BeginPath member function, calling the appropriate drawing functions, and calling EndPath. Calling EndPath automatically selects the path into the device context for subsequent manipulation.
+
+<BR></P>
+
+<P>Functions that manipulate paths include CloseFigure, FlattenPath, StrokePath, and WidenPath. The path can be rendered into the device context using StrokePath. To render the path's interior, use FillPath; or you can use StrokeAndFillPath to render both the path's contours and its interior at the same time using the current pen and brush.
+
+<BR></P>
+
+<P>A path can be turned into a clipping region by calling SelectClipPath.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=4><B>GDI Object Support in MFC</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Many GDI drawing operations are accomplished using a series of GDI objects, such as pens, brushes, or fonts. The Microsoft Foundation Classes Library provides a series of wrapper classes that encapsulate the functionality of these GDI objects.
+
+<BR></P>
+
+<P>All GDI object classes are derived from the class CGdiObject. Figure 24.5 illustrates GDI object classes in MFC.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="24vcu05.gif">Figure 24.5. GDI object classes.</A></B>
+
+<BR></P>
+
+<P>The CGdiObject class provides generic support for GDI objects in the form of a series of member functions. The Attach and Detach member functions can be used to attach a CGdiObject-derived MFC object to a GDI object or detach it from the GDI object. The handle of the object, stored in the m_hObject member variable, can be retrieved through the &quot;safe&quot; function GetSafeHandle. (This function can also be used with null CGdiObject pointers.) A pointer to a CGdiObject that corresponds to a Windows GDI object handle can be obtained by calling the static member function FromHandle. To obtain a GDI object's type, use the GetObjectType member function.
+
+<BR></P>
+
+<P>The CreateStockObject member function can be used to crate a stock pen, brush, font, or palette. Note that this function should be called with a CGdiObject-derived object that is of the appropriate class (CPen, CBrush, CFont, or CPalette).
+
+<BR></P>
+
+<P>The UnrealizeObject member function can be used to reset the origin of a brush or reset a palette. Do not use this member function for objects of any other type.
+
+<BR></P>
+
+<P>The DeleteObject member function deletes the GDI object that the CGdiObject-derived MFC object is attached to. The DeleteTempMap function, called usually from the idle-time handler of your application's CWinApp object, is used to delete any temporary CGdiObject objects that were created by the FromHandle member function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>Pens</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Support for GDI pen objects in MFC is provided through the CPen class. A pen can be created either in a single step or in two steps. If you wish to create a pen in a single step, you can utilize overloaded versions the CPen constructor for this purpose. For example, to create a dashed black pen, you can declare the pen object as follows:
+
+<BR></P>
+
+<PRE>CPen myPen(PS_DASH, 0, RGB(0, 0, 0));</PRE>
+
+<P>Alternatively, pens can be created in a two-step operation, by creating first the MFC CPen object using a parameterless constructor, and then calling the CreatePen or CreatePenIndirect member functions to create a corresponding GDI pen object. For example:
+
+<BR></P>
+
+<PRE>CPen *pPen;
+
+pPen = new CPen;
+
+pPen-&gt;CreatePen(PS_SOLID, 3, RGB(255, 0, 0));</PRE>
+
+<P>To obtain a LOGPEN structure from a CPen object, use the GetLogPen function. You can also use a CPen object in any GDI function calls that require a pen handle of type HPEN because the CPen class defines the operator HPEN operator function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Brushes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The MFC supports GDI brushes through the CBrush class. Like pens, brushes can also be created in either a single step or a two-step process.
+
+<BR></P>
+
+<P>To create a GDI brush while constructing the CBrush object, use one of the overloaded versions of the CBrush constructor. For example, to create a solid yellow brush, you could construct the CBrush object as follows:
+
+<BR></P>
+
+<PRE>CBrush *pBrush;
+
+pBrush = new CBrush(RGB(255, 255, 0));</PRE>
+
+<P>Alternatively, you can first create the CBrush MFC object through the parameterless constructor and then create the GDI brush object by calling the CreateSolidBrush, CreateHatchBrush, CreatePatternBrush, CreateDIBPatternBrush, CreateSysColorBrush, or CreateBrushIndirect member functions. For example:
+
+<BR></P>
+
+<PRE>CBrush cyanBrush;
+
+cyanBrush.CreateSolidBrush(RGB(0, 255, 255));</PRE>
+
+<P>To obtain a LOGBRUSH structure from a CBrush object, use the GetLogBrush member function. You can also use CBrush objects in place of handles of type HBRUSH in GDI function calls because the CBrush class defines the operator HBRUSH operator function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>Bitmaps</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>GDI bitmaps are supported in MFC by the CBitmap class. Constructing a bitmap is a two-step process. First, the MFC CBitmap object must be created; next, one of the initialization functions must be called to create the GDI bitmap object.
+
+<BR></P>
+
+<P>The initialization functions include LoadBitmap, LoadOEMBitmap, LoadMappedBitmap, CreateBitmap, CreateBitmapIndirect, CreateCompatibleBitmap, and CreateDiscardableBitmap.
+
+<BR></P>
+
+<P>To obtain a pointer to a BITMAP structure representing the GDI bitmap the CBitmap object is attached to, call the GetBitmap member function. You can also use CBitmap objects in place of handles of type HBITMAP in GDI function calls, thanks to the presence of the operator HBITMAP operator function.
+
+<BR></P>
+
+<P>The bits in a bitmap can be set or read using the SetBitmapBits and GetBitmapBits member functions. You can also assign a width and a height to the bitmap (in LOMETRIC units) using SetBitmapDimension. However, these values are only used as return values with GetBitmapDimension and serve no other purpose.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>Fonts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Support for GDI logical fonts is encapsulated in MFC in the CFont class. Creation of a font in MFC is a two-step process; first, the CFont MFC object is created; next, an initialization function is called to create the underlying GDI logical font.
+
+<BR></P>
+
+<P>The initialization functions include CreateFont, CreateFontIndirect, CreatePointFont, and CreatePointFontIndirect.
+
+<BR></P>
+
+<P>A pointer to a LOGFONT structure can be obtained by calling the GetLogFont member function. CFont objects can also be used in place of HFONT handles in GDI function calls thanks to the presents of the operator HFONT operator function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=3><B>Palettes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Logical palette support in MFC is provided through the CPalette class. Palettes, like fonts and bitmaps, are constructed in a two-step operation. First, the CPalette object is created; next, an initialization function is called to create the underlying GDI palette object.
+
+<BR></P>
+
+<P>The two palette initialization functions are CreatePalette and CreateHalftonePalette.
+
+<BR></P>
+
+<P>Palette operations include AnimatePalette, GetNearestPaletteIndex, GetEntryCount, GetPaletteEntries, SetPaletteEntries, and ResizePalette.
+
+<BR></P>
+
+<P>CPalette objects can be used in GDI function calls that require a palette handle of type HPALETTE because the CPalette class defines the operator function operator HPALETTE.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=3><B>Regions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Support for GDI regions is provided in MFC through the CRgn class. A region is created by first creating the CRgn object, and then calling an initialization function.
+
+<BR></P>
+
+<P>There are a large number of CRgn initialization functions. These are summarized in Table 24.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 24.2. </B><B>CRgn</B><B> initialization functions.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Member Function</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Creates</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>CreateRectRgn</P>
+
+<TD>
+
+<P>A rectangular region</P>
+
+<TR>
+
+<TD>
+
+<P>CreateRectRgnIndirect</P>
+
+<TD>
+
+<P>A region from a RECT structure</P>
+
+<TR>
+
+<TD>
+
+<P>CreateEllipticRgn</P>
+
+<TD>
+
+<P>An elliptical region</P>
+
+<TR>
+
+<TD>
+
+<P>CreateEllipticRgnIndirect</P>
+
+<TD>
+
+<P>An elliptical region from a RECT structure</P>
+
+<TR>
+
+<TD>
+
+<P>CreatePolygonRgn</P>
+
+<TD>
+
+<P>A polygonal region</P>
+
+<TR>
+
+<TD>
+
+<P>CreatePolyPolygonRgn</P>
+
+<TD>
+
+<P>A region of several (possibly disjoint) polygons</P>
+
+<TR>
+
+<TD>
+
+<P>CreateRoundRectRgn</P>
+
+<TD>
+
+<P>A region in the shape of a rounded rectangle</P>
+
+<TR>
+
+<TD>
+
+<P>CombineRgn</P>
+
+<TD>
+
+<P>A region that is the union of two existing regions</P>
+
+<TR>
+
+<TD>
+
+<P>CopyRgn</P>
+
+<TD>
+
+<P>A region that is the copy of another region</P>
+
+<TR>
+
+<TD>
+
+<P>CreateFromPath</P>
+
+<TD>
+
+<P>A region from a path</P>
+
+<TR>
+
+<TD>
+
+<P>CreateFromData</P>
+
+<TD>
+
+<P>A region from a RGNDATA structure and an XFORM matrix</P></TABLE>
+
+<P>To compare two CRgn objects and check if they are equivalent, use the EqualRgn member function. To obtain a RGNDATA structure for a CRgn object, call GetRegionData. To obtain a region's bounding rectangle (that is, the tightest rectangle that encloses the region), call GetRgnBox.
+
+<BR></P>
+
+<P>To set a region to a specific rectangle, call SetRectRgn. To move a region by a specific offset, use OffsetRgn.
+
+<BR></P>
+
+<P>You can determine whether a given point or parts of a given rectangle fall within the region; use the PtInRegion or RectInRegion member functions.
+
+<BR></P>
+
+<P>A CRgn object can be used in place of an HRGN handle in GDI function calls, thanks to the presence of the operator function operator HRGN.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I27" NAME="I27">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Windows Graphics Device Interface (GDI) functionality is encapsulated by the CDC class (representing device contexts), the CGdiObject class (representing GDI objects), and classes derived from both.
+
+<BR></P>
+
+<P>CDC-derived classes include CClientDC (representing a window's interior), CWindowDC (representing a window), and CPaintDC (representing a device context while processing a WM_PAINT message). These derived classes only differ from the base class inasmuch as their constructor and destructor encapsulate calls that create and destroy the appropriate GDI device context (for example, by calling GetDC and ReleaseDC, or BeginPaint/EndPaint). In contrast, a base CDC object is not automatically attached to a GDI device context; the device context must be explicitly created through the CreateDC member function (or attached to through the Attach member function).
+
+<BR></P>
+
+<P>Another class derived from CDC is CMetafileDC, which represents metafile device contexts.
+
+<BR></P>
+
+<P>A CDC object maintains two GDI device context handles. The output device context handle is used for drawing operations; the attribute device context handle is used for operations obtaining information about the device context. The two handles are usually identical, except for the case of CMetafileDC objects, in which case the attribute device context is set to NULL.
+
+<BR></P>
+
+<P>The CDC class encapsulates most GDI drawing functionality. This includes basic drawing functions, simple lines and shapes, text and font functions, clipping functions, bitmap and scrolling functions, and region and path-related functions. The CDC class also provides functionality related to mapping modes. Note that encapsulation of the Windows NT world coordinate transformation functions is not provided as part of the CDC class.
+
+<BR></P>
+
+<P>Most drawing operations utilize drawing tools that are selected into a device context using the SelectObject or SelectStockObject functions. These tools are GDI objects such as pens, brushes, palettes, bitmaps, fonts, and regions. Support for these GDI objects in MFC is provided through a series of classes derived from CGdiObject. The CPen, CBrush, CFont, CBitmap, CPalette, and CRgn classes encapsulate the functionality of pens, brushes, fonts, bitmaps, palettes, and regions, respectively.</P>
+
+<P><A HREF="vcu23fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu25fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

@@ -1,0 +1,1901 @@
+<HTML><HEAD>
+
+   <TITLE>TutoriaL sobre C - Nocturnus Labs. Inc.</TITLE>
+</HEAD>
+</HEAD>
+<BODY>
+
+
+
+<P><FONT FACE="Courier New,Courier">19. <A HREF="#19">Operadores e Fun&ccedil;&otilde;es
+String</A></FONT>
+<BR><FONT FACE="Courier New,Courier">20. <A HREF="#20">Entradas e Sa&iacute;das
+em Dispositivos</A></FONT>
+<BR><FONT FACE="Courier New,Courier">21. <A HREF="#21">Opera&ccedil;&otilde;es
+com Arquivo</A></FONT>
+<BR><FONT FACE="Courier New,Courier">22. <A HREF="#22">Opera&ccedil;&otilde;es
+com Arquivo - Continua&ccedil;&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">23. <A HREF="#23">Opera&ccedil;&otilde;es
+com Arquivo - Continua&ccedil;&atilde;o</A></FONT>
+<BR><FONT FACE="Courier New,Courier">24. <A HREF="#24">Opera&ccedil;&otilde;es
+com Arquivo - Conceitos de Chaves</A></FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Operadores e
+Fun&ccedil;&otilde;es String&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Operadores</FONT></FONT></H3>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">char strcat(s1,s2)</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">char *s1,*s2;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">copia a string s2 para o final de s1.</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">char strncat(s1,s2,n)</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">char *s1,*s2;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">copia no caractere de s2 para o final
+de s1.</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">char strcmp(s1,s2)</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">char *s1,*s2;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">compara duas strings retomando</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">0- se iguais</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">1- se a 1<SUP>a</SUP>. for maior que 2<SUP>a</SUP>.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- se a 2<SUP>a</SUP>. for maior que 1<SUP>a</SUP>.</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">char strcpy(s1,s2)</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">char *s1,*s2;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">copia a string s2 para a string s1</FONT></LI>
+</MENU>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">strlen(s)</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">char *s;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">retorna o total de caracteres de s, exceto
+o caracter nulo</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">atoi(s)</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">char *s;</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">converte string em n&uacute;mero inteiro</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier">Podemos "truncar" vari&aacute;veis tipo
+string, procedendo como se estas fossem matrizes de caracter.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo: Escreva o nome do m&ecirc;s
+correspondente ao n&uacute;mero.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i,j,k;
+char *mes = "JANFEVMARABRMAIJUNJULAGOSETOUTNOVDEZ";
+cls();
+printf("Digite o Mes: ");&nbsp;
+scanf("%d",&amp;j);
+k=j*3-3;
+for(i=k;i&lt;k+3;i++)
+printf("%c",mes[i]);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">No Exemplo a seguir, determinamos o exato
+tamanho da vari&aacute;vel digitada, atrav&eacute;s da fun&ccedil;&atilde;o
+"strlen", e "misturamos" os tipos "tot" e "a" de forma conseq&uuml;ente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo: Determine o "n&uacute;mero
+da sorte"de um nome.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int tot=0,i,w;
+char a,s[20];
+cls();&nbsp;&nbsp;&nbsp;
+printf("Digite seu Nome: "); scanf("%s",s);
+for(i=0;i&lt;=strlen(s)-1;i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a = s[i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tot = tot + a - 64;
+&nbsp; }
+printf("%s seu numero da sorte e' %d",s,tot);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Podemos tamb&eacute;m converter strings
+e n&uacute;meros (inteiros/fracion&aacute;rios) conforme desejarmos:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Exemplo: Convers&atilde;o de String em
+N&uacute;mero Inteiro</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int i;
+char s[10];
+printf("Digite uma sequencia de numeros com letras: ");
+gets(s);
+i = atoi(s);
+printf("Numero: %d ",i);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+19L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Elabore um programa que armazene e
+exiba notas de alunos de classes de no m&aacute;ximo 4 alunos. Existem
+apenas 3 classes de alunos.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Dado um nome, inverta-o.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- Dado um nome, ordene suas letras
+de forma crescente.</FONT>
+<BR><A NAME="20"></A>
+<BR><FONT FACE="Courier New,Courier"></FONT>&nbsp;
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Entradas e Sa&iacute;das
+em Dispositivos</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">As fun&ccedil;&otilde;es e programas
+a seguir foram concebidos para serem compilados pelo Turbo C, portanto
+algumas adapta&ccedil;&otilde;es poder&atilde;o ser necess&aacute;rias
+para sua utiliza&ccedil;&atilde;o no Classic C. Entretanto a maior parte
+dos programas funcionar&aacute; de forma adequada tamb&eacute;m no Classic
+C.</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="140"><B><FONT FACE="Courier New,Courier">Nome</FONT></B></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier"><B>Fun&ccedil;&atilde;o</B>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">fclose()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Fecha uma fila&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">feof()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Devolve se fim de fila&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">ferror()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Devolve Verdadeiro se
+um erro tiver ocorrido&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">fopen()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Abre uma fila&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">fprint()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Sa&iacute;da&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">fscanf()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Entrada&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">fseek()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Procura um byte especificado
+na fila&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">getc()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">L&ecirc; um caracter na
+fila&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">putc()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Grava um caracter na fila&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">remove()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Apaga o arquivo&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="140"><FONT FACE="Courier New,Courier">rewind()</FONT></TD>
+
+<TD WIDTH="378"><FONT FACE="Courier New,Courier">Reposiciona o ponteiro
+do Arquivo em seu in&iacute;cio&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">Para podermos utilizar estas instru&ccedil;&otilde;es,
+temos que carregar a biblioteca "stdio.h", que cont&eacute;m estas rotinas.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Sintaxes:</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">fopen()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">A fun&ccedil;&atilde;o "fopen" tem duas
+finalidades, a saber:</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">abrir uma fila de bytes</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">ligar um arquivo em disco &agrave;quela
+fila</FONT></LI>
+</UL>
+
+<PRE><FONT FACE="Courier New,Courier">FILE *fopen(char *NomeArquivo, char *modo);</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo: Abertura de arquivo para grava&ccedil;&atilde;o:</FONT>
+<PRE><FONT FACE="Courier New,Courier">if ((fp = fopen("teste","w")) = NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("N&atilde;o posso abrir o Arquivo teste.\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1); /* for&ccedil;a o t&eacute;rmino da execu&ccedil;&atilde;o da rotina */
+&nbsp; }</FONT></PRE>
+<FONT FACE="Courier New,Courier">A tabela a seguir apresenta os modos de
+abertura de arquivo v&aacute;lidos:</FONT>
+<TABLE BORDER >
+<TR>
+<TD WIDTH="111"><B><FONT FACE="Courier New,Courier">Modo</FONT></B></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier"><B>Significado</B>&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"r"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Abre Arquivo de Texto
+para Leitura&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"w"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Cria Arquivo de Texto
+para Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"a"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Anexa a um Arquivo de
+Texto&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"rb"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Abre Arquivo Bin&aacute;rio
+para Leitura&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"wb"&nbsp;</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Cria Arquivo Bin&aacute;rio
+para Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"ab"&nbsp;</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Anexa a um Arquivo Bin&aacute;rio&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"r+"&nbsp;</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Abre Arquivo de Texto
+para Leitura/Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"w+"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Cria Arquivo de Texto
+para Leitura/Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"a+"&nbsp;</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Abre ou Cria Arquivo de
+Texto para Leitura/Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"r+b"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Abre Arquivo Bin&aacute;rio
+para Leitura/Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"w+b"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Cria Arquivo Bin&aacute;rio
+para Leitura/Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"a+b"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Abre ou Cria Arquivo Bin&aacute;rio
+para Leitura/Grava&ccedil;&atilde;o&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"rt"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Idem a "r"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"wt"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Idem a "w"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"at"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Idem a "a"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"r+t"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Idem a "r+"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"w+t"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Idem a "w+"&nbsp;</FONT></TD>
+</TR>
+
+<TR>
+<TD WIDTH="111"><FONT FACE="Courier New,Courier">"a+t"</FONT></TD>
+
+<TD WIDTH="406"><FONT FACE="Courier New,Courier">Idem a "a+"&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier">&nbsp;</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">putc()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Grava caracteres em fila previamente abertos</FONT>
+<PRE><FONT FACE="Courier New,Courier">int putc(int ch, FILE *fp);</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">ch &eacute; o caracter a ser gravado</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">fp &eacute; o ponteiro devolvido por fopen</FONT></LI>
+</MENU>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">getc()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Ler caracteres em uma fila aberta</FONT>
+<PRE><FONT FACE="Courier New,Courier">int getc(FILE *fp);</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">ch = getc(fp);
+while (ch != EOF)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ch = getc(fp);</FONT></PRE>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">fclose()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Fechar as filas abertas. Caso o programa
+seja encerrado sem que as filas sejam fechadas, dados gravados nos buffers
+podem ser perdidos.</FONT>
+<PRE><FONT FACE="Courier New,Courier">int fclose(FILE *fp);</FONT></PRE>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">ferror()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Determina se a opera&ccedil;&atilde;o
+de arquivo produziu um erro. Sua forma geral ser&aacute;:</FONT>
+<PRE><FONT FACE="Courier New,Courier">int ferror(FILE *fp);</FONT></PRE>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">rewind()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Reinicia o arquivo, equivale ao Reset
+do Pascal, ou seja apenas movimenta o ponteiro do arquivo para seu in&iacute;cio.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo (Funciona no Classic C) de
+montagem de um pequeno cadastro de nomes, endere&ccedil;os e sal&aacute;rios
+de funcion&aacute;rios.</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct registro {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char nome[40];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char endereco[40];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float valor;
+} matriz[100];
+
+main()
+{&nbsp;
+char escolha;
+inicia_matriz();
+for (;;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; escolha = menu();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch (escolha) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'i' :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inserir();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'e' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exibir();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'c' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; carga();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 's' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; salvar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'f' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; saida();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+puts(escolha);
+}
+
+saida()
+{
+cls();
+exit();
+}
+
+inicia_matriz()
+{
+int t;
+for (t=0;t&lt;100;t++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *matriz[t].nome = '\0';
+}&nbsp;&nbsp;
+
+menu()
+{
+char s;
+cls();
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Inserir");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Exibir");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Carregar");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Salvar");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Finaliza");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite a 1<SUP>a</SUP>. Letra: ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;s);
+} while(s != 'i' &amp;&amp; s != 'e' &amp;&amp; s != 'c' &amp;&amp; s != 's' &amp;&amp; s != 'f');
+return(s);
+}
+
+inserir()
+{
+int i;
+for (i=0; i &lt; 100; i++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!*matriz[i].nome) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i==100) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Arquivo Cheio!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Nome: "); gets(matriz[i].nome);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("End.: "); gets(matriz[i].endereco);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Val.: "); scanf("%f",&amp;matriz[i].valor);&nbsp;
+}
+
+exibir()
+{
+char x;
+int t;
+cls();
+for(t=0;t&lt;100;t++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (*matriz[t].nome) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%s \n", matriz[t].nome);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%s \n", matriz[t].endereco);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%f \n", matriz[t].valor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts(" "); puts("&lt;Enter> para prosseguir!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = getchar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}&nbsp;
+salvar()
+{
+FILE *fp;
+int i;
+if ((fp=fopen("LISTA.DAT","wb"))==NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falhou Abertura! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;}
+for (i=0;i&lt;100;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (*matriz[i].nome)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (fwrite(&amp;matriz[i],sizeof(struct registro), 1,fp) != 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falha na Gravacao! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(fp);
+}
+
+carga()
+{
+FILE *fp;
+int i;
+if ((fp=fopen("LISTA.DAT","rb")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falha na Abertura do Arquivo!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+}
+inicia_matriz();
+for (i=0; i &lt; 100; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (fread(&amp;matriz[i], sizeof(struct registro), 1, fp) != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (feof(fp)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(fp);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Erro de Leitura! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(fp);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+20L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Escreva um programa que armazene n&uacute;meros
+primos numa matriz.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Escreva um nome, num arquivo.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Retome o exerc&iacute;cio 1, por&eacute;m
+armazene-o num arquivo.</FONT></LI>
+</MENU>
+<A NAME="21"></A>
+<BR><FONT FACE="Courier New,Courier"></FONT>&nbsp;
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Opera&ccedil;&otilde;es
+com Arquivo</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Atrav&eacute;s dos exemplos que ser&atilde;o
+apresentados a seguir, constataremos a boa intera&ccedil;&atilde;o existente
+entre a linguagem C e o sistema operacional, antes por&eacute;m apresentaremos
+uma nova forma de escrever "main()".</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Vamos supor que desejamos criar um
+programa que escreva num arquivo cujo nome ser&aacute; fornecido na chamada
+do programa (Exemplificando: KTOD TESTE &lt;Enter>). Gostar&iacute;amos
+que o DOS criasse o arquivo TESTE guardando o conte&uacute;do digitado
+durante a execu&ccedil;&atilde;o do programa.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Para isso temos a seguinte sintaxe
+para "main()":</FONT>
+<PRE><FONT FACE="Courier New,Courier">main(argv,argc)</FONT></PRE>
+<FONT FACE="Courier New,Courier">onde</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">argc - tem o n&uacute;mero de argumentos
+contidos nas linha de comando (necessariamente maior ou igual a um, pois
+o pr&oacute;prio programa j&aacute; &eacute; considerado um argumento pelo
+D.O.S.). Argv &eacute; um ponteiro que acomodar&aacute; os caracteres digitados.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo 1: Programa KTOD, que escreve
+caracteres num arquivo criado/aberto via D.O.S.</FONT>
+<PRE><FONT FACE="Courier New,Courier">#include "stdio.h"
+main(argc,argv)
+int argc;
+char *argv[];
+{
+FILE *fp;
+char ch;
+if (arg != 2) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite o Nome do Arquivo\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+if ((fp=fopen(argv[1],"w")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Arquivo n&atilde;o pode ser aberto\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ch = getchar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putc(ch,fp);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while( ch != '$');
+fclose(fp);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo 2: Programa DTOV, que apresenta
+em v&iacute;deo os caracteres digitados via KTOD.</FONT>
+<PRE><FONT FACE="Courier New,Courier">#include "stdio.h"
+main(argc,argv)
+int argc;
+char *argv[];
+{
+FILE *fp;
+char ch;
+if (arg != 2) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite o Nome do Arquivo\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+if ((fp=fopen(argv[1],"w")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Arquivo n&atilde;o pode ser aberto\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+ch = getc(fp);
+while (ch != EOF) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchar(ch);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ch=getc(fp);
+} while( ch != '$');
+fclose(fp);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+21L)</FONT></FONT></H1>
+<FONT FACE="Courier New,Courier">1- Uso do Compilador Turbo C. Testar exemplos
+vistos em teoria.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">2- Elabore programa que exiba um programa
+em C armazenado em disco (a semelhan&ccedil;a do comando type do DOS).</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">3- O que ocorre com o arquivo DADOS.DAT
+(que cont&eacute;m dados) ap&oacute;s a execu&ccedil;&atilde;o do seguinte
+programa.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">main()</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">{</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">FILE *fp;</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">if ((fp=fopen("DADOS.DAT","w"))==Null)
+{</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">exit(1);</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">}</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">fclose(fp);</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">}</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><A NAME="22"></A>
+<BR><FONT FACE="Courier New,Courier"></FONT>&nbsp;
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Opera&ccedil;&otilde;es
+com Arquivo</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo 1: Programa para copiar Arquivos.</FONT>
+<PRE><FONT FACE="Courier New,Courier">#include "stdio.h"
+main(argc,argv)
+int argc;
+char *argv[];
+{
+FILE *in, *out;
+char ch;
+if (arg != 3) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite o Nome dos Arquivos\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if ((in=fopen(argv[1],"rb")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Arquivo origem n&atilde;o existe\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+if ((out=fopen(argv[2],"wb")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Arquivo destino n&atilde;o existe\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+while (! feof(in))&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putc(getc(in),out);&nbsp; /* esta &eacute; a c&oacute;pia propriamente dita */
+fclose(in);
+fclose(out);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Outras fun&ccedil;&otilde;es de tratamento
+de Arquivos.</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">getw() e putw()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Id&ecirc;nticas a getc() e putc(), por&eacute;m
+trabalhando com inteiros.</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">fgets() e fputs()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Sintaxes:</FONT>
+<PRE><FONT FACE="Courier New,Courier">char *fputs(char *str, FILE *fp);
+char *fgets(char *str, int comprimento, FILE *fp);</FONT></PRE>
+<FONT FACE="Courier New,Courier">fputs() &eacute; an&aacute;loga a puts(),
+por&eacute;m escreve em disco.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">fgets() l&ecirc; uma "string" da fila
+especificada, incluindo caracteres como</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">\n, por&eacute;m a "string" lida sempre
+ser&aacute; finalizada com zero ASCII.</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">fread() e fwrite()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Permitem que leiamos/gravemos blocos de
+dados, sua forma geral &eacute; a seguinte:</FONT>
+<PRE><FONT FACE="Courier New,Courier">int fread(void *buffer, int num_bytes, int cont, FILE *fp);
+int fwrite(void *buffer, int num_bytes, int cont, FILE *fp);</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo 2: Leitura de Arquivos contendo
+n&uacute;meros.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+FILE *fp;
+float f = 12.23;
+if ((fp=fopen("teste","wb")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Arquivo n&atilde;o pode ser criado\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+fwrite(&amp;f,sizeof(float(),1,fp);
+fclose(fp);
+}</FONT></PRE>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">fseek()</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">Entrada e sa&iacute;da com acesso aleat&oacute;rio</FONT>
+<PRE><FONT FACE="Courier New,Courier">int fseek(FILE *fp, long int num_bytes, int origem);</FONT></PRE>
+<FONT FACE="Courier New,Courier">fp - &eacute; o ponteiro de arquivo devolvido
+por fopen().</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">num_bytes - &eacute; um inteiro longo
+que representa o n&uacute;mero de bytes desde a origem at&eacute; chegar
+a posi&ccedil;&atilde;o corrente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Este comando &eacute; normalmente utilizado
+em arquivos bin&aacute;rios.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo 3: Leitura de um caracter em
+um arquivo bin&aacute;rio.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+FILE *fp;
+if ((fp=fopen("teste","rb")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Arquivo n&atilde;o pode ser aberto\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+fseek(fp,234L,0);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* L for&ccedil;a que seja um inteiro longo */
+return getc(fp);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* l&ecirc; o caracter 234 */
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo 4: Programa EDL</FONT>
+<PRE><FONT FACE="Courier New,Courier">include &lt;stdio.h>
+main()
+{
+int c;
+while ((c = getchar()) != EOF)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchar(c);
+&nbsp;}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio (Aula
+22L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1- Compile e Estude o programa EDL.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">2- Construa os Programas KTOD e DTOV usando
+o Turbo C.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3- Construa o comando COPIAR, visto na
+teoria.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">4- Elabore programa para cria&ccedil;&atilde;o
+de um dump de arquivo.</FONT></LI>
+</MENU>
+<A NAME="23"></A>
+<BR><FONT FACE="Courier New,Courier"></FONT>&nbsp;
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Opera&ccedil;&otilde;es
+com Arquivo&nbsp;</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Caso o programador desejasse reproduzir
+entradas e sa&iacute;das semelhantes as existentes em teclado e v&iacute;deo,
+ele poderia utilizar os comandos "fprintf" e "fscanf" conforme as sintaxes
+a seguir:</FONT>
+<PRE><FONT FACE="Courier New,Courier">fprintf(fp,"string de controle",lista de argumentos);
+fscanf(fp,"string de controle",lista de argumentos);</FONT></PRE>
+<FONT FACE="Courier New,Courier">A linguagem C permite a cria&ccedil;&atilde;o
+de 5 tipos de estruturas particulares, a saber:</FONT>
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Estrutura, um grupo de vari&aacute;veis
+sobre o mesmo nome.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Campo de Bit, que permite f&aacute;cil
+acesso a bits dentro de uma palavra.</FONT></LI>
+
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier">Uni&atilde;o, que permite que definamos
+a mesma parte da mem&oacute;ria contendo dois ou mais tipos de vari&aacute;veis
+(obviamente n&atilde;o usadas concomitantemente).</FONT></LI>
+</UL>
+
+<LI>
+<FONT FACE="Courier New,Courier">Enumera&ccedil;&atilde;o, que &eacute;
+similar a uma lista de s&iacute;mbolos.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">Tipo Final, onde o programador cria um
+novo nome para um tipo j&aacute; existente.</FONT></LI>
+</UL>
+<FONT FACE="Courier New,Courier">A seguir criaremos um registro que far&aacute;
+uso destes conceitos. Supondo que desejamos um registro contendo Nome,
+Endere&ccedil;o, etc., ter&iacute;amos:</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct regs {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char nome[30];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char rua[40];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char cidade[20];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char estado[02];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unsigned long int cep;
+}; /* ponto e v&iacute;rgula encerrando o registro */</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Dados</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Al&eacute;m dos tipos b&aacute;sicos de
+dados que costumamos utilizar em nossos exemplos (int, float, char, etc.),
+em C dispomos de modificadores que podem mudar a forma de armazenar e de
+acessar determinada vari&aacute;vel.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Modificadores de Acesso
+e de Armazenamento</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">O modificador const, impede que uma vari&aacute;vel
+mude de valor durante a execu&ccedil;&atilde;o do programam conforme segue:</FONT>
+<PRE><FONT FACE="Courier New,Courier">const float ver=3.20;</FONT></PRE>
+<FONT FACE="Courier New,Courier">neste caso <I>ver</I> n&atilde;o poder&aacute;
+ser alterada durante a execu&ccedil;&atilde;o do programa.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O modificador volatile, permite que
+determinada vari&aacute;vel tenha seu valor alterado sem um comando do
+programa. Este tipo de situa&ccedil;&atilde;o ocorre por exemplo no caso
+de seu programa acessar o rel&oacute;gio da m&aacute;quina. Neste caso
+sua vari&aacute;vel de tempo ser&aacute; atualizada constantemente sem
+que seja necess&aacute;ria qualquer instru&ccedil;&atilde;o de seu programa.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O modificador auto, raramente usado,
+serve para declarar vari&aacute;veis locais. O modificador extern permite
+que vari&aacute;veis globais declaradas em m&oacute;dulos compilados separadamente
+possam ser adequadamente utilizadas.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier"><B>&nbsp;&nbsp;&nbsp; Prog. Um&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Prog. Dois
+
+</B>&nbsp;&nbsp;&nbsp;&nbsp; int x,y;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; extern x,y;
+&nbsp;&nbsp;&nbsp;&nbsp; main()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; funcDois()
+&nbsp;&nbsp;&nbsp;&nbsp; {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = y++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; func1()
+&nbsp;&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = 12;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y = 3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</FONT></PRE>
+<FONT FACE="Courier New,Courier">O modificador static permite que uma vari&aacute;vel
+seja permanente dentro de sua pr&oacute;pria fun&ccedil;&atilde;o. Diferentemente
+da vari&aacute;vel global, esta vari&aacute;vel somente &eacute; v&aacute;lida
+em sua pr&oacute;pria rotina.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">serie()
+{
+static int ser_num;
+ser_num = ser_num + 12;
+return(ser_num);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">No exemplo anterior ser_num continua a
+existir entre as chamadas das fun&ccedil;&otilde;es ao inv&eacute;s de
+existir somente dentro da fun&ccedil;&atilde;o <I>s&eacute;rie, </I>como
+ocorreria com uma vari&aacute;vel local normal.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O modificador register permite, caso
+seja poss&iacute;vel, que determinada vari&aacute;vel inteira ou caracter,
+n&atilde;o se localize na mem&oacute;ria convencional, fique num registrador
+dispon&iacute;vel (se houver um) da CPU, tornando a execu&ccedil;&atilde;o
+do programa muito mais veloz. Basta para isso declaramos:</FONT>
+<PRE><FONT FACE="Courier New,Courier">register int i;
+for(i=0;i&lt;30000;i++)</FONT></PRE>
+<FONT FACE="Courier New,Courier">Caso seja poss&iacute;vel o contador i
+ser&aacute; processado muito mais rapidamente do que seria sem o modificador
+register.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Convers&otilde;es de Tipos</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">O exemplo a seguir mostra a facilidade
+que temos para converter tipos em C.</FONT>
+<PRE><FONT FACE="Courier New,Courier">main()
+{
+int x=70,x1=7;
+char c='a',c1='A';
+float f=23.215;
+printf("x= %d, c= %c, f= %2.2f, x1= %d, c1= %c \n",x,c,f,x1,c1);
+c = x;
+printf("c &lt;--x : c= %c\n",c);
+x = f;
+printf("x &lt;--f : x= %d\n",x);
+f = x1;
+printf("f &lt;--x1: f= %2.2f\n",f);
+f = c1;
+printf("f &lt;--c1: f= %2.2f",f);
+}
+
+x= 70, c= a, f= 23.22, x1= 7, c1= A
+c &lt;--x : c= F
+x &lt;--f : x= 23
+f &lt;--x1: f= 7.00
+f &lt;--c1: f= 65.00</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Ponteiros de fun&ccedil;&otilde;es</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Da mesma forma como uma vari&aacute;vel
+pode ser "apontada" por uma vari&aacute;vel tipo ponteiro, uma fun&ccedil;&atilde;o
+tamb&eacute;m poder&aacute; ser. Imaginemos um programa onde desej&aacute;ssemos
+comparar duas palavras numa fun&ccedil;&atilde;o que as recebesse juntamente
+com um ponteiro que indicasse o sucesso ou n&atilde;o da compara&ccedil;&atilde;o.
+No programa principal a fun&ccedil;&atilde;o teria que ser declarada como
+um valor e depois poderia ser apontada por um ponteiro. Particularmente
+neste caso temos poucas vantagens em usar este racioc&iacute;nio, por&eacute;m
+em alguns casos poderemos usar este m&eacute;todo de maneira a melhorarmos
+nossos programas.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Estruturas</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Em C, uma estrutura &eacute; uma cole&ccedil;&atilde;o
+de vari&aacute;veis referenciadas atrav&eacute;s de um nome definido pelo
+programador, semelhante ao record da linguagem Pascal.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo de programa com um pequeno
+cadastro:</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct dados {
+char nome[30];
+char rua[40];
+char cidade[20];
+char estado[02];
+char cep[09];
+&nbsp; };</FONT></PRE>
+<FONT FACE="Courier New,Courier">N&atilde;o devemos confundir tipo com
+vari&aacute;vel, de forma que &eacute; errado afirmar-se coisas como "a
+vari&aacute;vel dados recebeu ...", este tipo (dados) servir&aacute; para
+posteriormente declaramos uma vari&aacute;vel como segue:</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct dados cliente;
+ou ainda
+struct dados {
+char nome[30];
+char rua[40];
+char cidade[20];
+char estado[02];
+char cep[09];
+} cliente;</FONT></PRE>
+
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Matrizes de Estrutura</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">Vamos supor termos definido um registro.
+Ser&aacute; que nos bastar&aacute; podermos manipular um registro por vez,
+ou seria mais interessante termos como manipular uma s&eacute;rie deles
+ao mesmo tempo? Para tornar isto poss&iacute;vel devemos ter uma matriz
+que reflita a estrutura declarada.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Exemplo:</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct dados fornecedor[100];</FONT></PRE>
+<FONT FACE="Courier New,Courier">Este trecho de c&oacute;digo criaria uma
+matriz (vetor) com 100 elementos organizados pelo formato de dados.</FONT>
+<H3>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Constru&ccedil;&atilde;o
+de Programa com acesso a registros</FONT></FONT></H3>
+<FONT FACE="Courier New,Courier">A seguir iremos contruir um exemplo completo
+de programa que acessa um tipo especial de arquivo, ou seja, aquele que
+cont&eacute;m apensas registros. Basicamente a teoria de Banco de Dados
+&eacute; fundamentada nos conceitos que est&atilde;o sendo exemplificados
+a seguir.</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct registro {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int codigo;
+long qtd;
+double valor;
+char descric[20];
+};
+
+main()
+{
+struct registro r, *rp;
+r.codigo = 999;
+r.qtd = 113333L;
+r.valor = 23.21e6;
+strcpy(r.descric,"MOTOR DE EXPLOSAO");
+printf("Codigo: %d, Qtd: %ld, Valor: %.2f\n",r.codigo,r.qtd,r.valor);
+printf("Descricao: %s\n",r.descric);
+rp = &amp;r;
+printf("Codigo: %d, Qtd: %ld, Valor: %.2f\n",rp->codigo,rp->qtd,rp->valor);
+strcpy(rp->descric,"MOTOR DE ARRANQUE");
+printf("Descricao: %s\n",rp->descric);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Laborat&oacute;rio - Arquivos
+(Aula 23L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1. No programa a seguir o carregaremos
+de um arquivo para uma matriz em mem&oacute;ria um arquivo com dados de
+clientes, que nos permitir&aacute; inserir novos nomes, exibir os dados
+armazenados em mem&oacute;ria e novamente armazen&aacute;-lo em disco.</FONT></LI>
+</MENU>
+
+<PRE><FONT FACE="Courier New,Courier">struct registro {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char nome[40];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char endereco[40];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float valor;
+} matriz[100];
+
+main()
+{&nbsp;
+char escolha;
+inicia_matriz();
+for (;;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; escolha = menu();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch (escolha) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'i' :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inserir();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'e' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exibir();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'c' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; carga();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 's' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; salvar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 'f' :
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; saida();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts(escolha);
+}
+
+saida()
+{
+cls();
+exit();
+}
+inicia_matriz()
+{
+int t;
+for (t=0;t&lt;100;t++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *matriz[t].nome = '\0';
+}&nbsp;&nbsp;
+
+menu()
+{
+char s;
+cls();
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Inserir");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Exibir");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Carregar");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Salvar");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Finaliza");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Digite a 1<SUP>a</SUP>. Letra: ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;s);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while(s != 'i' &amp;&amp; s != 'e' &amp;&amp; s != 'c' &amp;&amp; s != 's' &amp;&amp; s != 'f');
+return(s);
+}
+
+inserir()
+{
+int i;
+for (i=0; i &lt; 100; i++)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!*matriz[i].nome) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (i==100) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Arquivo Cheio!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Nome: "); gets(matriz[i].nome);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("End.: "); gets(matriz[i].endereco);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Val.: "); scanf("%f",&amp;matriz[i].valor);&nbsp;
+}
+
+exibir()
+{
+char x;
+int t;
+cls();
+for(t=0;t&lt;100;t++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (*matriz[t].nome) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%s \n", matriz[t].nome);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%s \n", matriz[t].endereco);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%f \n", matriz[t].valor);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts(" "); puts("&lt;Enter> para prosseguir!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = getchar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}&nbsp;
+
+salvar()
+{
+FILE *fp;
+int i;
+if ((fp=fopen("LISTA.DAT","wb"))==NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falhou Abertura! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+for (i=0;i&lt;100;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (*matriz[i].nome)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (fwrite(&amp;matriz[i],sizeof(struct registro), 1,fp) != 1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falha na Gravacao! ");
+fclose(fp);
+}
+
+carga()
+{
+FILE *fp;
+int i;
+if ((fp=fopen("LISTA.DAT","rb")) == NULL) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falha na Abertura do Arquivo!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+inicia_matriz();
+for (i=0; i &lt; 100; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (fread(&amp;matriz[i], sizeof(struct registro), 1, fp) != 1)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (feof(fp)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(fp);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Erro de Leitura! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(fp);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;
+}</FONT></PRE>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">2. Monte Registro que exiba o m&ecirc;s
+escolhido pelo usu&aacute;rio.</FONT></LI>
+</MENU>
+<A NAME="24"></A>
+<BR><FONT FACE="Courier New,Courier"></FONT>&nbsp;
+<TABLE COLS=1 WIDTH="100%" BGCOLOR="#3333FF" >
+<TR>
+<TD><FONT FACE="Courier New,Courier"><FONT COLOR="#FFFFFF">Arquivos - Conceito
+de Chaves</FONT></FONT></TD>
+</TR>
+</TABLE>
+<FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">O programa anterior demonstra como
+devemos proceder para Carregar um arquivo do disco para a Mem&oacute;ria.
+Permite listarmos e inserirmos dados neste arquivo.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Finalmente permite salvarmos os dados
+para o Arquivo. Ficou faltando uma rotina de pesquisa, para podermos consultar,
+excluir e alterar dados, al&eacute;m de uma rotina permitindo listar os
+dados organizados, por exemplo alfabeticamente.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">Montaremos uma rotina que permita a
+ordena&ccedil;&atilde;o destes dados usando ponteiros para isto. Uma rotina
+de pesquisa bin&aacute;ria tamb&eacute;m poderia ser elaborada bastando
+para isto a cria&ccedil;&atilde;o de rotina que permitisse a navega&ccedil;&atilde;o
+dentro do modelo abaixo demonstrado:</FONT>
+<PRE><FONT FACE="Courier New,Courier">&nbsp; Botafogo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Olaria
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bangu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; C.Grande&nbsp;&nbsp; Fluminense&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vasco</FONT></PRE>
+<FONT FACE="Courier New,Courier">Observe que qualquer pesquisa acharia
+o time pesquisado no m&aacute;ximo em 3 tentativas. Isto ocorre porque
+a estrutura acima est&aacute; devidamente balanceada. Suponha por&eacute;m
+que as entradas n&atilde;o ocorram na sucess&atilde;o acima mostrada (Flamengo,
+Botafogo, Olaria, Bangu, C.Grande, Fluminense e Vasco), mas ocorram na
+seq&uuml;&ecirc;ncia apresentada a seguir: Am&eacute;rica, Corinthians,
+Guarani, Palmeiras, Portuguesa, Santos e S&atilde;o Paulo. Ter&iacute;amos:</FONT>
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">Am&eacute;rica</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">--- Corinthians</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">--- Guarani</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">--- Palmeiras</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">--- Portuguesa</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">--- Santos</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">--- S&atilde;o Paulo</FONT></LI>
+</MENU>
+<FONT FACE="Courier New,Courier">Desta forma n&atilde;o seria adequado
+desenvolvermos uma rotina de pesquise sem antes escrevermos uma rotina
+de "balanceamento" da estrutura acima, que possibilitam obtermos estruturas
+no conceito de &aacute;rvore bin&aacute;ria balanceada. Felizmente todos
+os gerenciadores de arquivo dispon&iacute;veis, providenciam este tipo
+de tratamento, desobrigando o programador de aplica&ccedil;&atilde;o da
+elabora&ccedil;&atilde;o deste tipo rotina.</FONT><FONT FACE="Courier New,Courier"></FONT>
+
+<P><FONT FACE="Courier New,Courier">A seguir dois exemplos completos de
+estruturas manipuladas por ponteiros.</FONT>
+<PRE><FONT FACE="Courier New,Courier">Exemplo 1: Cadastro acessado por ponteiros, com acesso seq&uuml;encial</FONT></PRE>
+
+<PRE><FONT FACE="Courier New,Courier">(Registro 1,2,3,4,5,67,8,...,100; em 100 Registros).
+
+struct addr
+{
+char nome[30];
+char rua[40];
+char cidade[18];
+char estado[02];
+char cep[09];
+char lixao[10];
+struct addr *next;&nbsp;&nbsp;&nbsp; /* ponteiro da prox entrada */
+struct addr *prior;&nbsp;&nbsp; /* ponteiro p/ entrada anterior */
+} lista;
+struct addr *start;&nbsp;&nbsp; /* primeiro da lista */
+struct addr *last;&nbsp;&nbsp;&nbsp; /* ultimo da lista */
+struct addr *null;
+main()
+{
+int choice;
+null = (struct addr *)malloc(sizeof(lista));
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; choice = menu_select();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch(choice) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 1 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enter();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delete();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 3 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; list();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 4 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; achar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 5 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; save();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 6 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; load();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 7 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while(1);
+}&nbsp;
+
+menu_select()
+{
+char s[80];
+int c;
+printf("1. Inserir Nomes\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("2. Retirar Nomes\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("3. Listar&nbsp; Nomes\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("4. Procurar Nome\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("5. Salvar Arquivo\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("6. Carregar Arquivo\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("7. Finalizar\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nSua opcao: ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gets(s);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = atoi(s);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while (c &lt; 0 || c > 7);
+return c;
+}
+
+enter()
+{&nbsp;
+struct addr *info;
+char *malloc();
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = (struct addr *)malloc(sizeof(lista));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (info == 0){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nMemoria Esgotada!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Nome: ",info->nome,30);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!info->nome[0])&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Rua: ",info->rua,40);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Cidade: ",info->cidade,18);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Estado: ",info->estado,02);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre CEP: ",info->cep,10);&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (start!=0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->next = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->next = null;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->next = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last = start;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->prior = null;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while(1);
+}
+
+inputs(prompt,s,count)
+char *prompt;
+char *s;
+int count;
+{
+char p[255];
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(prompt);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gets(p);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (strlen(p) > count)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Muito Grande!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while (strlen(p) > count);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; strcpy(s,p);
+}
+
+delete()
+{
+struct addr *info, *find();
+char s[255];
+int volta;
+inputs("Entre Nome: ",s,30);
+info = find(s);
+if (info) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (start == info) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->prior = null;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior->next = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (info != last)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->next->prior = info->prior;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last = info->prior;
+&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free(info);
+&nbsp; }
+}
+
+struct addr *find(nome)
+char *nome;
+{
+struct addr *info;
+info = start;
+while (info &amp;&amp; info != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!strcmp(nome,info->nome))&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+return null;
+}
+
+list()
+{
+int t;
+char lixo;
+struct addr *info;
+info = start;
+while (info &amp;&amp; info != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display(info);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;lixo);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+printf("\n\n");
+}
+
+achar()
+{
+struct addr *info,*find();&nbsp;
+char s[255];
+inputs("Entre Nome: ",s,30);
+info = find(s);
+if (info != null)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display(info);
+else&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Nao Encontrado!\n");
+}
+
+display(info)
+struct addr *info;
+{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("%s\n",info->nome);
+printf("%s\n",info->rua);
+printf("%s\n",info->cidade);
+printf("%s\n",info->estado);
+printf("%s\n",info->cep);
+printf("\n\n");
+}
+
+save()
+{
+int t,size;
+struct addr *info;
+char *p;
+FILE *fp;
+if ((fp = fopen("LISTA.DAT","w")) == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falhou a Abertura!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);
+&nbsp;&nbsp;&nbsp; }
+printf("Salvando Arquivo\n");
+size = sizeof(lista);
+info = start;
+while (info &amp;&amp; info != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p = (char *)info; /* convesao p/ ponteiro de caracter */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (t=0;t&lt;size-1;++t)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putc(*p++,fp); /* salva um byte */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next; /* proximo */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+putc(EOF,fp); /* marcando fim de arquivo ... opcional */
+fclose(fp);
+}
+load()
+{
+int t,size;
+struct addr *info,*temp;
+char *p,*malloc();
+FILE *fp;
+if ((fp = fopen("LISTA.DAT","r")) == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falhou Abertura");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+printf("Carregando Arquivo\n");
+size = sizeof(lista);
+start = (struct addr *)malloc(size);
+if (!start) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Acabou Memoria! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+info = start;
+p = (char *)info; /* ponteiro para caracter */
+while ((*p++ = getc(fp)) != EOF) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (t=0;t&lt;size-2;++t)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *p++ = getc(fp); /* carrega byte a byte */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->next = (struct addr *)malloc(size); /* aloca mais memoria */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!info->next) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Memoria Esgotada!\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior = temp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p = (char *)info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (info == null) break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+free(temp->next);
+temp->next = null;
+last = temp;
+start->prior = null;
+fclose(fp);
+}</FONT></PRE>
+<FONT FACE="Courier New,Courier">Exemplo 2: Registro ordenados alfabeticamente
+atrav&eacute;s de ponteiros:</FONT>
+<PRE><FONT FACE="Courier New,Courier">struct addr
+{
+char nome[30];
+char rua[40];
+char cidade[18];
+char estado[02];
+char cep[09];
+char vago[10];
+struct addr *next;&nbsp;&nbsp;&nbsp; /* ponteiro da prox entrada */
+struct addr *prior;&nbsp;&nbsp; /* ponteiro p/ entrada anterior */
+} lista;
+struct addr *start;&nbsp;&nbsp; /* primeiro da lista */
+struct addr *last;&nbsp;&nbsp;&nbsp; /* ultimo da lista */
+struct addr *null;&nbsp;&nbsp;&nbsp; /* endereco inicial */
+struct addr *entra;&nbsp;&nbsp; /* entrada atual */
+char mostra = 'S';
+
+main()
+{
+int choice;
+cls;
+printf("Exibir Situacao (Enter Exibe - n nao): "); scanf("%c",&amp;mostra);
+null = (struct addr *)malloc(sizeof(lista));
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; choice = menu_select();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch(choice) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 1 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; enter();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delete();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 3 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; list();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 4 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; achar();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 5 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; save();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 6 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; load();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 7 :&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while(1);
+}&nbsp;
+
+menu_select()
+{
+char s[80];
+int c;
+printf("1. Inserir Nomes\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("2. Retirar Nomes\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("3. Listar&nbsp; Nomes\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("4. Procurar Nome\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+printf("5. Salvar Arquivo\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("6. Carregar Arquivo\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf("7. Finalizar\n");&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nSua opcao: ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gets(s);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = atoi(s);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while (c &lt; 0 || c > 7);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return c;
+}
+enter()
+{&nbsp;
+struct addr *info;
+struct addr *old;
+int situacao;
+char lixo;
+char *malloc();
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last = (struct addr *)malloc(sizeof(lista));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(last == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\nMemoria Esgotada!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Nome: ",last->nome,30);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!last->nome[0])&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Rua: ",last->rua,40);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Cidade: ",last->cidade,18);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre Estado: ",last->estado,02);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inputs("Entre CEP: ",last->cep,10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(start!=0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = start;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; old = start;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; situacao = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (situacao==0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(mostra!='n') {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Posicionado em %s&nbsp; &lt;Enter>\n",info->nome);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;lixo);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(*info->nome>*last->nome) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(mostra != 'n') {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Posicionou (1) %s\n",info->nome);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; situacao = 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(info==null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (mostra != 'n')
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Fim de Arquivo (2) %s\n",last->nome);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; situacao = 2;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; old = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(info->next==null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(mostra != 'n') {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Aponta para Fim de Arquivo (3) %s\n",info->nome);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; situacao = 3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(situacao==1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(info==start) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->next = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->prior = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->next = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->prior = old;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; old->next = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;}
+&nbsp;if(situacao==2) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->next = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; old->next = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->prior = old;
+&nbsp; }
+&nbsp; if(situacao==3) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->next = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->next = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last->prior = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp; }
+&nbsp;else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start = last;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->next = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->prior = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;}while(1);
+}
+
+inputs(prompt,s,count)
+char *prompt;
+char *s;
+int count;
+{
+char p[255];
+do {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf(prompt);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gets(p);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (strlen(p) > count)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Muito Grande!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } while (strlen(p) > count);
+strcpy(s,p);
+}
+
+delete()
+{
+struct addr *info, *find();
+char s[255];
+int volta;
+inputs("Entre Nome: ",s,30);
+info = find(s);
+if (info) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (start == info) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->prior = null;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior->next = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (info != last)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->next->prior = info->prior;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last = info->prior;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free(info);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+}
+
+achar()
+{
+struct addr *info, *find();
+char s[255];
+int volta;
+inputs("Entre Nome: ",s,30);
+info = find(s);
+if (info==null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Nao Encontrado!\n");
+else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display(info);
+}
+
+struct addr *find(nome)
+char *nome;
+{
+struct addr *info;
+info = start;
+while (info &amp;&amp; info != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!strcmp(nome,info->nome))&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp; }
+return null;
+}
+list()
+{
+int t;
+char lixo;
+struct addr *info;
+info = start;
+while (info &amp;&amp; info != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display(info);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanf("%c",&amp;lixo);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+printf("\n\n");
+}
+
+display(info)
+struct addr *info;
+{
+printf("\n\n***&nbsp; E X I B I N D O&nbsp;&nbsp; R E G I S T R O&nbsp; ***\n");
+printf("%s\n",info->nome);
+printf("%s\n",info->rua);
+printf("%s\n",info->cidade);
+printf("%s\n",info->estado);
+printf("%s\n",info->cep);
+printf("\n\n");
+}
+
+save()
+{
+int t,size;
+struct addr *info;
+char *p;
+FILE *fp;
+if ((fp = fopen("ALFA.DAT","w")) == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falhou a Abertura!");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);
+&nbsp; }
+printf("Salvando Arquivo\n");
+size = sizeof(lista);
+info = start;
+while (info &amp;&amp; info != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p = (char *)info; /* convesao p/ ponteiro de caracter */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (t=0;t&lt;size-1;++t)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putc(*p++,fp); /* salva um byte */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(info->next==null)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next; /* proximo */
+&nbsp; }
+putc(EOF,fp); /* marcando fim de arquivo ... opcional */
+fclose(fp);
+}
+load()
+{
+int t,size;
+struct addr *info,*temp;
+char *p,*malloc();
+FILE *fp;
+if ((fp = fopen("ALFA.DAT","r")) == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Falhou Abertura");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit(0);
+&nbsp; }
+printf("Carregando Arquivo\n");
+size = sizeof(lista);
+start = (struct addr *)malloc(size);
+if (!start) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; puts("Acabou Memoria! ");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp; }
+info = start;
+p = (char *)info; /* ponteiro para caracter */
+while ((*p++ = getc(fp)) != EOF) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (t=0;t&lt;size-2;++t)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *p++ = getc(fp); /* carrega byte a byte */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->next = (struct addr *)malloc(size); /* aloca mais memoria */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!info->next) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("Memoria Esgotada!\n");
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info->prior = temp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp = info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; info = info->next;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(info->next==null)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p = (char *)info;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (info == null)&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free(temp->next);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp->next = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; last = temp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start->prior = null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fclose(fp);
+}</FONT></PRE>
+
+<H1>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+0>Teste de Cadastro (Aula
+24L)</FONT></FONT></H1>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">1. Digita&ccedil;&atilde;o do Exemplo
+Acima.</FONT></LI>
+</MENU>
+
+<OL>
+<LI>
+<FONT FACE="Courier New,Courier">Critique a forma de recupera&ccedil;&atilde;o
+dos dados previamente digitados.</FONT></LI>
+</OL>
+
+<MENU>
+<LI>
+<FONT FACE="Courier New,Courier">2. Montar programa que escreva Dados num
+arquivo.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">3. Montar programa a semelhan&ccedil;a
+do Comando Type.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">4. Montar programa que escreva um texto
+num arquivo.</FONT></LI>
+
+<LI>
+<FONT FACE="Courier New,Courier">5. Montar programa que leia texto previamente
+armazenado num arquivo.</FONT></LI>
+</MENU>
+<A NAME="25"></A>
+</BODY>
+</HTML>

@@ -1,0 +1,1500 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu26fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu27fi.htm">
+
+<LINK REL="Previous" HREF="vcu25fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu25fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu27fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">26 &#151; Collection Classes</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">CObject Collections</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">The CObList Class and the POSITION type</A></LI>
+
+<LI>
+
+<A HREF="#I5">The CObArray Class</A></LI></UL>
+
+<LI>
+
+<A HREF="#I6">Other List Collections</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I7">The CPtrList Class</A></LI>
+
+<LI>
+
+<A HREF="#I8">The CStringList Class</A></LI></UL>
+
+<LI>
+
+<A HREF="#I9">Other Array Collections</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I10">The CPtrArray Class</A></LI>
+
+<LI>
+
+<A HREF="#I11">Integral Array Classes</A></LI>
+
+<LI>
+
+<A HREF="#I12">The CStringArray Class</A></LI></UL>
+
+<LI>
+
+<A HREF="#I13">Mappings</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I14">The CMapStringToString Class</A></LI>
+
+<LI>
+
+<A HREF="#I15">The CMapStringToOb Class</A></LI>
+
+<LI>
+
+<A HREF="#I16">The CMapStringToPtr Class</A></LI>
+
+<LI>
+
+<A HREF="#I17">The CMapPtrToPtr Class</A></LI>
+
+<LI>
+
+<A HREF="#I18">The CMapPtrToWord Class</A></LI>
+
+<LI>
+
+<A HREF="#I19">The CMapWordToOb Class</A></LI>
+
+<LI>
+
+<A HREF="#I20">The CMapWordToPtr Class</A></LI></UL>
+
+<LI>
+
+<A HREF="#I21">Template-Based Object Collections</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I22">Collection Class Helper Functions</A></LI>
+
+<LI>
+
+<A HREF="#I23">The CList Template</A></LI>
+
+<LI>
+
+<A HREF="#I24">The CArray Template</A></LI>
+
+<LI>
+
+<A HREF="#I25">The CMap Template</A></LI>
+
+<LI>
+
+<A HREF="#I26">The CTypedPtrList Template</A></LI>
+
+<LI>
+
+<A HREF="#I27">The CTypedPtrArray Template</A></LI>
+
+<LI>
+
+<A HREF="#I28">The CTypedPtrMap Template</A></LI></UL>
+
+<LI>
+
+<A HREF="#I29">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>26 &#151; Collection Classes</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The Microsoft Foundation Classes Library implements a number of collection classes. These collection classes include a variety of lists, arrays, and mappings.
+
+<BR></P>
+
+<P>Collections have been supported by the MFC Library since its early versions. In the days of Visual C++ 1.5 and earlier versions, template support was not yet available in the compiler; correspondingly, there are several non-template-based collection classes in the Library.
+
+<BR></P>
+
+<P>Newer, 32-bit versions of the compiler obviously provide full template support. Accordingly, starting with MFC 3.0, a series of new <I>type-safe</I> collection classes was introduced. However, they do not render the old classes obsolete; if you have been using the non-template-based collection classes in your code, there is no reason why you should not continue to do so. In new code, it is recommended that you try to use the new, template-based classes, as their type-safe nature provides for safer, more robust code.
+
+<BR></P>
+
+<P>Throughout the MFC Library, the most commonly used collections are collections of CObject items. This fact, plus the relative simplicity of the CObject collection classes, provides a good reason for starting our review of collection classes with CObList, and CObArray.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B><I>CObject</I></B><B> Collections</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The MFC Library provides two ordered collections of CObject items. The CObList collection is a list of CObject items; the CObArray collection is an array of CObject items. But, you may ask, what exactly is the difference between the two? What are the advantages of using one or the other?
+
+<BR></P>
+
+<P>The CObList class organizes CObject pointers in a linked list. Due to the nature of such a list, insertion and removal of elements are very fast operations. On the other hand, the list is not indexed; retrieving an element by a numerical index is a slow process. List collections are meant to be used in situations where the list is &quot;walked&quot; with the help of an iterator. Consider, for example, a typical use of a CObList collection, namely to organize all items in a document. When the items are accessed in order to serialize or to draw the document, elements in the list are accessed sequentially.
+
+<BR></P>
+
+<P>The CObArray class, in contrast, indexes elements by an integer index value. Inserting or removing elements are slow operations, as they involve moving potentially large blocks of data. However, retrieving data by the integer index is fast.
+
+<BR></P>
+
+<P>While both classes are nominally collections of CObject pointers, you will probably never use them with the CObject class. While technically not an abstract class, the CObject class is pretty useless by itself. Instead, CObList and CObArray are used as collections of CObject-derived classes, such as collections of items of type CWnd, CView, or CDocItem. In the following sections, I present several small examples of code in which objects of type CObject are declared; note that these code fragments will not compile &quot;as is,&quot; as creation of a CObject is prevented by the declaration of a protected constructor in the MFC library. When applying these examples to concrete situations, just substitute a CObject-derived class in these examples and assume any required typecasts.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>The </B><B><I>CObList</I></B><B> Class and the </B><B><I>POSITION</I></B><B> type</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Using a CObList collection involves creating the collection, adding items to the collection, and accessing items through iterator functions.
+
+<BR></P>
+
+<P>A CObList can be created either by declaring a variable of type CObList or using the new operator to obtain a pointer to a new CObList collection.
+
+<BR></P>
+
+<P>Items can be added to a CObList by calling the AddHead or AddTail functions. As their names imply, these functions add an element at the beginning and at the end of the list, respectively. Items do not need to be unique; the same CObject pointer can occur any number of times in the list.
+
+<BR></P>
+
+<P>To obtain the first or the last element on the list, use the GetHead or GetTail member functions.
+
+<BR></P>
+
+<P>It is also possible to add a new element to the list at a specific position. The InsertBefore and InsertAfter member functions can be used to insert a new element before or after a specific element. The element position is identified by a variable of type POSITION. This type is used throughout collection classes as a general-purpose iterator type.
+
+<BR></P>
+
+<P>A value of type POSITION can be obtained by calling either the GetHeadPosition or the GetTailPosition member functions. The returned POSITION value can be used in subsequent calls to GetNext or GetTail to access elements of the list sequentially. For example, to walk the elements in a CObList from the beginning to the end of the list, you would use code similar to the following:
+
+<BR></P>
+
+<PRE>CObList myList;
+
+...
+
+// Populate the list
+
+...
+
+POSITION pos = myList.GetHeadPosition();
+
+while (pos != NULL)
+
+{
+
+    CObject *pObject = myList.GetNext(pos);
+
+    ...
+
+    // Do something nasty to *pObject
+
+    ...
+
+}</PRE>
+
+<P>Similarly, you can walk the elements of a CObList backwards as follows:
+
+<BR></P>
+
+<PRE>CObList myList;
+
+...
+
+// Populate the list
+
+...
+
+POSITION pos = myList.GetTailPosition();
+
+while (pos != NULL)
+
+{
+
+    CObject *pObject = myList.GetPrev(pos);
+
+    ...
+
+    // Do something nasty to *pObject
+
+    ...
+
+}</PRE>
+
+<P>As you can see from these two examples, the names of the GetNext and GetPrev functions can be slightly misleading. What these functions do is return the <I>current</I> element pointed to by the POSITION parameter, while at the same time advancing this parameter to refer to the next (or previous) element.
+
+<BR></P>
+
+<P>A POSITION value can also be used with the GetAt, SetAt, and RemoveAt member functions. All three of these functions take a parameter of type POSITION; GetAt retrieves a CObject pointer corresponding to that position, SetAt sets the element at the given position to a new value, and RemoveAt removes the element from the list altogether.
+
+<BR></P>
+
+<P>Removing an element during an iteration may cause problems. In order to ensure that you always maintain a valid POSITION value for GetNext, you should use a method similar to the following:
+
+<BR></P>
+
+<PRE>POSITION pos = myList.GetHeadPosition();
+
+while (pos != NULL)
+
+{
+
+    POSITION pos2 = pos;
+
+    CObject *pObject = GetNext(pos);
+
+    if ( /* pObject is to be removed */ )
+
+    {
+
+        myList.RemoveAt(pos2);
+
+    }
+
+}</PRE>
+
+<P>Additional functions that can be used to remove elements are RemoveHead and RemoveTail. The RemoveAll function can be used to remove all elements (empty the list).
+
+<BR></P>
+
+<P>Removing an element does not destroy the element; the program that created the element is responsible for its destruction. For example:
+
+<BR></P>
+
+<PRE>CObject *pObject;
+
+CObList myList;
+
+...
+
+pObject = new CObject;
+
+myList.AddTail(pObject);
+
+...
+
+// some time later
+
+...
+
+pObject = myList.RemoveTail();
+
+delete pObject;</PRE>
+
+<P>To determine if a list is empty, use the IsEmpty member function. To obtain the number of elements in the list, call GetCount.
+
+<BR></P>
+
+<P>You can also search for a specific element in the list. The Find member function determines whether a particular CObject pointer is in the list; if so, it returns a value of type POSITION indicating its first occurrence. The FindIndex member function returns the POSITION value that corresponds to a given numerical index. Note that as the CObList class does not maintain an index of any kind, these operations can be slow if the list is large.
+
+<BR></P>
+
+<P>The CObList type is itself derived from CObject. As such, the CObList class supports serialization. If its Serialize member function is called, it in turn serializes every CObject element in the list using the &lt;&lt; and &gt;&gt; operators. In order to ensure that the list is serialized correctly, elements added to it should be of a CObject-derived type that is declared and implemented using the DECLARE_SERIAL and IMPLEMENT_SERIAL macros.
+
+<BR></P>
+
+<P>CObList objects can be used in conjunction with the CArchive class and the &lt;&lt; and &gt;&gt; operators, as in the following example:
+
+<BR></P>
+
+<PRE>class CMyDocument : public CDocument
+
+{
+
+    CObList m_List;
+
+    // rest of the class declaration follows
+
+    ...
+
+}
+
+void CMyDocument::Serialize(CArchive &amp;ar)
+
+{
+
+    if (ar.IsStoring())
+
+    {
+
+        ar &lt;&lt; m_List;
+
+    }
+
+    else
+
+    {
+
+        ar &gt;&gt; m_List;
+
+    }
+
+}</PRE>
+
+<P>Because CObList is also CObject-derived, it is possible to use a CObList collection to refer to items of type CObList, in effect creating a list of lists.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>The </B><B><I>CObArray</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>CObArray objects are arrays of CObject pointers. These arrays are similar in function and behavior to C arrays, with one crucial difference: a CObArray can grow or shrink dynamically.
+
+<BR></P>
+
+<P>Using a CObArray involves constructing the CObArray object, populating it with CObject pointer elements, and retrieving array elements (possibly by using the overloaded [] operator).
+
+<BR></P>
+
+<P>You can create a CObArray like you would create any other variable, either on the stack as an automatic variable or through the new operator.
+
+<BR></P>
+
+<P>At the heart of the CObArray class are the SetAt, GetAt, and SetAtGrow member functions. SetAt and GetAt behave as you would expect, setting and retrieving an element at the specified location. SetAtGrow also sets an element at the specified location; however, this function causes the array to grow if the location is past the current array bounds.
+
+<BR></P>
+
+<P>Neither SetAt nor GetAt report an error if an invalid index is specified. However, they do cause an assertion in the debug version of the MFC Library.
+
+<BR></P>
+
+<P>Elements can also be added to the array using the Add member function. This member function appends a new element to the array, growing the array as necessary.
+
+<BR></P>
+
+<P>The current number of elements in the array can be obtained by calling GetSize. The largest valid array index (which is equal to the number of array elements minus one, as array indexes are zero based) can be obtained by calling GetUpperBound.
+
+<BR></P>
+
+<P>The SetSize function can be used to set the number of elements in the array, allocating additional memory if necessary. If SetSize is used to shrink the array, unused memory will be freed.
+
+<BR></P>
+
+<P>Whenever the array is grown as a result of a call to SetAtGrow, Add, or SetSize, a memory allocation error may occur. These errors are indicated by an exception of type CMemoryException being thrown.
+
+<BR></P>
+
+<P>The SetSize function can also be used to specify the amount by which memory allocated by CObArray is grown. Whenever new memory needs to be allocated, the amount allocated will hold as many CObject pointers as specified in the second parameter of SetSize. If this parameter is not set, the CObArray class attempts to determine the optimum amount of memory that it should allocate to avoid heap fragmentation.
+
+<BR></P>
+
+<P>Any extra memory allocated when the array was grown can be released by calling FreeExtra. The entire array can be emptied and all memory released by calling RemoveAll.
+
+<BR></P>
+
+<P>The CObArray class provides and override version of the [] operator. Through this operator, array elements can be accessed. The operator can be used in situations where an lvalue is needed (for example, on the left side of an assignment operation). This behavior is implemented with the help of the ElementAt member function, which returns a reference to the CObject pointer at the specified location. Thus, the following line:
+
+<BR></P>
+
+<PRE>myArray[10] = &amp;myObject;</PRE>
+
+<P>is equivalent to
+
+<BR></P>
+
+<PRE>myArray.ElementAt(10) = &amp;myObject;</PRE>
+
+<P>Two member functions, InsertAt and RemoveAt, can be used to insert elements into the array or to remove an element at a specific index. Note that these operations are slow; in the case of large arrays, they potentially require the moving of large blocks of data.
+
+<BR></P>
+
+<P>As with CObList, the CObArray class does not destroy any elements when they are removed from the array. You are responsible for freeing such items yourself. For example:
+
+<BR></P>
+
+<PRE>CObject *pObject;
+
+CObArray myList;
+
+...
+
+pObject = new CObject;
+
+myArray.Add(pObject);
+
+...
+
+// some time later
+
+...
+
+pObject = myArray[myArray.GetUpperBound()];
+
+myArray.SetSize(myArray.GetUpperBound());
+
+delete pObject;</PRE>
+
+<P>The CObArray type is derived from CObject. One advantage of this fact is that CObArray collections can also be serialized. When the CObArray::Serialize member function is called, it in turn serializes array elements using the &lt;&lt; and &gt;&gt; operators. To support serialization, elements added to the array must be of a CObject-derived type that is declared and implemented using the DECLARE_SERIAL and IMPLEMENT_SERIAL macros.
+
+<BR></P>
+
+<P>CObArray collections can be used with the CArchive class and the &lt;&lt; and &gt;&gt; operators.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=4><B>Other List Collections</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>There are several other list collections with features and behavior very similar to that of CObList.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>The </B><B><I>CPtrList</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CPtrList class implements identical behavior to that of CObList, but for elements that are void pointers. The features and member functions of this class are otherwise identical to the features and member functions of CObList.
+
+<BR></P>
+
+<P>Note that the CPtrList class does not support serialization.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>The </B><B><I>CStringList</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CStringList class is also similar in behavior and implementation to CObList. However, there is one crucial difference; instead of storing pointers to items of type CString, a CStringList stores copies of the actual CString objects themselves.
+
+<BR></P>
+
+<P>As a consequence, the application is no longer required to explicitly delete a CString object after removing it from the CStringList. Nor is it necessary to allocate an element using new or malloc to ensure that an object remains valid after the function in which it was declared terminates. For example, consider the following (incorrect) function implementation:
+
+<BR></P>
+
+<PRE>void MyAddElement(CObList *pList)
+
+{
+
+    CObject myObject;
+
+    pList-&gt;AddTail(&amp;myObject);  // WRONG!
+
+}</PRE>
+
+<P>This is obviously wrong as the address &amp;myObject becomes meaningless when the function returns. Instead, the following implementation should have been used:
+
+<BR></P>
+
+<PRE>void MyAddElement(CObList *pList)
+
+{
+
+    CObject *pObject;
+
+    pObject = new CObject;
+
+    pList-&gt;AddTail(pObject);
+
+}</PRE>
+
+<P>The same problem does not present itself when using a CStringList. The following implementation is correct:
+
+<BR></P>
+
+<PRE>void MyAddElement(CStringList *pList)
+
+{
+
+    CString myString;
+
+    pList-&gt;AddTail(myString);
+
+}</PRE>
+
+<P>Serialization of CStringList collections is supported.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=4><B>Other Array Collections</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In addition to CObArray, the MFC Library provides a series of additional ready-to-use array collections. Analogous to the list collections CPtrList and CStringList are the array collections CPtrArray and CStringArray; however, there are also a series of additional array collections that hold integral types.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>The </B><B><I>CPtrArray</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CPtrArray class implements the same behavior as CObArray but for void pointer elements. The behavior of member functions and the features of the class are identical to the features and member function behavior of CObArray.
+
+<BR></P>
+
+<P>Serialization is not supported by CPtrArray.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Integral Array Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>There are several array classes in MFC that store elements of integral types. These are summarized in Table 26.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 26.1. Integral Array Collection Classes.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><B><I>Class Name</I></B>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><B><I>Element Type</I></B>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>CByteArray</P>
+
+<TD>
+
+<P>BYTE</P>
+
+<TR>
+
+<TD>
+
+<P>CWordArray</P>
+
+<TD>
+
+<P>WORD</P>
+
+<TR>
+
+<TD>
+
+<P>CDWordArray</P>
+
+<TD>
+
+<P>DWORD</P>
+
+<TR>
+
+<TD>
+
+<P>CUIntArray</P>
+
+<TD>
+
+<P>UINT</P></TABLE>
+
+<P>The type CUIntArray differs from the other three types in that the size of a UINT is implementation-dependent. Under 16-bit Windows, a UINT as 16 bits wide; under Windows NT or Windows 95, it is a 32-bit type. Consequently, unlike the other three types, CUIntArray does not support serialization.
+
+<BR></P>
+
+<P>The other three collection classes use element types that are guaranteed to be of the same size on different implementations. A BYTE is always 8 bits wide; a WORD, 16 bits, and a DWORD is always 32 bits.
+
+<BR></P>
+
+<P>With the exception of the difference in serialization support by CUIntArray, the features and behavior of these classes is identical to the features and behavior of CObArray.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>The </B><B><I>CStringArray</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CStringArray class represents an array of CString objects. As in the case of CStringList, CStringArray stores copies of the CString objects themselves, not just pointers to them. Consequently, application programmers are not responsible for destroying CString objects that are removed from the array.
+
+<BR></P>
+
+<P>The features and behavior of CStringArray are otherwise similar to the features and behavior of CObArray. In particular, CStringArray supports serialization.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=4><B>Mappings</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Mappings represent a type of a collection that is markedly different from lists or arrays. Lists and arrays are ordered collections; in contrast, mappings represent unordered mappings of key objects to value objects. Because of the obvious similarity, mappings are sometimes also referred to as dictionaries (and indeed, implementing the functionality of a dictionary of words is a trivial task using, for example, the mapping collection CMapStringToString).
+
+<BR></P>
+
+<P>Mappings are tailored towards fast searches by key value. In all the mapping classes, key values are expected to be unique. An attempt to set a value with an existing key will overwrite the current entry in the mapping as opposed to creating an entry with a duplicate key value.
+
+<BR></P>
+
+<P>The MFC Library offers several map collections. Keys that are pointers, strings, or 16-bit words are used to index items that are pointers to CObject, pointer to void, strings, or 16-bit words. Because not all combinations of these types are implemented in the form of a mapping collection, and because there are minor variations and differences in the behavior of these classes, I review them individually.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>The </B><B><I>CMapStringToString</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapStringToString class maps keys of type CString to values of the same type.
+
+<BR></P>
+
+<P>To construct a CMapStringToString collection, simply declare an object of this type or use the new operator. Once the collection has been constructed, key-value pairs can be added to it using the SetAt member function. A convenient shorthand for using SetAt is the overloaded [] operator. Curiously, this operator can <I>only</I> be used in the place of an lvalue; it cannot be used for looking up keys for the simple reason that key values are often not found in the collection.
+
+<BR></P>
+
+<P>To look up data by key value, use instead the Lookup member function. The Boolean return value of this function indicates whether the key was found or not.
+
+<BR></P>
+
+<P>I suppose it would be possible to implement an overloaded form of the [] operator that can be used on the right-hand side of assignments and use an exception to communicate a lookup failure. However, an unhandled exception would cause your application to terminate even though the failure to find a key in an index is &quot;normal&quot; behavior.
+
+<BR></P>
+
+<P>To remove a key-value pair from the collection, use the RemoveKey member function. You can also remove all key-value pairs and thus empty the collection using RemoveAll.
+
+<BR></P>
+
+<P>You can find out if a collection is empty by calling the IsEmpty member function. The GetCount member function returns the number of key-value pairs in the collection.
+
+<BR></P>
+
+<P>It is also possible to iterate through a collection. The GetStartPosition member function yields an iterator of type POSITION that can be used in subsequent calls to GetNextAssoc to obtain key-value pairs. Note that the order in which elements are returned is arbitrary and has no significance. In particular, these functions are not guaranteed to yield elements in ascending key order.
+
+<BR></P>
+
+<P>CMapStringToString collections can be serialized. They can be used in conjunction with the CArchive class and the &lt;&lt; and &gt;&gt; operators.
+
+<BR></P>
+
+<P>Listing 26.1 shows a simple, yet functional program that implements a word vocabulary. This command-line application can be compiled from the command line (cl -MT vocab.cpp).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 26.1. Using </B><B>CMapStringToString</B><B> in a console application.</B></LH></UL>
+
+<PRE>#include &lt;afx.h&gt;
+
+#include &lt;iostream.h&gt;
+
+#include &lt;stdio.h&gt;
+
+void main(void)
+
+{
+
+    CString wrd, def;
+
+    CMapStringToString map;
+
+    CStdioFile inf(stdin);
+
+    cout &lt;&lt; &quot;Populating the dictionary\n&quot;;
+
+    while (TRUE)
+
+    {
+
+        cout &lt;&lt; &quot;Enter word: &quot;;
+
+        cout.flush();
+
+        inf.ReadString(wrd);
+
+        if (wrd == &quot;Q&quot;) break;
+
+        cout &lt;&lt; &quot;Definition: &quot;;
+
+        cout.flush();
+
+        inf.ReadString(def);
+
+        map[wrd] = def;
+
+    }
+
+    if (map.IsEmpty())
+
+    {
+
+        cout &lt;&lt; &quot;Empty vocabulary!\n&quot;;
+
+        exit(0);
+
+    }
+
+    cout &lt;&lt; &quot;Vocabulary populated with &quot;;
+
+    cout &lt;&lt; map.GetCount() &lt;&lt; &quot; elements.\n&quot;;
+
+    cout &lt;&lt; &quot;Looking up words in the dictionary\n&quot;;
+
+    while (TRUE)
+
+    {
+
+        cout &lt;&lt; &quot;Enter word: &quot;;
+
+        cout.flush();
+
+        inf.ReadString(wrd);
+
+        if (wrd == &quot;Q&quot;) break;
+
+        if (map.Lookup(wrd, def))
+
+            cout &lt;&lt; def &lt;&lt; '\n';
+
+        else
+
+            cout &lt;&lt; &quot;not found!\n&quot;;
+
+    }
+
+}</PRE>
+
+<P>This program allocates a CMapStringToString collection and then enters an input loop. In this loop, corresponding word-definition pairs are entered by the user and added to the collection. The loop terminates when the user enters a capital Q for the word. At this time, after displaying the size of the collection, the program enters a second loop. In this loop, the user enters words that are to be looked up in the vocabulary. Here is a sample session with this program:
+
+<BR></P>
+
+<PRE>Populating the dictionary
+
+Enter word: mouse
+
+Definition: small, nocturnal rodent
+
+Enter word: cat
+
+Definition: small, domesticated carnivore
+
+Enter word: dog
+
+Definition: large, supposedly domesticated ugly animal that barks
+
+Enter word: Q
+
+Vocabulary populated with 3 elements.
+
+Looking up words in the dictionary
+
+Enter word: cat
+
+small, domesticated carnivore
+
+Enter word: mouse
+
+small, nocturnal rodent
+
+Enter word: rat
+
+not found!
+
+Enter word:</PRE>
+
+<P>As I said, implementing a dictionary with these dictionary collections is indeed a trivially simple task.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>The </B><B><I>CMapStringToOb</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapStringToOb class maps objects of type CString to CObject pointers. That is, it uses string indexes to maintain a collection of CObject items. The obvious use of this class is to create a named set of CObject items.
+
+<BR></P>
+
+<P>The features and behavior of this class are almost identical to the features and behavior of CMapStringToString, with one crucial difference. As this class stores CObject pointers, it is the programmer's responsibility that any CObject items that are removed from the collection are destroyed. For example:
+
+<BR></P>
+
+<PRE>CObject *pObject;
+
+CMapStringToOb myMap;
+
+...
+
+pObject = new CObject;
+
+myMap[&quot;myObject&quot;] = pObject;
+
+...
+
+// some time later
+
+...
+
+if (myMap.Lookup(&quot;myObject&quot;, pObject))
+
+{
+
+    myMap.RemoveKey(&quot;myObject&quot;);
+
+    delete pObject;
+
+};</PRE>
+
+<P>CMapStringToOb can also be serialized and used with the CArchive class, and the &lt;&lt; and &gt;&gt; operators.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>The </B><B><I>CMapStringToPtr</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapStringToPtr class maps objects of type CString to pointers to void. This class can be used to provide a collection of named items of arbitrary type.
+
+<BR></P>
+
+<P>Like the CMapStringToOb class, this class also stores pointers to items and does not free the items when the pointers are removed from the collection. It is the application programmer's responsibility to destroy the items the pointers point to.
+
+<BR></P>
+
+<P>Unlike the CMapStringToOb class, CMapStringToPtr collections cannot be serialized.
+
+<BR></P>
+
+<P>In all other respects, the features and behavior of CMapStringToPtr are identical to the features and behavior of CMapStringToOb.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>The </B><B><I>CMapPtrToPtr</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapPtrToPtr class maps void pointers to void pointers. Note that it is the pointer value that serves as a key to this collection, not the entities that these pointers refer. Thus, two pointers that refer to two identical but distinct objects will be treated as unequal keys by CMapPtrToPtr. For example, consider the following code:
+
+<BR></P>
+
+<PRE>CMapPtrToPtr myMap;
+
+int a, b, x, y;
+
+a = b = 123;
+
+myMap[&amp;a] = &amp;x;
+
+myMap[&amp;b] = &amp;y;</PRE>
+
+<P>Although a and b are equal, &amp;a and &amp;b are not; consequently, this code adds two distinct key-value pairs to the collection.
+
+<BR></P>
+
+<P>When a key-value pair is removed from a CMapPtrToPtr collection, the application is responsible for destroying both entities that the two pointers (the key and the value) refer to.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=3><B>The </B><B><I>CMapPtrToWord</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapPtrToWord class maps void pointers to values of type WORD. Note that as with CMapPtrToPtr, it is the pointer value, not the entity it points to, that serves as the key to this collection.
+
+<BR></P>
+
+<P>When removing a key-value pair from this collection, applications should ensure that the entities the keys point to are appropriately destroyed.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>The </B><B><I>CMapWordToOb</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapWordToOb class maps an index of type WORD to items that are CObject pointers.
+
+<BR></P>
+
+<P>What is the difference between this class and a CObArray? In an array collection, indexes are assumed to start at zero and be consecutive. In contrast, the WORD indexes in a CMapWordToOb collection can be arbitrary. For example, to use the indexes 1 and 100 in a CObArray collection requires allocating memory for 101 elements; the same two indexes in a CMapWordToOb only occupy two slots in the collection.
+
+<BR></P>
+
+<P>Collections of type CMapWordToOb support serialization and work in conjunction with the CArchive class, and the &lt;&lt; and &gt;&gt; operators.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>The </B><B><I>CMapWordToPtr</I></B><B> Class</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMapWordToPtr class maps an index of type WORD to items that are void pointers. The features and behavior of this class are identical to the features and behavior of CMapWordToOb with one exception: CMapWordToPtr does not support serialization.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=4><B>Template-Based Object Collections</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The collection classes that we have reviewed thus far are not type safe. Allow me to elaborate on this point.
+
+<BR></P>
+
+<P>Consider, for example, how a collection of CWnd objects would be implemented using CObList. Items that are CWnd pointers would be added to the list in a fashion similar to the following:
+
+<BR></P>
+
+<PRE>CWnd *pWnd;
+
+CObList myList;
+
+...
+
+myList.AddTail((CObject *)pWnd);
+
+...
+
+pWnd = (CWnd *)(myList.GetHead());</PRE>
+
+<P>Because of the typecast in the call to AddTail, the collection has no way of verifying that the object passed to it is indeed of the correct type. Similarly, when the item is retrieved from the collection, it is always a pointer to the CObject type. If, due to a programming error, a pointer of another CObject-derived type is passed to the collection, there will be no errors, no compiler warnings, but the application will silently fail. For example, you can add a pointer of type CDocument to the collection:
+
+<BR></P>
+
+<PRE>CDocument *pDoc;
+
+...
+
+myList.AddTail((CObject *)pDoc);</PRE>
+
+<P>and not notice a thing; only later, when you retrieve this pointer assuming it is a pointer to a CWnd object, will your program show hard-to-analyze signs of misbehavior.
+
+<BR></P>
+
+<P>Type-safe collection templates provide a solution to this problem. By declaring the collection as follows:
+
+<BR></P>
+
+<PRE>CTypedPtrList&lt;CObList, CWnd *&gt; myList;</PRE>
+
+<P>one can eliminate the need for typecasts and thus ensure that if anything other than a CWnd pointer is added to the collection, the compiler will indicate an error.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> It is also possible to derive type-safe versions from non-template collection classes by adding properly typed wrapper functions. However, the templates discussed here represent a more general approach.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>There are two types of template collections. The first category consists of simple arrays, lists, and mappings; the second category consists of arrays, lists, and maps of typed pointers. Members of the first category are the CList, CArray, and CMap templates; members of the second category include CTypedPtrList, CTypedPtrArray, and CTypedPtrMap.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Collection Class Helper Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The simple collection templates CList, CArray, and CMap use seven collection class helper functions. Implementing these functions may be necessary in order for these classes to provide expected behavior.
+
+<BR></P>
+
+<P>For construction of elements, the collection classes use the ConstructElements helper function. ConstructElements is called after memory has been allocated for the new elements. The default implementation uses the constructor of type TYPE to create the elements. This function is used by all three simple collection templates when memory for new elements is allocated.
+
+<BR></P>
+
+<P>The function DestructElements is called before memory allocated for elements in the collection is deallocated. The default implementation of this function uses the destructor of type TYPE to deinitialize collection elements. This function is also used by all three simple collection templates.
+
+<BR></P>
+
+<P>The CompareElements function compares two elements for equality. The default implementation uses the == operator for this purpose. This function is used by the function CList::Find and by CMap-based collections.
+
+<BR></P>
+
+<P>The CopyElements function copies elements. The default implementation performs a bitwise copy (hardly adequate in many situations). This function is used by the CArray::Append and CArray::Copy member functions.
+
+<BR></P>
+
+<P>The SerializeElements helper function serializes elements in the collection. The default implementation performs bitwise serialization (again, this is hardly adequate in many cases). Override this function, for example, when you wish to call the Serialize member function of your collection elements instead.
+
+<BR></P>
+
+<P>The HashKey helper function is used by CMap-based collections to create a hash key. The default implementation creates a hash key by right-shifting the key value by four bit positions. Override this member function if you wish to use a hash key that is more appropriate for your application.
+
+<BR></P>
+
+<P>Finally, the DumpElements member function is used to create a diagnostic dump of collection elements. The default implementation of this function does nothing. Override this function, for example, if you wish to call the Dump member function of the collection elements instead.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=3><B>The </B><B><I>CList</I></B><B> Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CList template is used to create lists of a given element type. A list is an ordered collection of items; it supports access to these items using an iterator.
+
+<BR></P>
+
+<P>The CList template takes two parameters. It is declared as follows:
+
+<BR></P>
+
+<PRE>template&lt;class TYPE, class ARG_TYPE&gt; class CList : public CObject
+
+{
+
+...
+
+};</PRE>
+
+<P>Of the two parameters, TYPE represents the type of elements that the list consists of; ARG_TYPE represents the type used in function arguments. ARG_TYPE is often a reference to TYPE. For example, a list of CString objects could be declared as follows:
+
+<BR></P>
+
+<PRE>CList&lt;CString, CString&amp;&gt; myList;</PRE>
+
+<P>Although the behavior of a CList and a CObList are similar, note one fundamental difference; a CList stores objects of type TYPE, not pointers to those objects. In the previous example, for every CString that is added to the list, a copy of the item is created.
+
+<BR></P>
+
+<P>A CList collection is constructed when it is declared. Elements of type TYPE are added to the collection using the AddHead or AddTail member functions. You can also add elements at a given position, identified by a POSITION value using InsertBefore and InsertAfter.
+
+<BR></P>
+
+<P>An iterator of type POSITION can be obtained by calling GetHeadPosition or GetTailPosition. Iterating through elements in the collection can be done by repeatedly calling GetNext or GetPrev, as in the following example:
+
+<BR></P>
+
+<PRE>CList&lt;CString, CString&amp;&gt; myList;
+
+...
+
+// Populate the list
+
+...
+
+POSITION pos = myList.GetHeadPosition();
+
+while (pos != NULL)
+
+{
+
+    CString str = GetNext(pos);
+
+    ...
+
+    // Do something ugly with str
+
+    ...
+
+}</PRE>
+
+<P>The head and tail element of the list can be obtained using the GetHead and GetTail member functions.
+
+<BR></P>
+
+<P>A POSITION value can also be used in calls to GetAt, SetAt, and RemoveAt. These member functions obtain an element at a given position, set the element at a given position to a new value, and remove an element at a given position.
+
+<BR></P>
+
+<P>The head or tail of the list can be removed by calling RemoveHead or RemoveTail. The entire list can be emptied by calling RemoveAll. To find out if the list is empty, call the IsEmpty member function; GetCount can be used to obtain the number of elements in the list.
+
+<BR></P>
+
+<P>Elements can be searched for by numerical index using the FindIndex function; and by value, using the Find function. Note that you may need to provide an override version of CompareElements in order for the Find member function to work correctly.
+
+<BR></P>
+
+<P>The CList template supports serialization. In order for serialization to work properly, it may be necessary to provide an override version of the SerializeElements helper function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I24" NAME="I24">
+
+<FONT SIZE=3><B>The </B><B><I>CArray</I></B><B> Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CArray template is used to create a dynamically allocated array of a given element type. An array is a collection of elements accessed through a zero-based integer index. The function and behavior of CArray are identical to the function and behavior of C arrays, with the important exception that a CArray can dynamically grow and shrink.
+
+<BR></P>
+
+<P>The CArray template takes two parameters. It is declared as follows:
+
+<BR></P>
+
+<PRE>template&lt;class TYPE, class ARG_TYPE&gt; class CArray : public CObject
+
+{
+
+...
+
+};</PRE>
+
+<P>The TYPE parameter represents the type of items that this collection consists of; the ARG_TYPE represents the argument type passed to functions. Often, ARG_TYPE is a reference to type. For example:
+
+<BR></P>
+
+<PRE>CArray&lt;CString, CString&amp;&gt; myArray;</PRE>
+
+<P>Despite the many similarities, there is a fundamental difference between the behavior of CArray and the non-template-based array collection CObArray. CArray stores copies the items themselves as opposed to pointers to items, as is the case with CObArray.
+
+<BR></P>
+
+<P>After declaring and thus constructing a CArray object, you can use the SetSize member function to set its size. To set an element at a given index, use the SetAt member function; to obtain an element at a given index, use GetAt. SetAt will not grow the array if an index is specified that is out of bounds. However, you can use SetAtGrow for this purpose. You can also add elements to the array and grow the array as necessary by calling the Add member function.
+
+<BR></P>
+
+<P>The [] operator is a shortcut for the SetAt and GetAt member functions. It can be used on both sides of an assignment operation. When used as an lvalue, it utilizes the ElementAt member function that retrieves a reference to the specified element.
+
+<BR></P>
+
+<P>The SetSize function can also be used to define the amount by which memory allocated for the array grows when additional memory is allocated. The default implementation attempts to use an optimal value to minimize heap fragmentation. Any extra memory thus allocated can be freed by calling the FreeExtra member function.
+
+<BR></P>
+
+<P>The current size of the array can be obtained by calling GetSize. The GetUpperBound function returns the maximum allowable index in the array (which is one less than the array's size).
+
+<BR></P>
+
+<P>It is possible to insert elements at a given location or remove an element at a given location using the InsertAt and RemoveAt functions. However, these operations may involve moving large chunks of data and thus tend to be slow.
+
+<BR></P>
+
+<P>Elements from another array (of the same type) can be copied into the array at a specified index position using the Copy member function, or appended to the end of the array using the Append member function. Proper operation of these functions may require that you provide an overloaded version of the CopyElements helper function.
+
+<BR></P>
+
+<P>The CArray class supports serialization. Proper serialization behavior may require that you provide an overloaded implementation of SerializeElements.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I25" NAME="I25">
+
+<FONT SIZE=3><B>The </B><B><I>CMap</I></B><B> Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CMap collection template provides an indexed collection of key-value pairs. CMap is declared as follows:
+
+<BR></P>
+
+<PRE>template&lt;class KEY, class ARG_KEY, class VALUE, class ARG_VALUE&gt;
+
+        class CMap : public CObject
+
+{
+
+    ...
+
+};</PRE>
+
+<P>KEY and VALUE represent the types of keys and values; ARG_KEY and ARG_VALUE represent types passed as function arguments. Often, ARG_KEY is a reference to KEY and ARG_TYPE is a reference to TYPE, as in the following example:
+
+<BR></P>
+
+<PRE>CMap&lt;CString, CString&amp;, CString, CString&amp;&gt; myMap;</PRE>
+
+<P>An efficient implementation of a CMap-based collection may require that you provide a version of the HashKey function overloaded for your KEY type.
+
+<BR></P>
+
+<P>To use a CMap-based collection, construct it by declaring it. Key-value pairs can be added to the collection by calling the SetAt member function. The [] operator is a shortcut for this function. It can only be used in this situation; because not every key value is expected to be found in the collection, the [] operator cannot be used on the right-hand side of assignment expressions (in other words, as something other than an lvalue).
+
+<BR></P>
+
+<P>Elements in the collection can be found using the LookUp member function. An element identified by a given key can be removed using the RemoveKey member function; to remove all elements (empty the collection), call RemoveAll.
+
+<BR></P>
+
+<P>It is possible to iterate through the collection. An iterator of type POSITION can be obtained by calling GetStartPosition; elements can be obtained one by one by repeatedly calling GetNextAssoc. The order in which the elements are returned is arbitrary and is not expected to match the key order.
+
+<BR></P>
+
+<P>To obtain the number of elements, call GetCount. Call IsEmpty to determine whether the collection has any elements.
+
+<BR></P>
+
+<P>Two additional functions, InitHashTable and GetHashTable, can be used to initialize the collection's hashing table to a given size and to retrieve the hashing table's size.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I26" NAME="I26">
+
+<FONT SIZE=3><B>The </B><B><I>CTypedPtrList</I></B><B> Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CTypedPtrList template provides a type-safe list of pointers by implementing a template wrapper for the non-template-based classes CObList and CPtrList. CTypedPtrList is declared as follows:
+
+<BR></P>
+
+<PRE>template&lt;class BASE_CLASS, class TYPE&gt;
+
+        CTypedPtrList : public BASE_CLASS
+
+{
+
+...
+
+};</PRE>
+
+<P>The type BASE_CLASS should be either CObList or CPtrList. If CObList is used, TYPE must represent a pointer to CObject-derived class; if CPtrList is used, TYPE can be any kind of a pointer.
+
+<BR></P>
+
+<P>CTypedPtrList works by providing wrapper functions for all CObList or CPtrList member functions that refer to the collection elements by type. The wrapper functions perform any necessary type casting. Otherwise, the behavior of CTypedPtrList is identical to that of CObList or CPtrList. In particular, CTypedPtrList supports serialization of it is used in conjunction with CObList; however, serialization is not supported when CPtrList is used.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I27" NAME="I27">
+
+<FONT SIZE=3><B>The </B><B><I>CTypedPtrArray</I></B><B> Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CTypedPtrArray collection template provides a type-safe array of pointers. This template is a wrapper for the non-template-based collections CObArray and CPtrArray. It is declared as follows:
+
+<BR></P>
+
+<PRE>template&lt;class BASE_CLASS, class TYPE&gt;
+
+        CTypedPtrArray : public BASE_CLASS
+
+{
+
+...
+
+};</PRE>
+
+<P>The BASE_CLASS type should be either CObArray or CPtrArray. TYPE represents a pointer type; this must be a pointer to a CObject-derived type if CObArray is used as the BASE_CLASS but can be any pointer type if CPtrArray is used.
+
+<BR></P>
+
+<P>CTypedPtrArray works by providing a wrapper function for every CObArray or CPtrArray function that refers to collection elements by type. The wrapper functions also perform all necessary type casting.
+
+<BR></P>
+
+<P>Serialization is supported by CTypedPtrArray-derived classes if they are based on CObArray.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I28" NAME="I28">
+
+<FONT SIZE=3><B>The </B><B><I>CTypedPtrMap</I></B><B> Template</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The CTypedPtrMap template provides type-safe mappings. It is a wrapper template for the mapping collection classes CMapPtrToPtr, CMapPtrToWord, CMapWordToPtr, and CMapStringToPtr.
+
+<BR></P>
+
+<P>Type-safe behavior is provided by implementing wrapper functions for base class member functions that reference the type of elements.
+
+<BR></P>
+
+<P>CTypedPtrMap-based classes do not support serialization.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I29" NAME="I29">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Microsoft Foundation Classes Library provides a series of collection classes. There are several non-template-based collections, and also several type-safe collection templates.
+
+<BR></P>
+
+<P>Perhaps the most widely used collection classes are collections of CObject pointers. The CObList collection represents an ordered list (linked list) of CObject pointers and is used frequently for storing, for example, lists of windows in the MFC. Elements in the collection are accessed through an iterator of the special type POSITION. The other CObject pointer collection is CObArray; the function and behavior of this type of collection are similar to the function and behavior of C arrays with one crucial difference: a CObArray can dynamically grow and shrink. Both CObArray and CObList are serializable collections.
+
+<BR></P>
+
+<P>Other list collections include CPtrList (a list of void pointers) and CStringList (a list of CString items). Of these two, CPtrList does not support serialization.
+
+<BR></P>
+
+<P>Other array collections include CPtrArray, CStringArray, and a variety of integral array types. The CPtrArray class does not support serialization.
+
+<BR></P>
+
+<P>In addition to lists and arrays, the MFC Library also supports mappings. Mappings are unordered collections of key-value pairs indexed by the key. A variety of mapping classes provides support for keys of type CString, WORD, and pointers to void; values can be of type CString, WORD, pointers to void, and CObject pointers (not all combinations are supported). With the exception of mappings where either the key or the value (or both) are void pointers, mapping classes also support serialization.
+
+<BR></P>
+
+<P>Ever since template support was introduced in Visual C++, the MFC Library supports type-safe collection templates. Two types of collection templates exist; simple templates support collections of a specific type, and typed pointer templates support type-safe collections of pointers.
+
+<BR></P>
+
+<P>The simple collection templates rely on several overridable helper functions to work correctly. These include SerializeElements, which is used when collection items are serialized, and CompareElements, which is used when collection items are searched for by value. Other helper functions are used for construction and destruction, element copy, diagnostic dumping, and hashing.
+
+<BR></P>
+
+<P>The simple collection templates include CList (linked list collection), CArray (dynamically allocated array), and CMap (key-value mappings). The pointer-based collection templates include CTypedPtrList, CTypedPtrArray, and CTypedPtrMap.
+
+<BR></P>
+
+<P>The simple collection templates can be used with any type. They support serialization through the helper function SerializeElements.
+
+<BR></P>
+
+<P>The pointer-based collection templates rely on non-template collections for their behavior. Specifically, they build upon the behavior of CObList and CPtrList, CObArray and CPtrArray, and any of the pointer-based mapping classes (CMapPtrToPtr, CMapPtrToWord, CMapWordToPtr, and CMapStringToPtr). Serialization is supported by CTypedPtrList and CTypedPtrArray if they are used in conjunction with CObList and CObArray, but not when they are used in conjunction with CPtrList or CPtrArray. Serialization of pointer-based mapping templates is not supported.</P>
+
+<P><A HREF="vcu25fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu27fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

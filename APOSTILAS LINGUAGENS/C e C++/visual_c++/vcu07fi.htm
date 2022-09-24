@@ -1,0 +1,1008 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu07fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu08fi.htm">
+
+<LINK REL="Previous" HREF="p02vcufi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="p02vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu08fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">7 &#151; Operating System Overview</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Windows and Messages</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Applications, Threads, and Windows</A></LI>
+
+<LI>
+
+<A HREF="#I5">Window Classes</A></LI>
+
+<LI>
+
+<A HREF="#I6">Message Types</A></LI></UL>
+
+<LI>
+
+<A HREF="#I7">Messages and Multitasking</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I8">Message Queues</A></LI>
+
+<LI>
+
+<A HREF="#I9">Processes and Threads</A></LI>
+
+<LI>
+
+<A HREF="#I10">Threads and Messages</A></LI></UL>
+
+<LI>
+
+<A HREF="#I11">Windows Function Calls</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I12">Kernel Services</A></LI>
+
+<LI>
+
+<A HREF="#I13">User Services</A></LI>
+
+<LI>
+
+<A HREF="#I14">GDI Services</A></LI>
+
+<LI>
+
+<A HREF="#I15">Other APIs</A></LI>
+
+<LI>
+
+<A HREF="#I16">Error Reporting</A></LI>
+
+<LI>
+
+<A HREF="#I17">Using Standard C/C++ Library Functions</A></LI></UL>
+
+<LI>
+
+<A HREF="#I18">Platform Differences</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I19">Windows NT</A></LI>
+
+<LI>
+
+<A HREF="#I20">Windows 95</A></LI>
+
+<LI>
+
+<A HREF="#I21">Win32s</A></LI>
+
+<LI>
+
+<A HREF="#I22">Other Platforms</A></LI></UL>
+
+<LI>
+
+<A HREF="#I23">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>7 &#151; Operating System Overview</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>The 32-bit edition of Visual C++ can be used to develop programs for three Win32 platforms: Windows NT (on multiple processors), Windows 95, and Win32s.
+
+<BR></P>
+
+<P>Windows NT is Microsoft's high-end portable server operating system. It is a full-featured 32-bit multithreaded operating system with an integrated graphical environment and advanced server capabilities. Its development has been aimed to maximize portability, stability, and security. While its compatibility with well-behaved MS-DOS and Windows 3.1 applications is remarkably good, it falls short of being a 100 percent replacement for your old MS-DOS system; if you wish to run a sophisticated game program, you may have to reboot to the good old DOS command line. (Does DOOM work under Windows NT? Don't ask me; I haven't tried.)
+
+<BR></P>
+
+<P>Windows 3.1 is, of course, the omnipresent graphical environment sitting, used or unused, in a directory on just about every PC nowadays. While it delivers some operating system-like features, it is essentially a graphical environment sitting on top of MS-DOS instead of replacing it. Because of limitations in both DOS and the 16-bit Windows 3.1 architecture, the DOS-Windows system combination is inherently unstable, prone to crashes, and exposed to ill-behaved applications. The Win32s subsystem is yet another layer on top of Windows 3.1; it implements a subset of the Win32 system calls that enables many simpler 32-bit applications (or complex ones that were written with Win32s compatibility in mind) to run.
+
+<BR></P>
+
+<P>Microsoft's new operating system, Windows 95, offers the best of both worlds. Unlike Windows NT, Windows 95 has been written with backward compatibility as one of the main design criteria. Despite this and the fact that Windows 95 inherited a significant amount of legacy code from Windows 3.1, it has remarkably few shortcomings. Its stability is comparable to Windows NT, its performance exceeds that of both Windows NT and Windows 3.1, and its hardware resource requirements are minimal, comparable to that of Windows 3.1.
+
+<BR></P>
+
+<P>Despite the obvious differences between these platforms (the most notable is the restrictions placed on applications intended to run in the Win32s environment), they share most essential features. In particular, most simple applications are expected to be compatible with all three of these platforms with little or no modification. For this reason, I usually discuss operating system or compiler features without regard to the target operating system; if significant platform differences exist, however, I mention those.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Windows and Messages</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Windows is often referred to as a <I>message-passing</I> operating system. At the very heart of the system is the mechanism that translates just about every <I>event</I> (a keypress, a mouse movement, a timer countdown) into a <I>message</I>; typical applications are built around a <I>message loop</I> that retrieves these messages and dispatches them to the appropriate message handler functions.
+
+<BR></P>
+
+<P>Messages, although sent to applications, are not addressed to them; they are, instead, addressed to what are the other fundamental components of the operating system, <I>windows</I>. A window is much more than merely a rectangular area of the computer's screen; it also represents an abstract entity through which the user and the application interact with each other.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Applications, Threads, and Windows</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>What is the relationship between applications and windows? A typical Win32 application consists of one or more <I>threads</I>, which are basically parallel paths of execution. Think of threads as multitasking within a single application; for example, one thread in a word processing application may be processing user input, while another is busy sending a document to the printer.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> Under Win32s, only single-threaded Win32 applications can run.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>A window is always &quot;owned by&quot; a thread; a thread may own one or more windows, or none at all. Finally, windows themselves are in a hierarchical relationship; some are top-level windows, others are subordinated to their <I>parent windows</I>. Figure 7.1 illustrates this hierarchy.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="07vcu01.gif">Figure 7.1. Processes, threads, and windows.</A></B>
+
+<BR></P>
+
+<P>There are many types of windows in Windows&#151;no pun intended!. The most obvious, of course, is the large rectangular area that we typically associate with an application. Also obvious is that a dialog box is a window in its own right; it can be moved around, sometimes sized, maximized, or minimized just like the main window of an application. What is less obvious is that many elements displayed within main windows or dialogs are also windows themselves. Every button, edit box, scrollbar, listbox, icon, even the screen background itself is treated as a window by the operating system.
+
+<BR></P>
+
+<P>A very revealing exercise, if you have not done this before, is spending some time with the Spy++ application that comes with Visual C++. Use its Find Window command from the Spy menu and drag the finder tool around the screen to find out how even an apparently simple application window can have many window components. Figure 7.2 shows a typical screen under Windows 95 with each of the multitude of windows within it marked by a thick black border.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="07vcu02.gif">Figure 7.2. The multitude of windows during a typical </B><B>session.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Window Classes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The basic behavior of a window is defined by its <I>window class</I>. The window class carries information about the window's initial appearance; the default icon, cursor, and menu resource associated with the window; and perhaps most importantly, the address of a function called the <I>window procedure</I>. When an application processes messages, it usually does so by calling the Windows function DispatchMessage for each message received; DispatchMessage, in turn, calls the appropriate window procedure by checking the class of the window the message is for. It is the window procedure that actually processes messages sent to that window.
+
+<BR></P>
+
+<P>There are many standard window classes provided by Windows itself. These <I>system global</I> classes implement the functionality of common controls, for example. Any application can use these classes for its windows; for example, any application can implement edit controls by using the Edit window class.
+
+<BR></P>
+
+<P>Applications can also define their own window classes through the RegisterClass function. This enables programmers to implement window behavior that is not part of any of the system-supplied global classes. For example, this is how a typical application implements the functionality of its own main window and registers the main window's icon and menu resource.
+
+<BR></P>
+
+<P>Windows also enables subclassing and superclassing an existing class. <I>Subclassing</I> substitutes the window procedure for a window class with another. Subclassing is accomplished by changing the window procedure address through the SetWindowLong (instance subclassing) or SetClassLong (global subclassing) function. The difference? In the first case, only the behavior of a specific window changes; in the second case, the behavior of all windows of the specified class is affected.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE: </B>Global subclassing behaves differently in Win32 and 16-bit Windows (Win32s). In the Win32 case, it affects only windows under the control of the application doing the subclassing; in 16-bit windows, the effect is global, affecting the windows of every application.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P><I>Superclassing</I> creates a new class based on an existing class, retaining its window procedure. To superclass a window class, an application retrieves class information using the GetClassInfo function, modifies the WNDCLASS structure thus received, and uses the modified structure in a call to RegisterClass. Through GetClassInfo, the application also obtains the address of the original window procedure, which it should retain; messages that the new window procedure does not process should be passed to this function.
+
+<BR></P>
+
+<P>Although the terminology is reminiscent of object-oriented terminology, the concept of a window class should not be confused with C++ concepts (or, in particular, concepts of the MFC library). The concept of window classes predates the use of object-oriented languages in Windows by several years.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Message Types</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Messages come in many flavors, representing events at many different levels. Again, the Spy++ tool can help you appreciate the complex message set every single window must process. Use the Spy++ tool to select some simple element, such as a dialog box, to snoop on; then watch the seemingly endless cascade of messages streaming by in the Spy++ window as you move the mouse over a button in the dialog and click it. Table 7.1 shows the list of messages that appear as I dismiss the Word for Windows &quot;About&quot; dialog by clicking on its OK button.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Table 7.1: Messages sent to the Word for Windows &quot;About&quot; dialog when the </B><B>user clicks the OK button.</B>
+
+<BR></LH></UL>
+
+<TABLE BORDER>
+
+<TR>
+
+<TD>
+
+<PRE><I>Symbolic Identifier</I>
+
+<BR></PRE>
+
+<TD>
+
+<PRE><I>Description</I>
+
+<BR></PRE>
+
+<TR>
+
+<TD>
+
+<P>WM_LBUTTONDOWN</P>
+
+<TD>
+
+<P>The left mouse button was pressed.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_PAINT</P>
+
+<TD>
+
+<P>The OK button is repainted as it is pressed.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_LBUTTONUP</P>
+
+<TD>
+
+<P>The left mouse button was released.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_PAINT</P>
+
+<TD>
+
+<P>The OK button is repainted as it is released.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_WINDOWPOSCHANGING</P>
+
+<TD>
+
+<P>The position of the window is about to change.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_WINDOWPOSCHANGED</P>
+
+<TD>
+
+<P>The position of the window has just changed.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_NCACTIVATE</P>
+
+<TD>
+
+<P>The window's title area has been activated.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_ACTIVATE</P>
+
+<TD>
+
+<P>The window's client area has been activated.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_WINDOWPOSCHANGING</P>
+
+<TD>
+
+<P>The position of the window is about to change.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_KILLFOCUS</P>
+
+<TD>
+
+<P>The window is about to lose focus.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_DESTROY</P>
+
+<TD>
+
+<P>The window is being destroyed.</P>
+
+<TR>
+
+<TD>
+
+<P>WM_NCDESTROY</P>
+
+<TD>
+
+<P>The title area of the window is being destroyed.</P></TABLE>
+
+<P>As you can see, messages representing every single occurrence, every single action are sent to the window for processing. Fortunately, an application does not have to be aware of the meaning of every single message. Instead of processing all possible messages, an application is free to &quot;pick and choose&quot;; messages that remain unprocessed are passed to the operating system's default message handler function.
+
+<BR></P>
+
+<P>Windows messages consist of several parts. Perhaps it is best to review the MSG structure, shown in Listing 7.1, which is used to represent messages.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 7.1. The </B><B>MSG</B><B> structure.</B></LH></UL>
+
+<PRE>typedef struct tagMSG {
+
+    HWND   hwnd;
+
+    UINT   message;
+
+    WPARAM wParam;
+
+    LPARAM lParam;
+
+    DWORD  time;
+
+    POINT  pt;
+
+} MSG;</PRE>
+
+<P>The first element of this structure, hwnd, uniquely identifies the window to which this message has been posted. Every window in Windows has such an identifier.
+
+<BR></P>
+
+<P>The next element identifies the message itself. This element may have hundreds of different values, indicating one of the many hundreds (literally!) of different messages that Windows applications may receive. Messages can be organized into several groups depending on their function. Message identifiers are usually referred to symbolically (such as, WM_PAINT, WM_TIMER) rather than by numeric value; these symbolic values are defined in the standard Windows header files. (You need only include windows.h; it, in turn, contains #include directives for the rest.)
+
+<BR></P>
+
+<P>By far the most populous group of Windows messages is the group of window management messages. The symbolic identifiers for these messages all begin with WM_. This group is so large, it only makes sense to further subdivide it into categories. These categories include DDE (Dynamic Data Exchange) messages, clipboard messages, mouse messages, keyboard messages, nonclient area messages (messages that relate to the title, border, and menu areas of a window, typically those areas that are managed by the operating system, not the application), MDI (Multiple Document Interface) messages, and many other types. These categories are somewhat inexact, not always strictly defined; they simply serve as a tool of convenience for programmers trying to form a mental picture of the large set of window management messages. Nor is the set of WM_ messages fixed; it is constantly growing as new operating system capabilities are added.
+
+<BR></P>
+
+<P>Other message groups are related to specific window types. There are messages defined for edit controls, buttons, listboxes, combo boxes, scrollbars, list and tree views, and so on. These messages, with few exceptions, are typically processed by the window procedure of the control's window class and are rarely of interest to the application programmer.
+
+<BR></P>
+
+<P>Applications can also define their own messages. Unique message identifiers can be obtained through a call to the function RegisterWindowMessage. Using private message types enables parts of an application to communicate with each other; separate applications can also exchange information this way. In fact, in 16-bit Windows, cooperating applications typically exchanged data by sending handles of global memory objects to each other. In Win32, this mechanism does not work because applications no longer share an address space; however, other, more powerful mechanisms (for example, memory mapped files) are available for intertask communication.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Messages and Multitasking</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In Windows 3.1, the message loop had another important role in the interaction between the application and the operating system: it enabled the application to yield control. As Windows 3.1 is not a preemptive multitasking operating system, it does not wrestle away control of the processor from an uncooperative application. Proper functioning of the system depended on the cooperative behavior of applications; namely, that they called specific message processing functions frequently. This behavior is still required of applications that are intended to run under Windows 3.1 using Win32s.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>Message Queues</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>This section starts with the simple and moves to the more complex. First, I describe the workings of the 16-bit Windows messaging and task scheduling architecture.
+
+<BR></P>
+
+<P>In 16-bit Windows, the operating system maintains a single <I>message </I><I>queue</I>. Messages that are generated by various operating system events--such as a keyboard or mouse interrupt--are deposited into this message queue. When an application makes an attempt to retrieve the next message in the queue through the GetMessage or PeekMessage function, the operating system may perform a <I>context switch</I> and activate another application for which messages are waiting in the queue. The message at the top of the queue is then retrieved and returned to the active application via an MSG structure.
+
+<BR></P>
+
+<P>If an application fails to make a call to GetMessage, PeekMessage, or Yield (which enables an application to relinquish control without checking the message queue), it effectively hangs the system. Messages keep accumulating in the message queue; as the queue is of a fixed size, eventually it overflows. Windows responds to this by generating a nasty beep every time a new message is received that cannot be placed into the queue; the result is a very ill system that is beeping continuously even at the slightest mouse movement.
+
+<BR></P>
+
+<P>In Win32 (that is, both in Windows NT and Windows 95) the message queue mechanism is much more sophisticated. In these preemptive operating systems, the orderly cooperation of competing tasks or threads is no longer guaranteed. Two or more threads can quite possibly attempt to access the message queue at the same time; furthermore, as task switching is no longer dependent on the next available message in the queue, there are no guarantees that a task would retrieve only the messages addressed to it. This is just one of a number of reasons why the single message queue of 16-bit Windows has been separated into individual message queues for each and every thread in the system.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Processes and Threads</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The subject of threads came up briefly during the discussion of the relationship of processes and threads versus windows.
+
+<BR></P>
+
+<P>In a non-multithreaded operating system, such as most flavors of UNIX, the smallest unit of execution is a <I>task</I> or <I>process</I>. The task-scheduling mechanism of the operating system switches between these tasks; multitasking is accomplished between two or more processes. If an application needs to perform multiple functions simultaneously, it splits itself into several tasks (for example, by using the UNIX fork system call). This approach has some severe drawbacks: tasks are a limited resource (most operating systems can handle fewer than a few hundred simultaneously executing tasks), spawning a new task consumes a prodigious amount of time and system resources, and the new task loses access to its parent's address space.
+
+<BR></P>
+
+<P>In contrast, in a multithreaded system the smallest unit of execution is a thread, not a process. A task or process may consist of one or more threads (usually one designated as the main thread). Setting up a new thread requires little in terms of system resources; threads of the same process have access to the same address space; switching between threads of the same process requires very little system overhead. In fact, I cannot think of any drawbacks a multithreaded operating system has when contrasted with a single-threaded one.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Threads and Messages</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Earlier I indicated that ownership of windows is assigned to individual threads. Correspondingly, each thread has a private message queue, in which the operating system deposits messages addressed to windows the thread owns. Does this mean that a thread must own at least one window and contain a message loop?
+
+<BR></P>
+
+<P>Fortunately, no; otherwise, the use of threads in typical programming situations would become cumbersome indeed. Threads can exist that own no windows and have no message processing loop whatsoever.
+
+<BR></P>
+
+<P>Consider, for example, a sophisticated mathematical application in which a complex calculation needs to be performed on every element of a two-dimensional array (a matrix). The easiest way to do this is to implement a loop in which the calculation is performed repeatedly. Under 16-bit Windows this approach was strictly forbidden; during the execution of the loop, no other applications could control the processor, and the computer effectively froze. In Win32, however, it is perfectly legitimate to set up a separate thread in which such a calculation is performed, while the application's main thread continues processing any messages the application may receive. The only effect on the system is a performance hit&#151;something not entirely unexpected when a complex, processing-intensive calculation is being performed. The thread doing the calculations has no windows, no message queue, no message loop; it does one thing only, and that is the calculation itself.
+
+<BR></P>
+
+<P>In MFC, these threads acquire a name of their own; they are called <I>worker threads</I>, in contrast to the more sophisticated, message queue processing <I>user-interface threads</I>.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=4><B>Windows Function Calls</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>While the existence of a message loop is perhaps the most distinguishing characteristic of Windows applications, it is by far not the only mechanism through which an application and Windows interact. Windows, like other operating systems, offers a humongous number of system calls to perform a wide variety of tasks, including process control, window management, file handling, memory management, graphical services, communications, and many other functions.
+
+<BR></P>
+
+<P>The &quot;core&quot; set of Windows system calls can be organized into three major categories. Kernel services include system calls for process and thread control, resource management, file and memory management. User services include system calls for the management of user-interface elements, such as windows, controls, dialogs, or messages. Graphics Device Interface (GDI) services provide device-independent graphical output functionality.
+
+<BR></P>
+
+<P>The Windows system also includes many miscellaneous Application Programming Interfaces (APIs). Separate APIs exist for a multitude of tasks; examples include MAPI (Messaging API), TAPI (Telephony API), or ODBC (Open Database Connectivity). The degree to which these APIs have been integrated into the core system varies; for example, OLE (Object Linking and Embedding), although implemented in the form of a series of system Dynamic Link Libraries, or DLLs, is nevertheless considered part of the &quot;core&quot; Windows functionality; other APIs, such as WinSock, are considered &quot;extras&quot; or add-ons.
+
+<BR></P>
+
+<P>This distinction between what is core and what isn't is fairly arbitrary. Indeed, from the perspective of an application there is little difference between a core API function that is part of the Kernel module and a function that is implemented in a DLL. Nothing illustrates this better than the conventions used to invoke API functions from the Visual Basic programming language. All API functions are declared identically, as functions in an external DLL. The only difference is the module name: &quot;Kernel&quot; in the case of a Kernel system call, and the name of the DLL in the case of a call to a DLL function.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Kernel Services</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Kernel services typically fall into the categories of file management, memory management, process and thread control, and resource management. While far from being an exhaustive list, these categories accurately describe most commonly used Kernel module functions.
+
+<BR></P>
+
+<P>The preferred method of file management differs from what is typically used in C/C++ programs. Instead of accessing files through the standard C library functions for stream or low-level I/O, or through the C++ iostream class, applications should utilize the Win32 concept of a <I>file </I><I>object</I> and the rich set of functions associated with those. File objects enable accessing files in ways that are not possible using the C/C++ libraries; examples include overlapped I/O and memory mapped files used for intertask communication.
+
+<BR></P>
+
+<P>In contrast, the memory management requirements of most applications are completely satisfied through the C malloc family of functions or the C++ new operator; in a Win32 application, these calls automatically translate into the appropriate Win32 memory management system calls. For applications with more elaborate memory management requirements, sophisticated functions exist for managing virtual memory; for example, these functions can be used to manipulate address spaces that are several hundred megabytes in size by allocating but not <I>committing</I> memory.
+
+<BR></P>
+
+<P>The most important facet of process and thread management concerns <I>synchronization</I>. This problem is new to the Windows environment, as it was not encountered in 16-bit Windows. Under the cooperative multitasking regime of Windows 3.1, applications give up control only at well-defined points during their execution; the execution of competing tasks is <I>synchronous</I>. In contrast, in the preemptive multitasking environment, processes and threads cannot deduce knowledge about the execution status of competing threads. In order to ensure that competing threads that are mutually dependent execute in an orderly fashion, and in order to avoid deadlock situations where two or more threads are suspended indefinitely, waiting for each other, a sophisticated synchronization mechanism is required. In Win32, this is accomplished through a variety of <I>synchronization objects</I> that threads can use to inform other threads about their status, protect sensitive areas of code from reentrant execution, or obtain information about other threads or the status of other objects.
+
+<BR></P>
+
+<P>Speaking of objects, in Win32, many kernel resources (not to be confused with user-interface resources) are represented as kernel objects. Examples include files, threads, processes, and synchronization objects. Objects are typically referred to through <I>handles</I>; some functions exist for the generic manipulation of objects, while others manipulate objects of a specific type. Under Windows NT, objects also have security-related properties. For example, a thread cannot manipulate a file object unless it has appropriate permissions that match the file object's security properties.
+
+<BR></P>
+
+<P>The Kernel module also provides functions to manage <I>user-interface </I><I>resources</I>. These resources include icons, cursors, dialog templates, string resources, version resources, accelerator tables, bitmaps, and other user-defined resource types. Kernel system calls are not aware of the purpose of a resource; however, they provide functionality to allocate memory for resources, load resources from a disk file (typically, the application's executable file), and purge resources from memory.
+
+<BR></P>
+
+<P>Some areas of Kernel module functionality are specific to Windows NT. For example, the NT Kernel module provides a variety of functions through which the security attribute of kernel objects can be examined and manipulated.
+
+<BR></P>
+
+<P>Another NT-specific area of functionality is tape backup functionality. Calls are available for erasing and formatting a tape and for reading and writing tape contents.
+
+<BR></P>
+
+<P>Accessing the contents of initialization files (INI files) is also accomplished through Kernel module calls such as WriteProfileString or GetPrivateProfileString. Use of these functions is not recommended, however; instead, new applications should use the Windows Registry for storing initialization information.
+
+<BR></P>
+
+<P>The Kernel module also provides the functionality required for 32-bit text-only programs, <I>console applications</I>. At first sight, these programs appear as plain old DOS programs; in reality, these are full-featured 32-bit applications that run from the command line and do not make use of the Windows graphical interface. Nevertheless, these applications can still access a rich set of Win32 system calls; for example, a console application can use virtual memory functions or it can be a multithreaded program.
+
+<BR></P>
+
+<P>There are many other areas of Kernel module functionality, ranging from the simple (such as operations on large integers) to the complex (such as the use of named pipes).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>User Services</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The User module, as its name implies, provides system calls that manage elements and aspects of the user interface. These include functions that handle windows, dialogs, menus, text and graphic cursors, controls, the clipboard, and many other areas.
+
+<BR></P>
+
+<P>In fact, it is through User module functions that awareness of these high-level components of the user interface becomes possible. The Kernel module provides memory allocation, thread management, and other services required for windows to function; the GDI module provides graphic primitives; but it is the User module that integrates these two areas and provides the concept of a window, for example.
+
+<BR></P>
+
+<P>Window management calls include functions to manage a window's size, position, appearance, and window procedure, as well as functions to enable or disable a window and to obtain information about windows. These functions are also used to manage controls, such as buttons, scrollbars, or edit boxes. The User module also contains functions to manage Multiple Document Interface (MDI) child windows.
+
+<BR></P>
+
+<P>Menu-related calls in the User module provide functionality to create, display, and manipulate menus, menu bars, and pop-up menus.
+
+<BR></P>
+
+<P>Through a family of User module functions, applications can manage the shape and appearance of the text cursor (the mouse cursor) and graphic cursor (the caret).
+
+<BR></P>
+
+<P>Management of the Windows clipboard is also accomplished through User module functions. The Windows <I>clipboard</I> is basically a simple mechanism through which applications can exchange data. An application can place data in the clipboard in a variety of public or private clipboard formats; other applications can examine the clipboard and retrieve data in any of the available formats that they can interpret. Most applications provide a set of Edit menu commands (Cut, Copy, Paste) for the explicit manipulation of clipboard contents.
+
+<BR></P>
+
+<P>The User module also provides functions for the management of messages and thread message queues. Applications can use these calls to check the contents of their message queues, retrieve and process messages, and create new messages. New messages can be either <I>sent</I> or <I>posted</I> to any window. A message that has been posted is simply entered into the message queue of the thread that owns the destination window. In contrast, sending a message directly invokes the window procedure of the destination window; the SendMessage function does not return until the destination window has processed the message. Not only does this mechanism bypass the message queue, it also makes it possible for the sending application to obtain a return value before continuing.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>GDI Services</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Graphics Device Interface functions are typically used to perform primitive device-independent graphical operations on device contexts. A <I>device context</I> is essentially an interface to a specific graphical device. It can be used to obtain information about the device and also perform graphical output to the device.
+
+<BR></P>
+
+<P>The information that can be obtained through a device context describes the device in detail. The technology of the device (for example, vector or raster), its type, name, resolution, color capability, font capability, and so on, can all be obtained through appropriate device context calls.
+
+<BR></P>
+
+<P>Graphical output is performed through a device context by passing the handle of the device context to the appropriate GDI output function. Through the device context, a generic, device-independent graphical call is translated into a set of instructions that realize the output on the specific device. For example, when an application calls the GDI function Ellipse, it is the device context that determines which device driver will actually execute the call; the device driver, in turn, may further refer the call to a hardware accelerator, if the video subsystem has such an accelerator capability.
+
+<BR></P>
+
+<P>GDI device contexts can describe a wide variety of devices. Typical device contexts include <I>display device contexts</I> (for output that goes directly to the computer's screen), <I>memory device contexts</I> (for output into a bitmap stored in memory), or <I>printer device contexts</I> (for output that eventually gets translated into printer control codes and sent to the printer).
+
+<BR></P>
+
+<P>A very special kind of a device context is the <I>metafile device context</I> that enables applications to make a permanent record of GDI output calls. Such a record is device-independent and can be played back on any device later. More than a mere convenience feature, metafiles play a crucial role in the device-independent representation of embedded OLE objects, the very mechanism that makes OLE objects portable and enables container applications to display or print them even in the absence of the server application.
+
+<BR></P>
+
+<P>Drawing into a device context usually takes place through logical coordinates. <I>Logical coordinates</I> describe objects using device-independent real-world measurements; for example, a rectangle can be described as two inches wide and one inch high. The GDI provides the necessary functionality for the mapping of logical coordinates to physical coordinates.
+
+<BR></P>
+
+<P>Significant differences exist in the way coordinate mapping takes place in Win32s, Windows 95, and Windows NT. For starters, both Win32s and Windows 95 are limited to 16-bit coordinates. In Win32s, this is due to the Windows 3.1 limitation that 16-bit integers are used to represent coordinate positions; in Windows 95, the reason is pretty much the same&#151;the restriction exists due to the existence of a lot of legacy code inherited from Windows 3.1. In contrast, Windows NT can handle 32-bit world coordinates, making it an operating system that is much better suited for sophisticated graphical applications&#151;CAD programs, for example.
+
+<BR></P>
+
+<P>All three operating systems support simple mappings from the logical to the physical coordinate space. This mapping is determined by the values specifying the coordinate origin and signed extent of the logical and physical space. The coordinate origins basically specify a horizontal and vertical displacement; the extents determine the orientation and scale of objects after the mapping.
+
+<BR></P>
+
+<P>In addition, Windows NT offers what are called <I>world transformation </I><I>functions</I>. Through these functions, any linear transformation can be used for mapping the logical to the physical coordinate space; in addition to translations and scaling, output can also be rotated or sheared.
+
+<BR></P>
+
+<P>Of the large number of GDI functions, perhaps the ones used most frequently are those that draw various objects; examples include the Rectangle, Ellipse, Polygon, or TextOut functions. (These are just a few representative cases; the actual number of these functions is very large.)
+
+<BR></P>
+
+<P>Other frequently used drawing functions are the <I>bit blit</I> functions that are used to quickly and efficiently copy bitmaps. (Well, maybe not that quickly and efficiently; for applications, such as games, which really require blazing speed, there is a faster, albeit less safe, set of bitmap manipulation functions in the Windows Game SDK.)
+
+<BR></P>
+
+<P>Other functions manage device contexts. Device contexts for various devices can be created and destroyed, their state can be saved and reloaded, or information about them can be obtained through these functions.
+
+<BR></P>
+
+<P>Another set contains functions that manipulate coordinate transformations. Functions common to all Win32 platforms can be used to set or retrieve the origin and extent of the <I>window</I> (the logical coordinate space) and the <I>viewport</I> (the coordinate space of the target device). NT-specific functions can be used to manipulate sophisticated world transformation matrixes.
+
+<BR></P>
+
+<P>GDI functions can also be used to manipulate palettes. This is mostly useful for applications that strive to achieve color fidelity on devices that offer a limited number of simultaneous colors&#151;256 colors, for example. By manipulating the color palette, these applications (a typical example would be a viewer for graphic files such as GIF or PCX format files) can select a set of colors that best match the colors in the picture about to be displayed, and thus reduce reliance on dithering techniques, providing a better quality image. Palette manipulation can also be used for <I>palette animation</I>, a technique that uses palette changes to create the impression of motion on the screen.
+
+<BR></P>
+
+<P>Yet another GDI feature is the ability to create and manage <I>GDI objects</I>. Brushes, pens, fonts, bitmaps, or palettes can be created and selected into device contexts to determine the appearance of shapes that are drawn subsequently.
+
+<BR></P>
+
+<P>Speaking of fonts, the GDI module also provides functionality to handle fonts (including TrueType fonts).
+
+<BR></P>
+
+<P>Other functions exist to manage two types of metafiles (the old-style Windows<I> </I>Metafiles and the new Enhanced Metafiles). Metafiles can be created, saved, reloaded, and replayed into any device context.
+
+<BR></P>
+
+<P>The GDI Module also provides the capability to manage regions and <I>clipping</I>. Clipping is of utmost importance in the Windows environment because it enables applications to draw to a display surface without regard to the boundaries of the surface (a client window, for example), or the possibility that parts of the surface are obscured by other objects on the screen.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Other APIs</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows is much more than the capabilities implemented in the three &quot;core&quot; modules. Many other modules, many other APIs, exist&#151;each implementing another specific area of functionality. Here are some of the more commonly used APIs, many of which are discussed in substantially more detail later:
+
+<BR></P>
+
+<UL>
+
+<LI><I>Common Control</I> functions are used to manipulate the new Windows 95 common controls. Needless to say, these functions are only available in Windows 95 or later, or Windows NT 3.51 or later, and Win32s 1.3 or later.
+
+<BR>
+
+<BR></LI>
+
+<LI><I>Common Dialogs</I> include system-supplied dialogs for opening a file for reading or writing, selecting a color from a color palette, selecting a font from the set of fonts installed on your system, and specifying a search or search and replace operation. These dialogs can be used as is, or their functionality can be modified through new dialog templates and window procedures.
+
+<BR>
+
+<BR></LI>
+
+<LI><I>MAPI</I>, or the Messaging Applications Programming Interface, gives applications access to messaging functions through mail delivery systems like Microsoft Mail. Actually, there are three variants of MAPI that are commonly used: <I>Simple MAPI</I> is used by older applications that are <I>messaging-aware</I>; that is, applications that do not require the presence of a messaging subsystem but can make use of it if it is there. Microsoft Word falls into this category. Newer messaging-aware and <I>messaging-enabled</I> applications (those that rely on the presence of a messaging subsystem) should use CMC, the Common Messaging Calls interface. Finally, sophisticated <I>message-based</I> workgroup applications may use the full range of MAPI services (<I>Extended MAPI</I>).
+
+<BR>
+
+<BR></LI>
+
+<LI><I>MCI</I> is the Multimedia Control Interface. Through MCI functions, applications have easy access to the video, audio, and MIDI capabilities of Windows. Most multimedia applications would use MCI functions for media playback; some applications would utilize more sophisticated MCI capabilities for the editing of media files.
+
+<BR>
+
+<BR></LI>
+
+<LI>The OLE API is a very rich collection of system calls implementing all aspects of OLE functionality. This includes OLE container and server functionality for in-place editing, activating objects, drag and drop, OLE Automation, and OLE custom controls.
+
+<BR>
+
+<BR></LI>
+
+<LI>TAPI is the Telephony API. Applications can use TAPI for a device-independent method of accessing telephony-based resources (modems, FAX-modems, voice messaging hardware).
+
+<BR>
+
+<BR></LI></UL>
+
+<P>There are several areas of network-related functionality; examples include WinSock<I>,</I> the Windows Sockets library, RAS, the Remote Access Service, and RPC, the Remote Procedure Call library.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=3><B>Error Reporting</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Many Windows functions use a common mechanism for error return. When an error occurs, these functions set a thread-specific error value that can be retrieved by calling the GetLastError function. The 32-bit values returned by this function are defined in the header file winerror.h or in library-specific header files.
+
+<BR></P>
+
+<P>Functions in your application can also set this error value by calling SetLastError. Application-specific error codes should have bit 29 of the value set; error codes with this bit set are reserved by the operating system for application-specific use.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I17" NAME="I17">
+
+<FONT SIZE=3><B>Using Standard C/C++ Library Functions</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Win32 applications can also use the standard set of C/C++ library functions, although some limitations apply.
+
+<BR></P>
+
+<P>First and foremost, a Windows application does not normally have access to the traditional stdin, stdout, or stderr streams, the corresponding DOS file handles (0, 1, and 2), or C++ iostream objects (cin and cout). Only text-based console applications can use these standard file handles. (However, Windows applications, too, may have a standard input or standard output open if they are launched with their I/O redirected.)
+
+<BR></P>
+
+<P>As I mentioned already, Windows applications should use the Win32 file management functions for file handling. This is not to say that the standard C stream and low-level I/O functions or the C++ iostream library are no longer available; it is simply that these libraries do not have all the capabilities available through the Win32 API. For example, the C/C++ library functions are not aware of a file object's security properties; nor can they be used for asynchronous, <I>overlapped</I> input and output operations.
+
+<BR></P>
+
+<P>Applications should also refrain from using the MS-DOS style C library process control functions (the exec family of functions) in favor of CreateProcess.
+
+<BR></P>
+
+<P>Most other C/C++ libraries can be used without restrictions. In particular, although the Win32 API offers a richer function set for memory manipulation, most applications do not require any services more sophisticated than those offered by malloc or the C++ new operator. The C/C++ math, buffer, string manipulation, character and byte classification, data conversion, and other routines can also safely be used.
+
+<BR></P>
+
+<P>Win32 applications should not attempt to access MS-DOS Interrupt 21 or IBM PC BIOS functions. The APIs that were available for this purpose in 16-bit Windows have been removed. Applications that require low-level access to system hardware are probably best developed using the appropriate DDK (Device Driver Development Kit).
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I18" NAME="I18">
+
+<FONT SIZE=4><B>Platform Differences</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>While the Win32 API is intended to serve as a platform-independent API, there exist some platform differences due to limitations in the underlying operating system. Some of these have already been mentioned earlier in this chapter; here, we review and summarize features that are specific to the Windows NT, Windows 95, and Win32s platforms.
+
+<BR></P>
+
+<P>Of the three platforms, two (Windows NT and Windows 95) can be used as development platforms with Visual C++. I have decided to include some notes reflecting my experience in actually developing code using these operating systems.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I19" NAME="I19">
+
+<FONT SIZE=3><B>Windows NT</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The most complete implementation of the Win32 API can be found in Windows NT. Since Version 3.51, Windows NT offers the same set of new custom controls that are available in Windows 95. Presently, the only shortcoming of Windows NT relative to Windows 95 is the lack of Windows 95 style shell functionality. Even this shortcoming may not be around much longer; at the time of this writing, a fairly stable &quot;preview&quot; implementation has already been released. (Note, however, that this implementation is unfortunately not yet fully compatible with the Visual C++ development system.)
+
+<BR></P>
+
+<P>Of the three platforms, only Windows NT offers Unicode support, advanced security features, and system level support for tape backup. Being a server platform, Windows NT obviously offers a much richer server environment than the other two platforms. Thanks to a fully 32-bit implementation, Windows NT is also the most stable of the three platforms, making it ideally suited as a development environment.
+
+<BR></P>
+
+<P>On the down side, Windows NT is by far the slowest, most resource-hungry of the three platforms. The barest minimum on which Windows NT runs at acceptable performance is a 33 MHz 486 system with at least 16MB of memory. The Visual C++ documentation states that at least 20 MB of RAM is required for acceptable performance. In practice, a well-equipped NT-based development system would have 32MB of RAM, a 1GB hard disk drive, and at least a 486/66 processor (but preferably a Pentium).
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I20" NAME="I20">
+
+<FONT SIZE=3><B>Windows 95</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>While Windows 95 lacks some of the features Windows NT offers, it more than makes up for it in terms of performance and compatibility with older, lower-end hardware. Most of the features missing from Windows 95 will not be greatly missed by the majority of users.
+
+<BR></P>
+
+<P>What is missing? NT's advanced security features, Unicode support, and system-level support for tape backup have already been mentioned. The OpenGL graphics library is also unavailable in Windows 95.
+
+<BR></P>
+
+<P>For graphics programmers coming from the NT environment, there are a few &quot;gotchas&quot;; among these are the lack of GDI support for world transformation functions and the limitation of coordinate spaces to 16-bit coordinate values.
+
+<BR></P>
+
+<P>On the other hand, Windows 95 delivers a flexible, stable multithreaded environment comparable to Windows NT in most aspects. It provides a very rich subset of the Win32 API; with the exception of the NT-specific features already mentioned, most API functions are available.
+
+<BR></P>
+
+<P>On the performance side, rumor says that most of Windows NT has been developed as relatively high-level portable C/C++ code; in contrast, Windows 95 inherits a fair amount of old Intel-specific Windows 3.1 code, and much of the new code has also been hand-optimized for this environment. It shows. For the functionality it delivers, the memory footprint of Windows 95 is tiny; people have been able to run it successfully on old 4MB 386-based systems. My personal experience with respect to low-end hardware is limited to my 8MB 486Sx25 notebook computer; I was quite delighted to find that not only does Windows 95 run on this machine very nicely, even the Visual C++ development system does a more than adequate job compiling large projects.
+
+<BR></P>
+
+<P>Speaking of Visual C++, Windows 95 makes an excellent development platform. Its stability, although unlike the rocklike nature of Windows NT, is still fabulous. All 32-bit development tools, including console applications, run remarkably well on this platform. And if my experience with my notebook machine is any indication, even a low-end machine with a 25 MHz 486 CPU, 8MB of RAM, and a 120MB hard disk drive is sufficient for working on small to medium-sized projects.
+
+<BR></P>
+
+<P>Still on the performance side, the existence of the newly released Windows 95 Games SDK must also be mentioned. This SDK contains a series of libraries and low-level drivers to provide high-performance graphics and sound APIs facilitating the development of sophisticated action games for Windows 95. For the time being, this SDK is not available for Windows NT.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I21" NAME="I21">
+
+<FONT SIZE=3><B>Win32s</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Win32s is by far the most restrictive of the three 32-bit environments. Foremost among its restrictions is its inability to run multithreaded applications.
+
+<BR></P>
+
+<P>Like Windows 95, Win32s is also incompatible with NT-specific features like Unicode, security, and tape backup functionality. Win32s does not support the OpenGL graphics library either.
+
+<BR></P>
+
+<P>Win32s has no support for the long filenames of Windows 95 and Windows NT. It also does not support the new common controls. Access to 32-bit MAPI functionality is also unsupported.
+
+<BR></P>
+
+<P>Win32s does not support overlapped I/O functionality, not even for communication devices. A curious consequence of this fact is that for a communications application to work under all three platforms, it may be necessary to provide both a 16-bit and a 32-bit DLL implementing platform-specific access to communications ports.
+
+<BR></P>
+
+<P>Win32s also shares some of the &quot;gotchas&quot; with Windows 95. Like Windows 95, the Win32s GDI implementation is limited to 16-bit coordinates and does not support world transformations.
+
+<BR></P>
+
+<P>Win32s cannot be used as a development platform with the 32-bit Visual C++ compiler. A good thing, too; with the dismal stability of Windows 3.1, development using this platform would likely be a frustrating experience.
+
+<BR></P>
+
+<P>In short, if your users still run Windows 3.1 with Win32s, urge them to upgrade to Windows 95. The stability improvements alone justify the effort and the expense, and your effort convincing them will be amply rewarded by the reduced number of support calls.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I22" NAME="I22">
+
+<FONT SIZE=3><B>Other Platforms</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>So far, I have been conspicuously silent about using Visual C++ to develop code for other hardware or software platforms.
+
+<BR></P>
+
+<P>The Windows NT implementations on the PowerPC, DEC Alpha, or MIPS CPUs are, for all intents and purposes, compatible with the implementations on the Intel family of CPUs. Well-written applications should be recompilable on these platforms with no modifications. Obviously, you must have the platform-specific version of the Visual C++ development system; cross-platform compilation is not possible.
+
+<BR></P>
+
+<P>Visual C++ can also be used to create code for Macintosh computers. In this case, the Intel version of Visual C++ is actually used as a cross-platform development product, after suitable extensions have been purchased and installed. There are many restrictions on what Win32 features applications intended to run on the Macintosh platform can use. (Generally, the Windows Portability Library for the Macintosh has limitations comparable to those of Win32s.)
+
+<BR></P>
+
+<P>In addition, there are some promising attempts at porting the MFC library to various UNIX platforms and implementing Win32 compatibility libraries on UNIX.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I23" NAME="I23">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Visual C++ applications are said to be targeted for the Win32 environment. This includes the various platform-specific versions of Windows NT, the new Windows 95 operating system, and the 32-bit Win32s extension to Windows 3.1. Additionally, Visual C++ can be used as a cross-platform development environment for the Macintosh.
+
+<BR></P>
+
+<P>At the core of every Windows application is its message loop. The Windows operating system delivers information about a variety of events in the form of messages to cooperating applications, which in turn process those messages by dispatching them to the appropriate window procedure. A window is a rectangular area in the screen; it is also an abstract entity that receives and processes messages.
+
+<BR></P>
+
+<P>Windows are owned by threads, which are simultaneous paths of execution within an application. Threads, in turn, are owned by processes or applications.
+
+<BR></P>
+
+<P>Applications also interact with Windows by calling one of the many operating system functions implemented either in the &quot;core&quot; of Windows or as a variety of add-ons. The core can roughly be divided into three categories: the Kernel module provides memory, file, and process management; the User module manages user-interface elements (specifically, windows) and handles messages; the GDI module provides graphical services.
+
+<BR></P>
+
+<P>Other modules implement specific areas of functionality, such as OLE, MAPI, networking, common controls and dialogs, and multimedia.
+
+<BR></P>
+
+<P>With some restrictions, Visual C++ applications can also use standard C/C++ library functions.
+
+<BR></P>
+
+<P>The three primary Win32 platforms differ in the extent to which the Win32 API is implemented. The most complete implementation is offered by Windows NT. Windows 95 offers a very rich subset, with some NT-specific elements and some advanced components missing. Win32s, on the other hand, offers a very restrictive implementation; most notable among these restrictions is its inability to run multithreaded applications.</P>
+
+<P><A HREF="p02vcufi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu08fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

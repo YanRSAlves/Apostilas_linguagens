@@ -1,0 +1,686 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu08fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu09fi.htm">
+
+<LINK REL="Previous" HREF="vcu07fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu07fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu09fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">8 &#151; The Message Loop</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">The &quot;Real&quot; Hello, World Program</A></LI>
+
+<LI>
+
+<A HREF="#I4"> A Simple Message Loop: Sent and Posted Messages</A></LI>
+
+<LI>
+
+<A HREF="#I5"> Window Procedures</A></LI>
+
+<LI>
+
+<A HREF="#I6"> Comparison with generic.c</A></LI>
+
+<LI>
+
+<A HREF="#I7">Multiple Message Loops and Window Procedures</A></LI>
+
+<LI>
+
+<A HREF="#I8"> Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>8 &#151; The Message Loop</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>It has often been said sarcastically about Windows programming that something must be wrong with an operating system that requires hundreds of lines of code for the simplest program of all, one which displays &quot;Hello, World!&quot; and does nothing else. But is it really true, or is it just another urban legend about the evil company Microsoft and its monstrous operating system contraption called Windows?
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>The &quot;Real&quot; Hello, World Program</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Consider the dialog shown in Figure 8.1. Make a guess: How many lines of C code, how many resource file lines, and so on, were required to create an application that displayed just this dialog, nothing else? How many times longer is this program than the infamous &quot;original&quot; Hello, World program that appeared at the beginning of Chapter 1 of the Kernighan-Ritchie C bible?
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="08vcu01.gif">Figure 8.1. The simplest Hello, World application under </B><B>Windows.</A></B>
+
+<BR></P>
+
+<P>You guessed it right. The number of lines (not counting the blank line inserted for cosmetic purposes only) is FIVE in both cases. The Windows version of the Hello, World program is shown in Listing 8.1.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 8.1. Source of the simplest Hello, World program, hello.c</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+int WINAPI WinMain(HINSTANCE d1, HINSTANCE d2, LPSTR d3, int d4)
+
+{
+
+      MessageBox(NULL, &quot;Hello, World!&quot;, &quot;&quot;, MB_OK);
+
+}</PRE>
+
+<P>Compiling this program is not any more difficult than compiling the original Hello, World program from the command line. (Let this also serve as a little preview on using the Visual C++ compiler from the command line.) In order for the compiler to work from the command line, it is necessary to first run the batch file VCVARS32.BAT, which Visual C++ creates in its binary files directory MSDEV\BIN during installation. (Depending on your operating system and its configuration, you may find it necessary to enlarge the environment space allocation for DOS boxes to avoid any &quot;Out of Environment Space&quot; errors this batch file may cause.)
+
+<BR></P>
+
+<P>Afterwards, all you have to do is type cl hello.c user32.lib and voil&#136;[ag]! The program hello.exe is ready to be executed{md}which you can do by simply typing hello at the command line; both Windows 95 and Windows NT can launch Windows applications this way.
+
+<BR></P>
+
+<P>For all its simplicity, the behavior of this &quot;application,&quot; if it can be thought to deserve that title, is surprisingly complex. Unlike its &quot;plain&quot; C counterpart, this application not only displays the message, it interacts with the user in a complex fashion. After initially displaying its message, the program &quot;stays alive&quot; on the screen&#151;meaning it can be moved around with the mouse. The mouse cursor can be clicked on the OK button to dismiss the program; alternatively, by clicking the mouse over the OK button and keeping the mouse button depressed, you can watch the OK button change its appearance as you move the mouse cursor over it. The window also has a simple menu that can be invoked by pressing Alt+Space or, under Windows 95, clicking its title area with the right mouse button; the single Move command can be used to change the window's position using the clipboard. Finally, the application can also be dismissed by using the Enter or Escape keys.
+
+<BR></P>
+
+<P>Remarkably rich behavior from a five-line piece of code, don't you think? But where does all this complexity come from? The secret lies in the magic words <I>message loop</I> and <I>window procedure</I>; unfortunately, a five-liner is not exactly a very revealing piece of programming excellence when it comes to understanding Windows application behavior. We have to move on to something more complex.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=4><B> A Simple Message Loop: Sent and Posted Messages</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The problem with our first Hello, World program is its simplicity. The MessageBox call at the center of this application encompasses (and hides!) a lot of functionality. In order to better understand what is taking place, we have to make this functionality more visible; in other words, we have to create a window that we manage ourselves, instead of letting the MessageBox function do this for us.
+
+<BR></P>
+
+<P>The new version of hello.c is shown in Figure 8.2. This time, the &quot;Hello, World!&quot; text appears as part of a button that occupies the entire client area. (It also appears in the window's title bar.) This is due to the fact that I employed a few unorthodox shortcuts to keep the application as simple as possible; this allows us to focus on the issues at hand instead of getting bogged down with irrelevant details.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="08vcu02.gif">Figure 8.2. Version of Hello, World with a simple </B><B>message loop.</A></B>
+
+<BR></P>
+
+<P>A &quot;typical&quot; Windows program, during initialization, registers a window class first, and then creates its main window using the newly registered class. For now, I wanted to avoid having to register a new class and all that comes with it (such as writing a window procedure); instead, I decided to use one of the existing window classes, the BUTTON class. The functionality of this class does not enable me to identically reproduce the behavior of the previous version of hello.c, but that is not the purpose anyway; the purpose is to demonstrate the function of a very simple message loop. This new version of the application is shown in Listing 8.2.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 8.2. Source of Hello, World with a simple message loop.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE d2,
+
+                                        LPSTR d3, int d4)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    hwnd = CreateWindow(&quot;BUTTON&quot;, &quot;Hello, World!&quot;,
+
+                        WS_VISIBLE | BS_CENTER, 100, 100, 100, 80,
+
+                        NULL, NULL, hInstance, NULL);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+    {
+
+        if (msg.message == WM_LBUTTONUP)
+
+        {
+
+            DestroyWindow(hwnd);
+
+            PostQuitMessage(0);
+
+        }
+
+        DispatchMessage(&amp;msg);
+
+    }
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>While not exactly the purpose of this exercise, I cannot help but point out that the application is still far from the legendary hundreds of lines that displaying &quot;Hello, World!&quot; is supposed to take; even with my publisher's formatting requirements, it still fits conveniently in one screen.
+
+<BR></P>
+
+<P>This example reveals the infamous message loop. After creating its window, the program enters into a while loop where it makes repeated calls to the GetMessage Windows function. Whenever the application receives a message, GetMessage returns; its return value is FALSE only if the message received was a WM_QUIT message. The special case of a WM_LBUTTONUP message is handled; the call to DestroyWindow causes the application's window to be destroyed, while the call to PostQuitMessage ensures that the GetMessage function receives a WM_QUIT message, which causes the loop to terminate. Messages other than WM_LBUTTONUP are <I>dispatched</I> through the DispatchMessage function.
+
+<BR></P>
+
+<P>Dispatched through the DispatchMessage function&#151;but dispatched to whom? A good question. These messages are in fact dispatched to the default window procedure of the BUTTON class. As in the case when we called the MessageBox function, this window procedure remains hidden from us, as it is implemented as part of the operating system.
+
+<BR></P>
+
+<P>When handling WM_LBUTTONUP messages, a seemingly more elegant solution would be to include the call to PostQuitMessage in another case block that responds to WM_DESTROY messages. The problem is that WM_DESTROY messages are typically not <I>posted</I> but <I>sent</I> to the application. There is a subtle, but crucial difference.
+
+<BR></P>
+
+<P>When a message is posted, the application retrieves it through a GetMessage or PeekMessage call at the time of its own choosing (PeekMessage is used when the application wants to perform some tasks when it has no messages to process). In contrast to posting, sending a message to an application implies a direct, immediate call to the window procedure, bypassing any message loops. So in our case, the WM_DESTROY message that is generated in response to our call to DestroyWindow is never seen by the GetMessage loop; instead, it is passed directly to the window procedure of the BUTTON window class.
+
+<BR></P>
+
+<P>This example still failed to show us the innards of the window procedure. Therefore, it is time to move on to yet another, more sophisticated version of our Hello, World program. But do not despair. . .we are still far from hundreds of lines!
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=4><B> Window Procedures</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The new version of hello.c, shown in Listing 8.3, registers its own window class. Done in part for cosmetic reasons (so we can do away with the ugly kludge of using the BUTTON class for our purposes) the most important reason for this is so that we can install our own window procedure.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 8.3. Source of Hello, World with a new window class.</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+void DrawHello(HWND hwnd)
+
+{
+
+    HDC hDC;
+
+    PAINTSTRUCT paintStruct;
+
+    RECT clientRect;
+
+    hDC = BeginPaint(hwnd, &amp;paintStruct);
+
+    if (hDC != NULL)
+
+    {
+
+        GetClientRect(hwnd, &amp;clientRect);
+
+        DPtoLP(hDC, (LPPOINT)&amp;clientRect, 2);
+
+        DrawText(hDC, &quot;Hello, World!&quot;, -1, &amp;clientRect,
+
+                 DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+        EndPaint(hwnd, &amp;paintStruct);
+
+    }
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case WM_PAINT:
+
+            DrawHello(hwnd);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                        LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;HELLO&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;HELLO&quot;, &quot;HELLO&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>I can almost sense your outrage: What? Sixty-four lines? Worse yet, to compile this program successfully you actually have to specify the gdi32.lib library on the command line? (Compile with cl hello.c user32.lib gdi32.lib.)
+
+<BR></P>
+
+<P>Rest assured, this is as far as we go; our text version of Hello, World will not get any more complex at this time. And at 64 lines, this is a &quot;full-featured&quot; Windows application (see Figure 8.3); it has a system menu, it can be moved, resized, minimized and maximized, it knows when to redraw itself, responds to the Close menu item or the Alt-F4 keystroke. Not bad, for an application that still fits easily on a printed page!
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="08vcu03.gif">Figure 8.3. Version of Hello, World with its own window </B><B>class.</A></B>
+
+<BR></P>
+
+<P>So how does this work? As before, execution starts with the WinMain function. The first thing the application does is checking whether it has any copies already running. If so, there is no need to re-register its window class. Otherwise, the window class is registered, its properties and behavior determined through the WndClass structure. In particular, it is through the WndClass structure that the address of the window procedure, WndProc, is given.
+
+<BR></P>
+
+<P>Next, an actual window is created through the CreateWindow system call. Once the window is displayed, WinMain enters the message loop; the message loop exits when GetMessage returns FALSE upon receiving a WM_QUIT message.
+
+<BR></P>
+
+<P>Finally, through WndProc, the purpose and structure of the mysterious window procedure are revealed. A typical window procedure is nothing but a giant switch statement. Depending on the message received, different functions are called that perform the necessary action. In our case, we process exactly two messages: WM_PAINT and WM_DESTROY.
+
+<BR></P>
+
+<P>WM_PAINT messages indicate that parts or all of the application's window must be redrawn. Sophisticated applications would normally not redraw parts of the application window for which redrawing has not been requested; in our case, we simply don't care, we just redisplay the &quot;Hello, World!&quot; text whenever a WM_PAINT message is received.
+
+<BR></P>
+
+<P>WM_DESTROY messages are received in response to user actions that cause the application's window to be destroyed. Our response to this is a call to PostQuitMessage; by doing this, we ensure that the GetMessage function in WinMain receives a WM_QUIT message, causing the main message loop to terminate.
+
+<BR></P>
+
+<P>What happens to messages that are not processed by our window procedure? They are instead passed to the <I>default window procedure</I>, DefWindowProc. This function determines the behavior of the application's window and many of its nonclient area components (such as its title bar) through the default handling of messages that it provides.
+
+<BR></P>
+
+<P>A companion to DefWindowProc is DefDlgProc. This default window procedure is specifically designed for windows that are dialog windows. This function provides handling for dialog-specific messages and also provides default management of the dialog's controls for cases when the dialog loses or gains focus.
+
+<BR></P>
+
+<P>If you have access to the Windows 3.1 SDK (perhaps through a subscription to the Microsoft Developer Network, level 2), it may be an educational exercise to look at the DEFPROC sample; this &quot;sample&quot; is nothing else but the source code of the two default window procedures, DefWindowProc and DefDlgProc.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=4><B> Comparison with </B><B><I>generic.c</I></B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>So if it is this easy to write a Hello, World program with just a few lines of code, what is the explanation for the common myth that even a simple program like this takes several hundred lines of code in Windows?
+
+<BR></P>
+
+<P>The explanation to this curious question can be found in how Microsoft presented its Windows Software Development Kit, or SDK, back in the &quot;good old days.&quot; The tutorial centerpiece of the old SDK was the <I>Generic </I><I>Windows Application</I>, a program that did nothing other than display a window with standard decorations and provide an About, a Help, and an Exit function. This program successfully served as the skeleton for many well-written Windows applications.
+
+<BR></P>
+
+<P>For all its simplicity, the generic.c source code was still almost 500 lines long, with another nearly 200 lines in its resource file, generic.rc. No wonder programmers in the old days found Windows programming forbidding. Nevertheless, even in the old days it was not necessary to reproduce these hundreds of lines of code &quot;from scratch&quot; every time you embarked upon a new Windows project; on the contrary, generic.c was used as a starting point, and it provided a default implementation for all the basic mechanics of a Windows application. It also influenced both the visual appearance and code style of Windows applications; for example, although not strictly necessary, most Windows applications ended up having separate InitApplication and InitInstance functions.
+
+<BR></P>
+
+<P>The task of the Visual C++ programmer is much easier nowadays, although really not that different. Instead of starting from a static skeleton, generic.c, MFC programmers start with an application skeleton dynamically created by the Visual C++ AppWizard. But the fact that you start off from a skeleton application that implements a framework for the basic mechanics of your application has not changed. In my opinion, the availability of a well-written skeleton application had a significant positive influence on Windows programming.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=4><B>Multiple Message Loops and Window Procedures</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>In all the examples that we build so far (namely, the three versions of hello.c) there was a single message loop in every one of them. (Well, in the case of the first one, the presence of the message loop was implicit in the MessageBox function call.) Can there be applications with more than one message loop? And if so, why would you want to write an application that way?
+
+<BR></P>
+
+<P>The answer to the first question is a sound yes. Applications can have as many message loops as they want. Consider the simplest of these situations, when an application that has its own message loop makes a call to the MessageBox function; would this call not imply that, temporarily, the implicit message loop in MessageBox takes over the processing of messages while the message is displayed?
+
+<BR></P>
+
+<P>This scenario also suggests an answer to the second question. You would implement a second (or third, or fourth) message loop when, during a particular stage of execution of your program, messages must be processed in a fashion that is markedly different from normal processing.
+
+<BR></P>
+
+<P>Consider, for example, the case of drawing with <I>mouse capture</I>. An application can provide a freehand drawing capability by looking for mouse events and capturing the mouse when the left button is pressed within its client area. While the mouse is captured, the application is informed of every mouse movement through a separate message; thus, the application can draw a freehand line by adding a new segment whenever the user moves the mouse. The mouse is <I>released</I> when the user releases the left mouse button.
+
+<BR></P>
+
+<P>Our fourth and final version of Hello, World, shown in Figure 8.4, is exactly such an application. This 94-line enormity, which must be compiled with the command line cl hello.c user32.lib gdi32.lib, although far less elegant than the Visual C++ &quot;Scribble&quot; tutorial, actually enables you to <I>draw</I> the text &quot;Hello, World!&quot; using the mouse cursor.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="08vcu04.gif">Figure 8.4. A graphical version of Hello, World</B><B><I>.</I></B><B><I></A></I></B>
+
+<BR></P>
+
+<P>Even a cursory glance at the application's source code, shown in Listing 8.4, reveals the existence of two while loops with calls to the GetMessage function. The main message loop found in WinMain is not different from before; the new stuff is in the DrawHello function.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 8.4. Source of the graphical version of Hello, World</B><B><I>.</I></B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+void AddSegmentAtMessagePos(HDC hDC, HWND hwnd, BOOL bDraw)
+
+{
+
+    DWORD dwPos;
+
+    POINTS points;
+
+    POINT point;
+
+    dwPos = GetMessagePos();
+
+    points = MAKEPOINTS(dwPos);
+
+    point.x = points.x;
+
+    point.y = points.y;
+
+    ScreenToClient(hwnd, &amp;point);
+
+    DPtoLP(hDC, &amp;point, 1);
+
+    if (bDraw) LineTo(hDC, point.x, point.y);
+
+    else MoveToEx(hDC, point.x, point.y, NULL);
+
+}
+
+void DrawHello(HWND hwnd)
+
+{
+
+    HDC hDC;
+
+    MSG msg;
+
+    if (GetCapture() != NULL) return;
+
+    hDC = GetDC(hwnd);
+
+    if (hDC != NULL)
+
+    {
+
+        SetCapture(hwnd);
+
+        AddSegmentAtMessagePos(hDC, hwnd, FALSE);
+
+        while(GetMessage(&amp;msg, NULL, 0, 0))
+
+        {
+
+            if (GetCapture() != hwnd) break;
+
+            switch (msg.message)
+
+            {
+
+                case WM_MOUSEMOVE:
+
+                    AddSegmentAtMessagePos(hDC, hwnd, TRUE);
+
+                    break;
+
+                case WM_LBUTTONUP:
+
+                    goto ExitLoop;
+
+        default:
+
+            DispatchMessage(&amp;msg);
+
+            }
+
+        }
+
+ExitLoop:
+
+        ReleaseCapture();
+
+        ReleaseDC(hwnd, hDC);
+
+    }
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    switch(uMsg)
+
+    {
+
+        case WM_LBUTTONDOWN:
+
+            DrawHello(hwnd);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+
+                                        LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    HWND hwnd;
+
+    WNDCLASS wndClass;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;HELLO&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;HELLO&quot;, &quot;HELLO&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>Previously, DrawHello merely put out a text string with the words &quot;Hello, World!&quot; in it. The new version is much more complex. Its work begins by checking whether any other application is already capturing the mouse or not, and acquiring a device context handle for the main window. Next, it captures the mouse via the SetCapture function, thus instructing Windows to send the application WM_MOUSEMOVE messages.
+
+<BR></P>
+
+<P>The DrawHello function also makes a call to the helper function AddSegmentAtMessagePos which, when called with the Boolean value FALSE as its third parameter, simply moves the drawing position to the position of the most recent message. For this, it makes use of the GetMessagePos function, which retrieves the position of the mouse cursor at the time the most recent message was created. AddSegmentAtMessagePos also makes use of coordinate transform functions to translate the screen coordinates of the mouse into logical coordinates in the window.
+
+<BR></P>
+
+<P>After the call to AddSegmentAtMessagePos, the DrawHello function enters its new message loop. While the mouse is captured, we expect special behavior from our application; most notably, it is expected to follow mouse movements on the screen by drawing additional freehand segments. This is again accomplished with calls to AddSegmentAtMessagePos with the third parameter set to TRUE, whenever a WM_MOUSEMOVE message is received.
+
+<BR></P>
+
+<P>This message loop terminates when the mouse button is released, or when the application loses mouse capture for whatever reason. At that time, DrawHello returns, and the primary message loop resumes processing subsequent messages.
+
+<BR></P>
+
+<P>Was it really necessary to implement this application with two message loops? Could we not have handled WM_MOUSEMOVE messages in our window procedure instead, dispatched there through the main message loop? It is certainly possible; however, organizing code the way demonstrated here makes it much more maintainable and helps avoid extremely large and complex window procedures.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B> Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Every Windows application is built around a message loop. A message loop makes repeated calls to the GetMessage or PeekMessage functions and retrieves messages, which it then dispatches to window procedures through DispatchMessage.
+
+<BR></P>
+
+<P>Window procedures are defined for window classes at the time the window class is registered through RegisterClass. A typical window procedure contains a switch statement with case blocks for all messages the application is interested in; other messages are dispatched to the default window procedure DefWindowProc (or DefDlgProc in the case of dialog windows).
+
+<BR></P>
+
+<P>Messages can be posted or sent to an application. Posted messages are deposited in a message queue, from which GetMessage or PeekMessage retrieves them. In contrast, sending a message implies an immediate call to the window procedure, bypassing the message queue and the message loop.
+
+<BR></P>
+
+<P>An application can have several message loops depending on its requirements. Although it is never required to have more than one message loop, this approach can aid in the development of better organized, more maintainable code.</P>
+
+<P><A HREF="vcu07fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu09fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

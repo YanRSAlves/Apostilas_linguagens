@@ -1,0 +1,366 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu04fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu05fi.htm">
+
+<LINK REL="Previous" HREF="vcu03fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu03fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu05fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">4 &#151; Source Browsing</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Adding Source Browser Information to a Project</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Changing Project Settings</A></LI>
+
+<LI>
+
+<A HREF="#I5">The BSCMAKE Tool</A></LI></UL>
+
+<LI>
+
+<A HREF="#I6">The Source Browser Window</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I7">Definitions and References</A></LI>
+
+<LI>
+
+<A HREF="#I8">File Outline</A></LI>
+
+<LI>
+
+<A HREF="#I9">Base Classes and Members</A></LI>
+
+<LI>
+
+<A HREF="#I10">Derived Classes and Members</A></LI>
+
+<LI>
+
+<A HREF="#I11">Call Graph</A></LI>
+
+<LI>
+
+<A HREF="#I12">Callers Graph</A></LI></UL>
+
+<LI>
+
+<A HREF="#I13">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>4 &#151; Source Browsing</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>In addition to the ClassWizard, the Source Browser is yet another invaluable development tool in Visual C++. This tool enables you to quickly locate definitions and references of symbols and to explore the relationship between symbols.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Adding Source Browser Information to a Project</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Source Browser tool requires the presence of a browser information file in your project. To add browser information, you must change your project settings; alternatively, you can also invoke the BSCMAKE utility manually.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Changing Project Settings</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>If you attempt to use source browsing features when no browser information file exists, the Developer Studio warns you of this and offers the option of rebuilding your project with browser information. You can also specify browser information in the Project Settings dialog (Figure 4.1). Select the Settings command from the Build menu to invoke this dialog, and select the Browse Info tab.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu01.gif">Figure 4.1. Adding browse information to a </B><B>project.</A></B>
+
+<BR></P>
+
+<P>To add browse information to your project, make sure the Build browse info file checkbox is set. Note that you can apply this setting selectively; for example, you can specify that browse information be added to your project's Debug build, but not to its Release version.
+
+<BR></P>
+
+<P>In this dialog, you can also specify additional command-line settings for the bscmake.exe utility.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>The BSCMAKE Tool</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The BSCMAKE tool, bscmake.exe, is the utility that creates browse information (BSC) files. This file is generated from source browser (SBR) files that are created during the link process. BSCMAKE employs a few tricks to improve its efficiency; for example, when it is finished processing an SBR file, it resets that file's length to zero, thus indicating that the file has no new information. This way, BSCMAKE can perform an incremental build of the browse information file during subsequent invocations. You can prevent BSCMAKE from implementing this behavior by specifying the /n command-line switch; when run with this switch, BSCMAKE performs a full build of the browse information file and does not truncate SBR files.
+
+<BR></P>
+
+<P>The bscmake.exe utility has several command-line options that can be used to improve its performance and limit the size of the BSC file. These options all begin with /E. For example, /Ei can be used to exclude the contents of specified include files from the build; /Er can be used to exclude specific symbols (the name of the include file or symbol to be excluded must be specified on the command line; if you wish to specify multiple filenames, enclose them in parenthesis). Other /E options include /El (exclude local symbols), /Em (exclude symbols in macro bodies), /Es (exclude include files specified with an absolute path either explicitly or through the INCLUDE environment variable).
+
+<BR></P>
+
+<P>BSCMAKE by default does not include unreferenced symbols in the browse information file. To include unreferenced symbols, specify the /Iu command-line option. Note that this option has no effect if the compiler generated packed SBR files, which do not contain unreferenced symbols.
+
+<BR></P>
+
+<P>To prevent BSCMAKE from repeatedly processing a header file that appears in several source files with preprocessor settings, use the /S option; this option forces BSCMAKE to ignore repeated occurrences of the header files specified on the command line.
+
+<BR></P>
+
+<P>BSCMAKE uses the base name of the first SBR file on its command line as the base name for its output file. To specify another output filename, use the /o command-line option.
+
+<BR></P>
+
+<P>The following example performs a full rebuild of a source information file. It also prevents BSCMAKE from processing two header files repeatedly:
+
+<BR></P>
+
+<PRE>bscmake /n /S (myhd1.h myhd2.h) /o myproj.bsc mysrc1.sbr mysrc2.sbr</PRE>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=4><B>The Source Browser Window</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The features of the Source Browser can be accessed through the Source Browser window. This window is invoked through the Browse command in the Tools menu. This command presents the Browse dialog (Figure 4.2), where you can enter the symbol you wish to look up and specify the type of browse information that you wish to see. If a symbol is presently highlighted in Class View or in an editor window, the symbol will appear as a default in the Identifier field of this dialog.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu02.gif">Figure 4.2. The Browse dialog.</A></B>
+
+<BR></P>
+
+<P>Note that you can use the asterisk as a wildcard character when specifying the symbol in this dialog.
+
+<BR></P>
+
+<P>You can also invoke the Source Browser window from within Class View in the Project Workspace window. Position the cursor over a symbol (class name, member function name, member variable name, or global symbol) and right-click to invoke the popup menu. Depending on the symbol's type, the popup menu will contain several commands (for example., the Base classes or Called by commands) that take you directly to the Source Browser window. Another shortcut available in these popup menus (and also popup menus in source editor windows) can take you directly to a symbol's declaration, definition, or references; this capability is a shortcut to a key Source Browser functionality.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Definitions and References</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Depending on how you invoke it, the Source Browser can provide several views on your application's source code. The first of these views is the Definitions and References window (Figure 4.3).
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu03.gif">Figure 4.3. Source Browser: Definitions and </B><B>References.</A></B>
+
+<BR></P>
+
+<P>In this window, all definitions and references of the specified symbols are shown. Selecting a definition or reference and double-clicking on it opens the appropriate source (or header) file and positions the cursor directly over the selected definition or reference. Thus, the source browser can be used as an efficient source navigation tool.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=3><B>File Outline</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The File Outline window (Figure 4.4) provides a unique view on a source or header file. This window lists all classes, functions, variables, macros, and types defined in the specified file.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu04.gif">Figure 4.4. Source Browser: File Outline.</A></B>
+
+<BR></P>
+
+<P>This window also contains a series of buttons that can be used to filter out unwanted symbols. You can specify which types of symbols you wish to see listed by clicking the appropriate button in the window's toolbar.
+
+<BR></P>
+
+<P>The type of a symbol is displayed in the form of a lowercase letter in the left pane of the File Outline window. For example, a lowercase f means that the symbol is a function. Next to this letter, an uppercase letter on gray background specifies whether the symbol is virtual (for example, a virtual member function) or static.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Base Classes and Members</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Base Classes and Members window (Figure 4.5) is a three-pane window where you can browse the base classes of a specific class; it also shows the selected class's member functions and variables and the definitions and references for those.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu05.gif">Figure 4.5. Source Browser: Base Classes and </B><B>Members.</A></B>
+
+<BR></P>
+
+<P>In the combo boxes in this window's toolbar, you can specify what combination of virtual, static, nonvirtual, and nonstatic functions you wish to see listed; and also, what combination of static and nonstatic data you wish to see appear.
+
+<BR></P>
+
+<P>In the pane displaying class members, the type of a member is marked by the lowercase letter <I>f</I> (function) or <I>d </I>(data). Another, uppercase letter on a gray background shows whether the member is declared as virtual or static.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Derived Classes and Members</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Derived Classes and Members window (Figure 4.6) enables you to browse classes derived from a specific class. The appearance and behavior of this window are similar to that of the Base Classes and Members window.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu06.gif">Figure 4.6. Source Browser: Derived Classes and </B><B>Members.</A></B>
+
+<BR></P>
+
+<P>This window is also a very useful tool for familiarizing yourself with the structure of the Microsoft Foundation Classes. For example, as shown in Figure 4.6, you can browse the entire hierarchy CObject-derived classes, exploring their members and their relationships.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Call Graph</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Call Graph window (Figure 4.7) shows a hierarchical view of functions called by the specified function.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu07.gif">Figure 4.7. Source Browser: Call Graph.</A></B>
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Callers Graph</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The Callers Graph window (Figure 4.8) shows the hierarchy of functions that call the specified function.
+
+<BR></P>
+
+<P>
+
+<BR><B><A HREF="04vcu08.gif">Figure 4.8. Source Browser: Callers Graph.</A></B>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Source Browser is an invaluable reference tool component of Visual C++.
+
+<BR></P>
+
+<P>Using the Source Browser requires that your project be built with source browser information added. You can select this option in the Project Settings dialog (Browse Info tab). The tool used to build browser information (BSC files) is the bscmake.exe utility.
+
+<BR></P>
+
+<P>The Source Browser window, invoked through the Browse command in the Tools menu or through various popup menus, presents six different views on your application's source.
+
+<BR></P>
+
+<P>The Definitions and References window lists all definitions and references for selected symbols. If you double-click on a definition or reference, the appropriate source or header file is opened with the cursor positioned at the location of the selected definition or reference.
+
+<BR></P>
+
+<P>The File Outline window presents a view of all symbols declared or defined in a specified source or header file. Toolbar buttons let you control what type of symbols you wish to see listed.
+
+<BR></P>
+
+<P>The Base Classes and Members window is where you browse the base classes of a specific class. The Derived Classes and Member window is where you do the same for classes derived from the specified class.
+
+<BR></P>
+
+<P>The Call Graph and Callers Graph windows can be used to list the functions called by a specific function or the functions that call a specific function.</P>
+
+<P><A HREF="vcu03fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu05fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+

@@ -1,0 +1,1014 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Visual C++ Unleashed vcu12fi.htm</TITLE>
+
+<LINK REL="ToC" HREF="index.htm">
+
+<LINK REL="Next" HREF="vcu13fi.htm">
+
+<LINK REL="Previous" HREF="vcu11fi.htm"></HEAD>
+
+<BODY TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" bgcolor=white>
+
+<P><A HREF="vcu11fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu13fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P><UL>
+
+<LI>
+
+<A HREF="#I1">12 &#151; Threads and Processes</A></LI>
+
+<UL>
+
+<UL>
+
+<LI>
+
+<A HREF="#I3">Multitasking in the Win32 Environment</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I4">Multitasking Concepts</A></LI>
+
+<LI>
+
+<A HREF="#I5">Cooperative Multitasking in Win32s</A></LI>
+
+<LI>
+
+<A HREF="#I6">Preemptive Multitasking in Windows NT</A></LI>
+
+<LI>
+
+<A HREF="#I7">Windows 95: A Mixed Bag of Multitasking Tricks</A></LI></UL>
+
+<LI>
+
+<A HREF="#I8">Programming with Processes and Threads</A></LI>
+
+<UL>
+
+<LI>
+
+<A HREF="#I9">Cooperative Multitasking: Yielding in the Message Loop</A></LI>
+
+<LI>
+
+<A HREF="#I10">Yielding During Lengthy Processing</A></LI>
+
+<LI>
+
+<A HREF="#I11">Using a Secondary Thread</A></LI>
+
+<LI>
+
+<A HREF="#I12">Thread Objects</A></LI>
+
+<LI>
+
+<A HREF="#I13">Creating and Managing Processes</A></LI>
+
+<LI>
+
+<A HREF="#I14">Synchronization Objects</A></LI>
+
+<LI>
+
+<A HREF="#I15">Programming with Synchronization Objects</A></LI></UL>
+
+<LI>
+
+<A HREF="#I16">Summary</A></LI></UL></UL></UL>
+
+
+
+<H1 ALIGN="CENTER">
+
+<CENTER><A ID="I1" NAME="I1">
+
+<BR>
+
+<FONT SIZE=5><A ID="I2" NAME="I2"></A><B>12 &#151; Threads and Processes</B>
+
+<BR></FONT></A></CENTER></H1>
+
+<P>As is the case with any evolving environment, Windows presents an odd mix of the old and the new, the obsolete, outdated, and the modern, the state-of-the-art. Nowhere is it more evident than in its multitasking capabilities, in particular the differences in those capabilities between the various Win32 platforms.
+
+<BR></P>
+
+<P><B>The old:</B> The cooperative multitasking environment of 16-bit Windows. Its antics and limitations survive intact in Win32s which, although it provides a rich implementation of the Win32 programming interface, nevertheless cannot alter the underlying operating system or eliminate its limitations.
+
+<BR>
+
+<BR></P>
+
+<P><B>The new:</B> The multithreaded Windows NT operating system. An operating system that was designed fresh from the ground up, Windows NT offers a very robust multitasking capability, suitable for high-reliability applications (such as large corporate servers).
+
+<BR>
+
+<BR></P>
+
+<P><B>The odd:</B> Windows 95. Here, the goal of the designers was as much to implement the new capabilities as to maintain 100 percent (well, close to 100 percent anyway) compatibility with the old 16-bit Windows environment. The result is an astonishing combination: Windows 95 delivers a surprisingly robust multitasking capability while at the same time doing an excellent job (sometimes better than 16-bit Windows itself) in maintaining compatibility with legacy applications. Naturally, this does not come without a price: Windows 95 suffers from some strange limitations, ever more likely to turn into annoying &quot;gotchas&quot; precisely because the system does such an excellent job delivering elsewhere. With its fluid multitasking capability, it may come as a surprise to the uninitiated that Windows 95 is just as likely to &quot;freeze&quot; because of an ill-behaved 16-bit application as Windows 3.1. (Although admittedly, Windows 95 does a lot better job recovering from such events.)
+
+<BR>
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I3" NAME="I3">
+
+<FONT SIZE=4><B>Multitasking in the Win32 Environment</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Because the differences are substantial, it pays to examine the multitasking capabilities of the three Win32 environments separately. But first, we turn our attention to some of the fundamental concepts essential to understanding multitasking in Windows.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I4" NAME="I4">
+
+<FONT SIZE=3><B>Multitasking Concepts</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Multitasking in general refers to an operating system's capability to load and execute several applications concurrently. A multitasking operating system is considered a robust and reliable one if it successfully shields concurrent applications from each other, making them believe that they alone &quot;own&quot; the computer and its resources. Furthermore, a well-written multitasking operating system also shields applications from each others' bugs; for example, if one application fails to perform array bounds checking and writes beyond the allocated boundaries of an array, the multitasking operating system should prevent this from overwriting the memory space of another application. To a large extent, multitasking operating systems rely on system hardware to implement these capabilities. For example, without the support of a memory management unit that generates an interrupt when an attempt is made to access memory at an illegal address, the operating system would have no way of knowing that such an attempt took place short of examining every single instruction in an application's code. This would be a very inefficient, time-consuming solution&#151;completely impractical, in fact.
+
+<BR></P>
+
+<P>Another important aspect of multitasking is <I>process scheduling</I>. As most processors are capable of executing only a single stream of instructions at any given time, multitasking would obviously not be possible without the technique of <I>context switching</I>. A context switch, triggered by a specific event (such as an interrupt from a timer circuit or a call by the running application to a specific function), essentially consists of saving the processor context (instruction pointer, stack pointer, register contents) of one running program and loading that of another.
+
+<BR></P>
+
+<P>Other no less important aspects of multitasking involve the operating system's capability to provide contention-free access to various system resources (such as the file system, the display device), prevent deadlock situations, and provide mechanisms through which concurrently executing applications can communicate with each other and synchronize their execution.
+
+<BR></P>
+
+<P>The degree to which various operating systems provide multitasking support varies greatly. Traditional mainframe operating systems have provided robust support in all aspects of multitasking since decades ago. On the other hand, multitasking on desktop computers is a relatively new phenomenon, largely because these machines only recently became sufficiently powerful to execute several tasks at once efficiently. (That said, many programmers are surprised to learn that even vintage MS-DOS provides rudimentary support for multitasking; this is what enabled developers to write robust Terminate and Stay Resident, or TSR, applications.)
+
+<BR></P>
+
+<P>When examining the difference between the multitasking support in the various Win32 environments, we quickly find that the primary emphasis is on the scheduling mechanism employed.
+
+<BR></P>
+
+<P>In a <I>cooperative multitasking</I> environment (also referred to often as nonpreemptive) the operating system relies explicitly on applications to <I>yield control</I> by regularly calling a specified set of operating system functions. Context switching takes place at well-defined points during the execution of a program.
+
+<BR></P>
+
+<P>In a <I>preemptive multitasking</I> environment, the operating system can interrupt the execution of an application at any time. This usually happens when the operating system responds to a hardware event, such as an interrupt from a timer circuit. An application's flow of execution can be interrupted at any point, not only at predefined spots. This raises the complexity of the system. In particular, in preemptive multitasking environments, the possibility of <I>reentrancy</I> becomes a distinct issue; a program may be interrupted while it is executing an operating system function, and while it is suspended, another program may call into the same operating system function, or <I>reenter</I> the function before the call to it from the first program was complete.
+
+<BR></P>
+
+<P>Another phrase often heard in the context of multitasking and Windows is <I>threads</I>. Perhaps the best way to describe threads is this: While multitasking offers the capability of running several programs concurrently, threads make possible several concurrent paths of execution within the <I>same</I> program. The introduction of this mechanism adds a powerful capability to the application programmer's repertoire. The price (you <I>knew</I> there was a price to pay for this, didn't you?): problems that were previously the concern of operating system authors only, such as the problems associated with reentrancy and process synchronization, are now something application programmers must also worry about.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I5" NAME="I5">
+
+<FONT SIZE=3><B>Cooperative Multitasking in Win32s</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows 3.1 is a cooperative multitasking environment. 32-bit applications that run under Windows 3.1 using Win32s are subject to the same multitasking limitations as ordinary 16-bit applications.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> A very limited form of preemptive multitasking exists in Windows 3.1. This is what enables the concurrent execution of several MS-DOS programs in separate DOS windows.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>In Windows 3.1, applications must regularly yield control to the operating system by calling one of the following functions: GetMessage, PeekMessage (without the PM_NOYIELD flag), and Yield.
+
+<BR></P>
+
+<P>It is fortunate that GetMessage is one of the yielding functions; thanks to this fact, applications that rely on a typical message loop for message processing need to do very little else to be well-behaved under the Windows 3.1 environment. However, the nature of the cooperative multitasking environment should never be forgotten; whenever a message triggers the execution of a time-consuming action, such as printing a large document or performing a lengthy calculation, the programmer is well-advised to include regular calls to Yield or PeekMessage in order not to &quot;freeze&quot; the operating system. Better yet, it should make an effort to actually process messages even during the time-consuming procedure; that way, the application's own window will also remain responsive. (For example, it would repaint itself if parts of it were uncovered due to an action of the user.)
+
+<BR></P>
+
+<P>Failing to cooperate with the operating system and other applications has more than mere cosmetic effects. As other applications will not have a chance to execute at all, odd things are bound to happen; the buffer of a communication application will overflow, a TCP/IP networking application will lose connection, timing-sensitive application will encounter a time-out condition, and so on. Worse yet, eventually the input buffers of Windows itself will overflow as well; ever heard that ugly rapid-fire beeping that is the response of a very sick Windows to any user-interface event (mouse button clicks, keyboard clicks, even mouse movements)?
+
+<BR></P>
+
+<P>There is very little excuse for writing an application that does not abide by the rules of cooperative multitasking. If your application is intended to run in the Win32s environment, abiding by these rules is a must; but, as we see momentarily, these practices are not a bad idea even in the preemptive Windows NT and Windows 95 environments.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I6" NAME="I6">
+
+<FONT SIZE=3><B>Preemptive Multitasking in Windows NT</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>I must admit, ever since the early versions of Windows NT, and despite some of the compatibility problems associated with it, switching from Windows 3.1 to Windows NT always felt like stepping out from a stuffy, overcrowded room to breathe some fresh mountain air.
+
+<BR></P>
+
+<P>This sensation was due in large part to NT's robust multitasking. Gone were the miseries of frozen applications, unresponsive keyboards, unsuccessful attempts to revive a system with the most drastic of methods, hitting Control+Alt+Delete. Instead, here was an operating system that always remained responsive, always offered a way to get rid of a pesky, ill-behaved program.
+
+<BR></P>
+
+<P>Windows NT provides preemptive multitasking for concurrent 32-bit processes. The case of 16-bit processes is special. These processes generally appear to Windows NT as a single process (the Windows On Windows, or WOW process), although beginning with Version 3.5, Windows NT enables 16-bit processes to run in a &quot;separate memory space,&quot; meaning that a separate WOW process is started for them. Those 16-bit applications that share a WOW process, however, must abide by the rules of cooperative multitasking to enable each other to live. In other words, if a 16-bit process freezes, it will also freeze all other 16-bit processes with which it shares a process; however, it will not have any ill effect on other processes, including 16-bit processes that run as part of another WOW process.
+
+<BR></P>
+
+<P>Does preemptive multitasking in Windows NT mean that you can forget everything you learned about well-behaved Windows applications and start writing noncooperative code? Absolutely not, and here is the reason why.
+
+<BR></P>
+
+<P>Even though Windows NT is capable of wrestling control away from an uncooperative 32-bit application and thus it can enable other applications to run, it will not be able to process messages aimed at the uncooperative application. Thus, if an application fails to regularly check its message queue, it will still appear unresponsive, buggy to the user. The user will not be able to interact with the application at all. Clicking on the application's window to bring it to the front will fail, and the application will not redraw parts of its window when it is uncovered when another window is moved or closed.
+
+<BR></P>
+
+<P>To avoid this, an application should make every effort to regularly check its message queue and dispatch any messages in it, even when it is otherwise busy performing some lengthy task. While failing to do so no longer threatens the integrity of the system as a whole, it certainly serves as a recipe for a very &quot;user-unfriendly&quot; application.
+
+<BR></P>
+
+<P>Fortunately, there is another aspect of Windows NT multitasking that makes such lengthy processes much easier to implement. Unlike its 16-bit predecessor, Windows NT is a multithreaded operating system.
+
+<BR></P>
+
+<P>A Windows NT program can easily and inexpensively create new threads of execution. For example, if it needs to perform a lengthy calculation, that task can be delegated to a secondary thread, while the primary thread continues processing messages. A secondary thread can even perform user interface functions; for example, while an application's primary thread continues processing messages sent to its main window, the application can delegate the function of processing messages for a dialog to a secondary thread. (When using the Microsoft Foundation Classes, there is actually special terminology to distinguish threads that own windows and process messages and those that do not; they are referred to as <I>user interface threads</I> and <I>worker threads</I>, respectively.)
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I7" NAME="I7">
+
+<FONT SIZE=3><B>Windows 95: A Mixed Bag of Multitasking Tricks</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Windows 95 combines the best features of both Windows 3.1 and Windows NT and loses surprisingly little in terms of tradeoffs. (I guess you can tell from this that I like Windows 95. Indeed, I like it a lot.)
+
+<BR></P>
+
+<P>On the one hand, Windows 95 delivers a Windows NT like preemptive multitasking and multithreading capability. If anything, Windows 95 is perhaps even more responsive, thanks to code that is more optimized, more specifically tailored to the Intel family of processors than the portable code of Windows NT. On the other hand, Windows 95 delivers a remarkable degree of compatibility with legacy DOS and 16-bit Windows applications. And all this is delivered by an operating system that is only slightly more resource hungry than its predecessor. I witnessed this firsthand, when I successfully installed Windows 95 <I>and</I> Visual C++ 2.1 on my 8MB 486Sx25 notebook computer.
+
+<BR></P>
+
+<P>This compatibility has been accomplished, in part, by incorporating large amounts of legacy code from Windows 3.1 into Windows 95. In other words, although Windows 95 is doubtless a 32-bit operating system, some code at its very heart is old-style 16-bit code. The obvious side effect of this is that some parameters that can have a full range of 32-bit values in Windows NT are restricted to 16 bits in Windows 95 (most notably, graphical coordinates). Another, less than obvious side effect has a direct consequence for multitasking under Windows 95.
+
+<BR></P>
+
+<P>Much of the Windows 3.1 legacy code has not been designed with reentrancy in mind. In other words, because 16-bit applications participated in cooperative multitasking, there was never a chance that one was interrupted in the middle of a system call; hence, there was no need to design mechanisms that would make it safe to repeatedly call system functions while a previous call was suspended, unfinished.
+
+<BR></P>
+
+<P>Because Windows 95 processes can be interrupted any time, Microsoft had two choices. The first was to rewrite Windows 3.1 system calls completely. Apart from being a monumental task, this approach would result in a loss of the advantage that importing Windows 3.1 legacy code represents, namely a high degree of backward compatibility. In effect, such a rewrite would result in another operating system; and that has been done, the result being Windows NT.
+
+<BR></P>
+
+<P>The other, much simpler solution is simply to protect the system while its 16-bit non-reentrant parts are executing. In particular, the Windows 95 solution means is that while one application is executing 16-bit code, all other applications are prevented from doing so.
+
+<BR></P>
+
+<P>This has a very noticeable effect in the case of 16-bit applications. You see, 16-bit applications are <I>always</I> running in 16-bit mode. What that means is that as long as a 16-bit application has control of the processor, no other application can execute the 16-bit code.
+
+<BR></P>
+
+<P>Which means that an uncooperative 16-bit application (one that fails to yield to the operating system, thus enabling other, 32-bit, processes to gain control) can just as effectively freeze the operating system as it did under Windows 3.1.
+
+<BR></P>
+
+<P>Fortunately, Windows 95 does a much better job of recovering. For example, it can kick out the offending process and do a good job cleaning up its mess without struggling with the stability and resource allocation problems that have plagued Windows 3.1.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I8" NAME="I8">
+
+<FONT SIZE=4><B>Programming with Processes and Threads</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>The Win32 API contains a rich set of functions for accessing all the multitasking and multithreading features of 32-bit Windows. In some cases, these functions supersede or replace traditional UNIX or C library (or, for that matter, MS-DOS) functions. Other functions represent new areas of functionality. Yet another set of functions (for example, the yielding functions) is familiar to Windows 3.1 programmers.
+
+<BR></P>
+
+<P>The remainder of this chapter reviews some of the multitasking programming techniques.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I9" NAME="I9">
+
+<FONT SIZE=3><B>Cooperative Multitasking: Yielding in the Message Loop</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As I mentioned earlier, authors of most simple Windows applications do not have to worry about cooperative multitasking. The typical message loop, shown in Listing 12.1, takes care of this problem. Every time the application becomes ready to process a new message, it calls the Windows GetMessage function. GetMessage, in turn, may not return immediately; instead, Windows may perform a context switch and pass control to another application.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 12.1. Yielding in the message loop.</B></LH></UL>
+
+<PRE>int WINAPI WinMain(...)
+
+{
+
+    MSG msg;
+
+    ...
+
+    // Application initialization goes here
+
+    ...
+
+    // Entering main message loop
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))    // This call yields!
+
+    {
+
+        // Message dispatching goes here
+
+        ...
+
+    }
+
+}</PRE>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I10" NAME="I10">
+
+<FONT SIZE=3><B>Yielding During Lengthy Processing</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>As I mentioned earlier, although in the 32-bit environment it is not strictly necessary for an application to yield cooperatively, it is a very good idea to continue doing so. Not only does this make the application more likely to remain compatible with Win32s, but more importantly, it ensures that the application itself remains responsive.
+
+<BR></P>
+
+<P>The example program shown in Listing 12.2 (resource file) and 12.3 (source file) demonstrates this technique. This is yet another simple example that can be compiled from the command line with the following instructions:
+
+<BR></P>
+
+<PRE>RC LOOP.RC
+
+CL LOOP.C LOOP.RES USER32.LIB</PRE>
+
+<P>Alternatively, you can create a Visual C++ project and add the files LOOP.C and LOOP.RC in order to compile from within the Development Studio.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 12.2. Processing loop example resource file (</B><B>LOOP.RC</B><B>).</B></LH></UL>
+
+<PRE>#include &quot;windows.h&quot;
+
+DlgBox DIALOG 20, 20, 90, 64
+
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+
+CAPTION &quot;LOOP&quot;
+
+BEGIN
+
+    DEFPUSHBUTTON &quot;CANCEL&quot; IDCANCEL, 29, 44, 32, 14, WS_GROUP
+
+    CTEXT &quot;Iterating&quot;      -1,        0,  8, 90,  8
+
+    CTEXT &quot;0&quot;              1000,      0, 23, 90,  8
+
+END</PRE>
+
+<UL>
+
+<LH><B>Listing 12.3. Processing loop example source file (</B><B>LOOP.C</B><B>).</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+HINSTANCE hInstance;
+
+BOOL bDoAbort;
+
+HWND hwnd;
+
+BOOL CALLBACK DlgProc(HWND hwndDlg, UINT uMsg,
+
+                      WPARAM wParam, LPARAM lParam)
+
+{
+
+    if (uMsg == WM_COMMAND &amp;&amp; LOWORD(wParam) == IDCANCEL)
+
+    {
+
+        EnableWindow(hwnd, TRUE);
+
+        DestroyWindow(hwndDlg);
+
+        return (bDoAbort = TRUE);
+
+    }
+
+    return FALSE;
+
+}
+
+void DoIterate(HWND hwndDlg)
+
+{
+
+    MSG msg;
+
+    int i;
+
+    char buf[18];
+
+    i = 0;
+
+    while (!bDoAbort)
+
+    {
+
+        SetWindowText(GetDlgItem(hwndDlg, 1000),
+
+                      _itoa(i++, buf, 10));
+
+        while (PeekMessage(&amp;msg, NULL, 0, 0, PM_REMOVE))
+
+            DispatchMessage(&amp;msg);
+
+    }
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    HWND hwndDlg;
+
+    switch(uMsg)
+
+    {
+
+        case WM_LBUTTONDOWN:
+
+            hwndDlg =
+
+                CreateDialog(hInstance, &quot;DlgBox&quot;, hwnd, DlgProc);
+
+            ShowWindow(hwndDlg, SW_NORMAL);
+
+            UpdateWindow(hwndDlg);
+
+            EnableWindow(hwnd, FALSE);
+
+            bDoAbort = FALSE;
+
+            DoIterate(hwndDlg);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hThisInstance,
+
+                   HINSTANCE hPrevInstance,
+
+                   LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    WNDCLASS wndClass;
+
+    hInstance = hThisInstance;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;LOOP&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;LOOP&quot;, &quot;LOOP&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>In this program, a processing-intensive loop is started when the user clicks in the client area of the application's main window. The processing in the DoIterate function is not particularly complex; it is simply incrementing the <I>i</I> variable and displaying the result repeatedly until the user stops the loop.
+
+<BR></P>
+
+<P>Before the iteration is started, however, the application displays a modeless dialog box. Moreover, it disables user interaction with the application's main window by calling the EnableWindow function. This has basically the same effect as using a modal dialog box with one crucial difference; we do not need to call the DialogBox function, and thus we retain control while the dialog box is displayed.
+
+<BR></P>
+
+<P>Inside the actual iteration loop, the function PeekMessage is called with great frequency. This ensures that the application yields control; but more importantly, it also ensures that the dialog through which the iteration can be aborted responds to user interface events.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE: </B>The PeekMessage call should only be used when the application actually performs background processing. Using PeekMessage instead of GetMessage prevents Windows from performing any &quot;idle-time&quot; processing such as virtual memory optimizations or power management on battery-powered systems. Therefore, PeekMessage should never be used in a general-purpose message loop.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I11" NAME="I11">
+
+<FONT SIZE=3><B>Using a Secondary Thread</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>While the previous technique can be used in programs intended for all Win32 platforms (including Win32s), it is somewhat cumbersome. For lengthy calculations of this kind, it is much easier to use a secondary thread in which the calculation can proceed uninterrupted, uncluttered with PeekMessage calls. Consider the example shown in Listing 12.4. This example can be compiled with the same resource file as the previous one, using identical command line instructions.
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 12.4. Processing in a secondary thread (</B><B>LOOP.C</B><B>).</B></LH></UL>
+
+<PRE>#include &lt;windows.h&gt;
+
+HINSTANCE hInstance;
+
+volatile BOOL bDoAbort;
+
+HWND hwnd;
+
+BOOL CALLBACK DlgProc(HWND hwndDlg, UINT uMsg,
+
+                      WPARAM wParam, LPARAM lParam)
+
+{
+
+    if (uMsg == WM_COMMAND &amp;&amp; LOWORD(wParam) == IDCANCEL)
+
+    {
+
+        EnableWindow(hwnd, TRUE);
+
+        DestroyWindow(hwndDlg);
+
+        return (bDoAbort = TRUE);
+
+    }
+
+    return FALSE;
+
+}
+
+DWORD WINAPI DoIterate(LPVOID hwndDlg)
+
+{
+
+    int i;
+
+    char buf[18];
+
+    i = 0;
+
+    while (!bDoAbort)
+
+    {
+
+        SetWindowText(GetDlgItem((HWND)hwndDlg, 1000),
+
+                      _itoa(i++, buf, 10));
+
+    }
+
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,
+
+                         WPARAM wParam, LPARAM lParam)
+
+{
+
+    HWND hwndDlg;
+
+    DWORD dwThreadId;
+
+    switch(uMsg)
+
+    {
+
+        case WM_LBUTTONDOWN:
+
+            hwndDlg =
+
+                CreateDialog(hInstance, &quot;DlgBox&quot;, hwnd, DlgProc);
+
+            ShowWindow(hwndDlg, SW_NORMAL);
+
+            UpdateWindow(hwndDlg);
+
+            EnableWindow(hwnd, FALSE);
+
+            bDoAbort = FALSE;
+
+            CreateThread(NULL, 0, DoIterate, (LPDWORD)hwndDlg, 0,
+
+                         &amp;dwThreadId);
+
+            break;
+
+        case WM_DESTROY:
+
+            PostQuitMessage(0);
+
+            break;
+
+        default:
+
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    }
+
+    return 0;
+
+}
+
+int WINAPI WinMain(HINSTANCE hThisInstance,
+
+                   HINSTANCE hPrevInstance,
+
+                   LPSTR d3, int nCmdShow)
+
+{
+
+    MSG msg;
+
+    WNDCLASS wndClass;
+
+    hInstance = hThisInstance;
+
+    if (hPrevInstance == NULL)
+
+    {
+
+        memset(&amp;wndClass, 0, sizeof(wndClass));
+
+        wndClass.style = CS_HREDRAW | CS_VREDRAW;
+
+        wndClass.lpfnWndProc = WndProc;
+
+        wndClass.hInstance = hInstance;
+
+        wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+
+        wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+
+        wndClass.lpszClassName = &quot;LOOP&quot;;
+
+        if (!RegisterClass(&amp;wndClass)) return FALSE;
+
+    }
+
+    hwnd = CreateWindow(&quot;LOOP&quot;, &quot;LOOP&quot;,
+
+                        WS_OVERLAPPEDWINDOW,
+
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+
+                        NULL, NULL, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+
+    UpdateWindow(hwnd);
+
+    while (GetMessage(&amp;msg, NULL, 0, 0))
+
+        DispatchMessage(&amp;msg);
+
+    return msg.wParam;
+
+}</PRE>
+
+<P>Perhaps the most significant difference between the two versions of LOOP.C is that in the second version, the iteration loop within the DoIterate function no longer calls PeekMessage and DispatchMessage. It does not have to; for the DoIterate function is now called from within a secondary thread, created by a call to CreateThread in the function WndProc.
+
+<BR></P>
+
+<P>Instead, the primary thread of the application continues execution after creating the secondary thread, and returns processing messages in the primary message loop in WinMain. It is this primary loop that now dispatches messages for the dialog as well.
+
+<BR></P>
+
+<P>Of particular interest is the changed declaration of the global variable bDoAbort. It is through this variable that the secondary thread is notified that it should stop executing; however, the value of this variable is set in the primary thread when the user dismisses the dialog. Of course, the optimizing compiler is not aware of this fact; so it is quite likely, that the following construct:
+
+<BR></P>
+
+<PRE>    while (!bDoAbort)
+
+    {
+
+        ...
+
+    }</PRE>
+
+<P>becomes optimized in such a way that the value of bDoAbort is never reloaded from memory. Why should it be? Nothing inside the while loop modifies its value, so the optimizing compiler can legitimately keep this value in a register, for example, which means that any changes to the value stored in memory by another thread will not be noticed by this thread.
+
+<BR></P>
+
+<P>The C keyword volatile comes to our rescue. Declaring a variable volatile essentially tells the compiler that regardless of its optimization rules, the value of such a variable should be written to memory every time it is modified; and the value of such a variable should be reloaded from memory every time it is referenced. Thus, we ensure that when the primary thread sets a bDoAbort to a new value, the secondary thread will actually see this change.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I12" NAME="I12">
+
+<FONT SIZE=3><B>Thread Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Our second LOOP.C example contained a call to CreateThread. Calling this function is the preferred method for creating a secondary thread. The return value of this function, which in this simple example we unceremoniously discarded, is a handle to the new <I>thread object</I>.
+
+<BR></P>
+
+<P>The thread object encapsulates the properties of a thread, including, for example, its security attributes, priority, and other information. Thread manipulation functions refer to threads through thread object handles like the one returned by CreateThread.
+
+<BR></P>
+
+<P>Our secondary thread in LOOP.C used the simplest exit mechanism; when the function designated as the thread function in the call to CreateThread returns, the thread is automatically terminated. This is because exiting the thread function amounts to an implicit call to ExitThread.
+
+<BR></P>
+
+<HR ALIGN=CENTER>
+
+<NOTE>
+
+<IMG SRC="note.gif" WIDTH = 35 HEIGHT = 35><B>NOTE:</B> The thread object remains valid even after a thread terminates, unless all handles to it (including the one obtained through CreateThread) have been closed through a call to CloseHandle.
+
+<BR></NOTE>
+
+<HR ALIGN=CENTER>
+
+<P>A thread's exit code (the return value of the thread function or the value passed to ExitThread) can be obtained through the GetExitCodeThread function.
+
+<BR></P>
+
+<P>A thread's priority can be obtained through GetThreadPriority and set through SetThreadPriority.
+
+<BR></P>
+
+<P>A thread can be started in a <I>suspended</I> state by specifying CREATE_SUSPENDED as one of the thread's creation flags in the call to CreateThread. A suspended thread can be resumed by calling ResumeThread.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I13" NAME="I13">
+
+<FONT SIZE=3><B>Creating and Managing Processes</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Closely related to the creation and management of threads is the creation and management of entire processes.
+
+<BR></P>
+
+<P>MS-DOS programmers have long been using the exec family of functions for spawning new processes. Windows programmers used WinExec; while those from the UNIX world are more familiar with fork. In Win32, this functionality has been consolidated into the CreateProcess function.
+
+<BR></P>
+
+<P>The CreateProcess function starts an application specified by name. It returns a handle to a <I>process object</I> that can later be used to refer to the newly created process. The process object encapsulates many properties of the new process, such as its security attributes or thread information.
+
+<BR></P>
+
+<P>The process can be terminated by a call to the ExitProcess function. A process also terminates if its primary thread terminates.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I14" NAME="I14">
+
+<FONT SIZE=3><B>Synchronization Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>Our little dance with the bDoAbort variable in the previous multithreaded example represents a simplistic solution to the problem of <I>synchronizing</I> two or more independently executing threads. Using a global variable served our purposes well, but may not be adequate in more complex situations.
+
+<BR></P>
+
+<P>One such situation arises when one thread has nothing to do while waiting for another thread to complete a particular task. If using a variable accessed from both threads were the only synchronization mechanism available to us, the waiting process would have to enter a loop, repeatedly checking this variable's value. If it is doing that with great frequency, the result is a lot of wasted processing capacity. This problem can be alleviated somewhat by inserting a delay between subsequent checks, for example:
+
+<BR></P>
+
+<PRE>while (!bStatus) Sleep(1000);</PRE>
+
+<P>Unfortunately, in many cases this is not a satisfactory solution either; we may not be able to afford to wait tens or hundreds of milliseconds before acting.
+
+<BR></P>
+
+<P>The Win32 API provides a set of functions that can be used to wait until a specific object or set of objects becomes <I>signaled</I>. There are several types of objects to which these functions apply. Some are dedicated <I>synchronization objects</I>, and<I> </I>others are objects for other purposes that nevertheless have signaled and nonsignaled states. Synchronization objects include <I>semaphores</I>, <I>events</I>, and <I>mutexes</I>.
+
+<BR></P>
+
+<P>Semaphore objects can be used to limit the number of concurrent accesses to a shared resource. When a semaphore object is created using the CreateSemaphore function, a maximum count is specified. Each time a thread that is waiting for the semaphore is released, the semaphore's count is decreased by one. The count can be increased again using the ReleaseSemaphore function.
+
+<BR></P>
+
+<P>The state of an event object can be explicitly set to signaled or nonsignaled. When an event is created using the CreateEvent function, its initial state is specified, and so is its type. A manual-reset event must be reset to nonsignaled explicitly using the ResetEvent function; an auto-reset event is reset to the nonsignaled state every time a waiting thread is released. The event's state can be set to signaled using the SetEvent function.
+
+<BR></P>
+
+<P>A mutex (<I>mut</I>ual <I>ex</I>clusion) object is nonsignaled when it is owned by a thread. A thread obtains ownership of a mutex object when it specifies the object's handle in a wait function. The mutex object can be released using the ReleaseMutex function.
+
+<BR></P>
+
+<P>Threads wait for a single object using the functions WaitForSingleObject or WaitForSingleObjectEx; or for multiple objects, using WaitForMultipleObjects, WaitForMultipleObjectsEx, or MsgWaitForMultipleObjects.
+
+<BR></P>
+
+<P>Synchronization objects can also be used for interprocess synchronization. Semaphores, events, and mutexes can be named when they are created using the appropriate creation function; another process can then open a handle to these objects using OpenSemaphore, OpenEvent, and OpenMutex.
+
+<BR></P>
+
+<P><I>Critical section</I> objects represent a variation of the mutex object. Critical section objects can only be used by threads of the same process, but they provide a more efficient mutual exclusion mechanism. These objects are typically used to protect critical sections of program code. A thread acquires ownership of the critical section object by calling EnterCriticalSection and releases ownership using LeaveCriticalSection. If the critical section object is owned by another thread at the time EnterCriticalSection is called, this function waits indefinitely until the critical section object is released.
+
+<BR></P>
+
+<P>Another simple yet efficient synchronization mechanism is <I>interlocked </I><I>variable access</I>. Using the functions InterlockedIncrement or InterlockedDecrement, a thread can increment or decrement a variable and check the result for zero without fear of being interrupted by another thread (which might also increment or decrement the same variable before the first thread has a chance to check its value). These functions can also be used for interprocess synchronization if the variable is in shared memory.
+
+<BR></P>
+
+<P>In addition to dedicated synchronization objects, threads can also wait on certain other objects. The state of a process object becomes signaled when the process terminates; similarly, the state of a thread object becomes signaled when the thread terminates. A <I>change notification</I> object, created by FindFirstChangeNotification, becomes signaled when a specified change occurs in the file system. The state of a <I>console input</I> object becomes signaled when there is unread input waiting in the console's input buffer.
+
+<BR></P>
+
+<H4 ALIGN="CENTER">
+
+<CENTER><A ID="I15" NAME="I15">
+
+<FONT SIZE=3><B>Programming with Synchronization Objects</B>
+
+<BR></FONT></A></CENTER></H4>
+
+<P>The techniques involving multiple threads and synchronization mechanisms are available not only to programs using the graphical interface, but to other programs, such as console applications, as well. In fact, the C++ example in Listing 12.5 is exactly that, a simple console application (compile with cl mutex.cpp).
+
+<BR></P>
+
+<UL>
+
+<LH><B>Listing 12.5. C++ example for the use of a mutex object.</B></LH></UL>
+
+<PRE>#include &lt;iostream.h&gt;
+
+#include &lt;windows.h&gt;
+
+void main()
+
+{
+
+    HANDLE hMutex;
+
+    hMutex = CreateMutex(NULL, FALSE, &quot;MYMUTEX&quot;);
+
+    cout &lt;&lt; &quot;Attempting to gain control of MYMUTEX object...&quot;;
+
+    cout.flush();
+
+    WaitForSingleObject(hMutex, INFINITE);
+
+    cout &lt;&lt; '\n' &lt;&lt; &quot;MYMUTEX control obtained.&quot; &lt;&lt; '\n';
+
+    cout &lt;&lt; &quot;Press ENTER to release the MYMUTEX object: &quot;;
+
+    cout.flush();
+
+    cin.get();
+
+    ReleaseMutex(hMutex);
+
+}</PRE>
+
+<P>This unremarkable little program creates a mutex object and attempts to gain ownership of it. When only a single copy of it is being executed (in a Windows 95 or Windows NT DOS window), it does not exhibit any revolutionary behavior.
+
+<BR></P>
+
+<P>To really see what this application has been designed to demonstrate, open a second DOS window. Run this example in both. You will see that while the first copy successfully gains control of the mutex object, the second copy becomes suspended while attempting to do so. It remains in this suspended state as long as the first copy maintains control of the mutex object; but once the object is released through ReleaseMutex, the second copy's call to WaitForSingleObject returns and it in turn gains control of the object. In fact, there is no limit of the number of processes that can cooperate through this mechanism; you could launch as many copies of this program in separate DOS windows as you like (or as memory permits).
+
+<BR></P>
+
+<P>The reason the two instances of this program were able to refer to the same mutex object is they were both referring to the object by the same name. Using the same name identified the same global object. It is easy to see how named synchronization objects can be used in a similar fashion to synchronize threads and processes, guard access to limited resources, or provide a simple communication mechanism between processes.
+
+<BR></P>
+
+<H3 ALIGN="CENTER">
+
+<CENTER><A ID="I16" NAME="I16">
+
+<FONT SIZE=4><B>Summary</B>
+
+<BR></FONT></A></CENTER></H3>
+
+<P>Multitasking represents an operating system's ability to execute several processes concurrently. The operating system accomplishes this task by regularly performing a context switch to switch from one application to another.
+
+<BR></P>
+
+<P>In a cooperative multitasking system, applications must explicitly yield control to the operating system. The operating system does not have the capability to interrupt the execution of a noncooperating program.
+
+<BR></P>
+
+<P>In a preemptive multitasking system, the operating system can and does interrupt applications based on asynchronous events such as an interrupt from timer hardware. Such an operating system is more complex and has to deal with issues such as reentrancy.
+
+<BR></P>
+
+<P>Windows 3.1 and, consequently, Win32s are examples of a cooperative multitasking system. Windows NT and Windows 95 are preemptive multitasking systems, but Windows 95 does inherit some of the limitations of Windows 3.1 through the legacy 16-bit implementation of some of its internal functions.
+
+<BR></P>
+
+<P>Both Windows 95 and Windows NT are also multithreaded operating systems. Threads are parallel paths of execution within the same process.
+
+<BR></P>
+
+<P>Although programs in Windows 95 and Windows NT are no longer required to yield to the operating system, they should still process messages even while performing lengthy processing. This ensures that these applications remain responsive to user-interface events.
+
+<BR></P>
+
+<P>There are several methods for synchronizing the execution of threads and processes. In particular, the Win32 API provides access to special synchronization objects, such as semaphores, mutexes, and events.</P>
+
+<P><A HREF="vcu11fi.htm"><IMG SRC="bluprev.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Previous Page"></A>
+
+<A HREF="index.htm"><IMG SRC="blutoc.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="TOC"></A>
+
+<A HREF="vcu13fi.htm"><IMG SRC="blunext.gif" WIDTH = 32 HEIGHT = 32 BORDER = 0 ALT="Next Page"></A>
+
+</P></BODY></HTML>
+
