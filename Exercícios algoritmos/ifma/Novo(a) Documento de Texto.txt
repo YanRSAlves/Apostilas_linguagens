@@ -1,0 +1,84 @@
+2)
+Var
+   nomeVendedor: Caractere
+   salarioFixo, totalVendas, salarioMes: Real
+
+Inicio
+   Escreva("Informe o nome do vendedor: ")
+   Leia(nomeVendedor)
+
+   Escreva("Informe o salário fixo do vendedor: R$ ")
+   Leia(salarioFixo)
+
+   Escreva("Informe o total de vendas efetuadas no mês (em dinheiro): R$ ")
+   Leia(totalVendas)
+
+   salarioMes <- salarioFixo + (totalVendas * 0.15)  // 15% de comissão sobre as vendas
+
+   Escreva("Nome do vendedor: ", nomeVendedor)
+   Escreva("Salário fixo: R$ ", salarioFixo)
+   Escreva("Salário do mês: R$ ", salarioMes)
+Fim
+
+3)
+Var
+   celsius, fahrenheit: Real
+
+Inicio
+   Escreva("Informe a temperatura em graus Celsius: ")
+   Leia(celsius)
+
+   fahrenheit <- (celsius * 9 + 160) / 5
+
+   Escreva("A temperatura em Fahrenheit é: ", fahrenheit, " °F")
+Fim
+
+4)
+Var
+   valorDepositado, rendimento: Real
+
+Inicio
+   Escreva("Informe o valor depositado: R$ ")
+   Leia(valorDepositado)
+
+   rendimento <- valorDepositado * 0.005  // 0,50% de juros ao mês
+
+   Escreva("Valor com rendimento após um mês: R$ ", valorDepositado + rendimento)
+Fim
+
+
+5)
+Var
+   numero: Real
+
+Inicio
+   Escreva("Digite um número: ")
+   Leia(numero)
+
+   Se numero > 10 Entao
+      Escreva("O número é maior que 10.")
+   FimSe
+Fim
+
+
+6)
+Var
+   valor1, valor2: Inteiro
+
+Inicio
+   Escreva("Digite o primeiro valor inteiro: ")
+   Leia(valor1)
+
+   Escreva("Digite o segundo valor inteiro: ")
+   Leia(valor2)
+
+   Se valor1 > valor2 Entao
+      Escreva("O maior valor é: ", valor1)
+   Senao
+      Se valor2 > valor1 Entao
+         Escreva("O maior valor é: ", valor2)
+      Senao
+         Escreva("Os valores são iguais.")
+      FimSe
+   FimSe
+Fim
